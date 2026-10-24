@@ -51,19 +51,19 @@ describe('CitySearch', () => {
     expect(submitted).toHaveBeenCalledWith({ city: 'Mendoza', country: '' });
   });
 
-  it('prevents submission and example selection while a search is pending', () => {
+  it('allows a newer query while a search is pending', async () => {
     const fixture = TestBed.createComponent(CitySearch);
     const submitted = vi.fn();
     fixture.componentInstance.querySubmitted.subscribe(submitted);
     fixture.componentRef.setInput('busy', true);
-    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.componentInstance.form.setValue({ city: 'Mendoza', country: '' });
     fixture.componentInstance.submit();
     fixture.componentInstance.chooseExample('Córdoba');
     fixture.componentInstance.chooseCountry('AR');
-    expect(submitted).not.toHaveBeenCalled();
-    expect(fixture.componentInstance.form.getRawValue()).toEqual({ city: 'Mendoza', country: '' });
-    expect(fixture.nativeElement.querySelector('#city').readOnly).toBe(true);
+    expect(submitted).toHaveBeenCalledTimes(3);
+    expect(submitted).toHaveBeenLastCalledWith({ city: 'Córdoba', country: 'AR' });
+    expect(fixture.nativeElement.querySelector('#city').readOnly).toBe(false);
   });
 
   it('focuses the country and can refine an ambiguous city without erasing its name', () => {
@@ -93,5 +93,34 @@ describe('CitySearch', () => {
     city.value = 'Mendoza';
     city.dispatchEvent(new Event('input', { bubbles: true }));
     expect(edited).toHaveBeenCalledOnce();
+  });
+
+  it.each(['Argentina', 'ÁR', 'ſT', 'A1'])(
+    'rejects country names and non-ASCII codes: %s',
+    async (country) => {
+      const fixture = TestBed.createComponent(CitySearch);
+      const submitted = vi.fn();
+      fixture.componentInstance.querySubmitted.subscribe(submitted);
+      await fixture.whenStable();
+      fixture.componentInstance.form.setValue({ city: 'Córdoba', country });
+      fixture.componentInstance.submit();
+      await fixture.whenStable();
+      expect(submitted).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.querySelector('#country-error').textContent).toContain(
+        'dos letras',
+      );
+    },
+  );
+
+  it('submits a normalized region and preserves the input', async () => {
+    const fixture = TestBed.createComponent(CitySearch);
+    const submitted = vi.fn();
+    fixture.componentInstance.querySubmitted.subscribe(submitted);
+    await fixture.whenStable();
+    fixture.componentInstance.form.setValue({ city: 'Córdoba', country: ' ar ' });
+    fixture.componentInstance.region.setValue('  Co\u0301rdoba ');
+    fixture.componentInstance.submit();
+    expect(submitted).toHaveBeenCalledWith({ city: 'Córdoba', country: 'AR', region: 'Córdoba' });
+    expect(fixture.componentInstance.region.value).toBe('  Co\u0301rdoba ');
   });
 });

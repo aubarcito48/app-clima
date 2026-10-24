@@ -1,109 +1,32 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
 import { Weather } from './weather';
 
-describe('Weather preview', () => {
+describe('Weather Django integration', () => {
+  let http: HttpTestingController;
   beforeEach(() => {
-    vi.useFakeTimers();
-    TestBed.configureTestingModule({ imports: [Weather] });
+    TestBed.configureTestingModule({
+      imports: [Weather],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    http = TestBed.inject(HttpTestingController);
   });
+  afterEach(() => http.verify());
 
-  afterEach(() => {
-    TestBed.resetTestingModule();
-    vi.useRealTimers();
-  });
-
-  it('starts with labelled regions and no fabricated current data', () => {
+  it('starts without fabricated data or an automatic request', async () => {
     const fixture = TestBed.createComponent(Weather);
-    fixture.detectChanges();
-    const view: HTMLElement = fixture.nativeElement;
-    expect(view.querySelectorAll('main')).toHaveLength(1);
-    expect(view.querySelector('label[for="city"]')).toBeTruthy();
-    expect(view.querySelector('input#city')).toBeTruthy();
-    expect(view.querySelectorAll('h2')).toHaveLength(3);
-    expect(view.querySelector('.temperature')).toBeNull();
-    expect(view.textContent).toContain('datos ficticios');
-  });
-
-  it('shows the loading state, then the same example across all regions', () => {
-    const fixture = TestBed.createComponent(Weather);
-    fixture.detectChanges();
-    const view: HTMLElement = fixture.nativeElement;
-    const example = Array.from(view.querySelectorAll('button')).find(
-      (button) => button.textContent?.trim() === 'Córdoba',
-    );
-    example?.click();
-    fixture.detectChanges();
-    expect(view.querySelector('[aria-busy="true"]')).toBeTruthy();
-    expect(view.querySelector('app-weather-loading')).toBeTruthy();
-    expect(view.querySelector('button[type="submit"]')?.hasAttribute('disabled')).toBe(true);
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(view.querySelector('[role="status"]')?.textContent).toContain('Córdoba');
-    expect(view.querySelector('app-current-weather')?.textContent).toContain('24');
-    expect(view.querySelector('app-forecast ol')?.children).toHaveLength(4);
-    expect(view.querySelector('app-recommendation')?.textContent).toContain(
-      'Para tu día en Córdoba',
-    );
-    expect(view.querySelector('app-recommendation')?.textContent).toContain(
-      'Todavía no se genera con IA',
-    );
-  });
-
-  it('removes the previous result during loading and does not mix examples', () => {
-    const fixture = TestBed.createComponent(Weather);
-    fixture.componentInstance.showExample();
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    fixture.componentInstance.showExample({ city: 'Mendoza', country: 'AR' });
-    fixture.detectChanges();
+    await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('.temperature')).toBeNull();
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('app-recommendation').textContent).toContain(
-      'Mendoza',
-    );
-    expect(fixture.nativeElement.querySelector('app-current-weather').textContent).not.toContain(
-      'Córdoba',
-    );
+    expect(fixture.nativeElement.querySelector('label[for="city"]')).toBeTruthy();
+    http.expectNone(() => true);
   });
 
-  it('cancels a pending example when returning to the initial state', () => {
+  it('submits through the form and adapts a real contract response', async () => {
     const fixture = TestBed.createComponent(Weather);
-    fixture.componentInstance.showExample();
-    fixture.componentInstance.reset();
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.state()).toBe('initial');
-    expect(fixture.nativeElement.querySelector('.temperature')).toBeNull();
-  });
-
-  it('explains the demo limitation instead of inventing weather for another city', () => {
-    const fixture = TestBed.createComponent(Weather);
-    fixture.componentInstance.showExample({ city: 'Madrid', country: 'ES' });
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
-      'Esta demo',
-    );
-    expect(fixture.nativeElement.querySelector('.temperature')).toBeNull();
-    expect(fixture.componentInstance.state()).toBe('initial');
-  });
-
-  it('keeps empty input from reaching the simulated search or changing current results', () => {
-    const fixture = TestBed.createComponent(Weather);
-    fixture.componentInstance.showExample();
-    vi.advanceTimersByTime(1000);
-    const previous = fixture.componentInstance.weather();
-    fixture.componentInstance.showExample({ city: '  \t ', country: 'AR' });
-    expect(fixture.componentInstance.state()).toBe('ready');
-    expect(fixture.componentInstance.weather()).toBe(previous);
-    expect(vi.getTimerCount()).toBe(0);
-  });
-
-  it('supports refining an ambiguous city with a country while preserving user input', () => {
-    const fixture = TestBed.createComponent(Weather);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const view: HTMLElement = fixture.nativeElement;
     const city = view.querySelector<HTMLInputElement>('#city')!;
     city.value = '  Córdoba  ';
@@ -111,48 +34,140 @@ describe('Weather preview', () => {
     view
       .querySelector('form')!
       .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    fixture.detectChanges();
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.feedback()?.kind).toBe('ambiguous');
-    expect(city.value).toBe('  Córdoba  ');
-    expect(document.activeElement).toBe(view.querySelector('#country'));
-    const option = Array.from(view.querySelectorAll<HTMLButtonElement>('ul button')).find(
-      (button) => button.textContent?.includes('Argentina'),
+    expect(fixture.componentInstance.state()).toBe('loading');
+    const req = http.expectOne((r) => r.params.get('ciudad') === 'Córdoba');
+    req.flush(CLIMATE_FIXTURE);
+    await fixture.whenStable();
+    expect(view.querySelector('app-current-weather h3')?.textContent).toContain('Córdoba');
+    expect(view.querySelector('app-forecast ol')?.children.length).toBe(
+      CLIMATE_FIXTURE.pronostico.intervalos.length,
     );
-    option!.click();
-    fixture.detectChanges();
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.feedback()).toBeNull();
-    expect(view.querySelector('app-current-weather h3')?.textContent?.trim()).toBe('Córdoba');
+    expect(view.querySelector('app-recommendation')?.textContent).toContain(
+      CLIMATE_FIXTURE.recomendacion.texto,
+    );
+    expect(view.textContent).not.toContain('Datos ficticios');
     expect(city.value).toBe('  Córdoba  ');
   });
 
-  it('lets users correct a simulated missing city without keeping stale errors', () => {
+  it('cancels an older search, ignores duplicates in flight and keeps the latest city', async () => {
     const fixture = TestBed.createComponent(Weather);
-    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: ' Córdoba ', country: 'ar' });
+    const old = http.expectOne((r) => r.params.get('ciudad') === 'Córdoba');
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    http.expectNone(() => true);
+    fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
+    expect(old.cancelled).toBe(true);
+    const latest = structuredClone(CLIMATE_FIXTURE);
+    latest.ubicacion.nombre = 'Mendoza';
+    latest.actual.temperatura_c = 0;
+    http.expectOne((r) => r.params.get('ciudad') === 'Mendoza').flush(latest);
+    expect(() => old.flush(CLIMATE_FIXTURE)).toThrow();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.response()?.ubicacion.nombre).toBe('Mendoza');
+    expect(fixture.nativeElement.querySelector('app-current-weather h3').textContent).toContain(
+      'Mendoza',
+    );
+  });
+
+  it('cancels on reset and component destruction', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    const first = http.expectOne(() => true);
+    fixture.componentInstance.reset();
+    expect(first.cancelled).toBe(true);
+    expect(fixture.componentInstance.weather()).toBeNull();
+    fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
+    const second = http.expectOne(() => true);
+    fixture.destroy();
+    expect(second.cancelled).toBe(true);
+  });
+
+  it('keeps current data and shows unavailable optional blocks without invented values', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    const data = structuredClone(CLIMATE_FIXTURE);
+    data.actual = {
+      ...data.actual,
+      temperatura_c: 0,
+      sensacion_c: -2,
+      humedad_pct: 0,
+      viento_kmh: null,
+      descripcion: null,
+    };
+    data.pronostico = { estado: 'no_disponible', intervalos: [] };
+    data.recomendacion = { estado: 'no_disponible', texto: null };
+    http.expectOne(() => true).flush(data);
+    await fixture.whenStable();
     const view: HTMLElement = fixture.nativeElement;
-    const city = view.querySelector<HTMLInputElement>('#city')!;
-    city.value = 'Ciudad inexistente';
-    city.dispatchEvent(new Event('input', { bubbles: true }));
-    view
-      .querySelector('form')!
-      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.feedback()?.kind).toBe('not-found');
-    expect(city.value).toBe('Ciudad inexistente');
-    city.value = 'Mendoza';
-    city.dispatchEvent(new Event('input', { bubbles: true }));
-    fixture.detectChanges();
+    expect(fixture.componentInstance.state()).toBe('ready');
+    expect(view.querySelector('.temperature')?.textContent).toContain('0');
+    expect(view.querySelector('app-current-weather')?.textContent).toContain('-2 °C');
+    expect(view.querySelector('app-current-weather')?.textContent).toContain('0 %');
+    expect(view.querySelector('app-current-weather')?.textContent).toContain('No disponible');
+    expect(view.querySelector('app-forecast')?.textContent).toContain('Pronóstico no disponible');
+    expect(view.querySelector('app-recommendation')?.textContent).toContain('no está disponible');
+    expect(view.textContent).not.toMatch(/undefined|NaN/);
+  });
+
+  it('refines a 409 using the candidate country and region even within the same country', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    const candidate = {
+      nombre: 'Córdoba',
+      pais: 'AR',
+      region: 'Córdoba',
+      latitud: -31.42,
+      longitud: -64.18,
+    };
+    http
+      .expectOne(() => true)
+      .flush(
+        {
+          codigo: 'CIUDAD_AMBIGUA',
+          candidatos: [candidate, { ...candidate, region: 'Otra región', latitud: -32 }],
+        },
+        { status: 409, statusText: 'Conflict' },
+      );
+    await fixture.whenStable();
+    const choice = fixture.nativeElement.querySelector('ul button') as HTMLButtonElement;
+    expect(choice.textContent).toContain('Córdoba, Córdoba, AR');
+    choice.click();
+    const req = http.expectOne(
+      (r) => r.params.get('region') === 'Córdoba' && r.params.get('pais') === 'AR',
+    );
+    req.flush(CLIMATE_FIXTURE);
+    await fixture.whenStable();
+    expect(fixture.componentInstance.state()).toBe('ready');
+  });
+
+  it('can retry after an error and never sends a blank city', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: ' ', country: '' });
+    http.expectNone(() => true);
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    http.expectOne(() => true).flush({}, { status: 503, statusText: 'Unavailable' });
+    await fixture.whenStable();
+    expect(fixture.componentInstance.feedback()?.kind).toBe('unavailable');
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    http.expectOne(() => true).flush(CLIMATE_FIXTURE);
+    await fixture.whenStable();
     expect(fixture.componentInstance.feedback()).toBeNull();
-    expect(view.querySelector('[role="alert"]')).toBeNull();
-    view
-      .querySelector('form')!
-      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    vi.advanceTimersByTime(1000);
-    fixture.detectChanges();
-    expect(view.querySelector('app-current-weather h3')?.textContent?.trim()).toBe('Mendoza');
+  });
+
+  it('renders AI output as literal text', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    const data = structuredClone(CLIMATE_FIXTURE);
+    data.recomendacion.texto = '<img src=x onerror="alert(1)">';
+    http.expectOne(() => true).flush(data);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('app-recommendation img')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-recommendation').textContent).toContain('<img');
   });
 });

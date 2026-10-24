@@ -1,38 +1,39 @@
 ﻿# Clima Inteligente
 
-Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones de IA basadas en esos datos. Angular consultará a Django; Django se encargará de OpenWeather y Groq.
+Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones de IA basadas en esos datos. Angular consulta únicamente a Django; Django se encarga de OpenWeather y Groq.
 
 ## Estado
 
-TK04: búsqueda con formulario reactivo, ciudad obligatoria, país opcional, normalización y codificación de parámetros. Los errores permiten corregir la entrada o precisar una ciudad ambigua. Se mantiene la interfaz responsive de TK03. Todavía no hay consultas HTTP ni integración con proveedores.
+TK05: conexión HTTP con Django mediante `apiBaseUrl` y `GET /api/v1/clima/`. Se valida el contrato recibido, se cancelan consultas anteriores y se evita duplicar una consulta idéntica mientras está pendiente. El formulario permite códigos de país de dos letras y región opcional. Se conserva el diseño existente, adaptando sus tarjetas para recibir datos del backend sin valores inventados.
 
-## Explorar la demo
+## Consultar el clima
 
-Al abrir la aplicación se muestra el estado inicial. Elegir Córdoba, Buenos Aires o Mendoza, o usar «Ver ejemplo de Córdoba», para recorrer una carga simulada de un segundo y el resultado. También se puede escribir una de esas ciudades y enviar el formulario; para los ejemplos argentinos se admite AR o Argentina. El país es opcional salvo que sea necesario precisar una ubicación ambigua.
+Al abrir la aplicación se muestra el estado inicial sin solicitudes automáticas. Escribir una ciudad o elegir Córdoba, Buenos Aires o Mendoza realiza una búsqueda en Django. Las sugerencias completan país AR, pero no contienen mediciones ni consejos locales. La demora simulada y los fixtures de la demo fueron retirados del flujo de aplicación; el fixture del contrato existe únicamente para las pruebas.
 
-Los valores, fechas y consejos son ejemplos fijos identificados como datos ficticios. No representan el clima actual ni son generados con IA. Si se escribe otra ciudad, la vista explica las opciones disponibles sin inventar un resultado. «Volver al inicio» permite revisar nuevamente el estado inicial.
+Para obtener información real, Django debe estar iniciado y tener configurada su clave privada de OpenWeather. Groq necesita clave y modelo habilitado en el backend; si falta o falla, la respuesta puede conservar el clima con IA no disponible. No se configuraron ni consumieron cuentas externas durante TK05. «Volver al inicio» cancela una solicitud pendiente y limpia el resultado.
 
-La conexión HTTP corresponde a TK05. El modelo de presentación y los errores de la demo no fijan el contrato de Django.
+El modelo `ClimateResponse` reproduce los cinco bloques del contrato v1: `ubicacion`, `actual`, `pronostico`, `recomendacion` y `meta`. El servicio lee JSON como `unknown` y comprueba tipos, fechas UTC, unidades y estados parciales antes de adaptarlo al modelo visual. Campos meteorológicos opcionales omitidos o null se conservan como ausencia; una respuesta sin datos obligatorios se rechaza con un aviso, sin fabricar mediciones. El detalle de presentación de clima y consejos continuará en TK06/TK07.
 
 ## Búsqueda y validación
 
-El formulario usa Reactive Forms, disponible en la versión Angular 21 del proyecto. La ciudad no puede estar vacía ni contener únicamente espacios, tabulaciones o saltos de línea. Una entrada inválida muestra un mensaje junto al formulario y lleva el foco a la ciudad; no emite la consulta ni inicia la carga simulada.
+El formulario usa Reactive Forms en Angular 21. La ciudad es obligatoria; ciudad y región admiten hasta 100 caracteres después de normalizar. Los campos conservan la entrada original. El país es opcional y debe ser un código ASCII de dos letras, como AR o ES; nombres como Argentina ya no se envían al backend. Una entrada inválida muestra un mensaje y no emite la consulta.
 
-Al enviar se recortan los espacios exteriores y se reducen los espacios interiores repetidos. Los códigos de país de dos letras se pasan a mayúsculas. Los campos conservan la entrada original, incluso cuando la respuesta informa un error. No se restringen los nombres de ciudad a letras ASCII.
+Al enviar se normaliza Unicode NFC, se recortan espacios exteriores, se reducen espacios interiores y se convierte el código de país a mayúsculas. Los nombres de ciudad y región conservan acentos y caracteres Unicode. En un 409 se pueden elegir candidatos con nombre, país y región, incluso cuando comparten país. Se envían esos filtros, sin elegir coordenadas arbitrariamente en el frontend.
 
-Los parámetros se serializan mediante `URLSearchParams`, sin concatenar texto sin codificar. Por ejemplo, ciudad ` Córdoba ` y país ` ar ` producen `ciudad=C%C3%B3rdoba&pais=AR`; si no hay país se omite `pais`. La demo consume esos mismos parámetros codificados. El envío HTTP y la adaptación del contrato real de Django se implementarán en TK05.
+`URLSearchParams` identifica consultas normalizadas y `HttpParams` codifica los valores para el GET. El servicio construye `HttpParams` desde los valores decodificados, conservando espacios y el carácter `+` sin doble codificación. Se omiten país y región vacíos. Ejemplo: `GET /api/v1/clima/?ciudad=C%C3%B3rdoba&pais=AR&region=C%C3%B3rdoba`.
 
 | Cómo probar | Resultado esperado |
 | --- | --- |
 | Ciudad vacía o solo espacios | Mensaje de validación y ninguna búsqueda. |
-| `  Buenos   Aires  `, país ` ar ` | Se consulta el ejemplo de Buenos Aires con AR; los campos conservan lo escrito. |
-| `Mendoza`, sin país | Resultado de ejemplo sin exigir país. |
-| `Córdoba`, sin país | Respuesta ambigua simulada: foco en país y opciones AR/ES para precisar. |
-| Elegir «Córdoba, Argentina (AR)» o escribir AR y reenviar | Resultado de Córdoba sin borrar la ciudad. |
-| Elegir España o escribir una ciudad fuera de los ejemplos | Aviso de datos no disponibles en la demo; no se inventa clima. |
-| `Ciudad inexistente` | Error de ciudad no encontrada simulado; foco en ciudad y entrada conservada para corregir. |
+| `  Buenos   Aires  `, país ` ar ` | Un GET con Buenos Aires y AR; los campos conservan lo escrito. |
+| País `Argentina` | Validación local: indicar un código de dos letras. |
+| Ciudad sin país ni región | Se omiten ambos filtros; Django determina si existe una ubicación inequívoca. |
+| Respuesta 409 | Candidatos para precisar ubicación; se puede seleccionar país y región juntos. |
+| Respuesta 404, 429 o 503 | Aviso recuperable sin conservar un resultado de otra ciudad como si fuera el nuevo. |
+| Clima válido con IA o pronóstico no disponibles | El clima sigue visible; se indica la ausencia del bloque correspondiente. |
+| Nueva búsqueda mientras otra está pendiente | Se cancela la anterior y solo se aplica el resultado de la última consulta. |
 
-Los errores anteriores se retiran al editar la consulta. Durante la carga, los campos quedan de solo lectura y se deshabilita un nuevo envío. Las respuestas de ciudad ambigua e inexistente son fixtures locales para verificar la interacción, no respuestas HTTP de un backend real.
+Los errores se retiran al editar o reenviar. El formulario permanece editable durante la carga para permitir una nueva búsqueda. Una consulta idéntica pendiente no inicia otro GET; al finalizar se permite reenviar explícitamente. `switchMap` cancela la suscripción anterior y `takeUntilDestroyed` cancela al salir de la página. Se limpian los datos de la consulta anterior al comenzar otra; un error no termina el flujo de búsquedas. No hay caché ni reintentos automáticos. Cada GET tiene un timeout de cliente de 45 segundos; cancelar en el navegador no garantiza cancelar trabajo ya recibido por Django/proveedores.
 
 ## Convenciones acordadas
 
@@ -82,6 +83,7 @@ src/app/pages       Páginas de la aplicación
 src/app/shared      Componentes reutilizables
 src/app/models      Modelos TypeScript
 src/app/service     Servicios de acceso a Django
+src/app/testing     Fixtures ficticios usados únicamente por las pruebas
 src/environments    Configuración pública por entorno
 ```
 
@@ -142,3 +144,17 @@ Verificado el 24 de octubre de 2026 con Node 24.13.1, npm 11.10.0 y Chromium 156
 - Sin solicitudes a servicios externos ni errores de ejecución en los flujos revisados.
 
 La evidencia corresponde al frontend con fixtures; no acredita que Django ya acepte estos parámetros o devuelva estos errores. No se crearon commits ni se publicaron cambios durante la implementación.
+
+## Verificación de TK05
+
+Verificado el 24 de octubre de 2026 con Angular 21.2.25, Node 24.13.1, npm 11.10.0 y Chromium 156.0.8078.4:
+
+- CP02: GET al host de `apiBaseUrl` con barra final y parámetros ciudad/país/región codificados; acentos, espacios, `&`, `+`, `#` y caracteres reservados conservados. Ninguna llamada de Angular a OpenWeather o Groq, sin API keys ni cabeceras de autorización del proveedor.
+- CP08: validación del JSON recibido; valores cero y negativos conservados, ausencia de campos opcionales representada como no disponible, sin `undefined` ni `NaN` en la vista. Clima visible cuando faltan pronóstico o IA. Datos obligatorios o unidades inválidos provocan un aviso, no un resultado fabricado.
+- CP12: consulta idéntica pendiente deduplicada; una nueva consulta cancela la anterior y la respuesta cancelada no puede sobrescribir la última ciudad. Reset y destrucción cancelan la solicitud; tras un error se puede volver a consultar.
+- **37 pruebas aprobadas** con `npm test -- --watch=false`, usando `HttpTestingController` sin red externa. Incluyen 409 con regiones del mismo país, corrección de filtros, JSON inválido y texto de IA renderizado literalmente sin ejecutar HTML.
+- Recorrido real en Chromium: Angular → HTTP → Django WSGI con servicios y SDK reales, transportes de proveedores simulados y claves ficticias. Se redirigió únicamente el destino del GET hacia un servidor temporal de QA, sin cambiar el `.env` de Angular ni el backend de desarrollo. Comprobados validación local, éxito con temperatura cero, ambos bloques opcionales ausentes, ambigüedad/refinamiento, 503 y recuperación. Esta evidencia no acredita cuentas ni datos meteorológicos reales.
+- Revisión a 360, 768 y 1440 px: sin desbordamiento horizontal ni errores de ejecución. Axe no detectó infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre el resultado; no sustituye la revisión completa prevista en TK08.
+- Builds de producción y desarrollo completados. Documentación y cambios revisados sin crear commit ni desplegar.
+
+Para usarlo localmente, mantener Django en el host configurado mediante `PUBLIC_API_BASE_URL_DEVELOPMENT` (por defecto `http://localhost:8000`), permitir el origen Angular en CORS y completar las claves solo en el backend. La pantalla inicial no necesita Django, pero buscar una ciudad sí. La URL de producción sigue siendo un placeholder hasta publicar el backend en Render. TK06 y TK07 continúan pendientes como tareas de presentación; no se modificaron el backend, sus claves ni los documentos originales.

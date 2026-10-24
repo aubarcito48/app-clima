@@ -25,7 +25,6 @@
           autocomplete="address-level2"
           required
           formControlName="city"
-          [readOnly]="busy()"
           [attr.aria-invalid]="cityInvalid || feedback()?.kind === 'not-found' ? 'true' : null"
           [attr.aria-describedby]="
             cityInvalid ? 'city-error' : feedback() ? 'search-feedback' : null
@@ -46,10 +45,13 @@
         placeholder="Ej. AR"
         autocomplete="country"
         formControlName="country"
-        [readOnly]="busy()"
-        [attr.aria-invalid]="feedback()?.kind === 'ambiguous' ? 'true' : null"
+        [attr.aria-invalid]="countryInvalid || feedback()?.kind === 'ambiguous' ? 'true' : null"
         [attr.aria-describedby]="
-          feedback()?.kind === 'ambiguous' ? 'country-help search-feedback' : 'country-help'
+          countryInvalid
+            ? 'country-help country-error'
+            : feedback()?.kind === 'ambiguous'
+              ? 'country-help search-feedback'
+              : 'country-help'
         "
         (input)="onEdited()"
         class="field w-full px-4"
@@ -57,15 +59,44 @@
     </div>
     <button
       type="submit"
-      [disabled]="busy()"
       class="primary-button flex h-13 items-center justify-center gap-3 px-7 sm:min-w-39"
     >
-      {{ busy() ? 'Cargando…' : 'Ver clima' }} <app-weather-icon name="arrow" [size]="18" />
+      {{ busy() ? 'Actualizar consulta' : 'Ver clima' }}
+      <app-weather-icon name="arrow" [size]="18" />
     </button>
   </div>
+  <div class="mt-3 max-w-96">
+    <label for="region" class="mb-2 block text-sm font-semibold text-ink"
+      >Región <span class="font-normal text-muted">(opcional)</span></label
+    >
+    <input
+      id="region"
+      name="region"
+      [formControl]="region"
+      (input)="onEdited()"
+      placeholder="Ej. Córdoba"
+      autocomplete="address-level1"
+      class="field w-full px-4"
+      aria-describedby="region-help"
+    />
+    <p id="region-help" class="mt-2 text-xs text-muted">
+      Provincia o estado para precisar ciudades con el mismo nombre.
+    </p>
+  </div>
+  @if (countryInvalid) {
+    <p id="country-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
+      Indicá un código de país de dos letras, por ejemplo AR o ES.
+    </p>
+  }
+  @if (region.touched && region.invalid) {
+    <p role="alert" class="mt-3 text-sm font-medium text-red-800">
+      La región admite hasta 100 caracteres.
+    </p>
+  }
   @if (cityInvalid) {
     <p id="city-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
-      Escribí una ciudad para consultar el clima. Los espacios solos no son una ciudad.
+      Escribí una ciudad para consultar el clima. Los espacios solos no son una ciudad. El nombre
+      admite hasta 100 caracteres.
     </p>
   }
   @if (feedback(); as issue) {
@@ -75,14 +106,9 @@
       </p>
       @if (issue.choices?.length) {
         <ul aria-label="Opciones para precisar la ciudad" class="mt-3 flex flex-wrap gap-2">
-          @for (choice of issue.choices; track choice.country) {
+          @for (choice of issue.choices; track choice.id ?? choice.country) {
             <li>
-              <button
-                type="button"
-                [disabled]="busy()"
-                (click)="chooseCountry(choice.country)"
-                class="example-button text-sm"
-              >
+              <button type="button" (click)="chooseLocation(choice)" class="example-button text-sm">
                 {{ choice.label }}
               </button>
             </li>
@@ -94,21 +120,15 @@
   <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs sm:text-sm">
     <span class="mr-1 text-muted">Probá con</span>
     @for (example of examples; track example) {
-      <button
-        type="button"
-        [disabled]="busy()"
-        (click)="chooseExample(example)"
-        class="example-button"
-      >
+      <button type="button" (click)="chooseExample(example)" class="example-button">
         {{ example }}
       </button>
     }
   </div>
   <p id="demo-help" class="mt-3 text-xs leading-relaxed text-muted">
-    Demo visual: las ciudades de ejemplo muestran datos ficticios, no el clima actual.
+    Consultá una ciudad o usá una búsqueda sugerida. Los datos se solicitan al servicio de clima.
   </p>
   <p id="country-help" class="mt-2 text-xs leading-relaxed text-muted">
-    El país es opcional. Podés indicar el código (AR) o el nombre (Argentina) para precisar la
-    ciudad.
+    El país es opcional. Usá un código de dos letras, como AR o ES, para precisar la ciudad.
   </p>
 </form>

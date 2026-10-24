@@ -38,11 +38,11 @@
       aria-label="Consulta de ciudad"
     >
       <app-city-search
-        #search
+        #citySearch
         [busy]="state() === 'loading'"
         [feedback]="feedback()"
         (queryEdited)="feedback.set(null)"
-        (querySubmitted)="showExample($event)"
+        (querySubmitted)="search($event)"
       />
     </section>
     <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
@@ -50,7 +50,7 @@
         @switch (state()) {
           @case ('loading') {
             <span class="inline-flex items-center gap-2"
-              ><span class="loading-dot" aria-hidden="true"></span> Preparando el ejemplo de
+              ><span class="loading-dot" aria-hidden="true"></span> Consultando el clima de
               {{ requestedCity() }}…</span
             >
           }
@@ -58,7 +58,7 @@
             <span class="inline-flex items-center gap-2"
               ><app-weather-icon name="pin" [size]="16" /><span
                 >Explorando <strong class="font-semibold text-ink">{{ weather()?.city }}</strong>
-                <span class="text-muted">· Datos ficticios</span></span
+                <span class="text-muted">· OpenWeather</span></span
               ></span
             >
           }
@@ -84,7 +84,7 @@
         <div class="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
           <app-current-weather
             [weather]="weather()"
-            (exampleRequested)="search.chooseExample('Córdoba')"
+            (exampleRequested)="citySearch.chooseExample('Córdoba')"
           />
           <app-forecast [weather]="weather()" class="lg:col-span-2 lg:row-start-2" />
           <app-recommendation [weather]="weather()" class="lg:col-start-2 lg:row-start-1" />
@@ -93,12 +93,12 @@
     </div>
     <aside
       class="mt-6 flex items-start gap-2.5 px-1 text-xs leading-6 text-muted"
-      aria-label="Información de la demo"
+      aria-label="Información del servicio"
     >
       <app-weather-icon name="sparkles" [size]="16" class="mt-1" />
       <p>
-        Un vistazo a lo que estamos creando. El clima, los horarios y los consejos de esta demo son
-        ejemplos fijos. No son información meteorológica actual ni respuestas generadas con IA.
+        La disponibilidad del pronóstico y del consejo puede variar. Consultá las condiciones antes
+        de organizar tus planes.
       </p>
     </aside>
   </main>

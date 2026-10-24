@@ -1,10 +1,10 @@
-// Modelo de presentación de TK03, independiente del futuro contrato de Django.
+// Modelo de presentación adaptado al contrato de Django, sin valores de reemplazo.
 export type WeatherCondition = 'sun' | 'cloud-sun' | 'cloud' | 'rain' | 'moon';
 export interface ForecastInterval {
   time: string;
   temperature: number;
-  condition: WeatherCondition;
-  description: string;
+  condition: WeatherCondition | null;
+  description: string | null;
 }
 export interface WeatherPreview {
   city: string;
@@ -12,11 +12,11 @@ export interface WeatherPreview {
   dateLabel: string;
   updatedAt: string;
   temperature: number;
-  feelsLike: number;
-  humidity: number;
-  wind: number;
-  condition: WeatherCondition;
-  description: string;
+  feelsLike: number | null;
+  humidity: number | null;
+  wind: number | null;
+  condition: WeatherCondition | null;
+  description: string | null;
   forecast: readonly ForecastInterval[];
-  advice: { heading: string; text: string; tips: readonly string[] };
+  advice: { heading: string; text: string; tips: readonly string[] } | null;
 }
