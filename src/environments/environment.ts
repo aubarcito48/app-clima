@@ -1,4 +1,4 @@
+// Generado por npm run env:configure. Solo configuración pública.
 export const environment = {
-  // Reemplazar por la URL HTTPS real de Django antes de integrar o publicar.
-  apiBaseUrl: 'https://api-clima.example.invalid',
+  "apiBaseUrl": "https://api-clima.example.invalid"
 } as const;

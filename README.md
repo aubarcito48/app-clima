@@ -59,10 +59,13 @@ Desde la carpeta `app-clima`:
 
 ```sh
 npm ci
+cp .env.example .env
 npm start
 ```
 
 Abrir http://localhost:4200. No es necesario ejecutar Django para ver la pantalla inicial.
+
+En PowerShell también podés copiar la plantilla con `Copy-Item .env.example .env`. El `.env` local queda ignorado por Git; `.env.example` sí se versiona y no contiene claves.
 
 ```sh
 npm run build
@@ -91,11 +94,17 @@ La página principal está en `pages/weather`. `shared` contiene los componentes
 | Desarrollo | `src/environments/environment.development.ts` | `http://localhost:8000` |
 | Producción | `src/environments/environment.ts` | `https://api-clima.example.invalid` (marcador sin servicio real) |
 
-Antes de integrar o publicar, reemplazar el marcador por la URL HTTPS real de Django en Render y recompilar. La base no incluye `/api/v1/clima/`; ese endpoint se incorporará al implementar el servicio en TK05.
+Configurar `PUBLIC_API_BASE_URL_DEVELOPMENT` y `PUBLIC_API_BASE_URL_PRODUCTION` en `.env`. Antes de integrar o publicar, reemplazar el marcador de producción por la URL HTTPS real de Django en Render y recompilar. La base no incluye `/api/v1/clima/`; ese endpoint se incorporará al implementar el servicio en TK05.
+
+Los scripts `start`, `build`, `build:dev`, `watch` y `test` ejecutan primero `scripts/configure-env.mjs`. Ese script genera los dos archivos de entorno usando exclusivamente esas dos variables públicas. Las variables del sistema o del hosting tienen prioridad sobre `.env`; sin `.env` se usan los valores públicos de ejemplo. No se agregan dependencias para leer el archivo.
+
+Los archivos TypeScript de entorno se conservan versionados porque solo contienen configuración pública. No editarlos para guardar claves: se regeneran al ejecutar los scripts. Cambiar `.env` requiere reiniciar el servidor o recompilar. Si usás el CLI directamente, ejecutar antes `npm run env:configure`.
 
 Angular CLI sustituye el archivo de entorno en desarrollo mediante `fileReplacements`. Para consumirlo se importa siempre `environment` desde `src/environments/environment.ts`, con la ruta relativa que corresponda. Consultar [entornos de Angular](https://angular.dev/tools/cli/environments).
 
 Estos valores son públicos y se incluyen en el navegador. No colocar claves de Groq, OpenWeather ni secretos aquí ni en archivos `.env` del frontend.
+
+Las API keys se guardarán en el `.env` de Django o en las variables privadas de Render al trabajar en el backend. No se necesita ninguna clave de proveedor para ejecutar este frontend. Un `.env` ignorado protege contra subir ese archivo a Git, pero no vuelve secreto un valor incluido en el JavaScript del navegador.
 
 ## Verificación de TK02
 
