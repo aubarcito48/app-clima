@@ -1,0 +1,113 @@
+﻿:host {
+  display: block;
+  min-width: 0;
+}
+.weather-panel {
+  background: linear-gradient(120deg, #edf2ff 0%, #e2edfb 55%, #dcebf8 100%);
+}
+.weather-panel::after {
+  content: '';
+  position: absolute;
+  width: 25rem;
+  height: 25rem;
+  border: 1px solid #fff9;
+  border-radius: 50%;
+  right: -12rem;
+  top: -6rem;
+  z-index: -1;
+  box-shadow:
+    0 0 0 3rem #ffffff20,
+    0 0 0 6rem #ffffff15;
+}
+.temperature {
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(4.5rem, 8vw, 6rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.075em;
+}
+.temperature-unit {
+  margin: 0.55rem 0 0 0.4rem;
+  font-size: 1.75rem;
+  letter-spacing: -0.04em;
+}
+.metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.9rem;
+  background: #ffffff80;
+  color: var(--color-secondary);
+}
+.weather-art {
+  filter: drop-shadow(0 12px 15px #627ba820);
+}
+.empty-sky {
+  position: relative;
+  height: 11rem;
+  width: 10rem;
+}
+.sun-disc {
+  position: absolute;
+  width: 6.8rem;
+  height: 6.8rem;
+  top: 1rem;
+  right: 0.3rem;
+  border-radius: 50%;
+  background: #f8ce65;
+  box-shadow:
+    0 0 0 12px #f8ce6520,
+    0 0 0 24px #f8ce6510;
+}
+.sky-cloud {
+  position: absolute;
+  height: 3.6rem;
+  width: 9rem;
+  top: 6rem;
+  left: -0.4rem;
+  border-radius: 4rem;
+  background: #fff;
+  box-shadow: 0 12px 24px #718db71a;
+}
+.sky-cloud::before,
+.sky-cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+.sky-cloud::before {
+  width: 4.5rem;
+  height: 4.5rem;
+  left: 1.1rem;
+  top: -2.1rem;
+}
+.sky-cloud::after {
+  width: 3.2rem;
+  height: 3.2rem;
+  right: 1rem;
+  top: -1.1rem;
+}
+.sky-cloud-back {
+  transform: scale(0.6);
+  background: #eef6ff;
+  top: 3.8rem;
+  left: 3.3rem;
+}
+@media (max-width: 639px) {
+  .empty-sky {
+    height: 9rem;
+    margin: 0.2rem auto 1rem;
+  }
+  .weather-art {
+    width: 5.5rem;
+  }
+  .weather-art app-weather-icon {
+    transform: scale(0.6);
+    transform-origin: left center;
+    width: 5rem;
+  }
+}

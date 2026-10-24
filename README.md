@@ -4,7 +4,15 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK02: base Angular con TypeScript estricto, componentes standalone, routing, SCSS y Tailwind CSS 4. La pantalla inicial es provisional; el diseño y los componentes de clima corresponden a TK03. Todavía no hay consultas HTTP ni integración con proveedores.
+TK03: interfaz principal responsive implementada con Tailwind CSS, componentes standalone y señales de Angular. Incluye búsqueda visual, clima actual, pronóstico por intervalos, recomendación y estados inicial, de carga y de resultado. Todavía no hay consultas HTTP ni integración con proveedores.
+
+## Explorar la demo
+
+Al abrir la aplicación se muestra el estado inicial. Elegir Córdoba, Buenos Aires o Mendoza, o usar «Ver ejemplo de Córdoba», para recorrer una carga simulada de un segundo y el resultado. También se puede escribir una de esas ciudades y enviar el formulario; el país puede estar vacío, ser AR o Argentina.
+
+Los valores, fechas y consejos son ejemplos fijos identificados como datos ficticios. No representan el clima actual ni son generados con IA. Si se escribe otra ciudad, la vista explica las opciones disponibles sin inventar un resultado. «Volver al inicio» permite revisar nuevamente el estado inicial.
+
+La validación completa de búsquedas corresponde a TK04 y la conexión HTTP a TK05. El modelo de presentación de la demo no fija el contrato de Django.
 
 ## Convenciones acordadas
 
@@ -54,7 +62,7 @@ src/app/service     Servicios de acceso a Django
 src/environments    Configuración pública por entorno
 ```
 
-Las cuatro carpetas se conservan con `.gitkeep` hasta implementar sus contenidos en las tareas siguientes.
+La página principal está en `pages/weather`. `shared` contiene los componentes de búsqueda, clima actual, pronóstico, recomendación, iconos y carga. `models/weather-preview.ts` contiene los tipos de presentación; los ejemplos fijos están en `pages/weather/weather-demo.ts`. `service` permanece reservado para la futura integración HTTP.
 
 ## Entornos
 
@@ -79,3 +87,15 @@ Verificado el 24 de octubre de 2026 con Node 24.13.1 y npm 11.10.0:
 - Entornos con URL pública únicamente, sin claves de proveedores.
 
 Esto no acredita integración con Django ni pruebas de clima; esas actividades pertenecen a tareas posteriores.
+
+## Verificación de TK03
+
+Verificado el 24 de octubre de 2026 con Node 24.13.1, npm 11.10.0 y Chromium 156.0.8078.4:
+
+- Vista inicial, carga y resultados revisados a 360, 768 y 1440 px sin desbordamiento horizontal ni controles fuera del viewport (CP10, alcance de TK03).
+- Regiones con títulos y formulario etiquetado, enlace de salto al contenido, foco visible, estado anunciable y animaciones desactivadas al preferir movimiento reducido.
+- Revisión automática con axe de estados inicial y de resultado sin infracciones detectadas en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas. Esto no sustituye una auditoría manual completa de accesibilidad (CP11 continúa en las tareas posteriores).
+- Ejemplos coherentes entre clima y consejo, cuatro intervalos, cambio de ciudad, retorno al inicio y aviso para ciudades fuera de la demo comprobados en navegador, sin solicitudes a proveedores ni errores de ejecución.
+- Siete pruebas de Angular aprobadas y build de producción completado. Las pruebas cubren entrada a la página, estado inicial, carga, resultado, separación de ejemplos, cancelación y limitaciones de la demo.
+
+Las herramientas de revisión visual se ejecutaron de forma temporal y no agregan dependencias a la aplicación. No se implementaron Django, Groq ni OpenWeather en esta tarea.

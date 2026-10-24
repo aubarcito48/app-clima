@@ -1,0 +1,90 @@
+﻿<section
+  class="weather-panel relative isolate h-full overflow-hidden rounded-[1.75rem] border border-white p-6 sm:p-8"
+  aria-labelledby="current-heading"
+>
+  <div class="relative z-10 flex items-center justify-between gap-3">
+    <h2 id="current-heading" class="text-sm font-semibold text-ink">Clima actual</h2>
+    <span
+      class="rounded-full border border-ink/10 bg-white/65 px-3 py-1 text-xs font-medium text-ink"
+      >{{ weather() ? 'Datos de prueba' : 'Tu próximo plan' }}</span
+    >
+  </div>
+  @if (weather(); as data) {
+    <div class="relative z-10 mt-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:mt-9">
+      <div class="min-w-0">
+        <p class="mb-2 flex items-center gap-1.5 text-sm text-secondary">
+          <app-weather-icon name="pin" [size]="16" /> {{ data.country }}
+        </p>
+        <h3 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          {{ data.city }}
+        </h3>
+        <p class="mt-2 text-sm text-secondary">
+          {{ data.dateLabel }} <span class="whitespace-nowrap">· {{ data.updatedAt }} h</span>
+        </p>
+        <p class="temperature mt-4 text-ink">
+          <span>{{ data.temperature }}</span
+          ><span class="temperature-unit">°C</span>
+        </p>
+        <p class="mt-2 text-base font-semibold text-ink">{{ data.description }}</p>
+        <p class="mt-1 text-sm text-secondary">Sensación térmica de {{ data.feelsLike }} °C</p>
+      </div>
+      <div class="weather-art text-ink/80" aria-hidden="true">
+        <app-weather-icon [name]="data.condition" [size]="150" />
+      </div>
+    </div>
+    <dl class="relative z-10 mt-8 grid grid-cols-2 gap-4 border-t border-ink/10 pt-5">
+      <div class="relative pl-13">
+        <dt class="text-xs text-secondary">
+          <span class="metric-icon absolute top-0 left-0"
+            ><app-weather-icon name="drop" [size]="21" /></span
+          >Humedad
+        </dt>
+        <dd class="mt-0.5 text-base font-semibold text-ink">{{ data.humidity }} %</dd>
+      </div>
+      <div class="relative pl-13">
+        <dt class="text-xs text-secondary">
+          <span class="metric-icon absolute top-0 left-0"
+            ><app-weather-icon name="wind" [size]="21" /></span
+          >Viento
+        </dt>
+        <dd class="mt-0.5 text-base font-semibold text-ink">{{ data.wind }} km/h</dd>
+      </div>
+    </dl>
+  } @else {
+    <div class="relative z-10 mt-7 grid items-center gap-3 sm:grid-cols-[1fr_10rem]">
+      <div class="order-2 sm:order-1">
+        <h3
+          class="max-w-78 font-display text-[1.9rem] leading-tight font-bold tracking-tight text-ink sm:text-[2.25rem]"
+        >
+          El cielo cambia.<br />Tus planes se adaptan.
+        </h3>
+        <p class="mt-4 max-w-76 text-sm leading-7 text-secondary">
+          Elegí una ciudad y encontrá el clima, las próximas horas y un consejo para acompañar tu
+          día.
+        </p>
+        <button
+          type="button"
+          (click)="exampleRequested.emit()"
+          class="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+        >
+          Ver ejemplo de Córdoba <app-weather-icon name="arrow" [size]="18" />
+        </button>
+      </div>
+      <div class="empty-sky order-1 sm:order-2" aria-hidden="true">
+        <div class="sun-disc"></div>
+        <div class="sky-cloud sky-cloud-back"></div>
+        <div class="sky-cloud"></div>
+      </div>
+    </div>
+    <div
+      class="relative z-10 mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-ink/10 pt-5 text-xs text-secondary"
+    >
+      <span class="flex items-center gap-2"
+        ><app-weather-icon name="sun" [size]="18" /> Clima de un vistazo</span
+      >
+      <span class="flex items-center gap-2"
+        ><app-weather-icon name="sparkles" [size]="18" /> Consejos para tu día</span
+      >
+    </div>
+  }
+</section>
