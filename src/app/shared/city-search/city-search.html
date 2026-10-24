@@ -1,5 +1,7 @@
-﻿<form
-  (submit)="submit($event)"
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  novalidate
   aria-label="Buscar el clima de una ciudad"
   aria-describedby="demo-help"
 >
@@ -16,13 +18,19 @@
         />
         <input
           id="city"
+          #cityField
           name="city"
           type="search"
           placeholder="Buscá una ciudad"
           autocomplete="address-level2"
           required
-          [value]="city()"
-          (input)="city.set($any($event.target).value)"
+          formControlName="city"
+          [readOnly]="busy()"
+          [attr.aria-invalid]="cityInvalid || feedback()?.kind === 'not-found' ? 'true' : null"
+          [attr.aria-describedby]="
+            cityInvalid ? 'city-error' : feedback() ? 'search-feedback' : null
+          "
+          (input)="onEdited()"
           class="field w-full pr-4 pl-12"
         />
       </div>
@@ -33,11 +41,17 @@
       >
       <input
         id="country"
+        #countryField
         name="country"
         placeholder="Ej. AR"
         autocomplete="country"
-        [value]="country()"
-        (input)="country.set($any($event.target).value)"
+        formControlName="country"
+        [readOnly]="busy()"
+        [attr.aria-invalid]="feedback()?.kind === 'ambiguous' ? 'true' : null"
+        [attr.aria-describedby]="
+          feedback()?.kind === 'ambiguous' ? 'country-help search-feedback' : 'country-help'
+        "
+        (input)="onEdited()"
         class="field w-full px-4"
       />
     </div>
@@ -49,6 +63,34 @@
       {{ busy() ? 'Cargando…' : 'Ver clima' }} <app-weather-icon name="arrow" [size]="18" />
     </button>
   </div>
+  @if (cityInvalid) {
+    <p id="city-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
+      Escribí una ciudad para consultar el clima. Los espacios solos no son una ciudad.
+    </p>
+  }
+  @if (feedback(); as issue) {
+    <div class="mt-4 rounded-xl border border-blue/20 bg-sky p-4">
+      <p id="search-feedback" role="alert" class="text-sm leading-6 text-ink">
+        {{ issue.message }}
+      </p>
+      @if (issue.choices?.length) {
+        <ul aria-label="Opciones para precisar la ciudad" class="mt-3 flex flex-wrap gap-2">
+          @for (choice of issue.choices; track choice.country) {
+            <li>
+              <button
+                type="button"
+                [disabled]="busy()"
+                (click)="chooseCountry(choice.country)"
+                class="example-button text-sm"
+              >
+                {{ choice.label }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
   <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs sm:text-sm">
     <span class="mr-1 text-muted">Probá con</span>
     @for (example of examples; track example) {
@@ -64,5 +106,9 @@
   </div>
   <p id="demo-help" class="mt-3 text-xs leading-relaxed text-muted">
     Demo visual: las ciudades de ejemplo muestran datos ficticios, no el clima actual.
+  </p>
+  <p id="country-help" class="mt-2 text-xs leading-relaxed text-muted">
+    El país es opcional. Podés indicar el código (AR) o el nombre (Argentina) para precisar la
+    ciudad.
   </p>
 </form>

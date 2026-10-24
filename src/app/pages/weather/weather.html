@@ -1,4 +1,4 @@
-﻿<a href="#main-content" class="skip-link">Saltar al contenido</a>
+<a href="#main-content" class="skip-link">Saltar al contenido</a>
 <div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
   <header
     class="flex flex-wrap items-center justify-between gap-4 border-b border-line py-6 sm:py-7"
@@ -37,7 +37,13 @@
       class="rounded-[1.5rem] border border-line bg-white p-5 sm:p-6"
       aria-label="Consulta de ciudad"
     >
-      <app-city-search [busy]="state() === 'loading'" (querySubmitted)="showExample($event)" />
+      <app-city-search
+        #search
+        [busy]="state() === 'loading'"
+        [feedback]="feedback()"
+        (queryEdited)="feedback.set(null)"
+        (querySubmitted)="showExample($event)"
+      />
     </section>
     <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
       <p role="status" aria-atomic="true" class="text-sm text-secondary">
@@ -71,20 +77,15 @@
         </button>
       }
     </div>
-    @if (message()) {
-      <p
-        role="alert"
-        class="mt-3 rounded-xl border border-blue/15 bg-sky px-4 py-3 text-sm leading-6 text-secondary"
-      >
-        {{ message() }}
-      </p>
-    }
     <div class="mt-4" [attr.aria-busy]="state() === 'loading'">
       @if (state() === 'loading') {
         <app-weather-loading />
       } @else {
         <div class="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-          <app-current-weather [weather]="weather()" (exampleRequested)="showExample()" />
+          <app-current-weather
+            [weather]="weather()"
+            (exampleRequested)="search.chooseExample('Córdoba')"
+          />
           <app-forecast [weather]="weather()" class="lg:col-span-2 lg:row-start-2" />
           <app-recommendation [weather]="weather()" class="lg:col-start-2 lg:row-start-1" />
         </div>
