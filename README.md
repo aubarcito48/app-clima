@@ -4,7 +4,14 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK02: base Angular con TypeScript estricto, componentes standalone, routing y SCSS. La pantalla inicial es provisional; el diseño y los componentes de clima corresponden a TK03. Todavía no hay consultas HTTP ni integración con proveedores.
+TK02: base Angular con TypeScript estricto, componentes standalone, routing, SCSS y Tailwind CSS 4. La pantalla inicial es provisional; el diseño y los componentes de clima corresponden a TK03. Todavía no hay consultas HTTP ni integración con proveedores.
+
+## Convenciones acordadas
+
+- En proyectos nuevos se usará CSS, no SCSS. Este proyecto conserva SCSS por decisión del usuario.
+- Trabajar con Tailwind CSS. La entrada global `src/tailwind.css` se procesa con `@tailwindcss/postcss` y convive con `src/styles.scss`.
+- Al crear proyectos, revisar `rootDir` explícito en las configuraciones de aplicación y pruebas. Aquí ambos usan `./src`.
+- Al finalizar cada TK, entregar un mensaje de commit listo para copiar.
 
 Sin base de datos, cuentas, historial persistente, dashboard ni administración. El backend se desarrolla por separado.
 
