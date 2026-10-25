@@ -1,0 +1,127 @@
+@if (location(); as place) {
+  <section
+    id="alertas"
+    class="rounded-3xl border border-line bg-surface p-4 sm:p-5"
+    aria-labelledby="alerts-heading"
+    [attr.aria-busy]="result().status === 'loading'"
+  >
+    <div class="flex flex-wrap items-start justify-between gap-2">
+      <div>
+        <h2
+          id="alerts-heading"
+          class="flex items-center gap-2 font-display text-lg font-bold text-ink"
+        >
+          <app-weather-icon name="alert" [size]="22" />Alertas meteorológicas
+        </h2>
+        <p class="mt-1 text-xs leading-6 text-secondary">
+          Avisos del SMN para {{ place.nombre }}. Hora local de la ciudad.
+        </p>
+      </div>
+      <a
+        href="https://www.smn.gob.ar/alertas"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex min-h-11 items-center rounded-lg px-2 text-xs font-semibold text-blue underline"
+        >Consultar SMN<span class="sr-only"> (se abre en otra pestaña)</span></a
+      >
+    </div>
+    <p
+      class="mt-2 text-sm leading-6 text-secondary"
+      role="status"
+      aria-label="Estado de alertas meteorológicas"
+      aria-atomic="true"
+    >
+      @if (result().status === 'loading') {
+        Consultando avisos oficiales…
+      } @else if (result().status === 'unavailable' || result().data?.estado === 'no_disponible') {
+        No pudimos verificar las alertas en este momento. Consultá la fuente oficial.
+      } @else if (result().data?.estado === 'fuera_cobertura') {
+        Esta sección cubre Argentina. No tenemos alertas verificadas para este país.
+      } @else if (result().data?.estado === 'parcial') {
+        Consulta incompleta: no se pudieron verificar todos los avisos. Consultá el SMN para ampliar
+        la información.
+      } @else if (result().data?.estado === 'disponible' && !result().data?.alertas?.length) {
+        Sin alertas reportadas para esta ubicación. Esto no equivale a ausencia de riesgo.
+      } @else if (result().data?.alertas?.length) {
+        Avisos vigentes o programados para esta ubicación: {{ result().data?.alertas?.length }}.
+      }
+    </p>
+    @if (result().data; as data) {
+      <ul class="mt-3 grid gap-3">
+        @for (alert of data.alertas; track $index) {
+          <li
+            class="alert-notice rounded-2xl border border-control-line p-4"
+            [attr.data-severity]="alert.severidad"
+          >
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="font-display text-base font-bold text-ink">{{ alert.fenomeno }}</h3>
+              <span class="severity rounded-full px-3 py-1 text-xs font-semibold"
+                >Severidad: {{ severity(alert.severidad) }}</span
+              >
+            </div>
+            <p class="mt-2 text-xs leading-6 text-secondary">
+              Desde
+              <time [attr.datetime]="alert.inicio_utc">{{ localTime(alert.inicio_utc) }}</time>
+              hasta <time [attr.datetime]="alert.fin_utc">{{ localTime(alert.fin_utc) }}</time
+              >.
+            </p>
+            <p
+              class="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink [overflow-wrap:anywhere]"
+              [textContent]="alert.descripcion"
+            ></p>
+            <details class="mt-2 rounded-lg text-sm text-secondary">
+              <summary class="min-h-11 cursor-pointer rounded-lg py-3 font-semibold text-blue">
+                Recomendaciones y área del aviso
+              </summary>
+              @if (alert.recomendaciones) {
+                <p
+                  class="whitespace-pre-wrap leading-6 [overflow-wrap:anywhere]"
+                  [textContent]="alert.recomendaciones"
+                ></p>
+              }
+              <p class="mt-2 text-xs leading-6 [overflow-wrap:anywhere]">{{ alert.zona }}</p>
+              <p class="mt-1 text-xs leading-6">Emitido: {{ localTime(alert.emitido_en_utc) }}.</p>
+              <a
+                [href]="alert.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-2 inline-flex min-h-11 items-center rounded-lg text-xs font-semibold text-blue underline"
+                >Ver documento oficial<span class="sr-only"> (se abre en otra pestaña)</span></a
+              >
+            </details>
+          </li>
+        }
+      </ul>
+      @if (data.estado !== 'fuera_cobertura') {
+        <p class="mt-3 text-xs leading-6 text-muted">
+          Fuente: {{ data.fuente.nombre }}. Consultado:
+          {{ localTime(data.fuente.consultado_en_utc) }}. Actualización automática cada tres
+          minutos.
+        </p>
+      }
+    }
+    @if (result().status !== 'loading' && result().data?.estado !== 'fuera_cobertura') {
+      <button
+        type="button"
+        class="mt-2 min-h-11 rounded-xl border border-control-line px-3 text-xs font-semibold text-blue hover:bg-sky"
+        (click)="retry()"
+      >
+        Actualizar avisos
+      </button>
+    }
+    <p class="mt-3 border-t border-line pt-3 text-xs leading-6 text-muted">
+      Son avisos meteorológicos oficiales; no incluyen un monitoreo de sismos ni de crecidas de
+      ríos. El Niño y La Niña aportan contexto estacional, pero no confirman un desastre en una
+      ciudad.
+      <a
+        class="rounded text-blue underline"
+        href="https://www.argentina.gob.ar/ina/el-nino-situacion-hidrometeorologica-en-argentina"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Ver informes oficiales sobre El Niño<span class="sr-only">
+          (se abre en otra pestaña)</span
+        ></a
+      >.
+    </p>
+  </section>
+}

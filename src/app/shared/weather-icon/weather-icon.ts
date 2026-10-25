@@ -13,7 +13,8 @@ export type IconName =
   | 'sunrise'
   | 'sunset'
   | 'heart'
-  | 'menu';
+  | 'menu'
+  | 'alert';
 @Component({
   selector: 'app-weather-icon',
   templateUrl: './weather-icon.html',

@@ -23,6 +23,10 @@ type ApiMock = {
   placesBody: unknown;
   placesStatus: number;
   placesHandler: ((route: Route, url: URL) => Promise<void>) | null;
+  alertsRequests: URL[];
+  alertsBody: unknown;
+  alertsStatus: number;
+  alertsHandler: ((route: Route, url: URL) => Promise<void>) | null;
   handler: ((route: Route, url: URL) => Promise<void>) | null;
   fulfill: (route: Route, body: unknown, status?: number) => Promise<void>;
 };
@@ -56,6 +60,10 @@ export const test = base.extend<{ api: ApiMock }>({
         },
         placesStatus: 200,
         placesHandler: null,
+        alertsRequests: [],
+        alertsBody: null,
+        alertsStatus: 200,
+        alertsHandler: null,
         handler: null,
         fulfill: (route, body, status = 200) =>
           route.fulfill({
@@ -78,6 +86,30 @@ export const test = base.extend<{ api: ApiMock }>({
           api.requests.push(url);
           if (api.handler) await api.handler(route, url);
           else await api.fulfill(route, api.body, api.status);
+        } else if (url.origin === apiURL.origin && url.pathname === '/api/v1/alertas/') {
+          expect(route.request().method()).toBe('GET');
+          api.alertsRequests.push(url);
+          if (api.alertsHandler) await api.alertsHandler(route, url);
+          else
+            await api.fulfill(
+              route,
+              api.alertsBody ?? {
+                ubicacion: {
+                  latitud: Number(url.searchParams.get('latitud')),
+                  longitud: Number(url.searchParams.get('longitud')),
+                  pais: url.searchParams.get('pais'),
+                },
+                estado: 'disponible',
+                alertas: [],
+                fuente: {
+                  nombre: 'Servicio Meteorológico Nacional',
+                  url: 'https://www.smn.gob.ar/alertas',
+                  consultado_en_utc: '2026-10-25T12:00:00Z',
+                  publicado_en_utc: '2026-10-25T12:00:00Z',
+                },
+              },
+              api.alertsStatus,
+            );
         } else if (url.origin === placesURL.origin && url.pathname === placesURL.pathname) {
           expect(route.request().method()).toBe('GET');
           api.placesRequests.push(url);

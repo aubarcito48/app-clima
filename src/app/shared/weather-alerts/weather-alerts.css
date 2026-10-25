@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.severity {
+  background: var(--color-sky);
+  color: var(--color-ink);
+}
+.alert-notice {
+  border-inline-start-width: 4px;
+}
+.alert-notice[data-severity='Extreme'],
+.alert-notice[data-severity='Severe'] {
+  border-inline-start-color: var(--color-danger);
+}
+.alert-notice[data-severity='Moderate'] {
+  border-inline-start-color: var(--color-blue);
+}

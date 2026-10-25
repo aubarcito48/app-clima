@@ -1,3 +1,5 @@
+import { EMPTY } from 'rxjs';
+import { WeatherAlertsApi } from '../../service/weather-alerts-api';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -12,7 +14,11 @@ describe('Recovery and accessible interactions (TK08)', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [Weather],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: WeatherAlertsApi, useValue: { search: () => EMPTY } },
+      ],
     });
     http = TestBed.inject(HttpTestingController);
   });

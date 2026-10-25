@@ -15,6 +15,7 @@ import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { FavoritePlaces } from '../../service/favorite-places';
 import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
+import { WeatherAlerts } from '../../shared/weather-alerts/weather-alerts';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
 @Component({
   selector: 'app-weather',
@@ -26,6 +27,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
     WeatherLoading,
     WeatherSidebar,
     ThemeToggle,
+    WeatherAlerts,
   ],
   templateUrl: './weather.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

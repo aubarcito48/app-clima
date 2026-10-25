@@ -75,8 +75,10 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   await expect(page.locator('.temperature')).toBeVisible();
   await page.getByLabel('Unidad de temperatura').focus();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('group', { name: 'Elegir un día del pronóstico, desplazables horizontalmente' })).toBeFocused();
-  for (let index = 0; index < await page.locator('.day-choice').count(); index++) {
+  await expect(
+    page.getByRole('group', { name: 'Elegir un día del pronóstico, desplazables horizontalmente' }),
+  ).toBeFocused();
+  for (let index = 0; index < (await page.locator('.day-choice').count()); index++) {
     await page.keyboard.press('Tab');
     await expect(page.locator('.day-choice').nth(index)).toBeFocused();
   }
@@ -130,7 +132,8 @@ test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema
   await expect(page.locator('.weather-panel')).not.toHaveCSS('background-image', 'none');
   await expect(page.locator('#current-heading')).toHaveCSS('color', 'rgb(18, 57, 82)');
   const initialDayAudit = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
   expect(initialDayAudit.violations).toEqual([]);
   const toggle = page.getByRole('button', { name: 'Activar modo oscuro', exact: true });
   await toggle.focus();
@@ -153,10 +156,12 @@ test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema
   await expect(page.locator('#advice-text')).toHaveCSS('color', 'rgb(18, 57, 82)');
   await expect(page.locator('.weather-panel')).not.toHaveCSS('background-image', 'none');
   const readyDayAudit = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
   expect(readyDayAudit.violations).toEqual([]);
   await info.attach('modo-dia-con-clima', {
-    body: await page.locator('app-current-weather').screenshot(), contentType: 'image/png',
+    body: await page.locator('app-current-weather').screenshot(),
+    contentType: 'image/png',
   });
   await page.getByRole('button', { name: 'Activar modo oscuro', exact: true }).click();
   await page.reload();
@@ -486,7 +491,9 @@ test('clima disponible con IA no disponible y aviso anunciable', async ({ page, 
   await expect(page.locator('app-forecast ol li')).toHaveCount(2);
   await expect(page.locator('app-recommendation')).toHaveCount(0);
   await expect(page.locator('#advice-text')).toHaveCount(0);
-  await expect(page.getByRole('status')).not.toContainText('Consejo de IA');
+  await expect(
+    page.getByRole('status', { name: 'Estado de la consulta del clima' }),
+  ).not.toContainText('Consejo de IA');
   await info.attach('IA-no-disponible', {
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
@@ -626,7 +633,9 @@ test('una respuesta tardía y un duplicado pendiente no reemplazan la última b�
   await search(page, 'Córdoba');
   await expect.poll(() => api.requests.length).toBe(1);
   await page.locator('#city').press('Enter');
-  await expect(page.getByRole('status')).toContainText('Consultando el clima de Córdoba');
+  await expect(page.getByRole('status', { name: 'Estado de la consulta del clima' })).toContainText(
+    'Consultando el clima de Córdoba',
+  );
   await search(page, 'Mendoza');
   await expect(page.locator('app-current-weather h3')).toHaveText('Mendoza');
   try {
