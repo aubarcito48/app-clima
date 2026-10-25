@@ -72,7 +72,10 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     contentType: 'image/png',
   });
   await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
-  await expect(page.locator('a[href="#consejo-ia"], a[href="#musica"]')).toHaveCount(0);
+  await expect(page.locator('app-current-weather #advice-text')).toHaveText(
+    data.recomendacion.texto!,
+  );
+  await expect(page.locator('a[href="#musica"]')).toHaveCount(0);
   await page.locator('#city').fill('Otro lugar');
   await expect(page.locator('.temperature')).toHaveCount(0);
   await expect(page.locator('app-temperature-chart svg')).toHaveCount(0);
@@ -122,7 +125,9 @@ test('flujo principal: clima, unidades y consejo de la misma consulta', async ({
   await expect(page.locator('app-current-weather dd').nth(0)).toHaveText('0 %');
   await expect(page.locator('app-current-weather dd').nth(1)).toHaveText('9.123 km/h');
   await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
-  await expect(page.locator('#advice-text')).toHaveCount(0);
+  await expect(page.locator('app-current-weather #advice-text')).toHaveText(
+    'Consejo ficticio de prueba para Mendoza.',
+  );
   await expect(page.locator('app-forecast ol li')).toHaveCount(2);
   await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
   await info.attach('resultado', {
@@ -289,7 +294,7 @@ test('una respuesta tardía y un duplicado pendiente no reemplazan la última b�
   } finally {
     await release?.();
   }
-  await expect(page.locator('#advice-text')).toHaveCount(0);
+  await expect(page.locator('#advice-text')).toHaveText('Consejo ficticio de prueba para Mendoza.');
   await expect(page.locator('app-current-weather h3')).toHaveText('Mendoza');
 });
 
@@ -299,7 +304,10 @@ test('texto literal, accesibilidad y ausencia de desbordamiento', async ({ page,
   api.body = data;
   await page.goto('/');
   await search(page, 'Córdoba');
-  await expect(page.locator('#advice-text')).toHaveCount(0);
+  await expect(page.locator('app-current-weather #advice-text')).toHaveText(
+    data.recomendacion.texto!,
+  );
+  await expect(page.locator('#advice-text script, #advice-text img')).toHaveCount(0);
   await expect(page.locator('app-recommendation script, app-recommendation img')).toHaveCount(0);
   const dimensions = await page.evaluate(() => ({
     viewport: innerWidth,

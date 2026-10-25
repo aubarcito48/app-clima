@@ -50,6 +50,34 @@
         }
       </div>
 
+      <section
+        id="consejo-ia"
+        aria-labelledby="clothing-advice-heading"
+        class="relative z-10 mt-3 rounded-2xl border border-white/15 bg-[#164d69]/65 px-4 py-3"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h4
+            id="clothing-advice-heading"
+            class="flex items-center gap-2 text-xs font-semibold text-ink"
+          >
+            <app-weather-icon name="sparkles" [size]="16" />Qué ponerte hoy
+          </h4>
+          @if (data.advice) {
+            <span class="text-[11px] text-secondary">Generado con IA</span>
+          }
+        </div>
+        @if (data.advice; as advice) {
+          <p
+            id="advice-text"
+            class="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink [overflow-wrap:anywhere]"
+            [textContent]="advice.text"
+          ></p>
+        } @else {
+          <p class="mt-2 text-xs leading-5 text-secondary">
+            El consejo de ropa no está disponible por el momento.
+          </p>
+        }
+      </section>
       <div
         class="relative z-10 mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-ink/10 pt-2 text-xs leading-5 text-secondary"
       >

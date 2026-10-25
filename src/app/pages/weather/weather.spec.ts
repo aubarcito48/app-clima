@@ -158,7 +158,7 @@ describe('Weather Django integration', () => {
     expect(fixture.componentInstance.feedback()).toBeNull();
   });
 
-  it('does not render removed blocks even when the response includes AI content', async () => {
+  it('renders clothing advice safely inside current weather without separate blocks', async () => {
     const fixture = TestBed.createComponent(Weather);
     await fixture.whenStable();
     fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
@@ -169,6 +169,10 @@ describe('Weather Django integration', () => {
     expect(fixture.nativeElement.querySelector('app-recommendation img')).toBeNull();
     expect(fixture.nativeElement.querySelector('app-recommendation')).toBeNull();
     expect(fixture.nativeElement.querySelector('app-weather-music')).toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('app-current-weather #advice-text')?.textContent,
+    ).toBe(data.recomendacion.texto);
+    expect(fixture.nativeElement.querySelector('#advice-text img')).toBeNull();
   });
 
   it('never mixes an earlier recommendation with the latest city when AI is unavailable', async () => {
@@ -180,7 +184,9 @@ describe('Weather Django integration', () => {
     expect(fixture.componentInstance.weather()?.advice?.text).toBe(
       CLIMATE_FIXTURE.recomendacion.texto,
     );
-    expect(fixture.nativeElement.querySelector('#advice-text')).toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('app-current-weather #advice-text')?.textContent,
+    ).toBe(CLIMATE_FIXTURE.recomendacion.texto);
     fixture.componentInstance.search({ city: 'Buenos Aires', country: 'AR' });
     const older = http.expectOne(() => true);
     fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
