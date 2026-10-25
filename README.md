@@ -4,7 +4,7 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK08: recuperación de errores y accesibilidad de las interacciones. Ciudad inexistente, conexión fallida, espera agotada y límite de solicitudes tienen mensajes y acciones explícitas. Se puede reintentar o cancelar; el foco y los anuncios de estado acompañan los cambios. Se conservan la conexión de TK05, el clima de TK06 y las recomendaciones de TK07.
+TK09: regresión del frontend automatizada y verificada. Pasan 69 pruebas unitarias y 27 ejecuciones E2E en Chromium (nueve escenarios en tres tamaños). Playwright prueba el flujo principal, fallas parciales, búsquedas concurrentes y recuperación con respuestas controladas. La publicación en Vercel y el consumo público de Render corresponden a TK10.
 
 ## Consultar el clima
 
@@ -122,9 +122,37 @@ src/app/models      Modelos TypeScript
 src/app/service     Servicios de acceso a Django
 src/app/testing     Fixtures ficticios usados únicamente por las pruebas
 src/environments    Configuración pública por entorno
+e2e                 Regresión Playwright con respuestas controladas
+playwright.config.ts Proyectos de navegador, reportes y artefactos
 ```
 
-La página principal está en `pages/weather`. `shared` contiene los componentes de búsqueda, clima actual, pronóstico, recomendación, iconos y carga. `models/weather-preview.ts` contiene los tipos de presentación; los ejemplos fijos están en `pages/weather/weather-demo.ts`. `service` permanece reservado para la futura integración HTTP.
+La página principal está en `pages/weather`. `shared` contiene los componentes de búsqueda, clima actual, pronóstico, recomendación, iconos y carga. `models/weather-preview.ts` contiene los tipos de presentación y `models/climate-response.ts` el contrato recibido. `service/climate-api.ts` consulta a Django y `service/climate-presentation.ts` adapta datos y errores. `testing/climate-fixture.ts` contiene únicamente datos ficticios para pruebas; ya no hay transporte de demo en la aplicación.
+
+## Regresión reproducible
+
+Desde un clon con Node y dependencias instaladas:
+
+```sh
+npm ci
+npm run e2e:install
+npm test -- --watch=false
+npm run e2e:typecheck
+npm run e2e
+```
+
+`e2e:install` prepara Chromium para Playwright. `npm run e2e` prepara los entornos públicos, inicia una instancia Angular separada en `http://127.0.0.1:4300` con configuración de producción, ejecuta los tres proyectos y cierra esa instancia al terminar. El puerto debe estar libre; no se reutiliza ni se cierra el servidor habitual de desarrollo en 4200. No necesita Django, `.env` ni claves de proveedores.
+
+Los proyectos `mobile-360`, `tablet-768` y `desktop-1440` usan Chromium, viewport de 360/768/1440 px, zona del navegador Asia/Tokyo y movimiento reducido. No representan pruebas de Safari, Firefox ni dispositivos físicos. Se ejecutan sin reintentos automáticos, con dos workers locales y uno en CI; una falla no se oculta mediante reintentos.
+
+`e2e/fixtures.ts` intercepta antes de navegar la URL de clima configurada por el build. Solo los archivos del servidor local pueden continuar a la red: la API recibe respuestas simuladas y cualquier otro origen se bloquea y hace fallar la prueba. También fallan los errores de ejecución y diálogos inesperados. No se usan `route.fetch`, cuentas reales ni un backend público. Esta regresión acredita el frontend con el contrato controlado; la integración real publicada queda para TK10.
+
+El reporte se guarda en `playwright-report/`; `test-results/` conserva los artefactos de ejecución. Se adjuntan capturas del flujo principal y de IA no disponible; ante fallas se conservan screenshot y traza. Ambas carpetas están ignoradas por Git. Para revisar el reporte local:
+
+```sh
+npm run e2e:report
+```
+
+La configuración está en `playwright.config.ts` y se comprueba mediante `e2e/tsconfig.json`, con `rootDir` explícito e independiente del código compilado de Angular. La integración CLI se agregó mediante `ng add playwright-ng-schematics`. Dependencias de prueba fijadas: Playwright Test 1.64.1, schematic 21.1.1, axe-playwright 4.14.0 y tipos de Node 24.19.2. La estrategia usa [intercepción de APIs de Playwright](https://playwright.dev/docs/mock) y [proyectos por configuración](https://playwright.dev/docs/test-projects).
 
 ## Entornos
 
@@ -228,3 +256,23 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 - Chromium a 360, 768 y 1440 px: búsqueda con Enter, enlace de salto, corrección de 404, reintento con Tab/Enter tras 429/503/conexión, timeout simulado, cancelación con retorno de foco, resultado parcial y región inválida. Sin carga bloqueada, desbordamiento horizontal ni errores de ejecución.
 - Axe sin infracciones detectadas en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre errores, resultado parcial y validación de región. Medidos borde de campo 3,33:1, botones de ejemplo de 44 px y animación desactivada con movimiento reducido. Revisados visualmente los paneles de recuperación y el foco.
 - Build de producción completado y formato/diff revisados. Revisión de navegador con respuestas HTTP y timeout simulados, sin llamar a proveedores reales. No se modificaron `.env`, claves, backend, dependencias ni documentos originales; sin commit ni despliegue. La regresión integral y su automatización versionada corresponden a TK09.
+
+## Verificación de TK09
+
+24 de octubre de 2026 (America/Buenos_Aires). Windows, Node 24.13.1, npm 11.10.0, Angular 21.2.25, Playwright 1.64.1 y Chromium 156.0.8078.4.
+
+| Cobertura del plan CP01–CP12 y CP14 | Resultado local |
+| --- | --- |
+| Validadores, normalización, códigos ASCII y parámetros reservados | Suite unitaria y E2E: entrada inválida sin GET; parámetros decodificados coherentes con lo enviado. |
+| Clima actual, unidades, datos ausentes y fechas | Suite unitaria y E2E: ceros/negativos/decimales, nulls, 40 intervalos, cruce de año y hora de ciudad independiente del navegador. |
+| Recomendaciones y disponibilidad parcial | E2E: consejo ligado a la consulta, clima con IA no disponible y ambos bloques opcionales ausentes sin mediciones inventadas. |
+| Ambigüedad, errores y recuperación | E2E: candidatos del mismo país refinados por región, 404 y reintento de 503 con teclado; la suite unitaria mantiene conexión, timeout, 429, cancelación y corrección de campos. |
+| Concurrencia y respuesta tardía | Se retiene la primera respuesta hasta después del resultado de la nueva ciudad; un duplicado pendiente no añade GET y el consejo final corresponde a la última búsqueda. |
+| Teclado, responsive y accesibilidad | Enter, Tab, enlace de salto, foco de corrección y reintento comprobados a tres tamaños; axe sin infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre resultado y límite de solicitudes. |
+
+- `npm test -- --watch=false`: **69 pruebas aprobadas**.
+- `npm run e2e`: **27 ejecuciones aprobadas** (nueve escenarios por tres tamaños), sin reintentos. Se ejecuta el build optimizado de producción a través del servidor de pruebas.
+- `npm run e2e:typecheck`: sin errores. Instalación de Chromium verificada; npm reporta cero vulnerabilidades al instalar las dependencias de prueba.
+- Inspección visual de las capturas de 360, 768 y 1440 px: contenido legible, foco visible y ausencia de desbordamiento; revisados éxito y consejo no disponible. Navegación con teclado automatizada. No se probó un lector de pantalla real ni se certifica accesibilidad completa.
+- Sin defectos bloqueantes observados en los casos ejecutados. La configuración inicial necesitó declarar los tipos de Node para comprobar los E2E; quedó resuelto y el chequeo pasa. No fueron necesarios cambios en el comportamiento de la aplicación.
+- README y lockfile actualizados. Sin llamadas a proveedores reales ni modificaciones de claves, `.env`, backend o documentos originales. Reporte disponible localmente; sin commit, PR ni despliegue. El usuario vinculará el commit al versionar TK09. TK10 continúa pendiente.
