@@ -170,4 +170,36 @@ describe('Weather Django integration', () => {
     expect(fixture.nativeElement.querySelector('app-recommendation img')).toBeNull();
     expect(fixture.nativeElement.querySelector('app-recommendation').textContent).toContain('<img');
   });
+
+  it('never mixes an earlier recommendation with the latest city when AI is unavailable', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    http.expectOne(() => true).flush(CLIMATE_FIXTURE);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('#advice-text').textContent).toBe(
+      CLIMATE_FIXTURE.recomendacion.texto,
+    );
+    fixture.componentInstance.search({ city: 'Buenos Aires', country: 'AR' });
+    const older = http.expectOne(() => true);
+    fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
+    expect(older.cancelled).toBe(true);
+    expect(fixture.componentInstance.weather()).toBeNull();
+    const latest = structuredClone(CLIMATE_FIXTURE);
+    latest.ubicacion.nombre = 'Mendoza';
+    latest.ubicacion.region = 'Mendoza';
+    latest.recomendacion = { estado: 'no_disponible', texto: null };
+    http.expectOne(() => true).flush(latest);
+    expect(() => older.flush(CLIMATE_FIXTURE)).toThrow();
+    await fixture.whenStable();
+    const view: HTMLElement = fixture.nativeElement;
+    expect(view.querySelector('app-current-weather h3')?.textContent).toContain('Mendoza');
+    expect(view.querySelector('app-forecast ol')).not.toBeNull();
+    expect(view.querySelector('app-recommendation')?.textContent).toContain(
+      'Para tu día en Mendoza',
+    );
+    expect(view.querySelector('app-recommendation')?.textContent).toContain('no está disponible');
+    expect(view.querySelector('#advice-text')).toBeNull();
+    expect(view.textContent).not.toContain(CLIMATE_FIXTURE.recomendacion.texto);
+  });
 });

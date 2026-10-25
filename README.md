@@ -4,7 +4,7 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK06: clima actual y pronóstico presentados con ubicación resuelta, unidades y fechas de la ciudad. Se distinguen la medición y la consulta, se muestra OpenWeather como fuente y se conservan todos los intervalos agrupados por fecha local. La conexión HTTP, validación del contrato y cancelación de búsquedas anteriores de TK05 siguen vigentes.
+TK07: recomendaciones recibidas desde Django con ubicación identificada y estados «Generado con IA» / «No disponible». Se muestra únicamente el texto del backend, sin ejecutar HTML ni crear consejos de reemplazo. El clima y el pronóstico disponibles permanecen visibles si falla la IA. Se conservan la conexión de TK05 y la presentación meteorológica de TK06.
 
 ## Consultar el clima
 
@@ -12,7 +12,15 @@ Al abrir la aplicación se muestra el estado inicial sin solicitudes automática
 
 Para obtener información real, Django debe estar iniciado y tener configurada su clave privada de OpenWeather. Groq necesita clave y modelo habilitado en el backend; si falta o falla, la respuesta puede conservar el clima con IA no disponible. No se configuraron ni consumieron cuentas externas durante TK05. «Volver al inicio» cancela una solicitud pendiente y limpia el resultado.
 
-El modelo `ClimateResponse` reproduce los cinco bloques del contrato v1: `ubicacion`, `actual`, `pronostico`, `recomendacion` y `meta`. El servicio lee JSON como `unknown` y comprueba tipos, fechas UTC, unidades y estados parciales antes de adaptarlo al modelo visual. Campos meteorológicos opcionales omitidos o null se conservan como ausencia; una respuesta sin datos obligatorios se rechaza con un aviso, sin fabricar mediciones. TK06 completa la presentación meteorológica; la revisión específica de consejos continúa en TK07.
+El modelo `ClimateResponse` reproduce los cinco bloques del contrato v1: `ubicacion`, `actual`, `pronostico`, `recomendacion` y `meta`. El servicio lee JSON como `unknown` y comprueba tipos, fechas UTC, unidades y estados parciales antes de adaptarlo al modelo visual. Campos meteorológicos opcionales omitidos o null se conservan como ausencia; una respuesta sin datos obligatorios se rechaza con un aviso, sin fabricar mediciones. TK06 completa la presentación meteorológica y TK07 la de recomendaciones.
+
+## Recomendaciones de IA
+
+La tarjeta usa `recomendacion.estado` y `recomendacion.texto` de la misma respuesta que el clima. Tanto el consejo disponible como su aviso de ausencia identifican ciudad, región cuando exista y país resueltos por Django. No se realizan peticiones separadas a Groq desde Angular ni se guardan consejos de búsquedas anteriores.
+
+Si el estado es `disponible`, se muestra «Generado con IA» y el texto completo recibido. Se conservan saltos de línea, acentos y hasta los 600 caracteres aceptados por el contrato, con ajuste de palabras largas en móvil. El texto se asigna a `textContent`: HTML, scripts, Markdown y expresiones de plantilla se muestran literalmente, sin interpretarlos. Se retiraron el encabezado genérico y la lista de sugerencias de la antigua demo del modelo de consejo.
+
+Si el estado es `no_disponible`, se muestra «No disponible» y un aviso; no se sustituye el consejo por uno inventado. El clima y el pronóstico que sí existan siguen visibles. Antes de una consulta no aparece una recomendación ficticia. Al iniciar otra búsqueda se retira el resultado anterior; la cancelación de TK05 impide que una respuesta tardía mezcle un consejo anterior con la nueva ubicación. Reenviar el formulario realiza una nueva consulta completa, sin reintentos automáticos exclusivos de IA.
 
 ## Clima y fechas de la ciudad
 
@@ -179,3 +187,14 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 - **49 pruebas aprobadas** mediante `npm test -- --watch=false`; 12 casos nuevos de adaptación y renderizado. Build de producción completado.
 - Chromium a 360, 768 y 1440 px: revisados valores, ambas fechas, agrupación de 40 intervalos, cambio de año y estados sin datos. Sin desbordamiento horizontal ni errores de ejecución. Axe no detectó infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre el resultado; no equivale a una auditoría completa.
 - La comprobación visual usó respuestas HTTP simuladas del contrato, sin consultas a Django ni a proveedores reales. No se modificaron claves, `.env`, backend, dependencias ni documentos originales; sin commit ni despliegue. TK07 continúa pendiente para la presentación específica de recomendaciones.
+
+## Verificación de TK07
+
+Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25, Node 24.13.1, npm 11.10.0 y Chromium 156.0.8078.4. Se aplicaron Angular/Google y frontend-design de Anthropic, manteniendo la estética y Tailwind existentes.
+
+- CP07: texto exacto recibido, saltos de línea y ubicación resuelta en la tarjeta. Una secuencia de búsquedas con un consejo previo y una solicitud cancelada termina mostrando solo la última ciudad, sin conservar recomendaciones de otra consulta.
+- CP09: IA no disponible muestra su estado y aviso, conservando clima actual y pronóstico válidos. Comprobados los estados inicial, disponible y no disponible, sin consejo de reemplazo ni lista vacía de sugerencias.
+- Renderizado seguro comprobado con etiquetas de imagen, scripts, Markdown, enlaces `javascript:` y expresiones de plantilla como texto literal. En Chromium no se crearon elementos ejecutables, no se evaluó el script ni se abrieron diálogos.
+- **57 pruebas aprobadas** con `npm test -- --watch=false`, ocho casos nuevos específicos de recomendaciones y coherencia entre consultas. Build de producción completado.
+- Chromium a 360, 768 y 1440 px: estados disponible/no disponible, texto con saltos, HTML literal y una palabra de 600 caracteres sin recorte ni desbordamiento. Sin errores de ejecución. Axe no detectó infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre ambos estados; no equivale a una auditoría completa.
+- Pruebas y revisión visual con respuestas HTTP simuladas, sin llamadas ni gasto en proveedores reales. README actualizado; backend, claves, `.env`, dependencias y documentos originales conservados. Sin commit ni despliegue. La revisión general de errores y accesibilidad corresponde a TK08.

@@ -26,5 +26,5 @@ export interface WeatherPreview {
   condition: WeatherCondition | null;
   description: string | null;
   forecast: readonly ForecastInterval[];
-  advice: { heading: string; text: string; tips: readonly string[] } | null;
+  advice: { text: string } | null;
 }

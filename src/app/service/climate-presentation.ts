@@ -57,9 +57,7 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
     advice:
       data.recomendacion.estado === 'disponible'
         ? {
-            heading: 'Para acompañar tus planes',
             text: data.recomendacion.texto!,
-            tips: [],
           }
         : null,
   };
