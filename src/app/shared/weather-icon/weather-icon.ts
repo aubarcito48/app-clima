@@ -11,7 +11,8 @@ export type IconName =
   | 'check'
   | 'close'
   | 'sunrise'
-  | 'sunset';
+  | 'sunset'
+  | 'heart';
 @Component({
   selector: 'app-weather-icon',
   templateUrl: './weather-icon.html',
@@ -19,6 +20,7 @@ export type IconName =
   host: { 'aria-hidden': 'true', class: 'inline-flex shrink-0 items-center justify-center' },
 })
 export class WeatherIcon {
+  readonly filled = input(false);
   readonly name = input<IconName>('sun');
   readonly size = input(24);
 }

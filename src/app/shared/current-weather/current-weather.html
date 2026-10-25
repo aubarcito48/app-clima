@@ -5,10 +5,27 @@
   >
     <div class="relative z-10 flex items-center justify-between gap-3">
       <h2 id="current-heading" class="text-sm font-semibold text-ink">Clima actual</h2>
-      <span
-        class="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-ink"
-        >{{ weather()?.source ?? 'Tu próximo plan' }}</span
-      >
+      <div class="flex shrink-0 items-center gap-2">
+        <span
+          class="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-ink"
+          >{{ weather()?.source ?? 'Tu próximo plan' }}</span
+        >
+        @if (weather(); as data) {
+          <button
+            type="button"
+            class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-sun-soft hover:bg-white/20 focus-visible:outline-sun-soft"
+            [attr.aria-label]="
+              favorite()
+                ? 'Quitar ' + data.city + ' de favoritos'
+                : 'Guardar ' + data.city + ' en favoritos'
+            "
+            [attr.aria-pressed]="favorite()"
+            (click)="favoriteToggled.emit()"
+          >
+            <app-weather-icon name="heart" [filled]="favorite()" [size]="23" />
+          </button>
+        }
+      </div>
     </div>
     @if (weather(); as data) {
       <div class="relative z-10 mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">

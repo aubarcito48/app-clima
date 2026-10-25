@@ -11,6 +11,8 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
   host: { class: 'block min-w-0' },
 })
 export class CurrentWeather {
+  readonly favorite = input(false);
+  readonly favoriteToggled = output<void>();
   readonly unit = input<TemperatureUnit>('C');
   temperature(value: number) {
     return displayTemperature(value, this.unit());

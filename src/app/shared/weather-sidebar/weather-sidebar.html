@@ -13,6 +13,75 @@
       ></span
     >
   </a>
+  <nav aria-label="Navegación principal" class="relative mt-7 grid gap-2">
+    <a
+      href="#pronostico"
+      class="sidebar-link"
+      [class.bg-white]="!placesOpen()"
+      [attr.aria-current]="!placesOpen() ? 'location' : null"
+      (click)="placesOpen.set(false)"
+      ><app-weather-icon name="cloud-sun" [size]="20" />Pronóstico</a
+    >
+    <button
+      #placesButton
+      type="button"
+      class="sidebar-link"
+      [class.bg-white]="placesOpen()"
+      [attr.aria-expanded]="placesOpen()"
+      aria-controls="favorite-places"
+      (click)="placesOpen.set(!placesOpen())"
+    >
+      <app-weather-icon name="heart" [size]="20" />Mis lugares<span
+        class="ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-ink"
+        >{{ favorites.places().length }}</span
+      >
+    </button>
+  </nav>
+  <p class="sr-only" aria-live="polite" aria-atomic="true">{{ favorites.announcement() }}</p>
+  @if (favorites.storageWarning()) {
+    <p class="relative mt-3 text-xs leading-5 text-secondary">{{ favorites.storageWarning() }}</p>
+  }
+  <section
+    id="favorite-places"
+    [hidden]="!placesOpen()"
+    aria-labelledby="favorite-heading"
+    class="relative mt-4 min-w-0"
+  >
+    <h2 id="favorite-heading" class="text-sm font-bold text-ink">Tus lugares guardados</h2>
+    @if (favorites.places().length) {
+      <ul class="mt-2 grid gap-2">
+        @for (place of favorites.places(); track place.id) {
+          <li class="flex min-w-0 items-center gap-1 rounded-2xl bg-white p-2">
+            <button
+              type="button"
+              class="min-h-11 min-w-0 flex-1 rounded-lg px-1 text-left"
+              (click)="placeSelected.emit(place); placesOpen.set(false)"
+            >
+              <span class="block break-words text-sm font-semibold text-ink">{{ place.name }}</span
+              ><span class="mt-1 block break-words text-xs text-secondary"
+                >{{ place.region ? place.region + ', ' : '' }}{{ place.country }}</span
+              >
+            </button>
+            <button
+              type="button"
+              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-blue hover:bg-sky"
+              [attr.aria-label]="
+                'Eliminar ' + place.name + ', ' + place.country + ' de Mis lugares'
+              "
+              (click)="removePlace(place.id)"
+            >
+              <app-weather-icon name="close" [size]="17" />
+            </button>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="mt-2 text-xs leading-6 text-secondary">
+        Todavía no guardaste lugares. Consultá una ciudad y tocá el corazón para agregarla.
+      </p>
+    }
+    <p class="mt-2 text-[11px] leading-5 text-muted">Guardados en este navegador.</p>
+  </section>
   <div class="relative mt-6 min-w-0">
     <app-weather-music [weather]="weather()" />
   </div>

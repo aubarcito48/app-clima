@@ -66,7 +66,7 @@ export class CitySearch {
   private readonly feedbackPanel = viewChild<ElementRef<HTMLElement>>('feedbackPanel');
   private timer: ReturnType<typeof setTimeout> | undefined;
   private composing = false;
-  private selectedPlace: PlaceSuggestion | null = null;
+  private selectedPlace: Omit<PlaceSuggestion, 'id'> | null = null;
   private readonly countryNames = new Intl.DisplayNames(['es'], { type: 'region' });
   constructor() {
     inject(DestroyRef).onDestroy(() => this.cancelAutoSearch());
@@ -128,7 +128,7 @@ export class CitySearch {
   private emit(query: WeatherQuery): void {
     this.querySubmitted.emit(query);
   }
-  chooseSuggestion(place: PlaceSuggestion): void {
+  chooseSuggestion(place: Omit<PlaceSuggestion, 'id'>): void {
     this.cancelAutoSearch();
     this.form.controls.city.setValue(
       [place.name, place.region, place.country].filter(Boolean).join(', '),

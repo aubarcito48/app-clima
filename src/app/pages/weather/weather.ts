@@ -13,6 +13,7 @@ import { Forecast } from '../../shared/forecast/forecast';
 import { WeatherIcon } from '../../shared/weather-icon/weather-icon';
 import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
+import { FavoritePlaces } from '../../service/favorite-places';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
 @Component({
   selector: 'app-weather',
@@ -22,6 +23,11 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   host: { class: 'block min-w-0' },
 })
 export class Weather {
+  readonly favorites = inject(FavoritePlaces);
+  toggleFavorite(): void {
+    const location = this.response()?.ubicacion;
+    if (location) this.favorites.toggle(location);
+  }
   readonly temperatureUnit = signal<'C' | 'F'>('C');
   readonly today = new Intl.DateTimeFormat('es-AR', {
     weekday: 'long',
