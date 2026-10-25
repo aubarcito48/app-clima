@@ -120,7 +120,7 @@
         </select>
       </div>
       @if (days().length) {
-        <div class="mt-4 grid gap-2" role="group" aria-label="Elegir un día del pronóstico">
+        <div class="day-strip mt-4" role="group" tabindex="0" aria-label="Elegir un día del pronóstico, desplazables horizontalmente">
           @for (day of days(); track day.key) {
             <button
               type="button"
@@ -137,29 +137,30 @@
               "
               (click)="selectedDay.set(day.key); showAll.set(false)"
             >
-              <span class="min-w-0"
+              <span class="min-w-0 text-center"
                 ><span class="block text-sm font-bold text-ink">{{ day.shortDay }}</span
                 ><span class="mt-1 block text-[10px] text-muted">{{ day.shortDate }}</span></span
               >
               @if (day.representative.condition; as condition) {
-                <app-weather-icon [name]="condition" [size]="26" class="text-blue" />
+                <app-weather-icon [name]="condition" [size]="30" class="text-blue" />
               } @else {
                 <span aria-hidden="true"></span>
               }
               <span
-                class="min-w-0 text-xs leading-5 text-secondary"
+                class="min-w-0 text-center text-[11px] leading-5 text-secondary"
                 [attr.title]="'Intervalo de las ' + day.representative.time + ' h'"
                 >{{ day.representative.description ?? 'Descripción no disponible' }}</span
               >
-              <span class="flex shrink-0 items-center gap-3 text-sm"
-                ><span class="font-bold text-ink"
-                  ><span class="sr-only">Mayor temperatura de intervalos: </span
-                  >{{ temperature(day.high) }}°</span
-                ><span class="text-muted"
-                  ><span class="sr-only">Menor temperatura de intervalos: </span
-                  >{{ temperature(day.low) }}°</span
-                ></span
-              >
+              <span class="day-temperatures text-sm">
+                <span class="font-bold text-ink">
+                  <span class="block text-[10px] font-normal text-secondary" aria-hidden="true">Máx.</span>
+                  <span class="sr-only">Mayor temperatura de intervalos: </span>{{ temperature(day.high) }}°
+                </span>
+                <span class="text-muted">
+                  <span class="block text-[10px]" aria-hidden="true">Mín.</span>
+                  <span class="sr-only">Menor temperatura de intervalos: </span>{{ temperature(day.low) }}°
+                </span>
+              </span>
             </button>
           }
         </div>

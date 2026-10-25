@@ -158,8 +158,9 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.locator('app-forecast ol li')).toHaveCount(6);
   const firstDayBox = (await page.locator('.day-choice').nth(0).boundingBox())!;
   const secondDayBox = (await page.locator('.day-choice').nth(1).boundingBox())!;
-  expect(secondDayBox.y).toBeGreaterThan(firstDayBox.y);
-  expect(secondDayBox.x).toBeCloseTo(firstDayBox.x, 0);
+  expect(secondDayBox.y).toBeCloseTo(firstDayBox.y, 0);
+  expect(secondDayBox.x).toBeGreaterThan(firstDayBox.x + firstDayBox.width);
+  expect(firstDayBox.height).toBeGreaterThan(firstDayBox.width);
   const hoursBox = (await page.locator('#hourly-intervals').boundingBox())!;
   const currentBox = (await page.locator('app-current-weather').boundingBox())!;
   const chartBox = (await page.locator('app-temperature-chart').boundingBox())!;
