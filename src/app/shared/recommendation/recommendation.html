@@ -1,11 +1,15 @@
-﻿<section
-  class="flex h-full flex-col rounded-[1.75rem] border border-lavender-line bg-lavender p-6 sm:p-8"
+<section
+  class="flex h-full flex-col rounded-[1.75rem] border border-tropical-line bg-tropical-soft p-6 sm:p-8"
+  id="consejo-ia"
   aria-labelledby="advice-heading"
   [attr.aria-describedby]="weather() ? 'advice-location' : null"
 >
   <div class="flex flex-wrap items-center justify-between gap-2">
     <h2 id="advice-heading" class="flex items-center gap-2.5 text-sm font-semibold text-ink">
-      <app-weather-icon name="sparkles" [size]="20" /> Un consejo para vos
+      <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/80 text-tropical"
+        ><app-weather-icon name="sparkles" [size]="20"
+      /></span>
+      Un consejo para vos
     </h2>
     <span class="rounded-full bg-white/75 px-2.5 py-1 text-xs font-medium text-secondary">{{
       weather() ? (weather()?.advice ? 'Generado con IA' : 'No disponible') : 'Clima + ideas'

@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { WeatherPreview } from '../../models/weather-preview';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 @Component({
@@ -11,5 +11,5 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
 })
 export class CurrentWeather {
   readonly weather = input<WeatherPreview | null>(null);
-  readonly exampleRequested = output<void>();
+  readonly searchRequested = output<void>();
 }

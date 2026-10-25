@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" fill="none">
+  <!-- Decorative vector illustration: blue alien, ocean and tropical foliage. -->
+  <circle cx="170" cy="133" r="105" fill="#c2ebfa" />
+  <circle cx="253" cy="58" r="25" fill="#ffdc86" />
+  <path
+    d="M40 230c52-22 86 18 130 1s75-14 109-2"
+    stroke="#8bd4ef"
+    stroke-width="9"
+    stroke-linecap="round"
+  />
+  <path d="M61 245c43-12 70 8 102 1" stroke="#8bd4ef" stroke-width="5" stroke-linecap="round" />
+  <path d="M249 220c-2-38 14-65 39-77-1 30-12 58-39 77Z" fill="#65ad96" />
+  <path d="M250 218c-26-18-34-39-27-61 20 10 29 31 27 61Z" fill="#8bc8b1" />
+  <path d="m250 221 21-52" stroke="#236d60" stroke-width="3" stroke-linecap="round" />
+  <path d="M103 125C79 121 29 93 22 41c39-3 74 16 98 59Z" fill="#2485c7" />
+  <path d="M96 113C68 99 47 77 38 55c25 4 48 19 65 45Z" fill="#ee91a6" />
+  <path d="M216 125c24-4 74-32 81-84-39-3-74 16-98 59Z" fill="#2485c7" />
+  <path d="M223 113c28-14 49-36 58-58-25 4-48 19-65 45Z" fill="#ee91a6" />
+  <path d="M116 196c-11 10-16 20-14 32h114c2-12-3-22-14-32Z" fill="#1767b1" />
+  <path d="M129 211c18-11 40-11 58 0l4 17h-66Z" fill="#9bdef4" />
+  <path d="M88 150c-3-37 21-73 71-73s76 36 73 73c-3 40-32 63-73 63s-68-23-71-63Z" fill="#2485c7" />
+  <path d="m143 83 9-17 9 15 15-10-3 14" fill="#2485c7" />
+  <path
+    d="M101 145c0-19 13-34 27-34 17 0 23 15 21 34-2 18-13 29-27 27-13-2-21-12-21-27Zm116 0c0-19-13-34-27-34-17 0-23 15-21 34 2 18 13 29 27 27 13-2 21-12 21-27Z"
+    fill="#9bdef4"
+  />
+  <ellipse cx="127" cy="143" rx="13" ry="18" fill="#123b60" />
+  <ellipse cx="191" cy="143" rx="13" ry="18" fill="#123b60" />
+  <circle cx="131" cy="137" r="4" fill="white" />
+  <circle cx="187" cy="137" r="4" fill="white" />
+  <path d="M142 158c0-9 7-14 17-14s17 5 17 14c0 8-9 15-17 15s-17-7-17-15Z" fill="#123b60" />
+  <path d="M125 180c19 16 49 16 68-1" stroke="#123b60" stroke-width="4" stroke-linecap="round" />
+  <path d="m136 187 5 7 5-4m27 0 5 4 5-7" fill="white" />
+  <path
+    d="M63 179c-15-18-34-10-26 4-14 11-1 26 12 16 5 17 25 11 20-4 17-2 14-22-6-16Z"
+    fill="#ee91a6"
+  />
+  <circle cx="56" cy="188" r="6" fill="#ffdc86" />
+</svg>

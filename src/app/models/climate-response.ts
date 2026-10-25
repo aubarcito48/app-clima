@@ -10,6 +10,9 @@ export interface ClimateResponse {
   ubicacion: ClimateLocation & { desplazamiento_horario_segundos: number };
   actual: {
     fecha_utc: string;
+    amanecer_utc?: string | null;
+    atardecer_utc?: string | null;
+    icono?: string | null;
     temperatura_c: number;
     sensacion_c: number | null;
     humedad_pct: number | null;
@@ -18,7 +21,13 @@ export interface ClimateResponse {
   };
   pronostico: {
     estado: 'disponible' | 'no_disponible';
-    intervalos: { fecha_utc: string; temperatura_c: number; descripcion: string | null }[];
+    intervalos: {
+      fecha_utc: string;
+      temperatura_c: number;
+      descripcion: string | null;
+      precipitacion_pct?: number | null;
+      icono?: string | null;
+    }[];
   };
   recomendacion: { estado: 'disponible' | 'no_disponible'; texto: string | null };
   meta: {
@@ -47,6 +56,12 @@ function optionalNumber(value: unknown, min = -Infinity, max = Infinity): number
 }
 function optionalText(value: unknown): string | null {
   return value == null ? null : text(value);
+}
+function icon(value: unknown): string | null {
+  if (value == null) return null;
+  if (typeof value !== 'string' || !/^(01|02|03|04|09|10|11|13|50)[dn]$/u.test(value))
+    throw new InvalidClimateResponse();
+  return value;
 }
 function utc(value: unknown): string {
   const result = text(value);
@@ -112,6 +127,13 @@ export function readClimateResponse(value: unknown): ClimateResponse {
     ubicacion: { ...readClimateLocation(location), desplazamiento_horario_segundos: offset },
     actual: {
       fecha_utc: utc(current['fecha_utc']),
+      ...('icono' in current ? { icono: icon(current['icono']) } : {}),
+      ...('amanecer_utc' in current
+        ? { amanecer_utc: current['amanecer_utc'] == null ? null : utc(current['amanecer_utc']) }
+        : {}),
+      ...('atardecer_utc' in current
+        ? { atardecer_utc: current['atardecer_utc'] == null ? null : utc(current['atardecer_utc']) }
+        : {}),
       temperatura_c: number(current['temperatura_c']),
       sensacion_c: optionalNumber(current['sensacion_c']),
       humedad_pct: optionalNumber(current['humedad_pct'], 0, 100),
@@ -124,6 +146,10 @@ export function readClimateResponse(value: unknown): ClimateResponse {
         const row = record(value);
         return {
           fecha_utc: utc(row['fecha_utc']),
+          ...('icono' in row ? { icono: icon(row['icono']) } : {}),
+          ...('precipitacion_pct' in row
+            ? { precipitacion_pct: optionalNumber(row['precipitacion_pct'], 0, 100) }
+            : {}),
           temperatura_c: number(row['temperatura_c']),
           descripcion: optionalText(row['descripcion']),
         };

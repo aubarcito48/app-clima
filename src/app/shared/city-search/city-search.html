@@ -2,116 +2,129 @@
   [formGroup]="form"
   (ngSubmit)="submit()"
   novalidate
-  aria-label="Buscar el clima de una ciudad"
+  aria-label="Buscar el clima de un lugar"
   aria-describedby="search-help"
 >
-  <div class="grid items-end gap-3 sm:grid-cols-[minmax(0,1fr)_8rem_auto]">
-    <div class="min-w-0">
-      <label for="city" class="mb-2 block text-sm font-semibold text-ink"
-        >¿Dónde querés consultar?</label
-      >
-      <div class="relative">
-        <app-weather-icon
-          name="search"
-          class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-muted"
-          [size]="20"
-        />
-        <input
-          id="city"
-          #cityField
-          name="city"
-          type="search"
-          placeholder="Buscá una ciudad"
-          autocomplete="address-level2"
-          required
-          formControlName="city"
-          [attr.aria-invalid]="
-            cityInvalid || feedback()?.kind === 'not-found' || feedback()?.field === 'city'
-              ? 'true'
-              : null
-          "
-          [attr.aria-describedby]="
-            cityInvalid ? 'city-error' : feedback() ? 'search-feedback' : null
-          "
-          (input)="onEdited()"
-          class="field w-full pr-4 pl-12"
-        />
-      </div>
-    </div>
-    <div>
-      <label for="country" class="mb-2 block text-sm font-semibold text-ink"
-        >País <span class="font-normal text-muted">(opcional)</span></label
-      >
+  <label for="city" class="mb-2 block text-sm font-semibold text-ink"
+    >Ciudad, región o provincia</label
+  >
+  <div class="flex flex-col items-start gap-3 sm:flex-row">
+    <div class="relative w-full min-w-0 flex-1">
+      <app-weather-icon
+        name="search"
+        class="pointer-events-none absolute top-[1.625rem] left-4 -translate-y-1/2 text-muted"
+        [size]="20"
+      />
       <input
-        id="country"
-        #countryField
-        name="country"
-        placeholder="Ej. AR"
-        autocomplete="country"
-        formControlName="country"
-        [attr.aria-invalid]="countryInvalid || feedback()?.field === 'country' ? 'true' : null"
+        id="city"
+        #cityField
+        name="city"
+        type="search"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        [attr.aria-expanded]="popupVisible"
+        [attr.aria-controls]="popupVisible ? 'place-options' : null"
+        [attr.aria-activedescendant]="
+          popupVisible && activeIndex() >= 0
+            ? 'place-option-' + suggestions()[activeIndex()].id
+            : null
+        "
+        placeholder="Empezá a escribir un lugar"
+        autocomplete="off"
+        formControlName="city"
+        [attr.aria-invalid]="
+          cityInvalid || feedback()?.kind === 'not-found' || feedback()?.kind === 'invalid'
+            ? 'true'
+            : null
+        "
         [attr.aria-describedby]="
-          countryInvalid
-            ? 'country-help country-error'
-            : feedback()?.kind === 'ambiguous' || feedback()?.field === 'country'
-              ? 'country-help search-feedback'
-              : 'country-help'
+          cityInvalid
+            ? 'search-help city-error'
+            : feedback()
+              ? 'search-help search-feedback'
+              : 'search-help'
         "
         (input)="onEdited()"
-        class="field w-full px-4"
+        (keydown)="onKeydown($event)"
+        (focus)="reopenSuggestions()"
+        (blur)="closeSuggestions()"
+        (compositionstart)="compositionStart()"
+        (compositionend)="compositionEnd()"
+        class="field w-full pr-4 pl-12"
       />
+      @if (popupVisible) {
+        <div class="mt-2 overflow-hidden rounded-2xl border border-control-line bg-white shadow-sm">
+          <ul
+            id="place-options"
+            role="listbox"
+            aria-label="Lugares encontrados"
+            class="max-h-72 overflow-y-auto py-1"
+          >
+            @for (place of suggestions(); track place.id; let index = $index) {
+              <li
+                role="option"
+                [id]="'place-option-' + place.id"
+                [attr.aria-selected]="activeIndex() === index"
+                (pointerdown)="$event.preventDefault()"
+                (click)="chooseSuggestion(place)"
+                (pointermove)="activeIndex.set(index)"
+                class="min-h-14 cursor-pointer px-4 py-3 text-sm text-ink hover:bg-sky"
+                [class.bg-sky]="activeIndex() === index"
+              >
+                <span class="block font-semibold">{{ place.name }}</span>
+                <span class="block text-xs leading-6 text-secondary"
+                  >{{ place.region ? place.region + ', ' : ''
+                  }}{{ countryLabel(place.country) }} ({{ place.country }})</span
+                >
+              </li>
+            }
+          </ul>
+        </div>
+      }
     </div>
     <button
-      #submitButton
-      type="submit"
-      class="primary-button flex h-13 items-center justify-center gap-3 px-7 sm:min-w-39"
+      type="button"
+      (click)="useLocation()"
+      [disabled]="locating()"
+      class="primary-button flex min-h-13 w-full items-center justify-center gap-2 px-5 sm:w-auto"
     >
-      {{ busy() ? 'Actualizar consulta' : 'Ver clima' }}
-      <app-weather-icon name="arrow" [size]="18" />
+      <app-weather-icon name="pin" [size]="18" />
+      {{ locating() ? 'Buscando ubicación…' : 'Usar mi ubicación' }}
     </button>
   </div>
-  <div class="mt-3 max-w-96">
-    <label for="region" class="mb-2 block text-sm font-semibold text-ink"
-      >Región <span class="font-normal text-muted">(opcional)</span></label
-    >
-    <input
-      id="region"
-      #regionField
-      name="region"
-      [formControl]="region"
-      (input)="onEdited()"
-      placeholder="Ej. Córdoba"
-      autocomplete="address-level1"
-      class="field w-full px-4"
-      [attr.aria-invalid]="
-        (region.touched && region.invalid) || feedback()?.field === 'region' ? 'true' : null
-      "
-      [attr.aria-describedby]="
-        region.touched && region.invalid
-          ? 'region-help region-error'
-          : feedback()?.field === 'region' || feedback()?.kind === 'ambiguous'
-            ? 'region-help search-feedback'
-            : 'region-help'
-      "
-    />
-    <p id="region-help" class="mt-2 text-xs text-muted">
-      Provincia o estado para precisar ciudades con el mismo nombre.
-    </p>
-  </div>
-  @if (countryInvalid) {
-    <p id="country-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
-      Indicá un código de país de dos letras, por ejemplo AR o ES.
-    </p>
-  }
-  @if (region.touched && region.invalid) {
-    <p id="region-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
-      La región admite hasta 100 caracteres.
+  <p id="search-help" class="mt-3 text-xs leading-6 text-muted">
+    Escribí al menos tres letras y elegí un lugar de la lista. También podés buscar lo escrito con
+    Enter.
+  </p>
+  <p
+    id="place-status"
+    aria-live="polite"
+    aria-atomic="true"
+    class="mt-2 text-xs leading-6 text-secondary"
+  >
+    {{ suggestionMessage() }}
+  </p>
+  @if (suggestions().length) {
+    <p class="mt-2 text-xs text-muted">
+      Lugares:
+      <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="underline"
+        >Open-Meteo</a
+      >
+      /
+      <a
+        href="https://www.geonames.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline"
+        >GeoNames</a
+      >.
     </p>
   }
   @if (cityInvalid) {
     <p id="city-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
-      Escribí una ciudad para consultar el clima. Los espacios solos no son una ciudad. El nombre
-      admite hasta 100 caracteres.
+      Escribí un lugar válido. Cada nombre admite hasta 100 caracteres; no dejes una coma sin
+      completar.
     </p>
   }
   @if (feedback(); as issue) {
@@ -130,13 +143,19 @@
           Reintentar consulta
         </button>
       } @else {
-        <button type="button" (click)="focusCorrection()" class="example-button mt-3 min-h-11">
-          {{ issue.kind === 'ambiguous' ? 'Precisar ubicación' : 'Corregir búsqueda' }}
+        <button type="button" (click)="focusCity()" class="example-button mt-3">
+          {{
+            issue.kind === 'location'
+              ? 'Buscar por nombre'
+              : issue.kind === 'ambiguous'
+                ? 'Precisar ubicación'
+                : 'Corregir búsqueda'
+          }}
         </button>
       }
       @if (issue.choices?.length) {
-        <ul aria-label="Opciones para precisar la ciudad" class="mt-3 flex flex-wrap gap-2">
-          @for (choice of issue.choices; track choice.id ?? choice.country) {
+        <ul aria-label="Opciones para precisar el lugar" class="mt-3 flex flex-wrap gap-2">
+          @for (choice of issue.choices; track choice.id ?? choice.label) {
             <li>
               <button type="button" (click)="chooseLocation(choice)" class="example-button text-sm">
                 {{ choice.label }}
@@ -147,18 +166,4 @@
       }
     </div>
   }
-  <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs sm:text-sm">
-    <span class="mr-1 text-muted">Probá con</span>
-    @for (example of examples; track example) {
-      <button type="button" (click)="chooseExample(example)" class="example-button">
-        {{ example }}
-      </button>
-    }
-  </div>
-  <p id="search-help" class="mt-3 text-xs leading-relaxed text-muted">
-    Consultá una ciudad o usá una búsqueda sugerida. Los datos se solicitan al servicio de clima.
-  </p>
-  <p id="country-help" class="mt-2 text-xs leading-relaxed text-muted">
-    El país es opcional. Usá un código de dos letras, como AR o ES, para precisar la ciudad.
-  </p>
 </form>

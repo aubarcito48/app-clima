@@ -1,10 +1,11 @@
-﻿import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, linkedSignal } from '@angular/core';
 import { computed } from '@angular/core';
 import { ForecastInterval, WeatherPreview } from '../../models/weather-preview';
 import { WeatherIcon } from '../weather-icon/weather-icon';
+import { TemperatureChart } from '../temperature-chart/temperature-chart';
 @Component({
   selector: 'app-forecast',
-  imports: [WeatherIcon],
+  imports: [WeatherIcon, TemperatureChart],
   templateUrl: './forecast.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-w-0' },
@@ -21,6 +22,27 @@ export class Forecast {
       }
       day.intervals.push(interval);
     }
-    return [...groups.values()];
+    return [...groups.values()]
+      .sort((a, b) => a.key.localeCompare(b.key))
+      .map((day) => ({
+        ...day,
+        low: Math.min(...day.intervals.map((row) => row.temperature)),
+        high: Math.max(...day.intervals.map((row) => row.temperature)),
+        intervals: day.intervals.sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime)),
+      }));
   });
+  readonly selectedDay = linkedSignal(() => {
+    this.weather();
+    return this.days()[0]?.key ?? '';
+  });
+  readonly activeDay = computed(
+    () => this.days().find((day) => day.key === this.selectedDay()) ?? null,
+  );
+  readonly showAll = linkedSignal(() => {
+    this.weather();
+    return false;
+  });
+  readonly visibleDays = computed(() =>
+    this.showAll() ? this.days() : this.activeDay() ? [this.activeDay()!] : [],
+  );
 }

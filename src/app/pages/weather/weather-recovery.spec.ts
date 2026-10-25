@@ -101,7 +101,7 @@ describe('Recovery and accessible interactions (TK08)', () => {
     expect(fixture.nativeElement.textContent).not.toContain('Reintentar consulta');
   });
 
-  it('focuses the region when Django reports a region error', async () => {
+  it('focuses the unified input when Django reports a region error', async () => {
     const fixture = TestBed.createComponent(Weather);
     await fixture.whenStable();
     fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
@@ -109,7 +109,7 @@ describe('Recovery and accessible interactions (TK08)', () => {
       .expectOne(() => true)
       .flush({ errores: { region: ['invalid'] } }, { status: 400, statusText: 'Bad Request' });
     await fixture.whenStable();
-    const region = fixture.nativeElement.querySelector('#region') as HTMLInputElement;
+    const region = fixture.nativeElement.querySelector('#city') as HTMLInputElement;
     expect(document.activeElement).toBe(region);
     expect(region.getAttribute('aria-invalid')).toBe('true');
     expect(region.getAttribute('aria-describedby')).toContain('search-feedback');

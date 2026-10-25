@@ -1,46 +1,81 @@
-﻿:host {
+:host {
   display: block;
   min-width: 0;
 }
 .weather-panel {
-  background: linear-gradient(120deg, #edf2ff 0%, #e2edfb 55%, #dcebf8 100%);
+  --color-ink: #ffffff;
+  --color-secondary: #eefaff;
+  --color-muted: #eefaff;
+  background: linear-gradient(135deg, #327c9c, #246587);
+  border-color: transparent;
+  box-shadow: 0 16px 36px #2c81a021;
 }
 .weather-panel::after {
   content: '';
   position: absolute;
-  width: 25rem;
-  height: 25rem;
-  border: 1px solid #fff9;
+  width: 45rem;
+  height: 18rem;
   border-radius: 50%;
-  right: -12rem;
-  top: -6rem;
+  background: #ffffff10;
+  right: -17rem;
+  bottom: -12rem;
+  transform: rotate(-12deg);
   z-index: -1;
-  box-shadow:
-    0 0 0 3rem #ffffff20,
-    0 0 0 6rem #ffffff15;
+  box-shadow: 0 -2rem 0 #ffffff08;
 }
 .temperature {
   display: flex;
   align-items: flex-start;
   font-size: clamp(4.5rem, 8vw, 6rem);
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: -0.075em;
+}
+.current-overview {
+  display: grid;
+  gap: 1.25rem;
+}
+.metric-card {
+  min-width: 0;
+  border-radius: 1.35rem;
+  background: white;
+  padding: 1.25rem;
+}
+.metric-card dt {
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+}
+.metric-card dt app-weather-icon {
+  display: flex;
+  width: fit-content;
+  margin-bottom: 1rem;
+  color: var(--color-blue);
+}
+.metric-card dt span {
+  display: block;
+}
+.metric-card dd {
+  margin-top: 0.5rem;
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+.metric-card p {
+  margin-top: 0.4rem;
+  color: var(--color-muted);
+  font-size: 0.65rem;
+  line-height: 1.7;
+}
+@media (min-width: 1280px) {
+  .current-overview {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  }
 }
 .temperature-unit {
   margin: 0.55rem 0 0 0.4rem;
   font-size: 1.75rem;
   letter-spacing: -0.04em;
-}
-.metric-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.9rem;
-  background: #ffffff80;
-  color: var(--color-secondary);
 }
 .weather-art {
   filter: drop-shadow(0 12px 15px #627ba820);

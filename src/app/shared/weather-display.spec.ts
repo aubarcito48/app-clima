@@ -77,9 +77,15 @@ describe('Current weather and forecast rendering (TK06)', () => {
     fixture.componentRef.setInput('weather', presentation);
     await fixture.whenStable();
     const view: HTMLElement = fixture.nativeElement;
+    expect(view.querySelectorAll('ol li')).toHaveLength(2);
+    const expand = Array.from(view.querySelectorAll('button')).find((button) =>
+      button.textContent?.includes('Ver todos los intervalos'),
+    )!;
+    expand.click();
+    await fixture.whenStable();
     const rows = Array.from(view.querySelectorAll('ol li'));
     expect(rows).toHaveLength(40);
-    expect(view.querySelectorAll('h3')).toHaveLength(
+    expect(view.querySelectorAll('h3[id^="forecast-day-"]')).toHaveLength(
       new Set(presentation.forecast.map((row) => row.dayKey)).size,
     );
     rows.forEach((row, index) => {

@@ -16,8 +16,13 @@ export function climate(city = 'Córdoba'): ClimateResponse {
 
 type ApiMock = {
   requests: URL[];
+  spotifyRequests: string[];
   body: unknown;
   status: number;
+  placesRequests: URL[];
+  placesBody: unknown;
+  placesStatus: number;
+  placesHandler: ((route: Route, url: URL) => Promise<void>) | null;
   handler: ((route: Route, url: URL) => Promise<void>) | null;
   fulfill: (route: Route, body: unknown, status?: number) => Promise<void>;
 };
@@ -27,13 +32,30 @@ export const test = base.extend<{ api: ApiMock }>({
     async ({ context, page, baseURL }, use) => {
       const appOrigin = new URL(baseURL!).origin;
       const apiURL = new URL(`${environment.apiBaseUrl}/api/v1/clima/`);
+      const placesURL = new URL(`${environment.apiBaseUrl}/api/v1/lugares/`);
       const unexpected: string[] = [];
       const errors: string[] = [];
       const dialogs: string[] = [];
       const api: ApiMock = {
         requests: [],
+        spotifyRequests: [],
         body: climate(),
         status: 200,
+        placesRequests: [],
+        placesBody: {
+          sugerencias: [
+            {
+              id: 1,
+              nombre: 'Córdoba',
+              pais: 'AR',
+              region: 'Córdoba',
+              latitud: -31.42,
+              longitud: -64.18,
+            },
+          ],
+        },
+        placesStatus: 200,
+        placesHandler: null,
         handler: null,
         fulfill: (route, body, status = 200) =>
           route.fulfill({
@@ -56,6 +78,20 @@ export const test = base.extend<{ api: ApiMock }>({
           api.requests.push(url);
           if (api.handler) await api.handler(route, url);
           else await api.fulfill(route, api.body, api.status);
+        } else if (url.origin === placesURL.origin && url.pathname === placesURL.pathname) {
+          expect(route.request().method()).toBe('GET');
+          api.placesRequests.push(url);
+          if (api.placesHandler) await api.placesHandler(route, url);
+          else await api.fulfill(route, api.placesBody, api.placesStatus);
+        } else if (
+          url.origin === 'https://open.spotify.com' &&
+          /^\/embed\/playlist\/[A-Za-z0-9]+$/u.test(url.pathname)
+        ) {
+          api.spotifyRequests.push(url.href);
+          await route.fulfill({
+            contentType: 'text/html',
+            body: '<!doctype html><html lang="es"><title>Spotify de prueba</title><body>Reproductor simulado</body></html>',
+          });
         } else if (url.origin === appOrigin) {
           await route.continue();
         } else {
@@ -77,8 +113,6 @@ export const test = base.extend<{ api: ApiMock }>({
 export { expect };
 
 export async function search(page: Page, city: string, country = 'AR', region = '') {
-  await page.locator('#city').fill(city);
-  await page.locator('#country').fill(country);
-  await page.locator('#region').fill(region);
+  await page.locator('#city').fill([city, region, country].filter(Boolean).join(', '));
   await page.locator('#city').press('Enter');
 }

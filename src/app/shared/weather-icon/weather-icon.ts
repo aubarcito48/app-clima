@@ -1,7 +1,17 @@
 ﻿import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { WeatherCondition } from '../../models/weather-preview';
 export type IconName =
-  WeatherCondition | 'search' | 'pin' | 'wind' | 'drop' | 'sparkles' | 'arrow' | 'check' | 'close';
+  | WeatherCondition
+  | 'search'
+  | 'pin'
+  | 'wind'
+  | 'drop'
+  | 'sparkles'
+  | 'arrow'
+  | 'check'
+  | 'close'
+  | 'sunrise'
+  | 'sunset';
 @Component({
   selector: 'app-weather-icon',
   templateUrl: './weather-icon.html',

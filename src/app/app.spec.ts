@@ -20,6 +20,8 @@ describe('App', () => {
 
   it('should render title', async () => {
     const harness = await RouterTestingHarness.create('/');
-    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toContain('Un buen día');
+    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toContain(
+      'Hola, explorador',
+    );
   });
 });

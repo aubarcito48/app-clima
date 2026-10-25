@@ -1,7 +1,32 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ClimateResponse, readClimateLocation } from '../models/climate-response';
 import { CitySearchFeedback } from '../models/city-query';
-import { WeatherPreview } from '../models/weather-preview';
+import { WeatherPreview, WeatherCondition } from '../models/weather-preview';
+
+function condition(icon?: string | null): WeatherCondition | null {
+  if (!icon) return null;
+  const icons: Record<string, WeatherCondition> = {
+    '01d': 'sun',
+    '01n': 'moon',
+    '02d': 'cloud-sun',
+    '02n': 'cloud-moon',
+    '03d': 'cloud',
+    '03n': 'cloud',
+    '04d': 'cloud',
+    '04n': 'cloud',
+    '09d': 'rain',
+    '09n': 'rain',
+    '10d': 'rain',
+    '10n': 'rain',
+    '11d': 'storm',
+    '11n': 'storm',
+    '13d': 'snow',
+    '13n': 'snow',
+    '50d': 'mist',
+    '50n': 'mist',
+  };
+  return icons[icon] ?? null;
+}
 
 export function climatePresentation(data: ClimateResponse): WeatherPreview {
   const offset = data.ubicacion.desplazamiento_horario_segundos * 1000;
@@ -19,6 +44,12 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
       hourCycle: 'h23',
     }),
     observedAtUtc: data.actual.fecha_utc,
+    sunrise: data.actual.amanecer_utc
+      ? local(data.actual.amanecer_utc, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      : null,
+    sunset: data.actual.atardecer_utc
+      ? local(data.actual.atardecer_utc, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      : null,
     updatedAtUtc: data.meta.consultado_en_utc,
     updatedAt: local(data.meta.consultado_en_utc, {
       day: 'numeric',
@@ -34,7 +65,7 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
     feelsLike: data.actual.sensacion_c,
     humidity: data.actual.humedad_pct,
     wind: data.actual.viento_kmh,
-    condition: null,
+    condition: condition(data.actual.icono),
     description: data.actual.descripcion,
     forecast: data.pronostico.intervalos.map((row) => ({
       dateTime: row.fecha_utc,
@@ -51,7 +82,8 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
         hourCycle: 'h23',
       }),
       temperature: row.temperatura_c,
-      condition: null,
+      precipitation: row.precipitacion_pct ?? null,
+      condition: condition(row.icono),
       description: row.descripcion,
     })),
     advice:

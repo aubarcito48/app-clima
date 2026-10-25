@@ -3,6 +3,20 @@ export interface CityQuery {
   country: string;
   region?: string;
 }
+export interface CoordinatesQuery {
+  latitude: number;
+  longitude: number;
+}
+export type WeatherQuery = CityQuery | CoordinatesQuery;
+
+export interface PlaceSuggestion {
+  id: number;
+  name: string;
+  country: string;
+  region: string | null;
+  latitude: number;
+  longitude: number;
+}
 
 export interface CountryChoice {
   label: string;
@@ -21,7 +35,8 @@ export interface CitySearchFeedback {
     | 'unavailable'
     | 'connection'
     | 'timeout'
-    | 'rate-limited';
+    | 'rate-limited'
+    | 'location';
   message: string;
   retryable?: boolean;
   field?: 'city' | 'country' | 'region';

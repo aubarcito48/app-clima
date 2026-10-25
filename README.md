@@ -1,14 +1,36 @@
-﻿# Clima Inteligente
+# StitchWeather
 
 Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones de IA basadas en esos datos. Angular consulta únicamente a Django; Django se encarga de OpenWeather y Groq.
 
 ## Estado
 
-TK09: regresión del frontend automatizada y verificada. Pasan 69 pruebas unitarias y 27 ejecuciones E2E en Chromium (nueve escenarios en tres tamaños). Playwright prueba el flujo principal, fallas parciales, búsquedas concurrentes y recuperación con respuestas controladas. La publicación en Vercel y el consumo público de Render corresponden a TK10.
+Ajustes posteriores a TK09: buscador único con sugerencias dinámicas y botón «Usar mi ubicación». Se retiraron «Probá con» y las ciudades fijas. Desde tres letras y tras una pausa de 300 ms se buscan lugares; al elegir uno se consulta el clima sin un botón adicional. Enter permite buscar el texto escrito. Pasan 80 pruebas unitarias y 48 E2E; la publicación sigue pendiente en TK10.
+
+## Diseño visual
+
+El diseño de `../diseno-app-clima-stitch` se trasladó desde su maqueta React/Next a componentes Angular 21, conservando Tailwind CSS v4. Se mantienen la barra lateral celeste, el logo **StitchWeather / Tu clima, más azul**, las superficies blancas, la tarjeta azul de clima actual y las métricas separadas. La navegación enlaza a las secciones funcionales de pronóstico, días y horas, consejo de IA y música. No se incorporan los valores ficticios de la maqueta ni sus controles sin funcionalidad.
+
+La paleta usa azul océano `#246b91`, tinta `#123952`, fondo `#eefaff`, celeste `#d9f5fb` y acentos coral y tropicales. Los tokens están en `src/tailwind.css`; los títulos usan Trebuchet MS y el texto Segoe UI/system-ui. Las ilustraciones y el favicon son SVG locales. No se agregaron React, Next, shadcn ni bibliotecas de gráficos.
+
+Componentes nuevos: `WeatherSidebar` (marca y navegación), `WeatherMusic` (selección y reproductor Spotify) y `TemperatureChart` (gráfico SVG de líneas). Se conservan el buscador con sugerencias reales, la ubicación actual, la cancelación de consultas y los estados de error y disponibilidad parcial. Se verificaron 360, 768 y 1440 px, teclado y accesibilidad WCAG A/AA con axe.
+
+## Días, horas y evolución
+
+El pronóstico agrupa los intervalos por fecha **local de la ciudad**, incluyendo cambios de mes y año. Elegir un día actualiza sus tarjetas por hora y el gráfico de líneas. «Ver todos los intervalos» permite recorrer la respuesta completa (hasta 40 valores), sin hacer otra consulta. Una nueva búsqueda reinicia la selección.
+
+El servicio actual entrega intervalos de **tres horas**, no mediciones de cada hora. No se inventan puntos intermedios. El gráfico respeta la distancia temporal de las observaciones, admite temperaturas negativas, cero, constantes y un único punto, y ofrece los mismos valores como texto en las tarjetas. En pantallas angostas su región se puede desplazar horizontalmente por teclado o tacto.
+
+El rango de cada fecha es el menor y mayor valor de sus intervalos disponibles; no se presenta como un extremo diario completo ni como un promedio. Una fecha inicial o final puede estar incompleta. Los iconos proceden del código opcional de OpenWeather, sin deducirlos de la temperatura. La probabilidad de lluvia aparece cuando el backend la incluye. Amanecer y atardecer usan la hora local; los datos ausentes dicen «No disponible».
+
+## Música con Spotify
+
+La selección usa reglas locales sobre el clima actual: lluvia, tormenta, nieve o temperatura inferior a 15 °C proponen **Peaceful Piano**; desde 24 °C se propone **Mood Booster**; el resto, **Chill Hits**. Es una selección de playlists fijas, independiente del mensaje generado con IA. Los IDs están en `weather-music.ts`.
+
+«Cargar reproductor de Spotify» incorpora el [embed oficial de Spotify](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed). Hasta pulsarlo no hay conexiones a Spotify. No requiere guardar credenciales ni agregar una API key de Spotify. Se puede cerrar el reproductor o abrir la playlist en Spotify; una nueva consulta elimina el reproductor anterior. El audio no se inicia automáticamente y su disponibilidad, reproducción completa o previa y sesión dependen de Spotify. Las pruebas interceptan el embed: verifican la integración, no la reproducción real ni la disponibilidad del catálogo.
 
 ## Consultar el clima
 
-Al abrir la aplicación se muestra el estado inicial sin solicitudes automáticas. Escribir una ciudad o elegir Córdoba, Buenos Aires o Mendoza realiza una búsqueda en Django. Las sugerencias completan país AR, pero no contienen mediciones ni consejos locales. La demora simulada y los fixtures de la demo fueron retirados del flujo de aplicación; el fixture del contrato existe únicamente para las pruebas.
+Al abrir la aplicación no se consulta clima ni se pide ubicación. Al escribir al menos tres caracteres se solicita una lista de hasta cinco lugares coincidentes tras 300 ms sin cambios. Cada opción muestra nombre, región cuando exista y país. Seleccionar una opción consulta el clima inmediatamente usando sus coordenadas; Enter sin una opción activa consulta el nombre escrito. No se consulta clima ni IA por cada prefijo. Los datos ficticios existen únicamente en las pruebas.
 
 Para obtener información real, Django debe estar iniciado y tener configurada su clave privada de OpenWeather. Groq necesita clave y modelo habilitado en el backend; si falta o falla, la respuesta puede conservar el clima con IA no disponible. No se configuraron ni consumieron cuentas externas durante TK05. «Volver al inicio» cancela una solicitud pendiente y limpia el resultado.
 
@@ -34,39 +56,56 @@ El pronóstico conserva cada intervalo suministrado por Django, con su temperatu
 
 ## Búsqueda y validación
 
-El formulario usa Reactive Forms en Angular 21. La ciudad es obligatoria; ciudad y región admiten hasta 100 caracteres después de normalizar. Los campos conservan la entrada original. El país es opcional y debe ser un código ASCII de dos letras, como AR o ES; nombres como Argentina ya no se envían al backend. Una entrada inválida muestra un mensaje y no emite la consulta.
+El formulario usa Reactive Forms en Angular 21 y tiene un único campo «Ciudad, región o provincia». Se puede escribir solo el lugar (`Mendoza`, `Tucumán`) o precisar con comas: `Córdoba, Córdoba, AR`. La primera parte se envía como `ciudad`, una segunda parte como `region`, y un último código ASCII de dos letras como `pais`. `Mendoza, AR` omite región. No se infieren códigos a partir de nombres de países ni se elige silenciosamente un candidato ambiguo.
 
-Al enviar se normaliza Unicode NFC, se recortan espacios exteriores, se reducen espacios interiores y se convierte el código de país a mayúsculas. Los nombres de ciudad y región conservan acentos y caracteres Unicode. En un 409 se pueden elegir candidatos con nombre, país y región, incluso cuando comparten país. Se envían esos filtros, sin elegir coordenadas arbitrariamente en el frontend.
+Se normalizan Unicode NFC, espacios y código de país sin reescribir lo que se está tecleando. Cada nombre admite hasta 100 caracteres y una coma final incompleta no inicia peticiones. No se consulta durante composición IME. En un 409, seleccionar un candidato completa el mismo campo con nombre, región y país y consulta inmediatamente.
 
 `URLSearchParams` identifica consultas normalizadas y `HttpParams` codifica los valores para el GET. El servicio construye `HttpParams` desde los valores decodificados, conservando espacios y el carácter `+` sin doble codificación. Se omiten país y región vacíos. Ejemplo: `GET /api/v1/clima/?ciudad=C%C3%B3rdoba&pais=AR&region=C%C3%B3rdoba`.
 
-| Cómo probar | Resultado esperado |
-| --- | --- |
-| Ciudad vacía o solo espacios | Mensaje de validación y ninguna búsqueda. |
-| `  Buenos   Aires  `, país ` ar ` | Un GET con Buenos Aires y AR; los campos conservan lo escrito. |
-| País `Argentina` | Validación local: indicar un código de dos letras. |
-| Ciudad sin país ni región | Se omiten ambos filtros; Django determina si existe una ubicación inequívoca. |
-| Respuesta 409 | Candidatos para precisar ubicación; se puede seleccionar país y región juntos. |
-| Respuesta 404, 429 o 503 | Aviso recuperable sin conservar un resultado de otra ciudad como si fuera el nuevo. |
-| Clima válido con IA o pronóstico no disponibles | El clima sigue visible; se indica la ausencia del bloque correspondiente. |
-| Nueva búsqueda mientras otra está pendiente | Se cancela la anterior y solo se aplica el resultado de la última consulta. |
+| Cómo probar                                     | Resultado esperado                                                                  |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Ciudad vacía o solo espacios                    | Mensaje de validación y ninguna búsqueda.                                           |
+| Escribir `Cor`                                  | Lista dinámica de lugares que coinciden; elegir uno consulta su clima.              |
+| ` Buenos   Aires , ar` y Enter                  | Un GET de clima con Buenos Aires y AR, desde un solo campo.                         |
+| `Córdoba, Córdoba, AR` y Enter                  | Ciudad Córdoba, región Córdoba y país AR.                                           |
+| Ciudad sin país ni región                       | Se omiten ambos filtros; Django determina si existe una ubicación inequívoca.       |
+| Respuesta 409                                   | Candidatos para precisar ubicación; se puede seleccionar país y región juntos.      |
+| Respuesta 404, 429 o 503                        | Aviso recuperable sin conservar un resultado de otra ciudad como si fuera el nuevo. |
+| Clima válido con IA o pronóstico no disponibles | El clima sigue visible; se indica la ausencia del bloque correspondiente.           |
+| Nueva búsqueda mientras otra está pendiente     | Se cancela la anterior y solo se aplica el resultado de la última consulta.         |
 
 Los errores se retiran al editar o reenviar. El formulario permanece editable durante la carga para permitir una nueva búsqueda. Una consulta idéntica pendiente no inicia otro GET; al finalizar se permite reenviar explícitamente. `switchMap` cancela la suscripción anterior y `takeUntilDestroyed` cancela al salir de la página. Se limpian los datos de la consulta anterior al comenzar otra; un error no termina el flujo de búsquedas. No hay caché ni reintentos automáticos. Cada GET tiene un timeout de cliente de 45 segundos; cancelar en el navegador no garantiza cancelar trabajo ya recibido por Django/proveedores.
 
+Al editar, se cancelan la consulta de clima, la localización y la búsqueda de sugerencias anteriores, y se retiran sus datos. Enter, seleccionar un lugar, «Usar mi ubicación» o cancelar interrumpen el temporizador y las sugerencias pendientes para no duplicar solicitudes ni mostrar una lista vieja.
+
+### Sugerencias mientras se escribe
+
+`PlaceSuggestions` consulta únicamente `GET /api/v1/lugares/?q=…` en Django. Este endpoint obtiene coincidencias por prefijo desde el servicio de geocodificación de Open-Meteo, basado en GeoNames, sin claves de OpenWeather/Groq y sin generar recomendaciones. Las opciones conservan el orden recibido, tienen identificador estable y coordenadas validadas. La lista no inventa nombres ni promete corregir errores ortográficos: sirve para completar un comienzo de nombre y distinguir lugares con nombres similares. [Documentación del proveedor](https://open-meteo.com/en/docs/geocoding-api).
+
+El campo funciona como combobox: flechas arriba/abajo recorren opciones, Enter elige la activa y Escape cierra sin modificar el texto. Sin opción activa, Enter busca por nombre. Tab permite salir normalmente; el foco permanece en el campo mientras se recorre la lista y se mantiene visible la opción activa. También se puede elegir con mouse o toque. No se consulta durante composición IME.
+
+Se anuncian la carga, la cantidad de coincidencias, la ausencia de resultados y la falla del servicio. Si las sugerencias fallan, siguen disponibles Enter y «Usar mi ubicación». La geolocalización continúa requiriendo una acción explícita; las sugerencias no piden permiso de ubicación. La atribución de lugares a Open-Meteo/GeoNames aparece junto al buscador.
+
+### Ubicación actual
+
+«Usar mi ubicación» llama a `navigator.geolocation.getCurrentPosition` solo al pulsarlo. Requiere contexto seguro (HTTPS o localhost) y permiso del navegador. No se consulta por IP ni se coloca una clave en Angular. Se usa precisión normal, una posición cacheada de hasta un minuto, timeout nativo de 10 segundos y límite de espera de 12 segundos incluyendo el permiso. Si se rechaza el permiso, no hay soporte o vence la espera, se muestra un aviso y se permite escribir un lugar.
+
+Angular envía exclusivamente `latitud` y `longitud` a `/api/v1/clima/`. Django valida el par y resuelve una localidad cercana mediante geocodificación inversa de OpenWeather; clima y pronóstico usan las coordenadas solicitadas, no el centro de esa localidad. La clave permanece en Django. No se guardan coordenadas en almacenamiento del navegador ni se sigue la ubicación con `watchPosition`. Al cancelar o comenzar otra búsqueda se ignoran callbacks tardíos; la solicitud de permiso del propio navegador no puede cerrarse desde la aplicación. Los requisitos del navegador se describen en [Geolocation de MDN](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition).
+
 ## Recuperación y accesibilidad
 
-| Situación | Acción disponible |
-| --- | --- |
-| Ciudad inexistente (`404` con `CIUDAD_NO_ENCONTRADA`) | «Corregir búsqueda» lleva el foco a ciudad y conserva lo escrito. Un 404 sin ese código se trata como falla del servicio. |
-| Consulta inválida (`400`) | Corregir el campo indicado por Django: ciudad, país o región. La validación local enfoca primero el primer campo inválido. |
-| Ciudad ambigua (`409`) | Elegir un candidato o «Precisar ubicación»; foco en país si falta o en región si el país ya está indicado. |
-| Conexión fallida (`0`) | Revisar conexión y «Reintentar consulta». Un bloqueo CORS también puede aparecer como falla de conexión; no se exponen detalles técnicos. |
-| Espera agotada (`TimeoutError`) | Aviso específico y «Reintentar consulta», sin mantener el indicador de carga activo. |
-| Límite (`429`) | Aviso para intentar más tarde; el reintento siempre depende de la persona. |
-| Servicio no disponible o respuesta inválida | «Reintentar consulta», sin mostrar cuerpos privados de error. |
-| Búsqueda pendiente | «Cancelar búsqueda» cancela la suscripción, limpia los datos, anuncia la cancelación y vuelve a ciudad. |
+| Situación                                             | Acción disponible                                                                                                                         |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Ciudad inexistente (`404` con `CIUDAD_NO_ENCONTRADA`) | «Corregir búsqueda» lleva el foco a ciudad y conserva lo escrito. Un 404 sin ese código se trata como falla del servicio.                 |
+| Consulta inválida (`400`)                             | Corregir el lugar y sus partes separadas por comas en el único campo.                                                                     |
+| Ciudad ambigua (`409`)                                | Elegir un candidato o «Precisar ubicación»; foco en el mismo campo de lugar.                                                              |
+| Conexión fallida (`0`)                                | Revisar conexión y «Reintentar consulta». Un bloqueo CORS también puede aparecer como falla de conexión; no se exponen detalles técnicos. |
+| Espera agotada (`TimeoutError`)                       | Aviso específico y «Reintentar consulta», sin mantener el indicador de carga activo.                                                      |
+| Límite (`429`)                                        | Aviso para intentar más tarde; el reintento siempre depende de la persona.                                                                |
+| Servicio no disponible o respuesta inválida           | «Reintentar consulta», sin mostrar cuerpos privados de error.                                                                             |
+| Búsqueda pendiente                                    | «Cancelar búsqueda» cancela la suscripción, limpia los datos, anuncia la cancelación y vuelve a ciudad.                                   |
 
-El reintento usa una copia de la última consulta normalizada que falló; no inventa filtros ni mezcla datos. Al editar se retiran el aviso y el reintento anterior, para no volver a enviar una búsqueda que ya no corresponda al formulario. Si se selecciona una ubicación o se reintenta, el foco queda en el botón de envío antes de retirar el control anterior. No se agregaron reintentos automáticos ni persistencia.
+El reintento usa una copia de la última consulta normalizada que falló, incluidos los pares de coordenadas, sin inventar filtros ni mezclar datos. Al editar se retiran el aviso y el reintento anterior. Si se selecciona una ubicación o se reintenta, el foco vuelve al campo de lugar antes de retirar el control anterior. No hay reintentos automáticos ni persistencia.
 
 Los errores remotos se anuncian mediante `role="alert"`. La carga, el resultado, la cancelación y la disponibilidad parcial se comunican con `role="status"` y `aria-atomic`; `aria-busy` se desactiva al terminar o fallar. El panel de errores de conexión/servicio recibe foco y permite llegar al reintento con Tab; las correcciones enfocan su campo. Los mensajes locales se asocian mediante `aria-describedby` y los campos inválidos llevan `aria-invalid`. El enlace «Saltar al contenido», el foco visible y los botones nativos permiten usar teclado sin una trampa de foco.
 
@@ -156,10 +195,10 @@ La configuración está en `playwright.config.ts` y se comprueba mediante `e2e/t
 
 ## Entornos
 
-| Configuración | Archivo | apiBaseUrl |
-| --- | --- | --- |
-| Desarrollo | `src/environments/environment.development.ts` | `http://localhost:8000` |
-| Producción | `src/environments/environment.ts` | `https://api-clima.example.invalid` (marcador sin servicio real) |
+| Configuración | Archivo                                       | apiBaseUrl                                                       |
+| ------------- | --------------------------------------------- | ---------------------------------------------------------------- |
+| Desarrollo    | `src/environments/environment.development.ts` | `http://localhost:8000`                                          |
+| Producción    | `src/environments/environment.ts`             | `https://api-clima.example.invalid` (marcador sin servicio real) |
 
 Configurar `PUBLIC_API_BASE_URL_DEVELOPMENT` y `PUBLIC_API_BASE_URL_PRODUCTION` en `.env`. Antes de integrar o publicar, reemplazar el marcador de producción por la URL HTTPS real de Django en Render y recompilar. La base no incluye `/api/v1/clima/`; ese endpoint se incorporará al implementar el servicio en TK05.
 
@@ -261,14 +300,14 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 
 24 de octubre de 2026 (America/Buenos_Aires). Windows, Node 24.13.1, npm 11.10.0, Angular 21.2.25, Playwright 1.64.1 y Chromium 156.0.8078.4.
 
-| Cobertura del plan CP01–CP12 y CP14 | Resultado local |
-| --- | --- |
-| Validadores, normalización, códigos ASCII y parámetros reservados | Suite unitaria y E2E: entrada inválida sin GET; parámetros decodificados coherentes con lo enviado. |
-| Clima actual, unidades, datos ausentes y fechas | Suite unitaria y E2E: ceros/negativos/decimales, nulls, 40 intervalos, cruce de año y hora de ciudad independiente del navegador. |
-| Recomendaciones y disponibilidad parcial | E2E: consejo ligado a la consulta, clima con IA no disponible y ambos bloques opcionales ausentes sin mediciones inventadas. |
-| Ambigüedad, errores y recuperación | E2E: candidatos del mismo país refinados por región, 404 y reintento de 503 con teclado; la suite unitaria mantiene conexión, timeout, 429, cancelación y corrección de campos. |
-| Concurrencia y respuesta tardía | Se retiene la primera respuesta hasta después del resultado de la nueva ciudad; un duplicado pendiente no añade GET y el consejo final corresponde a la última búsqueda. |
-| Teclado, responsive y accesibilidad | Enter, Tab, enlace de salto, foco de corrección y reintento comprobados a tres tamaños; axe sin infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre resultado y límite de solicitudes. |
+| Cobertura del plan CP01–CP12 y CP14                               | Resultado local                                                                                                                                                                                     |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Validadores, normalización, códigos ASCII y parámetros reservados | Suite unitaria y E2E: entrada inválida sin GET; parámetros decodificados coherentes con lo enviado.                                                                                                 |
+| Clima actual, unidades, datos ausentes y fechas                   | Suite unitaria y E2E: ceros/negativos/decimales, nulls, 40 intervalos, cruce de año y hora de ciudad independiente del navegador.                                                                   |
+| Recomendaciones y disponibilidad parcial                          | E2E: consejo ligado a la consulta, clima con IA no disponible y ambos bloques opcionales ausentes sin mediciones inventadas.                                                                        |
+| Ambigüedad, errores y recuperación                                | E2E: candidatos del mismo país refinados por región, 404 y reintento de 503 con teclado; la suite unitaria mantiene conexión, timeout, 429, cancelación y corrección de campos.                     |
+| Concurrencia y respuesta tardía                                   | Se retiene la primera respuesta hasta después del resultado de la nueva ciudad; un duplicado pendiente no añade GET y el consejo final corresponde a la última búsqueda.                            |
+| Teclado, responsive y accesibilidad                               | Enter, Tab, enlace de salto, foco de corrección y reintento comprobados a tres tamaños; axe sin infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre resultado y límite de solicitudes. |
 
 - `npm test -- --watch=false`: **69 pruebas aprobadas**.
 - `npm run e2e`: **27 ejecuciones aprobadas** (nueve escenarios por tres tamaños), sin reintentos. Se ejecuta el build optimizado de producción a través del servidor de pruebas.
@@ -276,3 +315,22 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 - Inspección visual de las capturas de 360, 768 y 1440 px: contenido legible, foco visible y ausencia de desbordamiento; revisados éxito y consejo no disponible. Navegación con teclado automatizada. No se probó un lector de pantalla real ni se certifica accesibilidad completa.
 - Sin defectos bloqueantes observados en los casos ejecutados. La configuración inicial necesitó declarar los tipos de Node para comprobar los E2E; quedó resuelto y el chequeo pasa. No fueron necesarios cambios en el comportamiento de la aplicación.
 - README y lockfile actualizados. Sin llamadas a proveedores reales ni modificaciones de claves, `.env`, backend o documentos originales. Reporte disponible localmente; sin commit, PR ni despliegue. El usuario vinculará el commit al versionar TK09. TK10 continúa pendiente.
+
+## Ajuste de búsqueda automática y ubicación actual
+
+24 de octubre de 2026 (America/Buenos_Aires). Cambio solicitado fuera de la numeración de tareas. Se reemplazaron los tres campos y el botón de envío por un campo único y una acción explícita de ubicación. La espera de 500 ms reduce llamadas durante la escritura, manteniendo consulta inmediata con Enter y cancelación de respuestas anteriores.
+
+- **70 pruebas unitarias y 36 E2E aprobados**: campo único, pausa de escritura, Enter sin duplicados, entrada incompleta, composición IME, candidatos y ubicación concedida/rechazada. También se comprueban timeout de localización, coordenadas cero y callbacks tardíos que no reemplazan una nueva búsqueda escrita.
+- E2E en Chromium a 360, 768 y 1440 px, con geolocalización emulada y respuestas HTTP controladas. Sin ubicación real del agente ni llamadas a proveedores. Inspección visual de capturas, teclado, axe en los estados revisados y build de producción correctos.
+- Backend ampliado con consulta por coordenadas y geocodificación inversa; **145 pruebas de Django aprobadas**. El esquema de respuesta conserva los mismos cinco bloques; el esquema de errores admite los campos `latitud` y `longitud`.
+- README actualizado en ambos repositorios. Sin cambios en claves, `.env`, dependencias o documentos originales. Sin commit ni despliegue; la numeración de tareas existentes se conserva.
+
+## Ajuste de autocompletado de lugares
+
+24 de octubre de 2026 (America/Buenos_Aires). Se retiraron las tres ciudades fijas y «Probá con». La acción inicial «Buscar un lugar» ahora enfoca el buscador en lugar de consultar un ejemplo fijo.
+
+- **80 pruebas unitarias y 48 E2E aprobados**: selección con coordenadas, debounce sin consultas de clima/IA, teclado, Escape, respuestas tardías y búsqueda con Enter si falla el autocompletado. Tres tamaños en Chromium (360, 768 y 1440 px); lista de cinco opciones, revisión visual y axe sin infracciones en las reglas ejecutadas. Build de producción y tipos correctos.
+- Backend: **150 pruebas aprobadas**, incluyendo contrato del nuevo endpoint, normalización, destino HTTPS fijo, entradas inválidas sin proveedor, límite/error, JSON incorrecto y ausencia de llamadas a clima o Groq.
+- Comprobación adicional del proveedor público con `Cord`: cinco coincidencias reales por prefijo, sin usar claves ni consultar clima/IA. El resto de la regresión usa respuestas y ubicaciones simuladas.
+- README actualizado en ambos repositorios; sin cambios de claves, `.env`, dependencias o documentos originales. Sin commit ni despliegue. Esta mejora modifica la pausa anterior: escribir prepara opciones; elegir una o pulsar Enter consulta el clima.
+- Cierre al retomar el 25 de octubre: Django reiniciado con la nueva ruta; HTTP local de `/api/v1/lugares/?q=Cord` verificado con 200, cinco sugerencias y CORS para Angular. Repetido el caso móvil de combobox con teclado/Escape: aprobado, sin llamadas de clima mientras se recorre la lista.

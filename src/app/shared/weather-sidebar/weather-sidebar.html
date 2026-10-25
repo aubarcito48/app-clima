@@ -1,0 +1,47 @@
+<aside class="stitch-sidebar">
+  <a
+    href="./"
+    aria-label="StitchWeather, inicio"
+    class="relative flex items-center gap-3 rounded-xl"
+  >
+    <span class="stitch-logo" aria-hidden="true">S</span>
+    <span
+      ><span class="block font-display text-lg font-bold tracking-tight text-ink"
+        >Stitch<span class="text-orange-800">Weather</span></span
+      ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
+        >TU CLIMA, MÁS AZUL</span
+      ></span
+    >
+  </a>
+  <nav
+    aria-label="Navegación principal"
+    class="relative mt-7 grid grid-cols-2 gap-2 lg:mt-12 lg:flex lg:flex-col"
+  >
+    <a href="#pronostico" class="sidebar-link bg-white font-bold text-blue"
+      ><app-weather-icon name="cloud-sun" [size]="20" />Pronóstico</a
+    >
+    <a href="#evolucion" class="sidebar-link"
+      ><app-weather-icon name="wind" [size]="20" />Días y horas</a
+    >
+    <a href="#consejo-ia" class="sidebar-link"
+      ><app-weather-icon name="sparkles" [size]="20" />Consejo de IA</a
+    >
+    <a href="#musica" class="sidebar-link"
+      ><span aria-hidden="true" class="text-xl leading-none">♫</span>Música</a
+    >
+  </nav>
+  <div class="sidebar-note">
+    <img
+      src="stitch-coast.svg"
+      alt=""
+      aria-hidden="true"
+      width="160"
+      height="135"
+      class="mx-auto mb-3 w-32"
+    />
+    <p class="font-display text-base font-bold">Un clima para cada aventura.</p>
+    <p class="mt-2 text-xs leading-6">
+      Buscá tu lugar, descubrí cómo sigue el día y poné tu música.
+    </p>
+  </div>
+</aside>

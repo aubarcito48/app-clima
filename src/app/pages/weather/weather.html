@@ -1,124 +1,108 @@
 <a href="#main-content" class="skip-link">Saltar al contenido</a>
-<div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
-  <header
-    class="flex flex-wrap items-center justify-between gap-4 border-b border-line py-6 sm:py-7"
-  >
-    <a
-      href="./"
-      aria-label="Clima Inteligente, inicio"
-      class="flex items-center gap-3 rounded-lg text-ink"
-    >
-      <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-ink text-sun"
-        ><app-weather-icon name="sun" [size]="25"
-      /></span>
-      <span class="font-display text-lg font-bold tracking-tight sm:text-xl"
-        >Clima Inteligente<span class="text-blue">.</span></span
+<div class="mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]">
+  <app-weather-sidebar />
+  <div class="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:py-10">
+    <main id="main-content" tabindex="-1" class="pb-10">
+      <header class="mb-7">
+        <p class="text-xs font-semibold tracking-[0.12em] text-secondary">{{ today }}</p>
+        <h1 class="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          Hola, explorador
+        </h1>
+        <p class="mt-2 text-sm leading-6 text-secondary">
+          Tu clima, tus planes y una banda sonora para el día.
+        </p>
+      </header>
+      <section
+        id="pronostico"
+        class="search-panel scroll-mt-6 rounded-[1.5rem] border border-line bg-white p-4 sm:p-5"
+        aria-label="Consulta de ciudad"
       >
-    </a>
-    <span
-      class="flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-secondary"
-      ><span class="h-1.5 w-1.5 rounded-full bg-blue" aria-hidden="true"></span> Versión de
-      prueba</span
-    >
-  </header>
-  <main id="main-content" tabindex="-1" class="pb-12">
-    <div class="pt-9 pb-7 sm:pt-12 sm:pb-8">
-      <h1
-        class="max-w-160 font-display text-[2rem] leading-[1.2] font-bold tracking-[-0.04em] text-ink sm:text-[2.75rem]"
-      >
-        Un buen día empieza<br class="hidden sm:block" />
-        con un buen plan.
-      </h1>
-      <p class="mt-4 max-w-140 text-sm leading-7 text-secondary sm:text-base">
-        El clima de tu ciudad, explicado para tu día a día.
-      </p>
-    </div>
-    <section
-      class="rounded-[1.5rem] border border-line bg-white p-5 sm:p-6"
-      aria-label="Consulta de ciudad"
-    >
-      <app-city-search
-        #citySearch
-        [busy]="state() === 'loading'"
-        [feedback]="feedback()"
-        (queryEdited)="feedback.set(null)"
-        (querySubmitted)="search($event)"
-        (retryRequested)="retry()"
-      />
-    </section>
-    <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
-      <p role="status" aria-atomic="true" class="text-sm text-secondary">
-        @switch (state()) {
-          @case ('loading') {
-            <span class="inline-flex items-center gap-2"
-              ><span class="loading-dot" aria-hidden="true"></span> Consultando el clima de
-              {{ requestedCity() }}…</span
-            >
-          }
-          @case ('ready') {
-            <span class="inline-flex items-center gap-2"
-              ><app-weather-icon name="pin" [size]="16" /><span
-                >Explorando <strong class="font-semibold text-ink">{{ weather()?.city }}</strong>
-                <span class="text-muted">· OpenWeather</span></span
-              ></span
-            >
-            <span class="sr-only"
-              >{{ weather()?.forecast?.length ? '' : 'Pronóstico no disponible.' }}
-              {{ weather()?.advice ? '' : 'Consejo de IA no disponible.' }}</span
-            >
-          }
-          @default {
-            @if (cancelled()) {
-              Búsqueda cancelada. Podés consultar otra ciudad.
-            } @else if (feedback()) {
-              No se pudo completar la consulta de {{ requestedCity() }}. Revisá el aviso de
-              búsqueda.
-            } @else {
-              Elegí una ciudad. Nosotros ponemos el contexto.
+        <app-city-search
+          #citySearch
+          [busy]="state() === 'loading'"
+          [locating]="locating()"
+          [feedback]="feedback()"
+          (queryEdited)="editQuery()"
+          (locationRequested)="locate()"
+          (querySubmitted)="search($event)"
+          (retryRequested)="retry()"
+        />
+      </section>
+      <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
+        <p role="status" aria-atomic="true" class="text-sm text-secondary">
+          @switch (state()) {
+            @case ('loading') {
+              <span class="inline-flex items-center gap-2"
+                ><span class="loading-dot" aria-hidden="true"></span>
+                {{ locating() ? 'Obteniendo' : 'Consultando el clima de' }}
+                {{ requestedCity() }}…</span
+              >
+            }
+            @case ('ready') {
+              <span class="inline-flex items-center gap-2"
+                ><app-weather-icon name="pin" [size]="16" /><span
+                  >Explorando <strong class="font-semibold text-ink">{{ weather()?.city }}</strong>
+                  <span class="text-muted">· OpenWeather</span></span
+                ></span
+              >
+              <span class="sr-only"
+                >{{ weather()?.forecast?.length ? '' : 'Pronóstico no disponible.' }}
+                {{ weather()?.advice ? '' : 'Consejo de IA no disponible.' }}</span
+              >
+            }
+            @default {
+              @if (cancelled()) {
+                Búsqueda cancelada. Podés consultar otra ciudad.
+              } @else if (feedback()) {
+                No se pudo completar la consulta de {{ requestedCity() }}. Revisá el aviso de
+                búsqueda.
+              } @else {
+                Elegí una ciudad. Nosotros ponemos el contexto.
+              }
             }
           }
+        </p>
+        @if (state() === 'ready' || state() === 'loading') {
+          <button
+            type="button"
+            (click)="citySearch.cancelAutoSearch(); reset(); citySearch.focusCity()"
+            class="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-secondary underline decoration-line underline-offset-4 hover:text-ink"
+          >
+            <app-weather-icon name="close" [size]="14" />
+            {{ state() === 'loading' ? 'Cancelar búsqueda' : 'Volver al inicio' }}
+          </button>
         }
-      </p>
-      @if (state() === 'ready' || state() === 'loading') {
-        <button
-          type="button"
-          (click)="reset(); citySearch.focusCity()"
-          class="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-secondary underline decoration-line underline-offset-4 hover:text-ink"
-        >
-          <app-weather-icon name="close" [size]="14" />
-          {{ state() === 'loading' ? 'Cancelar búsqueda' : 'Volver al inicio' }}
-        </button>
-      }
-    </div>
-    <div class="mt-4" [attr.aria-busy]="state() === 'loading'">
-      @if (state() === 'loading') {
-        <app-weather-loading />
-      } @else {
-        <div class="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-          <app-current-weather
-            [weather]="weather()"
-            (exampleRequested)="citySearch.chooseExample('Córdoba')"
-          />
-          <app-forecast [weather]="weather()" class="lg:col-span-2 lg:row-start-2" />
-          <app-recommendation [weather]="weather()" class="lg:col-start-2 lg:row-start-1" />
-        </div>
-      }
-    </div>
-    <aside
-      class="mt-6 flex items-start gap-2.5 px-1 text-xs leading-6 text-muted"
-      aria-label="Información del servicio"
+      </div>
+      <div class="mt-4" [attr.aria-busy]="state() === 'loading'">
+        @if (state() === 'loading') {
+          <app-weather-loading />
+        } @else {
+          <div class="grid items-stretch gap-6">
+            <app-current-weather [weather]="weather()" (searchRequested)="citySearch.focusCity()" />
+            <div class="grid items-stretch gap-5 xl:grid-cols-2">
+              <app-recommendation [weather]="weather()" />
+              <app-weather-music [weather]="weather()" />
+            </div>
+            <app-forecast [weather]="weather()" />
+          </div>
+        }
+      </div>
+      <aside
+        class="mt-6 flex items-start gap-2.5 px-1 text-xs leading-6 text-muted"
+        aria-label="Información del servicio"
+      >
+        <app-weather-icon name="sparkles" [size]="16" class="mt-1" />
+        <p>
+          La disponibilidad del pronóstico y del consejo puede variar. Consultá las condiciones
+          antes de organizar tus planes.
+        </p>
+      </aside>
+    </main>
+    <footer
+      class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line py-6 text-xs leading-6 text-muted"
     >
-      <app-weather-icon name="sparkles" [size]="16" class="mt-1" />
-      <p>
-        La disponibilidad del pronóstico y del consejo puede variar. Consultá las condiciones antes
-        de organizar tus planes.
-      </p>
-    </aside>
-  </main>
-  <footer
-    class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line py-6 text-xs leading-6 text-muted"
-  >
-    <p>Hecho para entender el cielo y disfrutar el día.</p>
-    <p>Clima Inteligente <span aria-hidden="true">·</span> Primera versión</p>
-  </footer>
+      <p>Hecho para entender el cielo y disfrutar el día.</p>
+      <p>StitchWeather <span aria-hidden="true">·</span> Tu clima, más azul</p>
+    </footer>
+  </div>
 </div>

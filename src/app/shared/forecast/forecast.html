@@ -1,49 +1,105 @@
-﻿<section
-  class="h-full rounded-[1.5rem] border border-line bg-white p-6 sm:p-7"
-  aria-labelledby="forecast-heading"
->
+<section id="evolucion" class="min-w-0 scroll-mt-6" aria-labelledby="forecast-heading">
   <div class="flex flex-wrap items-center justify-between gap-2">
     <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
-      Pronóstico por intervalos
+      Pronóstico por días y horas
     </h2>
     <span class="text-xs text-muted">{{
-      weather() ? 'Hora local de la ciudad' : 'Pronóstico por intervalos'
+      weather() ? 'Hora local de la ciudad' : 'Pronóstico por días y horas'
     }}</span>
   </div>
   @if (weather(); as data) {
     <p class="mt-3 text-xs leading-6 text-secondary">
       {{ data.city }} ({{ data.timezoneLabel }}). Fuente: {{ data.source }}.
     </p>
-    @for (day of days(); track day.key) {
-      <section class="mt-6" [attr.aria-labelledby]="'forecast-day-' + day.key">
-        <h3 [id]="'forecast-day-' + day.key" class="mb-3 text-sm font-semibold text-ink">
-          {{ day.label }}
-        </h3>
-        <ol
-          class="grid grid-cols-2 gap-3 sm:grid-cols-4"
-          [attr.aria-label]="'Intervalos de pronóstico del ' + day.label"
-        >
-          @for (interval of day.intervals; track interval.dateTime; let first = $first) {
-            <li
-              class="flex min-w-0 flex-col items-center rounded-2xl border px-2 py-4"
-              [class]="first ? 'border-blue/15 bg-sky' : 'border-transparent bg-canvas/70'"
+    @if (days().length) {
+      <div
+        class="mt-5 grid gap-3 sm:grid-cols-2"
+        role="group"
+        aria-label="Elegir un día del pronóstico"
+      >
+        @for (day of days(); track day.key) {
+          <button
+            type="button"
+            class="day-choice"
+            [attr.aria-pressed]="selectedDay() === day.key"
+            (click)="selectedDay.set(day.key); showAll.set(false)"
+          >
+            <span class="min-w-0"
+              ><span class="block text-sm font-semibold text-ink">{{ day.label }}</span
+              ><span class="mt-1 block text-xs text-secondary"
+                >Rango de intervalos disponibles</span
+              ></span
             >
-              <time [attr.datetime]="interval.dateTime" class="text-sm font-medium text-secondary"
-                >{{ interval.time }} h</time
+            <span class="shrink-0 text-sm font-bold text-blue"
+              >{{ day.low }} a {{ day.high }} °C</span
+            >
+          </button>
+        }
+      </div>
+      <p class="mt-3 text-xs leading-6 text-muted">
+        El rango corresponde a los intervalos recibidos de cada fecha, que puede estar incompleta.
+        No es una mínima o máxima diaria completa.
+      </p>
+      <div class="mt-7 flex flex-wrap items-center justify-between gap-2">
+        <h3 class="font-display text-lg font-bold text-ink">El clima durante el día</h3>
+        <button
+          type="button"
+          class="example-button text-xs font-semibold"
+          [attr.aria-expanded]="showAll()"
+          aria-controls="hourly-intervals"
+          (click)="showAll.set(!showAll())"
+        >
+          {{ showAll() ? 'Ver solo el día elegido' : 'Ver todos los intervalos' }}
+        </button>
+      </div>
+      <p class="mt-2 text-xs leading-6 text-secondary">
+        Pronóstico por horas con intervalos de tres horas, según disponibilidad del servicio.
+      </p>
+    }
+    <div id="hourly-intervals">
+      @for (day of visibleDays(); track day.key) {
+        <section class="mt-6" [attr.aria-labelledby]="'forecast-day-' + day.key">
+          <h3 [id]="'forecast-day-' + day.key" class="mb-3 text-sm font-semibold text-ink">
+            {{ day.label }}
+          </h3>
+          <ol
+            class="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-8"
+            [attr.aria-label]="'Intervalos de pronóstico del ' + day.label"
+          >
+            @for (interval of day.intervals; track interval.dateTime; let first = $first) {
+              <li
+                class="flex min-w-0 flex-col items-center rounded-2xl border px-2 py-4"
+                [class]="first ? 'border-blue/40 bg-sky' : 'border-line bg-white'"
               >
-              @if (interval.condition; as condition) {
-                <app-weather-icon [name]="condition" [size]="34" class="my-4 text-secondary" />
-              }
-              <p class="text-xl font-semibold tracking-tight text-ink">
-                {{ interval.temperature }}<span class="ml-0.5 text-sm font-normal">°C</span>
-              </p>
-              <p class="mt-2 text-center text-xs leading-5 text-muted">
-                {{ interval.description ?? 'Descripción no disponible' }}
-              </p>
-            </li>
-          }
-        </ol>
-      </section>
+                <time [attr.datetime]="interval.dateTime" class="text-sm font-medium text-secondary"
+                  >{{ interval.time }} h</time
+                >
+                @if (interval.condition; as condition) {
+                  <app-weather-icon [name]="condition" [size]="34" class="my-4 text-secondary" />
+                }
+                <p class="text-xl font-semibold tracking-tight text-ink">
+                  {{ interval.temperature }}<span class="ml-0.5 text-sm font-normal">°C</span>
+                </p>
+                <p class="mt-2 text-center text-xs leading-5 text-muted">
+                  {{ interval.description ?? 'Descripción no disponible' }}
+                </p>
+                @if (interval.precipitation != null) {
+                  <p class="mt-2 text-center text-xs text-secondary">
+                    Lluvia: {{ interval.precipitation }} %
+                  </p>
+                }
+              </li>
+            }
+          </ol>
+        </section>
+      }
+    </div>
+    @if (activeDay(); as day) {
+      <app-temperature-chart
+        class="mt-6 block min-w-0"
+        [intervals]="day.intervals"
+        [label]="'Evolución del ' + day.label"
+      />
     }
     <p class="mt-4 text-xs leading-5 text-muted">
       {{

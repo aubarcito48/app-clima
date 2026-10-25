@@ -1,15 +1,17 @@
-﻿@import 'tailwindcss';
+@import 'tailwindcss';
 @theme {
-  --color-ink: #172c4c;
-  --color-secondary: #475d78;
-  --color-muted: #54657e;
-  --color-canvas: #f3f7fc;
-  --color-sky: #edf3fd;
-  --color-line: #dfe6f0;
-  --color-control-line: #7c8ca4;
-  --color-lavender: #e9eefc;
-  --color-lavender-line: #dce3f7;
-  --color-blue: #3f65b1;
+  --color-ink: #123952;
+  --color-secondary: #365d75;
+  --color-muted: #4b687c;
+  --color-canvas: #eefaff;
+  --color-sky: #d9f2fc;
+  --color-line: #c5e2ee;
+  --color-control-line: #65889e;
+  --color-tropical: #236d60;
+  --color-tropical-soft: #e6f5f0;
+  --color-tropical-line: #beded3;
+  --color-coral: #ee91a6;
+  --color-blue: #246b91;
   --color-sun: #f8c85c;
   --color-sun-soft: #ffe1a0;
   --color-sun-stroke: #bd8525;
@@ -27,6 +29,7 @@
     min-width: 320px;
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
+    background: var(--color-canvas);
   }
   button,
   input {
@@ -45,16 +48,39 @@
     outline-offset: 4px;
   }
   ::selection {
-    background: #d2dff9;
+    background: #a5dff5;
     color: var(--color-ink);
   }
 }
 @layer components {
+  .day-choice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    min-height: 4.75rem;
+    border: 1px solid transparent;
+    border-radius: 1.1rem;
+    background: white;
+    padding: 1rem;
+    text-align: left;
+  }
+  .day-choice[aria-pressed='true'] {
+    border-color: var(--color-blue);
+    background: var(--color-sky);
+  }
+  .day-choice:hover {
+    border-color: var(--color-blue);
+  }
+  .search-panel {
+    box-shadow: 0 8px 28px #123b6006;
+  }
   .field {
     height: 3.25rem;
     border: 1px solid var(--color-control-line);
     border-radius: 0.85rem;
-    background: #fbfcfe;
+    background: #f8fdff;
     color: var(--color-ink);
     font-size: 0.875rem;
   }
@@ -67,14 +93,14 @@
   }
   .primary-button {
     border-radius: 0.85rem;
-    background: var(--color-ink);
+    background: var(--color-blue);
     color: white;
     font-size: 0.875rem;
     font-weight: 600;
     transition: background 0.15s;
   }
   .primary-button:hover:not(:disabled) {
-    background: #28476d;
+    background: #124f8a;
   }
   .example-button {
     min-height: 2.75rem;
@@ -105,7 +131,7 @@
   }
   .skeleton {
     border-radius: 0.6rem;
-    background: #ced9ec;
+    background: #bdddea;
     animation: skeleton-pulse 1.4s ease-in-out infinite;
   }
   .loading-dot {

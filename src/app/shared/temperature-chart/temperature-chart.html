@@ -1,0 +1,79 @@
+@if (chart(); as graph) {
+  <figure class="rounded-3xl border border-line bg-white p-4 sm:p-6">
+    <figcaption
+      class="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-ink"
+    >
+      {{ label() }} <span class="text-xs font-normal text-muted">Temperatura (°C)</span>
+    </figcaption>
+    <div
+      class="overflow-x-auto pb-2"
+      tabindex="0"
+      role="region"
+      aria-label="Gráfico de temperatura; desplazable horizontalmente"
+    >
+      <svg
+        viewBox="0 0 720 250"
+        class="block w-full min-w-120"
+        role="img"
+        [attr.aria-label]="label() + '. Valores exactos disponibles en las tarjetas por hora.'"
+      >
+        @for (tick of graph.ticks; track tick.y) {
+          <line x1="56" x2="664" [attr.y1]="tick.y" [attr.y2]="tick.y" stroke="var(--color-line)" />
+          <text
+            x="44"
+            [attr.y]="tick.y + 4"
+            text-anchor="end"
+            fill="var(--color-secondary)"
+            font-size="12"
+          >
+            {{ tick.value }}°
+          </text>
+        }
+        @if (graph.points.length > 1) {
+          <polyline
+            [attr.points]="graph.path"
+            fill="none"
+            stroke="var(--color-blue)"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        }
+        @for (point of graph.points; track point.dateTime) {
+          <circle
+            [attr.cx]="point.x"
+            [attr.cy]="point.y"
+            r="5"
+            fill="var(--color-blue)"
+            stroke="white"
+            stroke-width="2"
+          >
+            <title>{{ point.time }} h: {{ point.temperature }} °C</title>
+          </circle>
+          <text
+            [attr.x]="point.x"
+            [attr.y]="point.y - 14"
+            text-anchor="middle"
+            fill="var(--color-ink)"
+            font-size="13"
+            font-weight="600"
+          >
+            {{ point.temperature }}°
+          </text>
+          <text
+            [attr.x]="point.x"
+            y="232"
+            text-anchor="middle"
+            fill="var(--color-secondary)"
+            font-size="12"
+          >
+            {{ point.time }}
+          </text>
+        }
+      </svg>
+    </div>
+    <p class="mt-2 text-xs leading-6 text-muted">
+      Hora local de la ciudad. Cada punto es un intervalo recibido; la línea permite seguir su
+      evolución.
+    </p>
+  </figure>
+}
