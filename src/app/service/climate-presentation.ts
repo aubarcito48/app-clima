@@ -13,11 +13,23 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
     city: data.ubicacion.nombre,
     country: [data.ubicacion.region, data.ubicacion.pais].filter(Boolean).join(', '),
     dateLabel: local(data.actual.fecha_utc, { day: 'numeric', month: 'long', year: 'numeric' }),
-    updatedAt: local(data.actual.fecha_utc, {
+    observedTime: local(data.actual.fecha_utc, {
       hour: '2-digit',
       minute: '2-digit',
       hourCycle: 'h23',
     }),
+    observedAtUtc: data.actual.fecha_utc,
+    updatedAtUtc: data.meta.consultado_en_utc,
+    updatedAt: local(data.meta.consultado_en_utc, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }),
+    timezoneLabel: utcOffsetLabel(data.ubicacion.desplazamiento_horario_segundos),
+    source: data.meta.fuente_meteorologica,
     temperature: data.actual.temperatura_c,
     feelsLike: data.actual.sensacion_c,
     humidity: data.actual.humedad_pct,
@@ -25,9 +37,15 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
     condition: null,
     description: data.actual.descripcion,
     forecast: data.pronostico.intervalos.map((row) => ({
+      dateTime: row.fecha_utc,
+      dayKey: new Date(Date.parse(row.fecha_utc) + offset).toISOString().slice(0, 10),
+      dayLabel: local(row.fecha_utc, {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
       time: local(row.fecha_utc, {
-        day: '2-digit',
-        month: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
         hourCycle: 'h23',
@@ -45,6 +63,14 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
           }
         : null,
   };
+}
+
+function utcOffsetLabel(offset: number): string {
+  const absolute = Math.abs(offset);
+  const hours = String(Math.floor(absolute / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((absolute % 3600) / 60)).padStart(2, '0');
+  const seconds = absolute % 60;
+  return `UTC${offset < 0 ? '−' : '+'}${hours}:${minutes}${seconds ? ':' + String(seconds).padStart(2, '0') : ''}`;
 }
 
 export function climateFeedback(error: unknown): CitySearchFeedback {

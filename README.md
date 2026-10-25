@@ -4,7 +4,7 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK05: conexión HTTP con Django mediante `apiBaseUrl` y `GET /api/v1/clima/`. Se valida el contrato recibido, se cancelan consultas anteriores y se evita duplicar una consulta idéntica mientras está pendiente. El formulario permite códigos de país de dos letras y región opcional. Se conserva el diseño existente, adaptando sus tarjetas para recibir datos del backend sin valores inventados.
+TK06: clima actual y pronóstico presentados con ubicación resuelta, unidades y fechas de la ciudad. Se distinguen la medición y la consulta, se muestra OpenWeather como fuente y se conservan todos los intervalos agrupados por fecha local. La conexión HTTP, validación del contrato y cancelación de búsquedas anteriores de TK05 siguen vigentes.
 
 ## Consultar el clima
 
@@ -12,7 +12,17 @@ Al abrir la aplicación se muestra el estado inicial sin solicitudes automática
 
 Para obtener información real, Django debe estar iniciado y tener configurada su clave privada de OpenWeather. Groq necesita clave y modelo habilitado en el backend; si falta o falla, la respuesta puede conservar el clima con IA no disponible. No se configuraron ni consumieron cuentas externas durante TK05. «Volver al inicio» cancela una solicitud pendiente y limpia el resultado.
 
-El modelo `ClimateResponse` reproduce los cinco bloques del contrato v1: `ubicacion`, `actual`, `pronostico`, `recomendacion` y `meta`. El servicio lee JSON como `unknown` y comprueba tipos, fechas UTC, unidades y estados parciales antes de adaptarlo al modelo visual. Campos meteorológicos opcionales omitidos o null se conservan como ausencia; una respuesta sin datos obligatorios se rechaza con un aviso, sin fabricar mediciones. El detalle de presentación de clima y consejos continuará en TK06/TK07.
+El modelo `ClimateResponse` reproduce los cinco bloques del contrato v1: `ubicacion`, `actual`, `pronostico`, `recomendacion` y `meta`. El servicio lee JSON como `unknown` y comprueba tipos, fechas UTC, unidades y estados parciales antes de adaptarlo al modelo visual. Campos meteorológicos opcionales omitidos o null se conservan como ausencia; una respuesta sin datos obligatorios se rechaza con un aviso, sin fabricar mediciones. TK06 completa la presentación meteorológica; la revisión específica de consejos continúa en TK07.
+
+## Clima y fechas de la ciudad
+
+La tarjeta de clima muestra el nombre resuelto por Django, región cuando exista y código de país. Temperatura y sensación térmica se expresan en °C, humedad en % y viento en km/h. Angular conserva los números recibidos: no vuelve a convertir el viento ni reemplaza ceros por ausencia. Sensación térmica, humedad, viento y descripción ausentes muestran «No disponible» o «Descripción no disponible», sin agregar unidades a un dato inexistente. No se asigna un icono de condición arbitrario cuando el contrato no lo proporciona.
+
+«Medición del…» corresponde a `actual.fecha_utc`; «Consultado el…» corresponde a `meta.consultado_en_utc`. Una consulta reciente no cambia la fecha de la medición. Los elementos `time` conservan el timestamp UTC original en `datetime`, mientras su texto usa el desplazamiento horario de `ubicacion.desplazamiento_horario_segundos`. La fuente procede de `meta.fuente_meteorologica`.
+
+La conversión es independiente de la zona horaria del navegador: se aplica el desplazamiento a cada instante y se formatea con `Intl.DateTimeFormat` en UTC para evitar aplicar otra zona por segunda vez. Se muestra el desplazamiento explícito, por ejemplo UTC−03:00 o UTC+05:45. El contrato entrega un offset, no una zona IANA; se usa ese mismo offset para todos los intervalos, sin inventar cambios futuros de horario de verano.
+
+El pronóstico conserva cada intervalo suministrado por Django, con su temperatura, descripción y hora. Se agrupa visualmente por fecha local, incluyendo el año cuando el rango cruza de diciembre a enero. Agrupar no calcula promedios, mínimos ni máximos diarios y no recorta los 40 intervalos admitidos por el contrato. Cada elemento se identifica por su timestamp UTC. Si el pronóstico no está disponible, se muestra un aviso sin lista vacía ni horarios de reemplazo y el clima actual permanece visible.
 
 ## Búsqueda y validación
 
@@ -158,3 +168,14 @@ Verificado el 24 de octubre de 2026 con Angular 21.2.25, Node 24.13.1, npm 11.10
 - Builds de producción y desarrollo completados. Documentación y cambios revisados sin crear commit ni desplegar.
 
 Para usarlo localmente, mantener Django en el host configurado mediante `PUBLIC_API_BASE_URL_DEVELOPMENT` (por defecto `http://localhost:8000`), permitir el origen Angular en CORS y completar las claves solo en el backend. La pantalla inicial no necesita Django, pero buscar una ciudad sí. La URL de producción sigue siendo un placeholder hasta publicar el backend en Render. TK06 y TK07 continúan pendientes como tareas de presentación; no se modificaron el backend, sus claves ni los documentos originales.
+
+## Verificación de TK06
+
+Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25, Node 24.13.1, npm 11.10.0 y Chromium 156.0.8078.4. Se conservaron Tailwind, la tipografía y la paleta existentes; se aplicaron las skills Angular/Google y frontend-design de Anthropic a la presentación.
+
+- CP04: ubicación resuelta, fuente, unidades y valores recibidos sin conversiones adicionales. Temperatura cero, sensación negativa, humedad cero y viento decimal comprobados; nulls indicados como no disponibles y sin iconos meteorológicos inventados.
+- CP05: se conservan los 40 intervalos y sus temperaturas, agrupados por fecha local. Cruce de medianoche y de año verificados sin promedios diarios ni modificación del payload original. Pronóstico ausente comunicado sin fabricar intervalos ni retirar el clima.
+- CP06: fecha de medición y fecha de consulta separadas; `datetime` UTC original y texto local coherentes. Probados offsets cero, negativo, de media hora y de 45 minutos. Un navegador configurado en Asia/Tokyo mostró correctamente los datos de una ciudad con UTC−03:00.
+- **49 pruebas aprobadas** mediante `npm test -- --watch=false`; 12 casos nuevos de adaptación y renderizado. Build de producción completado.
+- Chromium a 360, 768 y 1440 px: revisados valores, ambas fechas, agrupación de 40 intervalos, cambio de año y estados sin datos. Sin desbordamiento horizontal ni errores de ejecución. Axe no detectó infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre el resultado; no equivale a una auditoría completa.
+- La comprobación visual usó respuestas HTTP simuladas del contrato, sin consultas a Django ni a proveedores reales. No se modificaron claves, `.env`, backend, dependencias ni documentos originales; sin commit ni despliegue. TK07 continúa pendiente para la presentación específica de recomendaciones.

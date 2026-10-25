@@ -1,5 +1,6 @@
 ﻿import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { WeatherPreview } from '../../models/weather-preview';
+import { computed } from '@angular/core';
+import { ForecastInterval, WeatherPreview } from '../../models/weather-preview';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 @Component({
   selector: 'app-forecast',
@@ -10,4 +11,16 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
 })
 export class Forecast {
   readonly weather = input<WeatherPreview | null>(null);
+  readonly days = computed(() => {
+    const groups = new Map<string, { key: string; label: string; intervals: ForecastInterval[] }>();
+    for (const interval of this.weather()?.forecast ?? []) {
+      let day = groups.get(interval.dayKey);
+      if (!day) {
+        day = { key: interval.dayKey, label: interval.dayLabel, intervals: [] };
+        groups.set(interval.dayKey, day);
+      }
+      day.intervals.push(interval);
+    }
+    return [...groups.values()];
+  });
 }

@@ -6,7 +6,7 @@
     <h2 id="current-heading" class="text-sm font-semibold text-ink">Clima actual</h2>
     <span
       class="rounded-full border border-ink/10 bg-white/65 px-3 py-1 text-xs font-medium text-ink"
-      >{{ weather() ? 'OpenWeather' : 'Tu próximo plan' }}</span
+      >{{ weather()?.source ?? 'Tu próximo plan' }}</span
     >
   </div>
   @if (weather(); as data) {
@@ -15,11 +15,14 @@
         <p class="mb-2 flex items-center gap-1.5 text-sm text-secondary">
           <app-weather-icon name="pin" [size]="16" /> {{ data.country }}
         </p>
-        <h3 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+        <h3 class="break-words font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
           {{ data.city }}
         </h3>
         <p class="mt-2 text-sm text-secondary">
-          {{ data.dateLabel }} <span class="whitespace-nowrap">· {{ data.updatedAt }} h</span>
+          Medición del
+          <time [attr.datetime]="data.observedAtUtc"
+            >{{ data.dateLabel }} a las {{ data.observedTime }} h</time
+          >
         </p>
         <p class="temperature mt-4 text-ink">
           <span>{{ data.temperature }}</span
@@ -33,11 +36,11 @@
           {{ data.feelsLike === null ? 'No disponible' : data.feelsLike + ' °C' }}
         </p>
       </div>
-      <div class="weather-art text-ink/80" aria-hidden="true">
-        @if (data.condition; as condition) {
+      @if (data.condition; as condition) {
+        <div class="weather-art text-ink/80" aria-hidden="true">
           <app-weather-icon [name]="condition" [size]="150" />
-        }
-      </div>
+        </div>
+      }
     </div>
     <dl class="relative z-10 mt-8 grid grid-cols-2 gap-4 border-t border-ink/10 pt-5">
       <div class="relative pl-13">
@@ -61,6 +64,12 @@
         </dd>
       </div>
     </dl>
+    <div class="relative z-10 mt-5 border-t border-ink/10 pt-4 text-xs leading-6 text-secondary">
+      <p>Hora de la ciudad ({{ data.timezoneLabel }}).</p>
+      <p>
+        Consultado el <time [attr.datetime]="data.updatedAtUtc">{{ data.updatedAt }}&nbsp;h</time>.
+      </p>
+    </div>
   } @else {
     <div class="relative z-10 mt-7 grid items-center gap-3 sm:grid-cols-[1fr_10rem]">
       <div class="order-2 sm:order-1">

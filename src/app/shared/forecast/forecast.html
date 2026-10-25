@@ -4,36 +4,51 @@
 >
   <div class="flex flex-wrap items-center justify-between gap-2">
     <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
-      Las próximas horas
+      Pronóstico por intervalos
     </h2>
     <span class="text-xs text-muted">{{
       weather() ? 'Hora local de la ciudad' : 'Pronóstico por intervalos'
     }}</span>
   </div>
   @if (weather(); as data) {
-    <ol class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label="Intervalos de pronóstico">
-      @for (interval of data.forecast; track interval.time; let first = $first) {
-        <li
-          class="flex min-w-0 flex-col items-center rounded-2xl border px-2 py-4"
-          [class]="first ? 'border-blue/15 bg-sky' : 'border-transparent bg-canvas/70'"
+    <p class="mt-3 text-xs leading-6 text-secondary">
+      {{ data.city }} ({{ data.timezoneLabel }}). Fuente: {{ data.source }}.
+    </p>
+    @for (day of days(); track day.key) {
+      <section class="mt-6" [attr.aria-labelledby]="'forecast-day-' + day.key">
+        <h3 [id]="'forecast-day-' + day.key" class="mb-3 text-sm font-semibold text-ink">
+          {{ day.label }}
+        </h3>
+        <ol
+          class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+          [attr.aria-label]="'Intervalos de pronóstico del ' + day.label"
         >
-          <time class="text-sm font-medium text-secondary">{{ interval.time }}</time>
-          @if (interval.condition; as condition) {
-            <app-weather-icon [name]="condition" [size]="34" class="my-4 text-secondary" />
+          @for (interval of day.intervals; track interval.dateTime; let first = $first) {
+            <li
+              class="flex min-w-0 flex-col items-center rounded-2xl border px-2 py-4"
+              [class]="first ? 'border-blue/15 bg-sky' : 'border-transparent bg-canvas/70'"
+            >
+              <time [attr.datetime]="interval.dateTime" class="text-sm font-medium text-secondary"
+                >{{ interval.time }} h</time
+              >
+              @if (interval.condition; as condition) {
+                <app-weather-icon [name]="condition" [size]="34" class="my-4 text-secondary" />
+              }
+              <p class="text-xl font-semibold tracking-tight text-ink">
+                {{ interval.temperature }}<span class="ml-0.5 text-sm font-normal">°C</span>
+              </p>
+              <p class="mt-2 text-center text-xs leading-5 text-muted">
+                {{ interval.description ?? 'Descripción no disponible' }}
+              </p>
+            </li>
           }
-          <p class="text-xl font-semibold tracking-tight text-ink">
-            {{ interval.temperature }}<span class="ml-0.5 text-sm font-normal">°C</span>
-          </p>
-          <p class="mt-2 text-center text-xs leading-5 text-muted">
-            {{ interval.description ?? 'Descripción no disponible' }}
-          </p>
-        </li>
-      }
-    </ol>
+        </ol>
+      </section>
+    }
     <p class="mt-4 text-xs leading-5 text-muted">
       {{
         data.forecast.length
-          ? 'Intervalos suministrados por el servicio de clima.'
+          ? 'Cada valor corresponde a su intervalo. No son promedios diarios.'
           : 'Pronóstico no disponible por el momento.'
       }}
     </p>

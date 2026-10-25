@@ -1,6 +1,9 @@
 // Modelo de presentación adaptado al contrato de Django, sin valores de reemplazo.
 export type WeatherCondition = 'sun' | 'cloud-sun' | 'cloud' | 'rain' | 'moon';
 export interface ForecastInterval {
+  dateTime: string;
+  dayKey: string;
+  dayLabel: string;
   time: string;
   temperature: number;
   condition: WeatherCondition | null;
@@ -11,6 +14,11 @@ export interface WeatherPreview {
   country: string;
   dateLabel: string;
   updatedAt: string;
+  observedAtUtc: string;
+  observedTime: string;
+  updatedAtUtc: string;
+  timezoneLabel: string;
+  source: string;
   temperature: number;
   feelsLike: number | null;
   humidity: number | null;
