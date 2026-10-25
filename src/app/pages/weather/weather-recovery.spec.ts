@@ -39,7 +39,7 @@ describe('Recovery and accessible interactions (TK08)', () => {
       expect(view.querySelector('app-weather-loading')).toBeNull();
       expect(view.querySelector('[role="alert"]')).not.toBeNull();
       expect(view.textContent).not.toContain('PRIVATE-ERROR');
-      expect(document.activeElement).toBe(view.querySelector('[role="group"]'));
+      expect(document.activeElement).toBe(view.querySelector('[aria-labelledby="search-feedback"]'));
       const retry = Array.from(view.querySelectorAll<HTMLButtonElement>('button')).find(
         (b) => b.textContent?.trim() === 'Reintentar consulta',
       )!;

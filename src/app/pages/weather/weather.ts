@@ -16,6 +16,8 @@ import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { FavoritePlaces } from '../../service/favorite-places';
 import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
 import { WeatherAlerts } from '../../shared/weather-alerts/weather-alerts';
+import { EmergencyContacts } from '../../shared/emergency-contacts/emergency-contacts';
+import { ClimateAwareness } from '../../shared/climate-awareness/climate-awareness';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
 @Component({
   selector: 'app-weather',
@@ -28,6 +30,8 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
     WeatherSidebar,
     ThemeToggle,
     WeatherAlerts,
+    EmergencyContacts,
+    ClimateAwareness,
   ],
   templateUrl: './weather.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,11 +45,6 @@ export class Weather {
     if (location) this.favorites.toggle(location);
   }
   readonly temperatureUnit = signal<'C' | 'F'>('C');
-  readonly today = new Intl.DateTimeFormat('es-AR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(new Date());
   readonly state = signal<'initial' | 'loading' | 'ready'>('initial');
   readonly weather = signal<WeatherPreview | null>(null);
   readonly feedback = signal<CitySearchFeedback | null>(null);

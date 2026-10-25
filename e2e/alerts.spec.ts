@@ -15,6 +15,23 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
   await expect(page.locator('.temperature')).toBeVisible();
   const panel = page.locator('app-weather-alerts');
   await expect(panel).toContainText('Tormentas de prueba');
+  await expect(page.locator('app-current-weather app-weather-alerts')).toHaveCount(1);
+  const metrics = page.getByRole('region', { name: 'Detalles del clima', exact: true });
+  await expect(metrics.locator('.metric-card')).toHaveCount(4);
+  await expect(metrics).toHaveCSS('background-image', /emergency-card-texture\.svg/);
+  const metricsBox = (await metrics.boundingBox())!,
+    alertsBox = (await panel.boundingBox())!;
+  expect(metricsBox.y + metricsBox.height).toBeLessThan(alertsBox.y);
+  if (page.viewportSize()!.width >= 1280) {
+    const currentBox = (await page.locator('.weather-panel').boundingBox())!;
+    expect(metricsBox.x).toBeGreaterThan(currentBox.x + currentBox.width);
+    expect(metricsBox.y).toBeCloseTo(currentBox.y, 0);
+    expect(metricsBox.height).toBeCloseTo(currentBox.height, 0);
+    expect(alertsBox.x).toBeCloseTo(currentBox.x, 0);
+    expect(alertsBox.width).toBeCloseTo(metricsBox.x + metricsBox.width - currentBox.x, 0);
+  } else {
+    expect(metricsBox.x).toBeCloseTo(alertsBox.x, 0);
+  }
   await expect(panel).toContainText('Severidad: Moderada');
   await expect(panel).toContainText('15:00');
   await expect(panel).toContainText('Aviso ficticio <img src=x onerror=alert(1)>.');

@@ -1,0 +1,97 @@
+<section aria-labelledby="emergency-heading" aria-roledescription="carrusel">
+  <div class="flex items-start justify-between gap-2 px-1">
+    <div class="min-w-0 flex-1">
+      <h2 id="emergency-heading" class="font-display text-sm font-bold text-ink">
+        Teléfonos útiles · Argentina
+      </h2>
+      <p id="contacts-help" class="mt-1 text-xs text-muted">
+        Deslizá o usá las flechas para ver los contactos.
+      </p>
+    </div>
+    <div class="flex gap-2" role="group" aria-label="Controles de teléfonos útiles">
+      <button
+        type="button"
+        class="carousel-control"
+        aria-label="Ver teléfonos anteriores"
+        aria-controls="emergency-viewport"
+        [disabled]="!canPrevious()"
+        (click)="move(-1)"
+      >
+        <app-weather-icon name="arrow" class="rotate-180" [size]="18" />
+      </button>
+      <button
+        type="button"
+        class="carousel-control"
+        aria-label="Ver más teléfonos"
+        aria-controls="emergency-viewport"
+        [disabled]="!canNext()"
+        (click)="move(1)"
+      >
+        <app-weather-icon name="arrow" [size]="18" />
+      </button>
+    </div>
+  </div>
+  @if (selectedCountry() && selectedCountry() !== 'AR') {
+    <p class="mt-2 px-1 text-xs font-semibold leading-5 text-secondary">
+      Consultaste una ubicación fuera de Argentina. Estos teléfonos corresponden a Argentina.
+    </p>
+  }
+  <div
+    #contactsViewport
+    id="emergency-viewport"
+    class="contacts-viewport mt-2"
+    tabindex="0"
+    role="region"
+    aria-label="Teléfonos útiles de Argentina, desplazables horizontalmente"
+    aria-describedby="contacts-help"
+    (scroll)="updateControls()"
+    (keydown)="onKeydown($event)"
+  >
+    <ul class="contacts-track">
+      @for (contact of contacts; track contact.number) {
+        <li class="contact-card textured-card" [class.priority-contact]="contact.number === '911'">
+          <a
+            #contactLink
+            class="contact-link"
+            [href]="'tel:' + contact.number"
+            [attr.aria-label]="
+              'Llamar al ' +
+              contact.number +
+              ', ' +
+              contact.name +
+              '. Cobertura: ' +
+              contact.coverage
+            "
+            (focus)="contactLink.scrollIntoView({ block: 'nearest', inline: 'nearest' })"
+          >
+            <span class="flex items-center justify-between gap-3"
+              ><span class="font-display text-2xl font-bold tracking-tight text-ink">{{
+                contact.number
+              }}</span
+              ><span class="flex items-center gap-1 text-xs font-semibold text-blue"
+                ><app-weather-icon name="phone" [size]="16" />Llamar</span
+              ></span
+            >
+            <span class="mt-1 block text-sm font-semibold leading-5 text-ink">{{
+              contact.name
+            }}</span>
+            <span class="mt-1 block text-xs leading-5 text-secondary">{{ contact.detail }}</span>
+            <span class="mt-auto block pt-2 text-[11px] leading-4 text-muted">{{
+              contact.coverage
+            }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+  <p class="mt-1 px-1 text-[11px] leading-5 text-muted">
+    Contactos de Argentina. La cobertura médica depende de la localidad.
+    <a
+      href="https://www.argentina.gob.ar/tema/emergencias"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex min-h-6 items-center rounded text-blue underline"
+      >Fuente oficial<span class="sr-only"> (se abre en otra pestaña)</span></a
+    >.
+  </p>
+</section>

@@ -1,0 +1,69 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.carousel-control {
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-control-line);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-blue);
+}
+.carousel-control:hover:not(:disabled) {
+  background: var(--color-sky);
+}
+.contacts-viewport {
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0.75rem;
+  border-radius: 1.25rem;
+  padding: 1rem 0.75rem 1.25rem;
+  scrollbar-width: none;
+}
+.contacts-viewport::-webkit-scrollbar {
+  display: none;
+}
+.contacts-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 15rem;
+  gap: 1.5rem;
+}
+.contact-card {
+  scroll-snap-align: start;
+}
+.contact-link {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 10rem;
+  height: 100%;
+  flex-direction: column;
+  border-radius: inherit;
+  padding: 0.8rem 1rem;
+}
+.contact-link:focus-visible {
+  outline: 3px solid var(--color-contact-focus);
+  outline-offset: 4px;
+}
+.contact-card:hover {
+  border-color: var(--color-blue);
+}
+.priority-contact {
+  border-color: #a2ddf5;
+  background-color: var(--color-contact-priority);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .contact-card {
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+  .contact-card:hover {
+    transform: translateY(-2px);
+  }
+}

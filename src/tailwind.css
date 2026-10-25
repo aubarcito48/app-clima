@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './motion.css';
+@import './textured-card.css';
 @theme static {
   --color-ink: #123952;
   --color-secondary: #365d75;
@@ -35,6 +36,9 @@
   --color-sun-soft: #ffe1a0;
   --color-sun-stroke: #bd8525;
   --color-cloud: #f8fbff;
+  --color-contact-surface: #205b7d;
+  --color-contact-priority: #16445e;
+  --color-contact-focus: #246b91;
   --font-display: 'Trebuchet MS', 'Segoe UI', sans-serif;
   --font-sans: 'Segoe UI', system-ui, sans-serif;
 }
@@ -69,6 +73,9 @@ html[data-theme='dark'] {
   --color-weather-secondary: #eefaff;
   --color-weather-heart: #ffe1a0;
   --color-advice: #0b263dbf;
+  --color-contact-surface: #12384f;
+  --color-contact-priority: #1c4963;
+  --color-contact-focus: #8bd5fa;
 }
 @layer base {
   html {

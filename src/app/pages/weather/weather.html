@@ -10,16 +10,24 @@
   />
   <div class="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:py-10">
     <main id="main-content" tabindex="-1" class="pb-10">
-      <header class="mb-7 flex items-start justify-between gap-3">
+      <header
+        class="mb-7 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 xl:grid-cols-[minmax(14rem,1fr)_minmax(18rem,1.5fr)_auto] xl:gap-5"
+      >
         <div class="min-w-0">
-          <p class="text-xs font-semibold tracking-[0.12em] text-secondary">{{ today }}</p>
-          <h1 class="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          <h1 class="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
             Hola, explorador
           </h1>
           <p class="mt-2 text-sm leading-6 text-secondary">Tu clima y tus planes para el día.</p>
         </div>
-        <app-theme-toggle class="shrink-0" />
+        <app-theme-toggle class="col-start-2 row-start-1 shrink-0 xl:col-start-3" />
+        <app-climate-awareness
+          class="col-span-2 row-start-2 min-w-0 xl:col-span-1 xl:col-start-2 xl:row-start-1"
+        />
       </header>
+      <app-emergency-contacts
+        class="mb-4 block"
+        [selectedCountry]="response()?.ubicacion?.pais ?? null"
+      />
       <section
         id="pronostico"
         class="search-panel scroll-mt-6 rounded-[1.5rem] border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3"
@@ -96,15 +104,16 @@
               [favorite]="favorites.contains(response()?.ubicacion ?? null)"
               (favoriteToggled)="toggleFavorite()"
               (searchRequested)="citySearch.focusCity()"
-            />
+            >
+              @if (response(); as data) {
+                <app-weather-alerts [location]="data.ubicacion" />
+              }
+            </app-current-weather>
             <app-forecast
               [weather]="weather()"
               [unit]="temperatureUnit()"
               (unitChange)="temperatureUnit.set($event)"
             />
-            @if (response(); as data) {
-              <app-weather-alerts [location]="data.ubicacion" />
-            }
           </div>
         }
       </div>

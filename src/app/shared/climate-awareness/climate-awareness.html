@@ -1,0 +1,65 @@
+<section
+  class="awareness-slider"
+  aria-label="Concientización climática"
+  aria-roledescription="carrusel"
+  (keydown)="onKeydown($event)"
+>
+  <div
+    #stage
+    class="image-stage"
+    (pointerdown)="pointerDown($event)"
+    (pointerup)="pointerUp($event)"
+    (pointercancel)="cancelPointer()"
+  >
+    @for (slide of slides; track slide.id; let index = $index) {
+      <figure
+        class="awareness-slide"
+        [hidden]="active() !== index"
+        role="group"
+        aria-roledescription="diapositiva"
+        [attr.aria-label]="index + 1 + ' de ' + slides.length"
+      >
+        <img
+          [src]="slide.src"
+          [alt]="slide.alt"
+          [width]="slide.width"
+          [height]="slide.height"
+          [attr.loading]="index === 0 ? 'eager' : 'lazy'"
+          draggable="false"
+        />
+        <figcaption>
+          <h2 class="font-display text-sm font-bold leading-5">{{ slide.title }}</h2>
+          <p class="mt-1 text-xs leading-5">{{ slide.message }}</p>
+        </figcaption>
+      </figure>
+    }
+    <button
+      type="button"
+      class="image-toggle"
+      [attr.aria-label]="
+        paused() ? 'Reanudar presentación ambiental' : 'Pausar presentación ambiental'
+      "
+      [attr.title]="paused() ? 'Tocá para reanudar' : 'Tocá para pausar'"
+      (click)="toggleRotation()"
+    ></button>
+  </div>
+  <div class="slider-controls">
+    <div class="flex items-center" role="group" aria-label="Elegir imagen ambiental">
+      @for (slide of slides; track slide.id; let index = $index) {
+        <button
+          type="button"
+          class="slide-dot"
+          [attr.aria-label]="'Ver imagen ' + (index + 1) + ': ' + slide.title"
+          [attr.aria-current]="active() === index ? 'true' : null"
+          (focus)="paused.set(true)"
+          (click)="select(index)"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+      }
+    </div>
+  </div>
+  <p class="sr-only" [attr.aria-live]="paused() ? 'polite' : 'off'" aria-atomic="true">
+    Imagen {{ active() + 1 }} de {{ slides.length }}: {{ slides[active()].title }}.
+  </p>
+</section>

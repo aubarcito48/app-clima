@@ -1,0 +1,29 @@
+/* Shared surface for useful phone numbers and the weather detail card. */
+.textured-card {
+  --color-ink: #f4fbff;
+  --color-secondary: #e0f1fa;
+  --color-muted: #d4e9f5;
+  --color-blue: #e0f5ff;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  border: 1px solid #70b5d6;
+  border-radius: 1.5rem;
+  background-color: var(--color-contact-surface);
+  background-image: url('/emergency-card-texture.svg'), linear-gradient(#ffffff11, #00000022);
+  box-shadow:
+    0 0.5rem 1rem #1239521a,
+    0 1rem 3rem #12395226;
+}
+.textured-card::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: #00414c;
+  transform: rotate(8deg) scale(0.95);
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+  pointer-events: none;
+}

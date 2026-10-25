@@ -7,106 +7,12 @@
       [label]="'Evolución del ' + day.label"
     />
   }
-  <div class="flex flex-wrap items-start justify-between gap-3">
-    <div>
-      <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
-        Pronóstico por hora
-      </h2>
-      <p class="mt-1 text-xs leading-6 text-muted">
-        Próximos intervalos del día elegido. Hora local de la ciudad.
-      </p>
-    </div>
-    @if (days().length) {
-      <button
-        type="button"
-        class="min-h-11 rounded-xl px-2 text-xs font-semibold text-blue hover:bg-surface"
-        [attr.aria-expanded]="showAll()"
-        aria-controls="hourly-intervals"
-        [attr.aria-label]="showAll() ? 'Ver solo el día elegido' : 'Ver todos los intervalos'"
-        (click)="showAll.set(!showAll())"
-      >
-        {{ showAll() ? 'Ver día elegido' : 'Ver completo' }} <span aria-hidden="true">→</span>
-      </button>
-    }
-  </div>
   @if (weather(); as data) {
-    <p class="mt-1 text-xs leading-6 text-secondary">
-      {{ data.city }} ({{ data.timezoneLabel }}). Fuente: {{ data.source }}. Intervalos de tres
-      horas según disponibilidad.
-    </p>
-    <div id="hourly-intervals">
-      @for (day of visibleDays(); track day.key) {
-        <section class="mt-3" [attr.aria-labelledby]="'forecast-day-' + day.key">
-          <h3
-            [id]="'forecast-day-' + day.key"
-            [class]="showAll() ? 'mb-2 text-xs font-semibold text-secondary' : 'sr-only'"
-          >
-            {{ day.label }}
-          </h3>
-          <div
-            class="hour-strip"
-            tabindex="0"
-            role="region"
-            [attr.aria-label]="'Horas del ' + day.label + ', desplazables horizontalmente'"
-          >
-            @if (day.key === data.observedDayKey) {
-              <div class="hour-card" aria-label="Clima actual">
-                <span class="text-xs font-semibold text-secondary">Ahora</span>
-                @if (data.condition; as condition) {
-                  <app-weather-icon [name]="condition" [size]="30" class="my-1 text-blue" />
-                }
-                <p class="text-lg font-semibold text-ink">
-                  {{ temperature(data.temperature)
-                  }}<span class="ml-0.5 text-xs font-normal">°{{ unit() }}</span>
-                </p>
-                <p class="text-center text-[11px] leading-5 text-muted">
-                  {{ data.description ?? 'Descripción no disponible' }}
-                </p>
-              </div>
-            }
-            <ol
-              class="flex shrink-0 gap-3"
-              [attr.aria-label]="'Intervalos de pronóstico del ' + day.label"
-            >
-              @for (interval of day.intervals; track interval.dateTime) {
-                <li class="hour-card">
-                  <time
-                    [attr.datetime]="interval.dateTime"
-                    class="text-xs font-semibold text-secondary"
-                    >{{ interval.time }} h</time
-                  >
-                  @if (interval.condition; as condition) {
-                    <app-weather-icon [name]="condition" [size]="30" class="my-1 text-blue" />
-                  }
-                  <p class="text-lg font-semibold text-ink">
-                    {{ temperature(interval.temperature)
-                    }}<span class="ml-0.5 text-xs font-normal">°{{ unit() }}</span>
-                  </p>
-                  <p class="text-center text-[11px] leading-5 text-muted">
-                    {{ interval.description ?? 'Descripción no disponible' }}
-                  </p>
-                  @if (interval.precipitation != null) {
-                    <p class="text-center text-[11px] text-secondary">
-                      Lluvia: {{ interval.precipitation }} %
-                    </p>
-                  }
-                </li>
-              }
-            </ol>
-          </div>
-        </section>
-      }
-    </div>
-    <section class="mt-7" aria-labelledby="daily-heading">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <h2 id="daily-heading" class="font-display text-lg font-bold text-ink">
-            Pronóstico de los próximos días
-          </h2>
-          <p class="mt-1 text-xs leading-6 text-muted">
-            Planificá tus aventuras. Elegí una fecha para ver sus horas.
-          </p>
-        </div>
+    <section aria-labelledby="daily-heading">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <h2 id="daily-heading" class="font-display text-lg font-bold text-ink">
+          Pronóstico de los próximos días
+        </h2>
         <label class="sr-only" for="forecast-unit">Unidad de temperatura</label>
         <select
           id="forecast-unit"
@@ -119,8 +25,16 @@
           <option value="F">°F</option>
         </select>
       </div>
+      <p class="mt-1 text-xs leading-6 text-muted">
+        Planificá tus aventuras. Elegí una fecha para ver sus horas.
+      </p>
       @if (days().length) {
-        <div class="day-strip mt-4" role="group" tabindex="0" aria-label="Elegir un día del pronóstico, desplazables horizontalmente">
+        <div
+          class="day-strip mt-4"
+          role="group"
+          tabindex="0"
+          aria-label="Elegir un día del pronóstico, desplazables horizontalmente"
+        >
           @for (day of days(); track day.key) {
             <button
               #dayButton
@@ -155,12 +69,16 @@
               >
               <span class="day-temperatures text-sm">
                 <span class="font-bold text-ink">
-                  <span class="block text-[10px] font-normal text-secondary" aria-hidden="true">Máx.</span>
-                  <span class="sr-only">Mayor temperatura de intervalos: </span>{{ temperature(day.high) }}°
+                  <span class="block text-[10px] font-normal text-secondary" aria-hidden="true"
+                    >Máx.</span
+                  >
+                  <span class="sr-only">Mayor temperatura de intervalos: </span
+                  >{{ temperature(day.high) }}°
                 </span>
                 <span class="text-muted">
                   <span class="block text-[10px]" aria-hidden="true">Mín.</span>
-                  <span class="sr-only">Menor temperatura de intervalos: </span>{{ temperature(day.low) }}°
+                  <span class="sr-only">Menor temperatura de intervalos: </span
+                  >{{ temperature(day.low) }}°
                 </span>
               </span>
             </button>
@@ -175,7 +93,116 @@
         <p class="mt-4 text-sm text-secondary">Pronóstico no disponible por el momento.</p>
       }
     </section>
+    <section class="mt-7" aria-labelledby="forecast-heading">
+      <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
+          Pronóstico por hora
+        </h2>
+        @if (days().length) {
+          <button
+            type="button"
+            class="min-h-11 rounded-xl px-2 text-xs font-semibold text-blue hover:bg-surface"
+            [attr.aria-expanded]="showAll()"
+            aria-controls="hourly-intervals"
+            [attr.aria-label]="showAll() ? 'Ver solo el día elegido' : 'Ver todos los intervalos'"
+            (click)="showAll.set(!showAll())"
+          >
+            {{ showAll() ? 'Ver día elegido' : 'Ver completo' }} <span aria-hidden="true">→</span>
+          </button>
+        }
+      </div>
+      <p class="mt-1 text-xs leading-6 text-muted">
+        Próximos intervalos del día elegido. Hora local de la ciudad.
+      </p>
+      <p class="mt-1 text-xs leading-6 text-secondary">
+        {{ data.city }} ({{ data.timezoneLabel }}). Fuente: {{ data.source }}. Intervalos de tres
+        horas según disponibilidad.
+      </p>
+      <div id="hourly-intervals">
+        @for (day of visibleDays(); track day.key) {
+          <section class="mt-3" [attr.aria-labelledby]="'forecast-day-' + day.key">
+            <h3
+              [id]="'forecast-day-' + day.key"
+              [class]="showAll() ? 'mb-2 text-xs font-semibold text-secondary' : 'sr-only'"
+            >
+              {{ day.label }}
+            </h3>
+            <div
+              class="hour-strip"
+              tabindex="0"
+              role="region"
+              [attr.aria-label]="'Horas del ' + day.label + ', desplazables horizontalmente'"
+            >
+              @if (day.key === data.observedDayKey) {
+                <div class="hour-card" aria-label="Clima actual">
+                  <span class="text-xs font-semibold text-secondary">Ahora</span>
+                  @if (data.condition; as condition) {
+                    <app-weather-icon [name]="condition" [size]="30" class="my-1 text-blue" />
+                  }
+                  <p class="text-lg font-semibold text-ink">
+                    {{ temperature(data.temperature)
+                    }}<span class="ml-0.5 text-xs font-normal">°{{ unit() }}</span>
+                  </p>
+                  <p class="text-center text-[11px] leading-5 text-muted">
+                    {{ data.description ?? 'Descripción no disponible' }}
+                  </p>
+                </div>
+              }
+              <ol
+                class="flex shrink-0 gap-3"
+                [attr.aria-label]="'Intervalos de pronóstico del ' + day.label"
+              >
+                @for (interval of day.intervals; track interval.dateTime) {
+                  <li class="hour-card">
+                    <time
+                      [attr.datetime]="interval.dateTime"
+                      class="text-xs font-semibold text-secondary"
+                      >{{ interval.time }} h</time
+                    >
+                    @if (interval.condition; as condition) {
+                      <app-weather-icon [name]="condition" [size]="30" class="my-1 text-blue" />
+                    }
+                    <p class="text-lg font-semibold text-ink">
+                      {{ temperature(interval.temperature)
+                      }}<span class="ml-0.5 text-xs font-normal">°{{ unit() }}</span>
+                    </p>
+                    <p class="text-center text-[11px] leading-5 text-muted">
+                      {{ interval.description ?? 'Descripción no disponible' }}
+                    </p>
+                    @if (interval.precipitation != null) {
+                      <p class="text-center text-[11px] text-secondary">
+                        Lluvia: {{ interval.precipitation }} %
+                      </p>
+                    }
+                  </li>
+                }
+              </ol>
+            </div>
+          </section>
+        }
+      </div>
+    </section>
   } @else {
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
+        Pronóstico por hora
+      </h2>
+      @if (days().length) {
+        <button
+          type="button"
+          class="min-h-11 rounded-xl px-2 text-xs font-semibold text-blue hover:bg-surface"
+          [attr.aria-expanded]="showAll()"
+          aria-controls="hourly-intervals"
+          [attr.aria-label]="showAll() ? 'Ver solo el día elegido' : 'Ver todos los intervalos'"
+          (click)="showAll.set(!showAll())"
+        >
+          {{ showAll() ? 'Ver día elegido' : 'Ver completo' }} <span aria-hidden="true">→</span>
+        </button>
+      }
+    </div>
+    <p class="mt-1 text-xs leading-6 text-muted">
+      Próximos intervalos del día elegido. Hora local de la ciudad.
+    </p>
     <div class="mt-4 rounded-3xl border border-line bg-surface px-6 py-10 text-center">
       <app-weather-icon name="cloud-sun" [size]="32" class="text-blue" />
       <p class="mt-3 text-sm font-semibold text-secondary">Un vistazo a lo que viene.</p>

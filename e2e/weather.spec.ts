@@ -373,7 +373,8 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   const hoursHeadingBox = (await page.locator('#forecast-heading').boundingBox())!;
   expect(chartBox.y).toBeGreaterThanOrEqual(currentBox.y + currentBox.height);
   expect(chartBox.y + chartBox.height).toBeLessThanOrEqual(hoursHeadingBox.y);
-  expect(hoursBox.y).toBeLessThan(firstDayBox.y);
+  expect(hoursHeadingBox.y).toBeGreaterThan(firstDayBox.y + firstDayBox.height);
+  expect(hoursBox.y).toBeGreaterThan(hoursHeadingBox.y);
   await expect(page.locator('#hourly-intervals')).toContainText('Ahora');
   await page.locator('.day-choice').nth(1).focus();
   await page.keyboard.press('Enter');
@@ -436,6 +437,26 @@ test('validación y parámetros: teclado, país ASCII y caracteres reservados', 
   await expect(
     page.getByRole('button', { name: 'Activar modo oscuro', exact: true }),
   ).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('button', { name: 'Pausar presentación ambiental', exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press('Tab');
+  for (let index = 1; index <= 3; index++) {
+    await expect(
+      page.getByRole('button', { name: new RegExp(`^Ver imagen ${index}:`) }),
+    ).toBeFocused();
+    await page.keyboard.press('Tab');
+  }
+  await expect(page.getByRole('button', { name: 'Ver más teléfonos', exact: true })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#emergency-viewport')).toBeFocused();
+  for (const contact of ['911', '100', '103', '105', '106', '107']) {
+    await page.keyboard.press('Tab');
+    await expect(page.locator(`app-emergency-contacts a[href="tel:${contact}"]`)).toBeFocused();
+  }
+  await page.keyboard.press('Tab');
+  await expect(page.locator('app-emergency-contacts a[target="_blank"]')).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.locator('#city')).toBeFocused();
   await page.locator('#city').press('Enter');
@@ -597,7 +618,7 @@ test('404 y 503: corregir y reintentar con teclado sin resultados anteriores', a
   api.status = 503;
   api.body = { codigo: 'SERVICIO_NO_DISPONIBLE' };
   await search(page, 'Mendoza');
-  await expect(page.getByRole('group')).toBeFocused();
+  await expect(page.locator('[aria-labelledby="search-feedback"]')).toBeFocused();
   await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
   api.status = 200;
   api.body = climate('Mendoza');
