@@ -1,25 +1,29 @@
+import { Translate } from '../translate';
 import { ChangeDetectionStrategy, Component, input, linkedSignal, model } from '@angular/core';
 import { displayTemperature, TemperatureUnit } from '../../models/temperature';
 import { computed } from '@angular/core';
 import { ForecastInterval, WeatherPreview } from '../../models/weather-preview';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { TemperatureChart } from '../temperature-chart/temperature-chart';
+import { inject } from '@angular/core';
+import { Language } from '../../service/language';
 @Component({
   selector: 'app-forecast',
-  imports: [WeatherIcon, TemperatureChart],
+  imports: [Translate, WeatherIcon, TemperatureChart],
   templateUrl: './forecast.html',
   styleUrl: './forecast.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-w-0' },
 })
 export class Forecast {
+  readonly language = inject(Language);
   readonly weather = input<WeatherPreview | null>(null);
   readonly unit = model<TemperatureUnit>('C');
   temperature(value: number) {
     return displayTemperature(value, this.unit());
   }
   private dateLabel(key: string, options: Intl.DateTimeFormatOptions) {
-    return new Intl.DateTimeFormat('es-AR', { ...options, timeZone: 'UTC' }).format(
+    return new Intl.DateTimeFormat(this.language.locale(), { ...options, timeZone: 'UTC' }).format(
       new Date(key + 'T12:00:00Z'),
     );
   }

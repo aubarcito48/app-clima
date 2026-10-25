@@ -334,3 +334,8 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 - Comprobación adicional del proveedor público con `Cord`: cinco coincidencias reales por prefijo, sin usar claves ni consultar clima/IA. El resto de la regresión usa respuestas y ubicaciones simuladas.
 - README actualizado en ambos repositorios; sin cambios de claves, `.env`, dependencias o documentos originales. Sin commit ni despliegue. Esta mejora modifica la pausa anterior: escribir prepara opciones; elegir una o pulsar Enter consulta el clima.
 - Cierre al retomar el 25 de octubre: Django reiniciado con la nueva ruta; HTTP local de `/api/v1/lugares/?q=Cord` verificado con 200, cinco sugerencias y CORS para Angular. Repetido el caso móvil de combobox con teclado/Escape: aprobado, sin llamadas de clima mientras se recorre la lista.
+# Español e inglés
+
+El selector **ES / EN** del encabezado cambia la interfaz y guarda la preferencia en este navegador. El idioma inicial es español. Las fechas y los nombres de países se adaptan a la selección. Si hay una consulta activa, se vuelve a pedir el clima en el nuevo idioma, incluido el consejo de IA.
+
+La API recibe `idioma=en` para inglés; si se omite, usa español. Para publicar esta función, desplegar primero los cambios de `app-clima-backend` en Render y luego los de este frontend en Vercel. No requiere variables de entorno nuevas. Los textos oficiales del SMN se conservan en español y se identifican como contenido en su idioma original.

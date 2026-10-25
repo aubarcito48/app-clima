@@ -28,10 +28,10 @@ function condition(icon?: string | null): WeatherCondition | null {
   return icons[icon] ?? null;
 }
 
-export function climatePresentation(data: ClimateResponse): WeatherPreview {
+export function climatePresentation(data: ClimateResponse, locale = 'es-AR'): WeatherPreview {
   const offset = data.ubicacion.desplazamiento_horario_segundos * 1000;
   const local = (date: string, options: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat('es-AR', { ...options, timeZone: 'UTC' }).format(
+    new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(
       new Date(Date.parse(date) + offset),
     );
   return {

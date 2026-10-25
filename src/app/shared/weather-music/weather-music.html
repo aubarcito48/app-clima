@@ -1,5 +1,5 @@
 @if (playlist(); as selection) {
-  <section id="musica" aria-label="Música para tu clima" class="min-w-0">
+  <section id="musica" [attr.aria-label]="'Música para tu clima' | translate" class="min-w-0">
     <iframe
       class="block w-full rounded-xl border-0"
       [src]="embedUrl()"

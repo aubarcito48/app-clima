@@ -1,7 +1,7 @@
 <section
   class="awareness-slider"
-  aria-label="Concientización climática"
-  aria-roledescription="carrusel"
+  [attr.aria-label]="'Concientización climática' | translate"
+  [attr.aria-roledescription]="'carrusel' | translate"
   (keydown)="onKeydown($event)"
 >
   <div
@@ -16,20 +16,22 @@
         class="awareness-slide"
         [hidden]="active() !== index"
         role="group"
-        aria-roledescription="diapositiva"
-        [attr.aria-label]="index + 1 + ' de ' + slides.length"
+        [attr.aria-roledescription]="'diapositiva' | translate"
+        [attr.aria-label]="
+          '{index} de {total}' | translate: { index: index + 1, total: slides.length }
+        "
       >
         <img
           [src]="slide.src"
-          [alt]="slide.alt"
+          [alt]="slide.alt | translate"
           [width]="slide.width"
           [height]="slide.height"
           [attr.loading]="index === 0 ? 'eager' : 'lazy'"
           draggable="false"
         />
         <figcaption>
-          <h2 class="font-display text-sm font-bold leading-5">{{ slide.title }}</h2>
-          <p class="mt-1 text-xs leading-5">{{ slide.message }}</p>
+          <h2 class="font-display text-sm font-bold leading-5">{{ slide.title | translate }}</h2>
+          <p class="mt-1 text-xs leading-5">{{ slide.message | translate }}</p>
         </figcaption>
       </figure>
     }
@@ -37,19 +39,30 @@
       type="button"
       class="image-toggle"
       [attr.aria-label]="
-        paused() ? 'Reanudar presentación ambiental' : 'Pausar presentación ambiental'
+        paused()
+          ? ('Reanudar presentación ambiental' | translate)
+          : ('Pausar presentación ambiental' | translate)
       "
-      [attr.title]="paused() ? 'Tocá para reanudar' : 'Tocá para pausar'"
+      [attr.title]="
+        paused() ? ('Tocá para reanudar' | translate) : ('Tocá para pausar' | translate)
+      "
       (click)="toggleRotation()"
     ></button>
   </div>
   <div class="slider-controls">
-    <div class="flex items-center" role="group" aria-label="Elegir imagen ambiental">
+    <div
+      class="flex items-center"
+      role="group"
+      [attr.aria-label]="'Elegir imagen ambiental' | translate"
+    >
       @for (slide of slides; track slide.id; let index = $index) {
         <button
           type="button"
           class="slide-dot"
-          [attr.aria-label]="'Ver imagen ' + (index + 1) + ': ' + slide.title"
+          [attr.aria-label]="
+            'Ver imagen {index}: {title}'
+              | translate: { index: index + 1, title: (slide.title | translate) }
+          "
           [attr.aria-current]="active() === index ? 'true' : null"
           (focus)="paused.set(true)"
           (click)="select(index)"
@@ -60,6 +73,7 @@
     </div>
   </div>
   <p class="sr-only" [attr.aria-live]="paused() ? 'polite' : 'off'" aria-atomic="true">
-    Imagen {{ active() + 1 }} de {{ slides.length }}: {{ slides[active()].title }}.
+    {{ 'Imagen' | translate }} {{ active() + 1 }} {{ 'de' | translate }} {{ slides.length }}:
+    {{ slides[active()].title | translate }}.
   </p>
 </section>

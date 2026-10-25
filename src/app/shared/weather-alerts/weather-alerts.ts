@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, merge, of, startWith, Subject, switchMap, timer } from 'rxjs';
@@ -5,6 +6,7 @@ import { ClimateResponse } from '../../models/climate-response';
 import { AlertSeverity, WeatherAlertsResponse } from '../../models/weather-alerts';
 import { WeatherAlertsApi } from '../../service/weather-alerts-api';
 import { WeatherIcon } from '../weather-icon/weather-icon';
+import { Language } from '../../service/language';
 
 type AlertsState = {
   status: 'idle' | 'loading' | 'ready' | 'unavailable';
@@ -13,12 +15,13 @@ type AlertsState = {
 
 @Component({
   selector: 'app-weather-alerts',
-  imports: [WeatherIcon],
+  imports: [Translate, WeatherIcon],
   templateUrl: './weather-alerts.html',
   styleUrl: './weather-alerts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherAlerts {
+  readonly language = inject(Language);
   readonly location = input<ClimateResponse['ubicacion'] | null>(null);
   private readonly api = inject(WeatherAlertsApi);
   private readonly refresh = new Subject<void>();
@@ -54,7 +57,7 @@ export class WeatherAlerts {
   }
   localTime(value: string): string {
     const offset = this.location()?.desplazamiento_horario_segundos ?? 0;
-    return new Intl.DateTimeFormat('es-AR', {
+    return new Intl.DateTimeFormat(this.language.locale(), {
       day: 'numeric',
       month: 'short',
       hour: '2-digit',

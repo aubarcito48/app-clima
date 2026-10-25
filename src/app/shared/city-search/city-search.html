@@ -2,12 +2,12 @@
   [formGroup]="form"
   (ngSubmit)="submit()"
   novalidate
-  aria-label="Buscar el clima de un lugar"
+  [attr.aria-label]="'Buscar el clima de un lugar' | translate"
   aria-describedby="search-help"
 >
-  <label for="city" class="mb-1 block text-sm font-semibold text-ink"
-    >Ciudad, región o provincia</label
-  >
+  <label for="city" class="mb-1 block text-sm font-semibold text-ink">{{
+    'Ciudad, región o provincia' | translate
+  }}</label>
   <div class="flex flex-col items-start gap-3 sm:flex-row">
     <div class="relative w-full min-w-0 flex-1">
       <app-weather-icon
@@ -30,7 +30,7 @@
             ? 'place-option-' + suggestions()[activeIndex()].id
             : null
         "
-        placeholder="Empezá a escribir un lugar"
+        [placeholder]="'Empezá a escribir un lugar' | translate"
         autocomplete="off"
         formControlName="city"
         [attr.aria-invalid]="
@@ -61,7 +61,7 @@
           <ul
             id="place-options"
             role="listbox"
-            aria-label="Lugares encontrados"
+            [attr.aria-label]="'Lugares encontrados' | translate"
             class="max-h-72 overflow-y-auto py-1"
           >
             @for (place of suggestions(); track place.id; let index = $index) {
@@ -93,12 +93,14 @@
       class="primary-button flex min-h-11 w-full items-center justify-center gap-2 px-5 sm:w-auto"
     >
       <app-weather-icon name="pin" [size]="18" />
-      {{ locating() ? 'Buscando ubicación…' : 'Usar mi ubicación' }}
+      {{ locating() ? ('Buscando ubicación…' | translate) : ('Usar mi ubicación' | translate) }}
     </button>
   </div>
   <p id="search-help" class="mt-1 text-xs leading-5 text-muted">
-    Escribí al menos tres letras y elegí un lugar de la lista. También podés buscar lo escrito con
-    Enter.
+    {{
+      'Escribí al menos tres letras y elegí un lugar de la lista. También podés buscar lo escrito con Enter.'
+        | translate
+    }}
   </p>
   <p
     id="place-status"
@@ -107,11 +109,11 @@
     class="text-xs leading-5 text-secondary"
     [class.mt-1]="!!suggestionMessage()"
   >
-    {{ suggestionMessage() }}
+    {{ suggestionMessage() | translate }}
   </p>
   @if (suggestions().length) {
     <p class="mt-2 text-xs text-muted">
-      Lugares:
+      {{ 'Lugares:' | translate }}
       <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="underline"
         >Open-Meteo</a
       >
@@ -127,8 +129,10 @@
   }
   @if (cityInvalid) {
     <p id="city-error" role="alert" class="mt-3 text-sm font-medium text-danger">
-      Escribí un lugar válido. Cada nombre admite hasta 100 caracteres; no dejes una coma sin
-      completar.
+      {{
+        'Escribí un lugar válido. Cada nombre admite hasta 100 caracteres; no dejes una coma sin completar.'
+          | translate
+      }}
     </p>
   }
   @if (feedback(); as issue) {
@@ -140,25 +144,28 @@
       class="mt-4 rounded-xl border border-blue/20 bg-sky p-4"
     >
       <p id="search-feedback" role="alert" class="text-sm leading-6 text-ink">
-        {{ issue.message }}
+        {{ issue.message | translate }}
       </p>
       @if (issue.retryable) {
         <button type="button" (click)="requestRetry()" class="primary-button mt-3 min-h-11 px-5">
-          Reintentar consulta
+          {{ 'Reintentar consulta' | translate }}
         </button>
       } @else {
         <button type="button" (click)="focusCity()" class="example-button mt-3">
           {{
             issue.kind === 'location'
-              ? 'Buscar por nombre'
+              ? ('Buscar por nombre' | translate)
               : issue.kind === 'ambiguous'
-                ? 'Precisar ubicación'
-                : 'Corregir búsqueda'
+                ? ('Precisar ubicación' | translate)
+                : ('Corregir búsqueda' | translate)
           }}
         </button>
       }
       @if (issue.choices?.length) {
-        <ul aria-label="Opciones para precisar el lugar" class="mt-3 flex flex-wrap gap-2">
+        <ul
+          [attr.aria-label]="'Opciones para precisar el lugar' | translate"
+          class="mt-3 flex flex-wrap gap-2"
+        >
           @for (choice of issue.choices; track choice.id ?? choice.label) {
             <li>
               <button type="button" (click)="chooseLocation(choice)" class="example-button text-sm">

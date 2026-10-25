@@ -9,15 +9,19 @@
       <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/80 text-tropical"
         ><app-weather-icon name="sparkles" [size]="20"
       /></span>
-      Un consejo para vos
+      {{ 'Un consejo para vos' | translate }}
     </h2>
     <span class="rounded-full bg-white/75 px-2.5 py-1 text-xs font-medium text-secondary">{{
-      weather() ? (weather()?.advice ? 'Generado con IA' : 'No disponible') : 'Clima + ideas'
+      weather()
+        ? weather()?.advice
+          ? ('Generado con IA' | translate)
+          : ('No disponible' | translate)
+        : ('Clima + ideas' | translate)
     }}</span>
   </div>
   @if (weather(); as data) {
     <p id="advice-location" class="mt-7 text-sm font-semibold leading-6 text-ink">
-      Para tu día en {{ data.city
+      {{ 'Para tu día en' | translate }} {{ data.city
       }}<span class="block text-xs font-normal text-secondary">{{ data.country }}</span>
     </p>
     @if (data.advice; as advice) {
@@ -27,12 +31,14 @@
         [textContent]="advice.text"
       ></p>
       <p class="mt-7 border-t border-ink/10 pt-4 text-xs leading-5 text-muted">
-        Consejo generado con IA a partir de esta consulta de clima.
+        {{ 'Consejo generado con IA a partir de esta consulta de clima.' | translate }}
       </p>
     } @else {
       <p class="mt-7 text-sm leading-7 text-secondary">
-        La recomendación no está disponible por el momento. Los datos de clima disponibles siguen
-        visibles.
+        {{
+          'La recomendación no está disponible por el momento. Los datos de clima disponibles siguen visibles.'
+            | translate
+        }}
       </p>
     }
   } @else {
@@ -40,15 +46,17 @@
       <h3
         class="max-w-68 font-display text-[1.7rem] leading-snug font-bold tracking-tight text-ink"
       >
-        Menos números.<br />Más ideas para tu día.
+        {{ 'Menos números.' | translate }}<br />{{ 'Más ideas para tu día.' | translate }}
       </h3>
       <p class="mt-4 max-w-80 text-sm leading-7 text-secondary">
-        ¿Un abrigo? ¿Paraguas? ¿Una tarde afuera? Acá vas a encontrar un consejo fácil de llevar a
-        tus planes.
+        {{
+          '¿Un abrigo? ¿Paraguas? ¿Una tarde afuera? Acá vas a encontrar un consejo fácil de llevar a tus planes.'
+            | translate
+        }}
       </p>
     </div>
     <p class="border-t border-ink/10 pt-4 text-xs leading-5 text-muted">
-      Elegí una ciudad para consultar una recomendación.
+      {{ 'Elegí una ciudad para consultar una recomendación.' | translate }}
     </p>
   }
 </section>

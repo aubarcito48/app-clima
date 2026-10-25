@@ -1,16 +1,16 @@
 <ng-template #brand>
   <a
     href="./"
-    aria-label="StitchWeather, inicio"
+    [attr.aria-label]="'StitchWeather, inicio' | translate"
     class="relative flex items-center gap-3 rounded-xl"
   >
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span [class.sr-only]="compact()"
       ><span class="block font-display text-lg font-bold tracking-tight text-ink"
         >Stitch<span class="text-brand-accent">Weather</span></span
-      ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
-        >TU CLIMA, MÁS AZUL</span
-      ></span
+      ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{
+        'TU CLIMA, MÁS AZUL' | translate
+      }}</span></span
     >
   </a>
 </ng-template>
@@ -21,7 +21,7 @@
       <button
         data-close-menu
         type="button"
-        aria-label="Cerrar menú"
+        [attr.aria-label]="'Cerrar menú' | translate"
         class="menu-control shrink-0"
         (click)="closeMenu()"
       >
@@ -29,16 +29,16 @@
       </button>
     }
   </div>
-  <nav aria-label="Navegación principal" class="relative mt-7 grid gap-2">
+  <nav [attr.aria-label]="'Navegación principal' | translate" class="relative mt-7 grid gap-2">
     <a
       href="#pronostico"
       class="sidebar-link"
       [class.bg-surface]="!placesOpen()"
       [attr.aria-current]="!placesOpen() ? 'location' : null"
       (click)="forecastSelected()"
-      ><app-weather-icon name="cloud-sun" [size]="20" /><span [class.sr-only]="compact()"
-        >Pronóstico</span
-      ></a
+      ><app-weather-icon name="cloud-sun" [size]="20" /><span [class.sr-only]="compact()">{{
+        'Pronóstico' | translate
+      }}</span></a
     >
     <button
       #placesButton
@@ -49,17 +49,22 @@
       aria-controls="favorite-places"
       (click)="togglePlaces()"
     >
-      <app-weather-icon name="heart" [size]="20" /><span [class.sr-only]="compact()"
-        >Mis lugares</span
+      <app-weather-icon name="heart" [size]="20" /><span [class.sr-only]="compact()">{{
+        'Mis lugares' | translate
+      }}</span
       ><span
         class="favorite-count ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
         >{{ favorites.places().length }}</span
       >
     </button>
   </nav>
-  <p class="sr-only" aria-live="polite" aria-atomic="true">{{ favorites.announcement() }}</p>
+  <p class="sr-only" aria-live="polite" aria-atomic="true">
+    {{ favorites.announcement() | translate }}
+  </p>
   @if (favorites.storageWarning()) {
-    <p class="relative mt-3 text-xs leading-5 text-secondary">{{ favorites.storageWarning() }}</p>
+    <p class="relative mt-3 text-xs leading-5 text-secondary">
+      {{ favorites.storageWarning() | translate }}
+    </p>
   }
   <section
     id="favorite-places"
@@ -67,7 +72,9 @@
     aria-labelledby="favorite-heading"
     class="relative mt-4 min-w-0"
   >
-    <h2 id="favorite-heading" class="text-sm font-bold text-ink">Tus lugares guardados</h2>
+    <h2 id="favorite-heading" class="text-sm font-bold text-ink">
+      {{ 'Tus lugares guardados' | translate }}
+    </h2>
     @if (favorites.places().length) {
       <ul class="mt-2 grid gap-2">
         @for (place of favorites.places(); track place.id) {
@@ -86,7 +93,8 @@
               type="button"
               class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-blue hover:bg-sky"
               [attr.aria-label]="
-                'Eliminar ' + place.name + ', ' + place.country + ' de Mis lugares'
+                'Eliminar {place} de Mis lugares'
+                  | translate: { place: place.name + ', ' + place.country }
               "
               (click)="removePlace(place.id)"
             >
@@ -97,10 +105,15 @@
       </ul>
     } @else {
       <p class="mt-2 text-xs leading-6 text-secondary">
-        Todavía no guardaste lugares. Consultá una ciudad y tocá el corazón para agregarla.
+        {{
+          'Todavía no guardaste lugares. Consultá una ciudad y tocá el corazón para agregarla.'
+            | translate
+        }}
       </p>
     }
-    <p class="mt-2 text-[11px] leading-5 text-muted">Guardados en este navegador.</p>
+    <p class="mt-2 text-[11px] leading-5 text-muted">
+      {{ 'Guardados en este navegador.' | translate }}
+    </p>
   </section>
   <div class="sidebar-note" [hidden]="compact()">
     <img
@@ -111,8 +124,10 @@
       height="135"
       class="mx-auto mb-3 w-32"
     />
-    <p class="font-display text-base font-bold">Un clima para cada aventura.</p>
-    <p class="mt-2 text-xs leading-6">Buscá tu lugar y descubrí cómo sigue el día.</p>
+    <p class="font-display text-base font-bold">{{ 'Un clima para cada aventura.' | translate }}</p>
+    <p class="mt-2 text-xs leading-6">
+      {{ 'Buscá tu lugar y descubrí cómo sigue el día.' | translate }}
+    </p>
   </div>
 </ng-template>
 
@@ -124,8 +139,10 @@
     <button
       type="button"
       class="desktop-collapse menu-control"
-      [attr.aria-label]="collapsed() ? 'Expandir menú lateral' : 'Contraer menú lateral'"
-      [attr.title]="collapsed() ? 'Expandir menú' : 'Contraer menú'"
+      [attr.aria-label]="
+        collapsed() ? ('Expandir menú lateral' | translate) : ('Contraer menú lateral' | translate)
+      "
+      [attr.title]="collapsed() ? ('Expandir menú' | translate) : ('Contraer menú' | translate)"
       [attr.aria-expanded]="!collapsed()"
       aria-controls="desktop-navigation"
       (click)="toggleCollapsed()"
@@ -139,7 +156,7 @@
       #menuTrigger
       type="button"
       class="menu-control"
-      aria-label="Abrir menú"
+      [attr.aria-label]="'Abrir menú' | translate"
       aria-haspopup="dialog"
       [attr.aria-expanded]="mobileOpen()"
       aria-controls="mobile-navigation"
@@ -152,7 +169,7 @@
     #mobileMenu
     id="mobile-navigation"
     class="mobile-menu"
-    aria-label="Navegación principal"
+    [attr.aria-label]="'Navegación principal' | translate"
     (cancel)="cancelMenu($event)"
     (close)="dialogClosed()"
     (click)="backdropClick($event)"

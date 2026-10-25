@@ -4,20 +4,21 @@
     aria-labelledby="current-heading"
   >
     <div class="relative z-10 flex items-center justify-between gap-3">
-      <h2 id="current-heading" class="text-sm font-semibold text-ink">Clima actual</h2>
+      <h2 id="current-heading" class="text-sm font-semibold text-ink">
+        {{ 'Clima actual' | translate }}
+      </h2>
       <div class="flex shrink-0 items-center gap-2">
         <span
           class="rounded-full border border-ink/30 bg-ink/5 px-3 py-1 text-xs font-medium text-ink"
-          >{{ weather()?.source ?? 'Tu próximo plan' }}</span
+          >{{ weather()?.source ?? ('Tu próximo plan' | translate) }}</span
         >
         @if (weather(); as data) {
           <button
             type="button"
             class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-xl border border-ink/30 bg-ink/5 hover:bg-ink/10 focus-visible:outline-blue"
             [attr.aria-label]="
-              favorite()
-                ? 'Quitar ' + data.city + ' de favoritos'
-                : 'Guardar ' + data.city + ' en favoritos'
+              (favorite() ? 'Quitar {city} de favoritos' : 'Guardar {city} en favoritos')
+                | translate: { city: data.city }
             "
             [attr.aria-pressed]="favorite()"
             (click)="favoriteToggled.emit()"
@@ -58,26 +59,28 @@
           </div>
           <div class="mt-1 flex flex-wrap items-center gap-x-3">
             <p class="text-base font-semibold text-ink">
-              {{ data.description ?? 'Descripción no disponible' }}
+              {{ data.description ?? ('Descripción no disponible' | translate) }}
             </p>
             @if (canAnimate()) {
               <button
                 type="button"
                 class="weather-motion-control min-h-11 items-center justify-center rounded-lg px-2 text-[11px] text-secondary underline decoration-ink/40 underline-offset-4 hover:bg-ink/10 focus-visible:outline-blue"
                 [attr.aria-label]="
-                  motionPaused() ? 'Reanudar animación del clima' : 'Pausar animación del clima'
+                  motionPaused()
+                    ? ('Reanudar animación del clima' | translate)
+                    : ('Pausar animación del clima' | translate)
                 "
                 (click)="motionPaused.set(!motionPaused())"
               >
-                {{ motionPaused() ? 'Reanudar' : 'Pausar' }}
+                {{ motionPaused() ? ('Reanudar' | translate) : ('Pausar' | translate) }}
               </button>
             }
           </div>
           <p class="mt-1 text-sm text-secondary">
-            Sensación térmica:
+            {{ 'Sensación térmica:' | translate }}
             {{
               data.feelsLike === null
-                ? 'No disponible'
+                ? ('No disponible' | translate)
                 : temperature(data.feelsLike) + ' °' + unit()
             }}
           </p>
@@ -94,10 +97,10 @@
             id="clothing-advice-heading"
             class="flex items-center gap-2 text-xs font-semibold text-ink"
           >
-            <app-weather-icon name="sparkles" [size]="16" />Qué ponerte hoy
+            <app-weather-icon name="sparkles" [size]="16" />{{ 'Qué ponerte hoy' | translate }}
           </h4>
           @if (data.advice) {
-            <span class="text-[11px] text-secondary">Generado con IA</span>
+            <span class="text-[11px] text-secondary">{{ 'Generado con IA' | translate }}</span>
           }
         </div>
         @if (data.advice; as advice) {
@@ -108,21 +111,28 @@
           ></p>
           @if (unit() === 'F') {
             <p class="mt-1 text-[11px] leading-5 text-secondary">
-              El consejo de IA conserva las unidades originales en °C.
+              {{ 'El consejo de IA conserva las unidades originales en °C.' | translate }}
             </p>
           }
         } @else {
           <p class="mt-2 text-xs leading-5 text-secondary">
-            El consejo de ropa no está disponible por el momento.
+            {{ 'El consejo de ropa no está disponible por el momento.' | translate }}
           </p>
         }
       </section>
       <div
         class="relative z-10 mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-ink/10 pt-2 text-xs leading-5 text-secondary"
       >
-        <p>Hora de la ciudad ({{ data.timezoneLabel }}).</p>
+        <p>{{ 'Hora de la ciudad (' | translate }}{{ data.timezoneLabel }}).</p>
         <p>
-          Consultado el
+          {{ 'Observado el' | translate }}
+          <time [attr.datetime]="data.observedAtUtc">{{
+            '{date} a las {time} h' | translate: { date: data.dateLabel, time: data.observedTime }
+          }}</time
+          >.
+        </p>
+        <p>
+          {{ 'Consultado el' | translate }}
           <time [attr.datetime]="data.updatedAtUtc">{{ data.updatedAt }}&nbsp;h</time>.
         </p>
       </div>
@@ -134,17 +144,20 @@
           <h3
             class="max-w-96 font-display text-[1.5rem] leading-tight font-bold tracking-tight text-ink sm:text-[1.75rem]"
           >
-            El cielo cambia.<br />Tus planes se adaptan.
+            {{ 'El cielo cambia.' | translate }}<br />{{ 'Tus planes se adaptan.' | translate }}
           </h3>
           <p class="mt-2 max-w-96 text-sm leading-6 text-secondary">
-            Elegí una ciudad y encontrá el clima y las próximas horas para organizar tu día.
+            {{
+              'Elegí una ciudad y encontrá el clima y las próximas horas para organizar tu día.'
+                | translate
+            }}
           </p>
           <button
             type="button"
             (click)="searchRequested.emit()"
             class="mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
           >
-            Buscar un lugar <app-weather-icon name="arrow" [size]="18" />
+            {{ 'Buscar un lugar' | translate }} <app-weather-icon name="arrow" [size]="18" />
           </button>
         </div>
         <div class="empty-sky" aria-hidden="true">
@@ -157,57 +170,81 @@
         class="relative z-10 mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-ink/10 pt-3 text-xs text-secondary"
       >
         <span class="flex items-center gap-2"
-          ><app-weather-icon name="sun" [size]="18" /> Clima de un vistazo</span
+          ><app-weather-icon name="sun" [size]="18" /> {{ 'Clima de un vistazo' | translate }}</span
         >
         <span class="flex items-center gap-2"
-          ><app-weather-icon name="sparkles" [size]="18" /> Pronóstico para tus planes</span
+          ><app-weather-icon name="sparkles" [size]="18" />
+          {{ 'Pronóstico para tus planes' | translate }}</span
         >
       </div>
     }
   </section>
 
   <div class="weather-side">
-    <section aria-label="Detalles del clima" class="metrics-panel textured-card">
+    <section
+      [attr.aria-label]="'Detalles del clima' | translate"
+      class="metrics-panel textured-card"
+    >
       <h2 class="relative z-10 mb-3 font-display text-sm font-bold text-ink">
-        Tu clima de un vistazo
+        {{ 'Tu clima de un vistazo' | translate }}
       </h2>
       <div class="relative z-10 grid grid-cols-2 gap-x-4 gap-y-4">
         <div class="metric-card">
           <dl>
-            <dt><app-weather-icon name="drop" [size]="22" /><span>Humedad</span></dt>
+            <dt>
+              <app-weather-icon name="drop" [size]="22" /><span>{{ 'Humedad' | translate }}</span>
+            </dt>
             <dd>
-              {{ weather()?.humidity == null ? 'No disponible' : weather()?.humidity + ' %' }}
+              {{
+                weather()?.humidity == null
+                  ? ('No disponible' | translate)
+                  : weather()?.humidity + ' %'
+              }}
             </dd>
           </dl>
-          <p>Humedad relativa</p>
+          <p>{{ 'Humedad relativa' | translate }}</p>
         </div>
         <div class="metric-card">
           <dl>
-            <dt><app-weather-icon name="wind" [size]="22" /><span>Viento</span></dt>
-            <dd>{{ weather()?.wind == null ? 'No disponible' : weather()?.wind + ' km/h' }}</dd>
+            <dt>
+              <app-weather-icon name="wind" [size]="22" /><span>{{ 'Viento' | translate }}</span>
+            </dt>
+            <dd>
+              {{
+                weather()?.wind == null ? ('No disponible' | translate) : weather()?.wind + ' km/h'
+              }}
+            </dd>
           </dl>
           <p>
-            {{ weather()?.windDirection?.label ?? 'Dirección no disponible'
+            {{ weather()?.windDirection?.label ?? 'Dirección no disponible' | translate
             }}{{
               weather()?.windDirection && weather()?.wind !== 0
-                ? ' (' + weather()?.windDirection?.abbreviation + ')'
+                ? ' (' + (weather()?.windDirection?.abbreviation | translate) + ')'
                 : ''
             }}
           </p>
         </div>
         <div class="metric-card">
           <dl>
-            <dt><app-weather-icon name="sunrise" [size]="22" /><span>Amanecer</span></dt>
-            <dd>{{ weather()?.sunrise ?? 'No disponible' }}</dd>
+            <dt>
+              <app-weather-icon name="sunrise" [size]="22" /><span>{{
+                'Amanecer' | translate
+              }}</span>
+            </dt>
+            <dd>{{ weather()?.sunrise ?? ('No disponible' | translate) }}</dd>
           </dl>
-          <p>Hora local de la ciudad</p>
+          <p>{{ 'Hora local de la ciudad' | translate }}</p>
         </div>
         <div class="metric-card">
           <dl>
-            <dt><app-weather-icon name="sunset" [size]="22" /><span>Atardecer</span></dt>
-            <dd>{{ weather()?.sunset ?? 'No disponible' }}</dd>
+            <dt>
+              <app-weather-icon name="sunset" [size]="22" /><span>{{
+                'Atardecer' | translate
+              }}</span>
+            </dt>
+            <dd>{{ weather()?.sunset ?? ('No disponible' | translate) }}</dd>
           </dl>
-          <p>Hora local de la ciudad</p>
+          <p>{{ 'Hora local de la ciudad' | translate }}</p>
         </div>
       </div>
     </section>

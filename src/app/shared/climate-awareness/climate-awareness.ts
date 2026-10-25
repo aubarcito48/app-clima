@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import { DOCUMENT } from '@angular/common';
 import {
   afterRenderEffect,
@@ -13,7 +14,7 @@ import {
 
 @Component({
   selector: 'app-climate-awareness',
-  imports: [],
+  imports: [Translate],
   templateUrl: './climate-awareness.html',
   styleUrl: './climate-awareness.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

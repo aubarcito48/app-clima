@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import {
   afterRenderEffect,
   ChangeDetectionStrategy,
@@ -22,15 +23,17 @@ import { Subject, switchMap, EMPTY, of, catchError, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { cityRequired, parsePlaceInput } from './city-query';
+import { Language } from '../../service/language';
 
 @Component({
   selector: 'app-city-search',
-  imports: [ReactiveFormsModule, WeatherIcon],
+  imports: [Translate, ReactiveFormsModule, WeatherIcon],
   templateUrl: './city-search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-w-0' },
 })
 export class CitySearch {
+  readonly language = inject(Language);
   readonly busy = input(false);
   readonly locating = input(false);
   readonly feedback = input<CitySearchFeedback | null>(null);
@@ -67,7 +70,6 @@ export class CitySearch {
   private timer: ReturnType<typeof setTimeout> | undefined;
   private composing = false;
   private selectedPlace: Omit<PlaceSuggestion, 'id'> | null = null;
-  private readonly countryNames = new Intl.DisplayNames(['es'], { type: 'region' });
   constructor() {
     inject(DestroyRef).onDestroy(() => this.cancelAutoSearch());
     this.lookups
@@ -114,7 +116,7 @@ export class CitySearch {
     return this.form.controls.city.touched && this.form.controls.city.invalid;
   }
   countryLabel(code: string): string {
-    return this.countryNames.of(code) ?? code;
+    return new Intl.DisplayNames([this.language.code()], { type: 'region' }).of(code) ?? code;
   }
   submit(): void {
     this.cancelAutoSearch();

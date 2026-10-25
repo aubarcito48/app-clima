@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WeatherPreview } from '../../models/weather-preview';
@@ -32,7 +33,7 @@ export function weatherPlaylist(weather: Pick<WeatherPreview, 'temperature' | 'd
 
 @Component({
   selector: 'app-weather-music',
-  imports: [],
+  imports: [Translate],
   templateUrl: './weather-music.html',
   styleUrl: './weather-music.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

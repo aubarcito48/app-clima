@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import {
   afterRenderEffect,
   ChangeDetectionStrategy,
@@ -13,7 +14,7 @@ import { displayTemperature } from '../../models/temperature';
 
 @Component({
   selector: 'app-temperature-chart',
-  imports: [],
+  imports: [Translate],
   templateUrl: './temperature-chart.html',
   styleUrl: './temperature-chart.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

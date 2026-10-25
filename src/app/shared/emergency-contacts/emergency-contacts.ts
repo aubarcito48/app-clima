@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import {
   afterRenderEffect,
   ChangeDetectionStrategy,
@@ -11,7 +12,7 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
 
 @Component({
   selector: 'app-emergency-contacts',
-  imports: [WeatherIcon],
+  imports: [Translate, WeatherIcon],
   templateUrl: './emergency-contacts.html',
   styleUrl: './emergency-contacts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

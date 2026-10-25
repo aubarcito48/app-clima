@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Translate } from '../../shared/translate';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
+import { Language } from '../../service/language';
+import { LanguageToggle } from '../../shared/language-toggle/language-toggle';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, EMPTY, map, of, Subject, switchMap, tap } from 'rxjs';
 import { CurrentLocation, LocationFailure } from '../../service/current-location';
@@ -22,6 +33,8 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
 @Component({
   selector: 'app-weather',
   imports: [
+    Translate,
+    LanguageToggle,
     CitySearch,
     CurrentWeather,
     Forecast,
@@ -38,6 +51,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   host: { class: 'block min-w-0' },
 })
 export class Weather {
+  readonly language = inject(Language);
   readonly sidebarCollapsed = signal(false);
   readonly favorites = inject(FavoritePlaces);
   toggleFavorite(): void {
@@ -46,7 +60,10 @@ export class Weather {
   }
   readonly temperatureUnit = signal<'C' | 'F'>('C');
   readonly state = signal<'initial' | 'loading' | 'ready'>('initial');
-  readonly weather = signal<WeatherPreview | null>(null);
+  readonly weather = computed<WeatherPreview | null>(() => {
+    const data = this.response();
+    return data ? climatePresentation(data, this.language.locale()) : null;
+  });
   readonly feedback = signal<CitySearchFeedback | null>(null);
   readonly requestedCity = signal('');
   readonly response = signal<ClimateResponse | null>(null);
@@ -58,6 +75,16 @@ export class Weather {
   private activeKey = '';
   private lastQuery: WeatherQuery | 'current-location' | null = null;
   constructor() {
+    let previousLanguage = this.language.code();
+    effect(() => {
+      const code = this.language.code();
+      if (code === previousLanguage) return;
+      previousLanguage = code;
+      untracked(() => {
+        if (this.lastQuery === 'current-location') this.locate();
+        else if (this.lastQuery) this.search(this.lastQuery);
+      });
+    });
     this.searches
       .pipe(
         switchMap((query) =>
@@ -99,7 +126,6 @@ export class Weather {
         this.activeKey = '';
         this.locating.set(false);
         this.response.set(result.data);
-        this.weather.set(result.data ? climatePresentation(result.data) : null);
         this.feedback.set(result.feedback);
         this.state.set(result.data ? 'ready' : 'initial');
       });
@@ -107,13 +133,12 @@ export class Weather {
   search(query: WeatherQuery): void {
     const normalized = 'city' in query ? normalizeCityQuery(query) : query;
     if ('city' in normalized && !normalized.city) return;
-    const key = serializeWeatherQuery(normalized);
+    const key = `${serializeWeatherQuery(normalized)}:${this.language.code()}`;
     if (this.state() === 'loading' && this.activeKey === key) return;
     this.activeKey = key;
     this.lastQuery = { ...normalized };
     this.cancelled.set(false);
     this.response.set(null);
-    this.weather.set(null);
     this.feedback.set(null);
     this.locating.set(false);
     this.requestedCity.set('city' in normalized ? normalized.city : 'tu ubicación actual');
@@ -121,12 +146,12 @@ export class Weather {
     this.searches.next(normalized);
   }
   reset(): void {
+    this.lastQuery = null;
     this.cancelled.set(this.state() === 'loading');
     this.searches.next(null);
     this.activeKey = '';
     this.locating.set(false);
     this.response.set(null);
-    this.weather.set(null);
     this.feedback.set(null);
     this.state.set('initial');
   }
@@ -140,7 +165,6 @@ export class Weather {
     this.lastQuery = null;
     this.locating.set(false);
     this.cancelled.set(false);
-    this.weather.set(null);
     this.response.set(null);
     this.feedback.set(null);
     this.state.set('initial');

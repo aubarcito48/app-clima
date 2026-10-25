@@ -1,3 +1,4 @@
+import { Translate } from '../translate';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,7 +17,7 @@ import { SavedPlace } from '../../models/saved-place';
 
 @Component({
   selector: 'app-weather-sidebar',
-  imports: [WeatherIcon, NgTemplateOutlet],
+  imports: [Translate, WeatherIcon, NgTemplateOutlet],
   templateUrl: './weather-sidebar.html',
   styleUrl: './weather-sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

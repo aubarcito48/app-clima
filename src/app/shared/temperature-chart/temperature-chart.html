@@ -4,12 +4,16 @@
       class="mb-1 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-ink"
     >
       <span
-        >{{ label()
+        >{{ label() | translate
         }}<span class="ml-2 text-xs font-normal text-muted"
-          >{{ metricLabel() }} ({{ metricUnit() }})</span
+          >{{ metricLabel() | translate }} ({{ metricUnit() }})</span
         ></span
       >
-      <span role="group" aria-label="Variable del gráfico" class="flex flex-wrap gap-1">
+      <span
+        role="group"
+        [attr.aria-label]="'Variable del gráfico' | translate"
+        class="flex flex-wrap gap-1"
+      >
         @for (option of metrics; track option.key) {
           <button
             type="button"
@@ -18,7 +22,7 @@
             [attr.aria-pressed]="metric() === option.key"
             (click)="metric.set(option.key)"
           >
-            {{ option.label }}
+            {{ option.label | translate }}
           </button>
         }
       </span>
@@ -29,7 +33,10 @@
         class="overflow-x-auto"
         tabindex="0"
         role="region"
-        [attr.aria-label]="'Gráfico de ' + metricLabel() + '; desplazable horizontalmente'"
+        [attr.aria-label]="
+          'Gráfico de {metric}; desplazable horizontalmente'
+            | translate: { metric: (metricLabel() | translate) }
+        "
       >
         @for (key of [motionKey()]; track key) {
           <svg
@@ -37,12 +44,13 @@
             class="chart-motion block h-40 w-full min-w-120 sm:h-44"
             role="img"
             [attr.aria-label]="
-              label() +
-              '. ' +
-              metricLabel() +
-              ' en ' +
-              metricUnit() +
-              '. Valores exactos disponibles en la tabla del gráfico.'
+              '{label}. {metric} en {unit}. Valores exactos disponibles en la tabla del gráfico.'
+                | translate
+                  : {
+                      label: (label() | translate),
+                      metric: (metricLabel() | translate),
+                      unit: metricUnit(),
+                    }
             "
           >
             @for (tick of graph.ticks; track tick.y) {
@@ -91,7 +99,7 @@
                   {{ point.time }} h: {{ point.value }} {{ metricUnit()
                   }}{{
                     metric() === 'wind'
-                      ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
+                      ? ', ' + (point.windDirection?.label ?? 'dirección no disponible' | translate)
                       : ''
                   }}
                 </title>
@@ -106,7 +114,9 @@
               >
                 {{ point.value
                 }}{{ metric() === 'temperature' ? '°' : metric() === 'precipitation' ? '%' : '' }}
-                {{ metric() === 'wind' ? (point.windDirection?.abbreviation ?? '') : '' }}
+                {{
+                  (metric() === 'wind' ? (point.windDirection?.abbreviation ?? '') : '') | translate
+                }}
               </text>
             }
             @for (point of graph.timeline; track point.dateTime) {
@@ -128,20 +138,22 @@
         class="flex h-40 items-center justify-center text-sm text-secondary sm:h-44"
         aria-live="polite"
       >
-        {{ metricLabel() }} no disponible para este día.
+        {{ metricLabel() | translate }} {{ 'no disponible para este día.' | translate }}
       </p>
     }
     <table class="sr-only">
       <caption>
         {{
-          metricLabel()
+          metricLabel() | translate
         }}
-        del día elegido
+        {{
+          'del día elegido' | translate
+        }}
       </caption>
       <thead>
         <tr>
-          <th scope="col">Hora local</th>
-          <th scope="col">{{ metricLabel() }} ({{ metricUnit() }})</th>
+          <th scope="col">{{ 'Hora local' | translate }}</th>
+          <th scope="col">{{ metricLabel() | translate }} ({{ metricUnit() }})</th>
         </tr>
       </thead>
       <tbody>
@@ -149,10 +161,13 @@
           <tr>
             <th scope="row">{{ point.time }} h</th>
             <td>
-              {{ point.value == null ? 'No disponible' : point.value + ' ' + metricUnit()
+              {{
+                point.value == null
+                  ? ('No disponible' | translate)
+                  : point.value + ' ' + metricUnit()
               }}{{
                 metric() === 'wind'
-                  ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
+                  ? ', ' + (point.windDirection?.label ?? 'dirección no disponible' | translate)
                   : ''
               }}
             </td>
@@ -161,13 +176,13 @@
       </tbody>
     </table>
     <p class="mt-1 text-xs leading-5 text-muted">
-      Hora local de la ciudad.
+      {{ 'Hora local de la ciudad.' | translate }}
       {{
         metric() === 'precipitation'
-          ? 'Probabilidad de lluvia, no cantidad acumulada.'
-          : 'Cada punto es un intervalo recibido.'
+          ? ('Probabilidad de lluvia, no cantidad acumulada.' | translate)
+          : ('Cada punto es un intervalo recibido.' | translate)
       }}
-      Los datos ausentes interrumpen la línea.
+      {{ 'Los datos ausentes interrumpen la línea.' | translate }}
     </p>
   </figure>
 }
