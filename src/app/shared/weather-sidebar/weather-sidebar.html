@@ -13,17 +13,9 @@
       ></span
     >
   </a>
-  <nav
-    aria-label="Navegación principal"
-    class="relative mt-7 grid grid-cols-2 gap-2 lg:mt-12 lg:flex lg:flex-col"
-  >
-    <a href="#pronostico" class="sidebar-link bg-white font-bold text-blue"
-      ><app-weather-icon name="cloud-sun" [size]="20" />Pronóstico</a
-    >
-    <a href="#evolucion" class="sidebar-link"
-      ><app-weather-icon name="wind" [size]="20" />Días y horas</a
-    >
-  </nav>
+  <div class="relative mt-6 min-w-0">
+    <app-weather-music [weather]="weather()" [compact]="true" />
+  </div>
   <div class="sidebar-note">
     <img
       src="stitch-coast.svg"

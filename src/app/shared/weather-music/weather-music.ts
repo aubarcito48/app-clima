@@ -38,6 +38,7 @@ export function weatherPlaylist(weather: Pick<WeatherPreview, 'temperature' | 'd
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherMusic {
+  readonly compact = input(false);
   readonly weather = input<WeatherPreview | null>(null);
   private readonly sanitizer = inject(DomSanitizer);
   readonly playlist = computed(() => (this.weather() ? weatherPlaylist(this.weather()!) : null));

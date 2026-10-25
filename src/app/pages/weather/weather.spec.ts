@@ -43,7 +43,7 @@ describe('Weather Django integration', () => {
       CLIMATE_FIXTURE.pronostico.intervalos.length,
     );
     expect(view.querySelector('app-recommendation')).toBeNull();
-    expect(view.querySelector('app-weather-music')).toBeNull();
+    expect(view.querySelector('main app-weather-music')).toBeNull();
     expect(view.textContent).not.toContain('Datos ficticios');
     expect(city.value).toBe('  Córdoba  ');
   });
@@ -168,7 +168,7 @@ describe('Weather Django integration', () => {
     await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('app-recommendation img')).toBeNull();
     expect(fixture.nativeElement.querySelector('app-recommendation')).toBeNull();
-    expect(fixture.nativeElement.querySelector('app-weather-music')).toBeNull();
+    expect(fixture.nativeElement.querySelector('main app-weather-music')).toBeNull();
     expect(
       fixture.nativeElement.querySelector('app-current-weather #advice-text')?.textContent,
     ).toBe(data.recomendacion.texto);

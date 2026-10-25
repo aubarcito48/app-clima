@@ -71,12 +71,26 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
   });
-  await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
+  await expect(page.locator('main app-recommendation, main app-weather-music')).toHaveCount(0);
   await expect(page.locator('app-current-weather #advice-text')).toHaveText(
     data.recomendacion.texto!,
   );
   await expect(page.locator('a[href="#musica"]')).toHaveCount(0);
+  await expect(page.locator('app-weather-sidebar app-weather-music')).toContainText(
+    'Peaceful Piano',
+  );
+  await expect(
+    page.locator(
+      'app-weather-sidebar a[href="#pronostico"], app-weather-sidebar a[href="#evolucion"]',
+    ),
+  ).toHaveCount(0);
+  await page.getByRole('button', { name: 'Cargar reproductor de Spotify' }).click();
+  const player = page.locator('app-weather-sidebar iframe');
+  await player.scrollIntoViewIfNeeded();
+  await expect(player).toHaveAttribute('src', /open\.spotify\.com\/embed\/playlist/);
+  await expect.poll(() => api.spotifyRequests.length).toBe(1);
   await page.locator('#city').fill('Otro lugar');
+  await expect(page.locator('app-weather-sidebar iframe')).toHaveCount(0);
   await expect(page.locator('.temperature')).toHaveCount(0);
   await expect(page.locator('app-temperature-chart svg')).toHaveCount(0);
 });
@@ -124,7 +138,7 @@ test('flujo principal: clima, unidades y consejo de la misma consulta', async ({
   await expect(page.locator('app-current-weather')).toContainText('-3 °C');
   await expect(page.locator('app-current-weather dd').nth(0)).toHaveText('0 %');
   await expect(page.locator('app-current-weather dd').nth(1)).toHaveText('9.123 km/h');
-  await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
+  await expect(page.locator('main app-recommendation, main app-weather-music')).toHaveCount(0);
   await expect(page.locator('app-current-weather #advice-text')).toHaveText(
     'Consejo ficticio de prueba para Mendoza.',
   );
