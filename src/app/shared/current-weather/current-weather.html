@@ -7,13 +7,13 @@
       <h2 id="current-heading" class="text-sm font-semibold text-ink">Clima actual</h2>
       <div class="flex shrink-0 items-center gap-2">
         <span
-          class="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-ink"
+          class="rounded-full border border-ink/30 bg-ink/5 px-3 py-1 text-xs font-medium text-ink"
           >{{ weather()?.source ?? 'Tu próximo plan' }}</span
         >
         @if (weather(); as data) {
           <button
             type="button"
-            class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-sun-soft hover:bg-white/20 focus-visible:outline-sun-soft"
+            class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-xl border border-ink/30 bg-ink/5 hover:bg-ink/10 focus-visible:outline-blue"
             [attr.aria-label]="
               favorite()
                 ? 'Quitar ' + data.city + ' de favoritos'
@@ -75,7 +75,7 @@
             @if (canAnimate()) {
               <button
                 type="button"
-                class="weather-motion-control min-h-11 items-center justify-center rounded-lg px-2 text-[11px] text-white/90 underline decoration-white/40 underline-offset-4 hover:bg-white/10 focus-visible:outline-sun-soft"
+                class="weather-motion-control min-h-11 items-center justify-center rounded-lg px-2 text-[11px] text-secondary underline decoration-ink/40 underline-offset-4 hover:bg-ink/10 focus-visible:outline-blue"
                 [attr.aria-label]="
                   motionPaused() ? 'Reanudar animación del clima' : 'Pausar animación del clima'
                 "
@@ -91,7 +91,7 @@
       <section
         id="consejo-ia"
         aria-labelledby="clothing-advice-heading"
-        class="relative z-10 mt-3 rounded-2xl border border-white/15 bg-[#164d69]/65 px-4 py-3"
+        class="relative z-10 mt-3 rounded-2xl border border-ink/15 bg-advice px-4 py-3"
       >
         <div class="flex flex-wrap items-center justify-between gap-2">
           <h4

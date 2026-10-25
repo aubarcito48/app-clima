@@ -2,6 +2,207 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search } from './fixtures';
 import type { Page } from '@playwright/test';
 
+test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho reducido', async ({
+  page,
+  api,
+}, info) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  const data = climate();
+  data.actual.icono = '02d';
+  data.pronostico.intervalos = Array.from({ length: 40 }, (_, index) => ({
+    ...data.pronostico.intervalos[0],
+    fecha_utc: new Date(Date.parse('2026-10-24T09:00:00Z') + index * 10800000).toISOString(),
+  }));
+  api.body = data;
+  await page.goto('/');
+  const themeButton = page.locator('app-theme-toggle button');
+  await expect(themeButton).toHaveAccessibleName('Activar modo claro');
+  await themeButton.focus();
+  await expect(themeButton).toBeFocused();
+  const focus = await themeButton.evaluate((e) => {
+    const style = getComputedStyle(e);
+    return { width: parseFloat(style.outlineWidth), style: style.outlineStyle };
+  });
+  expect(focus.width).toBeGreaterThanOrEqual(3);
+  expect(focus.style).toBe('solid');
+  await page.keyboard.press('Space');
+  await expect(themeButton).toHaveAccessibleName('Activar modo oscuro');
+  await page.keyboard.press('Space');
+  await expect(themeButton).toHaveAccessibleName('Activar modo claro');
+  await expect(themeButton).toBeFocused();
+
+  const locationButton = page.getByRole('button', { name: 'Usar mi ubicación', exact: true });
+  await locationButton.hover();
+  // Measure the final hover color, after its CSS transition settles.
+  await expect
+    .poll(() =>
+      locationButton.evaluate(async (e) => {
+        getComputedStyle(e).backgroundColor;
+        await Promise.all(
+          e.getAnimations().map((animation) => animation.finished.catch(() => undefined)),
+        );
+        const style = getComputedStyle(e);
+        const luminance = (color: string) => {
+          const rgb = color
+            .match(/[\d.]+/g)!
+            .slice(0, 3)
+            .map(Number)
+            .map((v) => {
+              const c = v / 255;
+              return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+            });
+          return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+        };
+        const a = luminance(style.color),
+          b = luminance(style.backgroundColor);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      }),
+    )
+    .toBeGreaterThanOrEqual(4.5);
+
+  await page.locator('#city').fill('Cor');
+  await expect(page.getByRole('listbox')).toBeVisible();
+  await page.locator('#city').press('ArrowDown');
+  await expect(page.getByRole('option').first()).toHaveAttribute('aria-selected', 'true');
+  const audit = async () => {
+    const result = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(result.violations).toEqual([]);
+  };
+  await audit();
+  await page.locator('#city').press('Enter');
+  await expect(page.locator('.temperature')).toBeVisible();
+  await page.getByLabel('Unidad de temperatura').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('group', { name: 'Elegir un día del pronóstico, desplazables horizontalmente' })).toBeFocused();
+  for (let index = 0; index < await page.locator('.day-choice').count(); index++) {
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.day-choice').nth(index)).toBeFocused();
+  }
+  await expect(page.locator('.day-choice').last()).toBeFocused();
+  const focusFits = await page
+    .locator('.day-choice')
+    .last()
+    .evaluate((e) => {
+      const button = e.getBoundingClientRect(),
+        strip = e.parentElement!.getBoundingClientRect();
+      const style = getComputedStyle(e);
+      const ring = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+      return (
+        parseFloat(style.outlineWidth) >= 3 &&
+        button.top - ring >= strip.top &&
+        button.bottom + ring <= strip.bottom &&
+        button.left - ring >= strip.left &&
+        button.right + ring <= strip.right
+      );
+    });
+  expect(focusFits).toBe(true);
+  await info.attach('foco-tarjetas-nocturnas', {
+    body: await page.locator('section[aria-labelledby="daily-heading"]').screenshot(),
+    contentType: 'image/png',
+  });
+  await page.getByRole('button', { name: /^Guardar .+ en favoritos$/ }).click();
+  await openNavigation(page);
+  await page.getByRole('button', { name: /^Mis lugares/ }).click();
+  await expect(page.locator('#favorite-places')).toBeVisible();
+  await audit();
+  await closeNavigation(page);
+  await page.setViewportSize({ width: 320, height: 640 });
+  await expect(page.getByRole('button', { name: 'Abrir menú', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  await audit();
+  await themeButton.focus();
+  await expect(themeButton).toBeInViewport();
+  await info.attach('foco-modo-oscuro-320', {
+    body: await page.screenshot(),
+    contentType: 'image/png',
+  });
+});
+
+test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema', async ({
+  page,
+  api,
+}, info) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('.weather-panel')).not.toHaveCSS('background-image', 'none');
+  await expect(page.locator('#current-heading')).toHaveCSS('color', 'rgb(18, 57, 82)');
+  const initialDayAudit = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(initialDayAudit.violations).toEqual([]);
+  const toggle = page.getByRole('button', { name: 'Activar modo oscuro', exact: true });
+  await toggle.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await search(page, 'Córdoba');
+  await expect(page.locator('.temperature')).toBeVisible();
+  await page.getByRole('button', { name: /^Guardar .+ en favoritos$/ }).click();
+  const audit = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  expect(audit.violations).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  await info.attach('modo-oscuro', {
+    body: await page.screenshot({ fullPage: true }),
+    contentType: 'image/png',
+  });
+  await page.getByRole('button', { name: 'Activar modo claro', exact: true }).click();
+  await expect(page.locator('.temperature')).toHaveCSS('color', 'rgb(18, 57, 82)');
+  await expect(page.locator('#advice-text')).toHaveCSS('color', 'rgb(18, 57, 82)');
+  await expect(page.locator('.weather-panel')).not.toHaveCSS('background-image', 'none');
+  const readyDayAudit = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(readyDayAudit.violations).toEqual([]);
+  await info.attach('modo-dia-con-clima', {
+    body: await page.locator('app-current-weather').screenshot(), contentType: 'image/png',
+  });
+  await page.getByRole('button', { name: 'Activar modo oscuro', exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Activar modo claro', exact: true })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.getByRole('button', { name: 'Activar modo claro', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  await expect(
+    page.getByRole('button', { name: 'Activar modo oscuro', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  expect(api.requests).toHaveLength(1);
+});
+
+test('el tema sigue al dispositivo sin preferencia guardada y funciona sin almacenamiento', async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.addInitScript(() => {
+    Object.defineProperty(Storage.prototype, 'getItem', {
+      configurable: true,
+      value() {
+        throw new DOMException('Storage blocked', 'SecurityError');
+      },
+    });
+    Object.defineProperty(Storage.prototype, 'setItem', {
+      configurable: true,
+      value() {
+        throw new DOMException('Storage blocked', 'SecurityError');
+      },
+    });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Activar modo claro', exact: true })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.getByRole('button', { name: 'Activar modo oscuro', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
+
 async function openNavigation(page: Page) {
   if (
     page.viewportSize()!.width < 1024 &&
@@ -226,6 +427,10 @@ test('validación y parámetros: teclado, país ASCII y caracteres reservados', 
   await expect(page.getByRole('link', { name: 'Saltar al contenido' })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('main')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('button', { name: 'Activar modo oscuro', exact: true }),
+  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.locator('#city')).toBeFocused();
   await page.locator('#city').press('Enter');

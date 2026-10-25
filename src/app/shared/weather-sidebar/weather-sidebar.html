@@ -7,7 +7,7 @@
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span [class.sr-only]="compact()"
       ><span class="block font-display text-lg font-bold tracking-tight text-ink"
-        >Stitch<span class="text-orange-800">Weather</span></span
+        >Stitch<span class="text-brand-accent">Weather</span></span
       ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
         >TU CLIMA, MÁS AZUL</span
       ></span
@@ -33,7 +33,7 @@
     <a
       href="#pronostico"
       class="sidebar-link"
-      [class.bg-white]="!placesOpen()"
+      [class.bg-surface]="!placesOpen()"
       [attr.aria-current]="!placesOpen() ? 'location' : null"
       (click)="forecastSelected()"
       ><app-weather-icon name="cloud-sun" [size]="20" /><span [class.sr-only]="compact()"
@@ -44,7 +44,7 @@
       #placesButton
       type="button"
       class="sidebar-link"
-      [class.bg-white]="placesOpen()"
+      [class.bg-surface]="placesOpen()"
       [attr.aria-expanded]="placesOpen()"
       aria-controls="favorite-places"
       (click)="togglePlaces()"
@@ -52,7 +52,7 @@
       <app-weather-icon name="heart" [size]="20" /><span [class.sr-only]="compact()"
         >Mis lugares</span
       ><span
-        class="favorite-count ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-ink"
+        class="favorite-count ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
         >{{ favorites.places().length }}</span
       >
     </button>
@@ -71,7 +71,7 @@
     @if (favorites.places().length) {
       <ul class="mt-2 grid gap-2">
         @for (place of favorites.places(); track place.id) {
-          <li class="flex min-w-0 items-center gap-1 rounded-2xl bg-white p-2">
+          <li class="flex min-w-0 items-center gap-1 rounded-2xl bg-surface p-2">
             <button
               type="button"
               class="min-h-11 min-w-0 flex-1 rounded-lg px-1 text-left"

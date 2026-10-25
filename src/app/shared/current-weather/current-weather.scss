@@ -3,12 +3,15 @@
   min-width: 0;
 }
 .weather-panel {
-  --color-ink: #ffffff;
-  --color-secondary: #eefaff;
-  --color-muted: #eefaff;
-  background: linear-gradient(135deg, #327c9c, #246587);
+  --color-ink: var(--color-weather-ink);
+  --color-secondary: var(--color-weather-secondary);
+  --color-muted: var(--color-weather-secondary);
+  background: linear-gradient(135deg, var(--color-weather-from), var(--color-weather-to));
   border-color: transparent;
   box-shadow: 0 16px 36px #2c81a021;
+}
+.favorite-toggle {
+  color: var(--color-weather-heart);
 }
 .weather-panel::after {
   content: '';
@@ -49,7 +52,7 @@
 .metric-card {
   min-width: 0;
   border-radius: 1.35rem;
-  background: white;
+  background: var(--color-surface);
   padding: 0.85rem;
 }
 .metric-card dt {

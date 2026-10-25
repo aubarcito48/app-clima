@@ -5,7 +5,7 @@
 .stitch-sidebar {
   position: relative;
   overflow: hidden;
-  background: #d9f5fb;
+  background: var(--color-sidebar);
   padding: 1.75rem 1.5rem;
 }
 .stitch-sidebar::before {
@@ -14,7 +14,7 @@
   width: 10rem;
   height: 10rem;
   border-radius: 50%;
-  background: #bdeaf580;
+  background: var(--color-sidebar-glow);
   left: -3.5rem;
   top: -3.5rem;
 }
@@ -48,7 +48,7 @@
   color: var(--color-blue);
 }
 .sidebar-link:hover {
-  background: #ffffffb3;
+  background: var(--color-hover);
 }
 @media (min-width: 1024px) {
   .stitch-sidebar {
@@ -79,7 +79,7 @@
   justify-content: center;
   border: 1px solid var(--color-control-line);
   border-radius: 0.9rem;
-  background: white;
+  background: var(--color-surface);
   color: var(--color-blue);
 }
 .menu-control:hover {
@@ -90,7 +90,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: #d9f5fb;
+  background: var(--color-sidebar);
   padding: 1rem 1.25rem;
 }
 .mobile-menu {
@@ -101,7 +101,7 @@
   max-height: none;
   border: 0;
   padding: 0;
-  background: #d9f5fb;
+  background: var(--color-sidebar);
   overflow-x: hidden;
   overflow-y: auto;
 }

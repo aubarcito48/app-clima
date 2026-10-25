@@ -19,7 +19,7 @@
     @if (days().length) {
       <button
         type="button"
-        class="min-h-11 rounded-xl px-2 text-xs font-semibold text-blue hover:bg-white"
+        class="min-h-11 rounded-xl px-2 text-xs font-semibold text-blue hover:bg-surface"
         [attr.aria-expanded]="showAll()"
         aria-controls="hourly-intervals"
         [attr.aria-label]="showAll() ? 'Ver solo el día elegido' : 'Ver todos los intervalos'"
@@ -113,7 +113,7 @@
           #unitSelect
           [value]="unit()"
           (change)="unit.set(unitSelect.value === 'F' ? 'F' : 'C')"
-          class="min-h-11 rounded-2xl border border-control-line bg-white px-3 text-xs font-semibold text-blue"
+          class="min-h-11 rounded-2xl border border-control-line bg-surface px-3 text-xs font-semibold text-blue"
         >
           <option value="C">°C</option>
           <option value="F">°F</option>
@@ -123,8 +123,10 @@
         <div class="day-strip mt-4" role="group" tabindex="0" aria-label="Elegir un día del pronóstico, desplazables horizontalmente">
           @for (day of days(); track day.key) {
             <button
+              #dayButton
               type="button"
               class="day-choice forecast-day"
+              (focus)="dayButton.scrollIntoView({ block: 'nearest', inline: 'nearest' })"
               [attr.aria-pressed]="selectedDay() === day.key"
               [attr.aria-label]="
                 day.label +
@@ -174,7 +176,7 @@
       }
     </section>
   } @else {
-    <div class="mt-4 rounded-3xl border border-line bg-white px-6 py-10 text-center">
+    <div class="mt-4 rounded-3xl border border-line bg-surface px-6 py-10 text-center">
       <app-weather-icon name="cloud-sun" [size]="32" class="text-blue" />
       <p class="mt-3 text-sm font-semibold text-secondary">Un vistazo a lo que viene.</p>
       <p class="mt-2 text-sm leading-6 text-muted">

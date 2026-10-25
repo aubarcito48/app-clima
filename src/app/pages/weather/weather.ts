@@ -14,10 +14,19 @@ import { WeatherIcon } from '../../shared/weather-icon/weather-icon';
 import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { FavoritePlaces } from '../../service/favorite-places';
+import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
 @Component({
   selector: 'app-weather',
-  imports: [CitySearch, CurrentWeather, Forecast, WeatherIcon, WeatherLoading, WeatherSidebar],
+  imports: [
+    CitySearch,
+    CurrentWeather,
+    Forecast,
+    WeatherIcon,
+    WeatherLoading,
+    WeatherSidebar,
+    ThemeToggle,
+  ],
   templateUrl: './weather.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-w-0' },

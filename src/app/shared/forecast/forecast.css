@@ -18,19 +18,20 @@
   justify-content: space-between;
   gap: 0.5rem;
   border-radius: 1.2rem;
-  background: white;
+  background: var(--color-surface);
   border: 1px solid transparent;
   padding: 1rem 0.65rem;
 }
 .hour-strip > .hour-card {
-  border-color: #9cd5e8;
-  background: #d9f5fb;
+  border-color: var(--color-selected-line);
+  background: var(--color-selected);
 }
 .day-strip {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
-  padding: 0.25rem 0.125rem 0.75rem;
+  scroll-padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.75rem;
 }
 .forecast-day {
   position: relative;
@@ -44,16 +45,16 @@
   gap: 0.5rem;
   border: 1px solid transparent;
   border-radius: 1.2rem;
-  background: white;
+  background: var(--color-surface);
   padding: 1rem 0.65rem;
   text-align: center;
 }
 .forecast-day[aria-pressed='true'] {
-  border-color: #9cd5e8;
-  background: #d9f5fb;
+  border-color: var(--color-selected-line);
+  background: var(--color-selected);
 }
 .forecast-day:hover:not([aria-pressed='true']) {
-  background: #f8fdff;
+  background: var(--color-hover);
   border-color: var(--color-blue);
 }
 .day-temperatures {
