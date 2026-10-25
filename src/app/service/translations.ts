@@ -1,5 +1,6 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Volver arriba': 'Back to top',
   'Observado el': 'Observed on',
   '{date} a las {time} h': '{date} at {time}',
   'Quitar {city} de favoritos': 'Remove {city} from favourites',

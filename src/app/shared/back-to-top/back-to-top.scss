@@ -1,0 +1,41 @@
+:host {
+  position: fixed;
+  right: max(1.25rem, calc(env(safe-area-inset-right) + 0.75rem));
+  bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+  z-index: 40;
+}
+
+.back-to-top {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-blue);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-blue);
+  box-shadow: 0 6px 20px #12395226;
+  transition:
+    background-color 160ms,
+    transform 160ms;
+}
+
+.back-to-top:hover {
+  background: var(--color-sky);
+  transform: translateY(-2px);
+}
+
+.back-to-top:active {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+
+  .back-to-top:hover {
+    transform: none;
+  }
+}

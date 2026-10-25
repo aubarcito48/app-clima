@@ -1,0 +1,11 @@
+@if (visible()) {
+  <button
+    type="button"
+    class="back-to-top"
+    [attr.aria-label]="'Volver arriba' | translate"
+    [attr.title]="'Volver arriba' | translate"
+    (click)="scrollToTop()"
+  >
+    <app-weather-icon name="arrow" [size]="22" class="-rotate-90" />
+  </button>
+}

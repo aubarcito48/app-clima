@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+/* Page scrollbar follows the same ocean palette as the weather controls. */
+@media (forced-colors: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-blue) var(--color-canvas);
+  }
+
+  /* Use the rounded thumb where the browser supports scrollbar parts. */
+  @supports selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+
+    html::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    html::-webkit-scrollbar-track,
+    html::-webkit-scrollbar-corner {
+      background: var(--color-canvas);
+    }
+
+    html::-webkit-scrollbar-thumb {
+      min-height: 48px;
+      border: 3px solid var(--color-canvas);
+      border-radius: 999px;
+      background: var(--color-blue);
+      background-clip: padding-box;
+    }
+
+    html::-webkit-scrollbar-thumb:hover {
+      background-color: color-mix(in srgb, var(--color-blue), var(--color-ink) 25%);
+    }
+
+    html::-webkit-scrollbar-thumb:active {
+      background-color: var(--color-ink);
+    }
+  }
+}

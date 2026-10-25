@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Language } from '../../service/language';
 import { LanguageToggle } from '../../shared/language-toggle/language-toggle';
+import { BackToTop } from '../../shared/back-to-top/back-to-top';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, EMPTY, map, of, Subject, switchMap, tap } from 'rxjs';
 import { CurrentLocation, LocationFailure } from '../../service/current-location';
@@ -35,6 +36,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   imports: [
     Translate,
     LanguageToggle,
+    BackToTop,
     CitySearch,
     CurrentWeather,
     Forecast,
