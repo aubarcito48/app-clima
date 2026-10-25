@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WeatherPreview } from '../../models/weather-preview';
 
@@ -38,14 +38,9 @@ export function weatherPlaylist(weather: Pick<WeatherPreview, 'temperature' | 'd
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherMusic {
-  readonly compact = input(false);
   readonly weather = input<WeatherPreview | null>(null);
   private readonly sanitizer = inject(DomSanitizer);
   readonly playlist = computed(() => (this.weather() ? weatherPlaylist(this.weather()!) : null));
-  readonly loadedFor = signal<string | null>(null);
-  readonly key = computed(
-    () => `${this.weather()?.city}:${this.weather()?.updatedAtUtc}:${this.playlist()?.id}`,
-  );
   readonly embedUrl = computed(() => {
     const playlist = this.playlist();
     // Only fixed local IDs enter this resource URL; never user or API content.

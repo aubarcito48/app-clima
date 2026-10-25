@@ -168,19 +168,21 @@ describe('Días, evolución y música', () => {
     expect(weatherPlaylist({ temperature: 20, description: null }).name).toBe('Chill Hits');
   });
 
-  it('loads only a fixed Spotify embed on request and removes it when the query changes', async () => {
+  it('shows the native compact Spotify player directly and changes it with the weather', async () => {
     const fixture = TestBed.createComponent(WeatherMusic);
     const data = climatePresentation(CLIMATE_FIXTURE);
     fixture.componentRef.setInput('weather', data);
     await fixture.whenStable();
     const view: HTMLElement = fixture.nativeElement;
-    expect(view.querySelector('iframe')).toBeNull();
-    view.querySelector<HTMLButtonElement>('button')!.click();
-    await fixture.whenStable();
+    expect(view.querySelector('button')).toBeNull();
+    expect(view.querySelector('iframe')?.height).toBe('80');
     expect(view.querySelector('iframe')?.src).toBe(
       'https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L?utm_source=generator',
     );
-    fixture.componentRef.setInput('weather', { ...data, city: 'Otro lugar' });
+    fixture.componentRef.setInput('weather', { ...data, temperature: 8 });
+    await fixture.whenStable();
+    expect(view.querySelector('iframe')?.src).toContain('37i9dQZF1DX4sWSpwq3Li');
+    fixture.componentRef.setInput('weather', null);
     await fixture.whenStable();
     expect(view.querySelector('iframe')).toBeNull();
   });

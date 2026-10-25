@@ -66,7 +66,7 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.locator('app-temperature-chart figcaption')).toContainText('°F');
   await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('C');
   expect(api.requests).toHaveLength(1);
-  expect(api.spotifyRequests).toHaveLength(0);
+  await expect(page.locator('app-weather-sidebar iframe')).toHaveAttribute('height', '80');
   await info.attach('stitch-dias-horas-musica', {
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
@@ -76,15 +76,16 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     data.recomendacion.texto!,
   );
   await expect(page.locator('a[href="#musica"]')).toHaveCount(0);
-  await expect(page.locator('app-weather-sidebar app-weather-music')).toContainText(
-    'Peaceful Piano',
+  await expect(page.locator('app-weather-sidebar iframe')).toHaveAttribute(
+    'title',
+    'Spotify: Peaceful Piano',
   );
   await expect(
     page.locator(
       'app-weather-sidebar a[href="#pronostico"], app-weather-sidebar a[href="#evolucion"]',
     ),
   ).toHaveCount(0);
-  await page.getByRole('button', { name: 'Cargar reproductor de Spotify' }).click();
+  await expect(page.getByRole('button', { name: 'Cargar reproductor de Spotify' })).toHaveCount(0);
   const player = page.locator('app-weather-sidebar iframe');
   await player.scrollIntoViewIfNeeded();
   await expect(player).toHaveAttribute('src', /open\.spotify\.com\/embed\/playlist/);
