@@ -17,6 +17,7 @@ export interface ClimateResponse {
     sensacion_c: number | null;
     humedad_pct: number | null;
     viento_kmh: number | null;
+    direccion_viento_grados?: number | null;
     descripcion: string | null;
   };
   pronostico: {
@@ -26,6 +27,8 @@ export interface ClimateResponse {
       temperatura_c: number;
       descripcion: string | null;
       precipitacion_pct?: number | null;
+      viento_kmh?: number | null;
+      direccion_viento_grados?: number | null;
       icono?: string | null;
     }[];
   };
@@ -138,6 +141,9 @@ export function readClimateResponse(value: unknown): ClimateResponse {
       sensacion_c: optionalNumber(current['sensacion_c']),
       humedad_pct: optionalNumber(current['humedad_pct'], 0, 100),
       viento_kmh: optionalNumber(current['viento_kmh'], 0),
+      ...('direccion_viento_grados' in current
+        ? { direccion_viento_grados: optionalNumber(current['direccion_viento_grados'], 0, 360) }
+        : {}),
       descripcion: optionalText(current['descripcion']),
     },
     pronostico: {
@@ -149,6 +155,10 @@ export function readClimateResponse(value: unknown): ClimateResponse {
           ...('icono' in row ? { icono: icon(row['icono']) } : {}),
           ...('precipitacion_pct' in row
             ? { precipitacion_pct: optionalNumber(row['precipitacion_pct'], 0, 100) }
+            : {}),
+          ...('viento_kmh' in row ? { viento_kmh: optionalNumber(row['viento_kmh'], 0) } : {}),
+          ...('direccion_viento_grados' in row
+            ? { direccion_viento_grados: optionalNumber(row['direccion_viento_grados'], 0, 360) }
             : {}),
           temperatura_c: number(row['temperatura_c']),
           descripcion: optionalText(row['descripcion']),

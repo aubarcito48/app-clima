@@ -66,6 +66,7 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
     feelsLike: data.actual.sensacion_c,
     humidity: data.actual.humedad_pct,
     wind: data.actual.viento_kmh,
+    windDirection: windDirection(data.actual.direccion_viento_grados, data.actual.viento_kmh),
     condition: condition(data.actual.icono),
     description: data.actual.descripcion,
     forecast: data.pronostico.intervalos.map((row) => ({
@@ -84,6 +85,8 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
       }),
       temperature: row.temperatura_c,
       precipitation: row.precipitacion_pct ?? null,
+      wind: row.viento_kmh ?? null,
+      windDirection: windDirection(row.direccion_viento_grados, row.viento_kmh),
       condition: condition(row.icono),
       description: row.descripcion,
     })),
@@ -94,6 +97,22 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
           }
         : null,
   };
+}
+
+export function windDirection(degrees?: number | null, speed?: number | null) {
+  if (speed === 0) return { label: 'En calma', abbreviation: 'Calma' };
+  if (degrees == null) return null;
+  const directions = [
+    { label: 'Norte', abbreviation: 'N' },
+    { label: 'Noreste', abbreviation: 'NE' },
+    { label: 'Este', abbreviation: 'E' },
+    { label: 'Sureste', abbreviation: 'SE' },
+    { label: 'Sur', abbreviation: 'S' },
+    { label: 'Suroeste', abbreviation: 'SO' },
+    { label: 'Oeste', abbreviation: 'O' },
+    { label: 'Noroeste', abbreviation: 'NO' },
+  ];
+  return directions[Math.floor((degrees + 22.5) / 45) % 8];
 }
 
 function utcOffsetLabel(offset: number): string {

@@ -12,7 +12,7 @@
       </header>
       <section
         id="pronostico"
-        class="search-panel scroll-mt-6 rounded-[1.5rem] border border-line bg-white p-4 sm:p-5"
+        class="search-panel scroll-mt-6 rounded-[1.5rem] border border-line bg-white px-4 py-3 sm:px-5 sm:py-3"
         aria-label="Consulta de ciudad"
       >
         <app-city-search
@@ -26,7 +26,7 @@
           (retryRequested)="retry()"
         />
       </section>
-      <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
+      <div class="mt-3 flex min-h-6 flex-wrap items-center justify-between gap-2">
         <p role="status" aria-atomic="true" class="text-sm text-secondary">
           @switch (state()) {
             @case ('loading') {
@@ -70,7 +70,7 @@
           </button>
         }
       </div>
-      <div class="mt-4" [attr.aria-busy]="state() === 'loading'">
+      <div class="mt-2" [attr.aria-busy]="state() === 'loading'">
         @if (state() === 'loading') {
           <app-weather-loading />
         } @else {

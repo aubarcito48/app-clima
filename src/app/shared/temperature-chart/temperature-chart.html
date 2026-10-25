@@ -1,79 +1,165 @@
 @if (chart(); as graph) {
-  <figure class="rounded-3xl border border-line bg-white p-4 sm:p-6">
+  <figure class="rounded-3xl border border-line bg-white p-3 sm:p-4">
     <figcaption
-      class="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-ink"
+      class="mb-1 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-ink"
     >
-      {{ label() }} <span class="text-xs font-normal text-muted">Temperatura (°{{ unit() }})</span>
-    </figcaption>
-    <div
-      class="overflow-x-auto pb-2"
-      tabindex="0"
-      role="region"
-      aria-label="Gráfico de temperatura; desplazable horizontalmente"
-    >
-      <svg
-        viewBox="0 0 720 250"
-        class="block w-full min-w-120"
-        role="img"
-        [attr.aria-label]="label() + '. Valores exactos disponibles en las tarjetas por hora.'"
+      <span
+        >{{ label()
+        }}<span class="ml-2 text-xs font-normal text-muted"
+          >{{ metricLabel() }} ({{ metricUnit() }})</span
+        ></span
       >
-        @for (tick of graph.ticks; track tick.y) {
-          <line x1="56" x2="664" [attr.y1]="tick.y" [attr.y2]="tick.y" stroke="var(--color-line)" />
-          <text
-            x="44"
-            [attr.y]="tick.y + 4"
-            text-anchor="end"
-            fill="var(--color-secondary)"
-            font-size="12"
+      <span role="group" aria-label="Variable del gráfico" class="flex flex-wrap gap-1">
+        @for (option of metrics; track option.key) {
+          <button
+            type="button"
+            class="min-h-11 border-b-2 px-3 text-xs font-semibold text-blue hover:bg-sky"
+            [class]="metric() === option.key ? 'border-blue' : 'border-transparent'"
+            [attr.aria-pressed]="metric() === option.key"
+            (click)="metric.set(option.key)"
           >
-            {{ tick.value }}°
-          </text>
+            {{ option.label }}
+          </button>
         }
-        @if (graph.points.length > 1) {
-          <polyline
-            [attr.points]="graph.path"
-            fill="none"
-            stroke="var(--color-blue)"
-            stroke-width="3"
-            stroke-linejoin="round"
-          />
+      </span>
+    </figcaption>
+    @if (graph.available) {
+      <div
+        #chartViewport
+        class="overflow-x-auto"
+        tabindex="0"
+        role="region"
+        [attr.aria-label]="'Gráfico de ' + metricLabel() + '; desplazable horizontalmente'"
+      >
+        <svg
+          [attr.viewBox]="'0 0 ' + width() + ' 180'"
+          class="block h-40 w-full min-w-120 sm:h-44"
+          role="img"
+          [attr.aria-label]="
+            label() +
+            '. ' +
+            metricLabel() +
+            ' en ' +
+            metricUnit() +
+            '. Valores exactos disponibles en la tabla del gráfico.'
+          "
+        >
+          @for (tick of graph.ticks; track tick.y) {
+            <line
+              x1="56"
+              [attr.x2]="width() - 32"
+              [attr.y1]="tick.y"
+              [attr.y2]="tick.y"
+              stroke="var(--color-line)"
+            />
+            <text
+              x="44"
+              [attr.y]="tick.y + 4"
+              text-anchor="end"
+              fill="var(--color-secondary)"
+              font-size="12"
+            >
+              {{ tick.value }}
+            </text>
+          }
+          @for (segment of graph.segments; track $index) {
+            <polyline
+              [attr.points]="segment"
+              fill="none"
+              stroke="var(--color-blue)"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+          }
+          @for (point of graph.points; track point.dateTime; let first = $first; let last = $last) {
+            <circle
+              [attr.cx]="point.x"
+              [attr.cy]="point.y"
+              r="5"
+              fill="var(--color-blue)"
+              stroke="white"
+              stroke-width="2"
+            >
+              <title>
+                {{ point.time }} h: {{ point.value }} {{ metricUnit()
+                }}{{
+                  metric() === 'wind'
+                    ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
+                    : ''
+                }}
+              </title>
+            </circle>
+            <text
+              [attr.x]="point.x"
+              [attr.y]="point.y - 14"
+              [attr.text-anchor]="first ? 'start' : last ? 'end' : 'middle'"
+              fill="var(--color-ink)"
+              font-size="13"
+              font-weight="600"
+            >
+              {{ point.value
+              }}{{ metric() === 'temperature' ? '°' : metric() === 'precipitation' ? '%' : '' }}
+              {{ metric() === 'wind' ? (point.windDirection?.abbreviation ?? '') : '' }}
+            </text>
+          }
+          @for (point of graph.timeline; track point.dateTime) {
+            <text
+              [attr.x]="point.x"
+              y="164"
+              text-anchor="middle"
+              fill="var(--color-secondary)"
+              font-size="12"
+            >
+              {{ point.time }}
+            </text>
+          }
+        </svg>
+      </div>
+    } @else {
+      <p
+        class="flex h-40 items-center justify-center text-sm text-secondary sm:h-44"
+        aria-live="polite"
+      >
+        {{ metricLabel() }} no disponible para este día.
+      </p>
+    }
+    <table class="sr-only">
+      <caption>
+        {{
+          metricLabel()
+        }}
+        del día elegido
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Hora local</th>
+          <th scope="col">{{ metricLabel() }} ({{ metricUnit() }})</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (point of graph.timeline; track point.dateTime) {
+          <tr>
+            <th scope="row">{{ point.time }} h</th>
+            <td>
+              {{ point.value == null ? 'No disponible' : point.value + ' ' + metricUnit()
+              }}{{
+                metric() === 'wind'
+                  ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
+                  : ''
+              }}
+            </td>
+          </tr>
         }
-        @for (point of graph.points; track point.dateTime) {
-          <circle
-            [attr.cx]="point.x"
-            [attr.cy]="point.y"
-            r="5"
-            fill="var(--color-blue)"
-            stroke="white"
-            stroke-width="2"
-          >
-            <title>{{ point.time }} h: {{ point.temperature }} °{{ unit() }}</title>
-          </circle>
-          <text
-            [attr.x]="point.x"
-            [attr.y]="point.y - 14"
-            text-anchor="middle"
-            fill="var(--color-ink)"
-            font-size="13"
-            font-weight="600"
-          >
-            {{ point.temperature }}°
-          </text>
-          <text
-            [attr.x]="point.x"
-            y="232"
-            text-anchor="middle"
-            fill="var(--color-secondary)"
-            font-size="12"
-          >
-            {{ point.time }}
-          </text>
-        }
-      </svg>
-    </div>
-    <p class="mt-2 text-xs leading-6 text-muted">
-      Hora local de la ciudad. Cada punto es un intervalo recibido; la línea permite seguir su
-      evolución.
+      </tbody>
+    </table>
+    <p class="mt-1 text-xs leading-5 text-muted">
+      Hora local de la ciudad.
+      {{
+        metric() === 'precipitation'
+          ? 'Probabilidad de lluvia, no cantidad acumulada.'
+          : 'Cada punto es un intervalo recibido.'
+      }}
+      Los datos ausentes interrumpen la línea.
     </p>
   </figure>
 }

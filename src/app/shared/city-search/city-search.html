@@ -5,14 +5,14 @@
   aria-label="Buscar el clima de un lugar"
   aria-describedby="search-help"
 >
-  <label for="city" class="mb-2 block text-sm font-semibold text-ink"
+  <label for="city" class="mb-1 block text-sm font-semibold text-ink"
     >Ciudad, región o provincia</label
   >
   <div class="flex flex-col items-start gap-3 sm:flex-row">
     <div class="relative w-full min-w-0 flex-1">
       <app-weather-icon
         name="search"
-        class="pointer-events-none absolute top-[1.625rem] left-4 -translate-y-1/2 text-muted"
+        class="pointer-events-none absolute top-[1.375rem] left-4 -translate-y-1/2 text-muted"
         [size]="20"
       />
       <input
@@ -51,7 +51,7 @@
         (blur)="closeSuggestions()"
         (compositionstart)="compositionStart()"
         (compositionend)="compositionEnd()"
-        class="field w-full pr-4 pl-12"
+        class="field h-11 w-full pr-4 pl-12"
       />
       @if (popupVisible) {
         <div class="mt-2 overflow-hidden rounded-2xl border border-control-line bg-white shadow-sm">
@@ -87,13 +87,13 @@
       type="button"
       (click)="useLocation()"
       [disabled]="locating()"
-      class="primary-button flex min-h-13 w-full items-center justify-center gap-2 px-5 sm:w-auto"
+      class="primary-button flex min-h-11 w-full items-center justify-center gap-2 px-5 sm:w-auto"
     >
       <app-weather-icon name="pin" [size]="18" />
       {{ locating() ? 'Buscando ubicación…' : 'Usar mi ubicación' }}
     </button>
   </div>
-  <p id="search-help" class="mt-3 text-xs leading-6 text-muted">
+  <p id="search-help" class="mt-1 text-xs leading-5 text-muted">
     Escribí al menos tres letras y elegí un lugar de la lista. También podés buscar lo escrito con
     Enter.
   </p>
@@ -101,7 +101,8 @@
     id="place-status"
     aria-live="polite"
     aria-atomic="true"
-    class="mt-2 text-xs leading-6 text-secondary"
+    class="text-xs leading-5 text-secondary"
+    [class.mt-1]="!!suggestionMessage()"
   >
     {{ suggestionMessage() }}
   </p>

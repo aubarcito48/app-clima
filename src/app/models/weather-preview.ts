@@ -2,6 +2,7 @@
 export type WeatherCondition =
   'sun' | 'cloud-sun' | 'cloud' | 'rain' | 'moon' | 'snow' | 'mist' | 'storm' | 'cloud-moon';
 export interface ForecastInterval {
+  windDirection?: { label: string; abbreviation: string } | null;
   dateTime: string;
   dayKey: string;
   dayLabel: string;
@@ -10,8 +11,10 @@ export interface ForecastInterval {
   condition: WeatherCondition | null;
   description: string | null;
   precipitation?: number | null;
+  wind?: number | null;
 }
 export interface WeatherPreview {
+  windDirection?: { label: string; abbreviation: string } | null;
   city: string;
   country: string;
   dateLabel: string;

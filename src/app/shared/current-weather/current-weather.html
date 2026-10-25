@@ -1,6 +1,6 @@
 <div class="current-overview">
   <section
-    class="weather-panel relative isolate h-full overflow-hidden rounded-[1.75rem] border border-white p-6 sm:p-8"
+    class="weather-panel relative isolate h-full overflow-hidden rounded-[1.75rem] border border-white p-4 sm:p-5"
     aria-labelledby="current-heading"
   >
     <div class="relative z-10 flex items-center justify-between gap-3">
@@ -11,44 +11,48 @@
       >
     </div>
     @if (weather(); as data) {
-      <div
-        class="relative z-10 mt-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:mt-9"
-      >
-        <div class="min-w-0">
-          <p class="mb-2 flex items-center gap-1.5 text-sm text-secondary">
-            <app-weather-icon name="pin" [size]="16" /> {{ data.country }}
-          </p>
-          <h3
-            class="break-words font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl"
-          >
-            {{ data.city }}
-          </h3>
-          <p class="mt-2 text-sm text-secondary">
-            Medición del
-            <time [attr.datetime]="data.observedAtUtc"
-              >{{ data.dateLabel }} a las {{ data.observedTime }} h</time
+      <div class="relative z-10 mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        <div class="current-details min-w-0">
+          <div>
+            <p class="mb-1 flex items-center gap-1.5 text-sm text-secondary">
+              <app-weather-icon name="pin" [size]="16" /> {{ data.country }}
+            </p>
+            <h3
+              class="break-words font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
             >
-          </p>
-          <p class="temperature mt-4 text-ink">
-            <span>{{ data.temperature }}</span
-            ><span class="temperature-unit">°C</span>
-          </p>
-          <p class="mt-2 text-base font-semibold text-ink">
-            {{ data.description ?? 'Descripción no disponible' }}
-          </p>
-          <p class="mt-1 text-sm text-secondary">
-            Sensación térmica:
-            {{ data.feelsLike === null ? 'No disponible' : data.feelsLike + ' °C' }}
-          </p>
+              {{ data.city }}
+            </h3>
+            <p class="mt-2 text-sm text-secondary">
+              Medición del
+              <time [attr.datetime]="data.observedAtUtc"
+                >{{ data.dateLabel }} a las {{ data.observedTime }} h</time
+              >
+            </p>
+          </div>
+          <div>
+            <p class="temperature text-ink">
+              <span>{{ data.temperature }}</span
+              ><span class="temperature-unit">°C</span>
+            </p>
+            <p class="mt-2 text-base font-semibold text-ink">
+              {{ data.description ?? 'Descripción no disponible' }}
+            </p>
+            <p class="mt-1 text-sm text-secondary">
+              Sensación térmica:
+              {{ data.feelsLike === null ? 'No disponible' : data.feelsLike + ' °C' }}
+            </p>
+          </div>
         </div>
         @if (data.condition; as condition) {
           <div class="weather-art text-ink/80" aria-hidden="true">
-            <app-weather-icon [name]="condition" [size]="150" />
+            <app-weather-icon [name]="condition" [size]="88" />
           </div>
         }
       </div>
 
-      <div class="relative z-10 mt-5 border-t border-ink/10 pt-4 text-xs leading-6 text-secondary">
+      <div
+        class="relative z-10 mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-ink/10 pt-2 text-xs leading-5 text-secondary"
+      >
         <p>Hora de la ciudad ({{ data.timezoneLabel }}).</p>
         <p>
           Consultado el
@@ -56,32 +60,34 @@
         </p>
       </div>
     } @else {
-      <div class="relative z-10 mt-7 grid items-center gap-3 sm:grid-cols-[1fr_10rem]">
-        <div class="order-2 sm:order-1">
+      <div
+        class="relative z-10 mt-4 grid grid-cols-[minmax(0,1fr)_5rem] items-center gap-3 sm:grid-cols-[minmax(0,1fr)_7rem]"
+      >
+        <div class="min-w-0">
           <h3
-            class="max-w-78 font-display text-[1.9rem] leading-tight font-bold tracking-tight text-ink sm:text-[2.25rem]"
+            class="max-w-96 font-display text-[1.5rem] leading-tight font-bold tracking-tight text-ink sm:text-[1.75rem]"
           >
             El cielo cambia.<br />Tus planes se adaptan.
           </h3>
-          <p class="mt-4 max-w-76 text-sm leading-7 text-secondary">
+          <p class="mt-2 max-w-96 text-sm leading-6 text-secondary">
             Elegí una ciudad y encontrá el clima y las próximas horas para organizar tu día.
           </p>
           <button
             type="button"
             (click)="searchRequested.emit()"
-            class="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+            class="mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
           >
             Buscar un lugar <app-weather-icon name="arrow" [size]="18" />
           </button>
         </div>
-        <div class="empty-sky order-1 sm:order-2" aria-hidden="true">
+        <div class="empty-sky" aria-hidden="true">
           <div class="sun-disc"></div>
           <div class="sky-cloud sky-cloud-back"></div>
           <div class="sky-cloud"></div>
         </div>
       </div>
       <div
-        class="relative z-10 mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-ink/10 pt-5 text-xs text-secondary"
+        class="relative z-10 mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-ink/10 pt-3 text-xs text-secondary"
       >
         <span class="flex items-center gap-2"
           ><app-weather-icon name="sun" [size]="18" /> Clima de un vistazo</span
@@ -106,7 +112,14 @@
         <dt><app-weather-icon name="wind" [size]="22" /><span>Viento</span></dt>
         <dd>{{ weather()?.wind == null ? 'No disponible' : weather()?.wind + ' km/h' }}</dd>
       </dl>
-      <p>Velocidad del viento</p>
+      <p>
+        {{ weather()?.windDirection?.label ?? 'Dirección no disponible'
+        }}{{
+          weather()?.windDirection && weather()?.wind !== 0
+            ? ' (' + weather()?.windDirection?.abbreviation + ')'
+            : ''
+        }}
+      </p>
     </div>
     <div class="metric-card">
       <dl>

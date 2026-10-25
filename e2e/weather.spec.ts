@@ -7,6 +7,7 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
 }, info) => {
   const data = climate();
   data.actual.icono = '02d';
+  data.actual.direccion_viento_grados = 270;
   data.actual.amanecer_utc = '2026-10-24T09:00:00Z';
   data.actual.atardecer_utc = '2026-10-24T22:30:00Z';
   data.pronostico.intervalos = Array.from({ length: 40 }, (_, index) => ({
@@ -15,6 +16,8 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     descripcion: 'Cielo claro',
     icono: '01d',
     precipitacion_pct: 0,
+    viento_kmh: index * 1.5,
+    direccion_viento_grados: 45,
   }));
   api.body = data;
   await page.goto('/');
@@ -24,12 +27,18 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.locator('app-current-weather')).toContainText('06:00');
   await expect(page.locator('app-current-weather')).toContainText('19:30');
   await expect(page.locator('.weather-art')).toBeVisible();
+  await expect(page.locator('app-current-weather')).toContainText('Oeste (O)');
   await expect(page.locator('app-forecast ol li')).toHaveCount(6);
   const firstDayBox = (await page.locator('.day-choice').nth(0).boundingBox())!;
   const secondDayBox = (await page.locator('.day-choice').nth(1).boundingBox())!;
   expect(secondDayBox.y).toBeGreaterThan(firstDayBox.y);
   expect(secondDayBox.x).toBeCloseTo(firstDayBox.x, 0);
   const hoursBox = (await page.locator('#hourly-intervals').boundingBox())!;
+  const currentBox = (await page.locator('app-current-weather').boundingBox())!;
+  const chartBox = (await page.locator('app-temperature-chart').boundingBox())!;
+  const hoursHeadingBox = (await page.locator('#forecast-heading').boundingBox())!;
+  expect(chartBox.y).toBeGreaterThanOrEqual(currentBox.y + currentBox.height);
+  expect(chartBox.y + chartBox.height).toBeLessThanOrEqual(hoursHeadingBox.y);
   expect(hoursBox.y).toBeLessThan(firstDayBox.y);
   await expect(page.locator('#hourly-intervals')).toContainText('Ahora');
   await page.locator('.day-choice').nth(1).focus();
@@ -38,6 +47,19 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.locator('app-forecast ol li')).toHaveCount(8);
   await expect(page.locator('app-temperature-chart circle')).toHaveCount(8);
   await expect(page.locator('app-temperature-chart polyline')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Precipitaciones', exact: true }).click();
+  await expect(page.locator('app-temperature-chart figcaption')).toContainText(
+    'Probabilidad de lluvia (%)',
+  );
+  await expect(page.getByRole('button', { name: 'Precipitaciones', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.getByRole('button', { name: 'Viento', exact: true }).click();
+  await expect(page.locator('app-temperature-chart figcaption')).toContainText('Viento (km/h)');
+  await expect(page.locator('app-temperature-chart circle title').first()).toContainText('Noreste');
+  await expect(page.locator('app-temperature-chart circle')).toHaveCount(8);
+  await page.getByRole('button', { name: 'Temperatura', exact: true }).click();
   await expect(page.locator('app-forecast ol li').first()).toContainText('Lluvia: 0 %');
   await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('F');
   await expect(page.locator('app-forecast ol li').first()).toContainText('°F');

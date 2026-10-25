@@ -1,4 +1,12 @@
 <section id="evolucion" class="min-w-0 scroll-mt-6" aria-labelledby="forecast-heading">
+  @if (activeDay(); as day) {
+    <app-temperature-chart
+      class="mb-6 block min-w-0"
+      [intervals]="day.intervals"
+      [unit]="unit()"
+      [label]="'Evolución del ' + day.label"
+    />
+  }
   <div class="flex flex-wrap items-start justify-between gap-3">
     <div>
       <h2 id="forecast-heading" class="font-display text-lg font-bold text-ink">
@@ -164,14 +172,6 @@
         <p class="mt-4 text-sm text-secondary">Pronóstico no disponible por el momento.</p>
       }
     </section>
-    @if (activeDay(); as day) {
-      <app-temperature-chart
-        class="mt-6 block min-w-0"
-        [intervals]="day.intervals"
-        [unit]="unit()"
-        [label]="'Evolución del ' + day.label"
-      />
-    }
   } @else {
     <div class="mt-4 rounded-3xl border border-line bg-white px-6 py-10 text-center">
       <app-weather-icon name="cloud-sun" [size]="32" class="text-blue" />

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import { climatePresentation } from '../service/climate-presentation';
+import { climatePresentation, windDirection } from '../service/climate-presentation';
 import { readClimateResponse } from '../models/climate-response';
 import { CLIMATE_FIXTURE } from '../testing/climate-fixture';
 import { Forecast } from './forecast/forecast';
@@ -18,6 +18,68 @@ function multiDay() {
 }
 
 describe('Días, evolución y música', () => {
+  it('maps eight wind directions, wraps north and distinguishes calm from missing direction', () => {
+    expect(
+      [0, 45, 90, 135, 180, 225, 270, 315, 360].map((deg) => windDirection(deg, 12)?.abbreviation),
+    ).toEqual(['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO', 'N']);
+    expect(windDirection(22.49, 10)?.abbreviation).toBe('N');
+    expect(windDirection(22.5, 10)?.abbreviation).toBe('NE');
+    expect(windDirection(337.5, 10)?.abbreviation).toBe('N');
+    expect(windDirection(null, 10)).toBeNull();
+    expect(windDirection(90, 0)?.label).toBe('En calma');
+    const data = structuredClone(CLIMATE_FIXTURE);
+    data.actual.direccion_viento_grados = 270;
+    data.pronostico.intervalos[0].viento_kmh = 18;
+    data.pronostico.intervalos[0].direccion_viento_grados = 135;
+    const result = climatePresentation(readClimateResponse(data));
+    expect(result.windDirection?.label).toBe('Oeste');
+    expect(result.forecast[0].windDirection?.label).toBe('Sureste');
+    data.actual.direccion_viento_grados = 361;
+    expect(() => readClimateResponse(data)).toThrow();
+  });
+  it('switches variables with their units, keeps zeroes and breaks lines at missing samples', async () => {
+    const fixture = TestBed.createComponent(TemperatureChart);
+    fixture.componentRef.setInput(
+      'intervals',
+      multiDay().forecast.map((row, index) => ({
+        ...row,
+        precipitation: [0, null, 100][index],
+        wind: [0, 18, null][index],
+      })),
+    );
+    await fixture.whenStable();
+    const view: HTMLElement = fixture.nativeElement;
+    const buttons = view.querySelectorAll<HTMLButtonElement>('button');
+    buttons[1].click();
+    await fixture.whenStable();
+    expect(view.querySelector('figcaption')?.textContent).toContain('Probabilidad de lluvia (%)');
+    expect(view.querySelectorAll('circle')).toHaveLength(2);
+    expect(view.querySelector('polyline')).toBeNull();
+    expect(view.querySelector('circle title')?.textContent).toContain('0 %');
+    expect(view.querySelector('table')?.textContent).toContain('No disponible');
+    expect(fixture.componentInstance.chart()?.ticks.map((tick) => tick.value)).toEqual([
+      0, 25, 50, 75, 100,
+    ]);
+    buttons[2].click();
+    await fixture.whenStable();
+    expect(view.querySelector('figcaption')?.textContent).toContain('Viento (km/h)');
+    expect(view.querySelectorAll('circle')).toHaveLength(2);
+    expect(view.querySelectorAll('polyline')).toHaveLength(1);
+    expect(view.querySelector('circle title')?.textContent).toContain('0 km/h');
+    fixture.componentRef.setInput('intervals', multiDay().forecast);
+    await fixture.whenStable();
+    expect(view.querySelector('svg')).toBeNull();
+    expect(view.textContent).toContain('Viento no disponible');
+  });
+
+  it('reads forecast wind as an optional nonnegative km/h value', () => {
+    const data = structuredClone(CLIMATE_FIXTURE);
+    data.pronostico.intervalos[0].viento_kmh = 0;
+    expect(climatePresentation(readClimateResponse(data)).forecast[0].wind).toBe(0);
+    expect(climatePresentation(readClimateResponse(data)).forecast[1].wind).toBeNull();
+    data.pronostico.intervalos[0].viento_kmh = -1;
+    expect(() => readClimateResponse(data)).toThrow();
+  });
   it('converts forecast cards, daily ranges and the line together without changing API values', async () => {
     const fixture = TestBed.createComponent(Forecast);
     const data = multiDay();
