@@ -4,7 +4,7 @@ Frontend Angular para consultar el clima de una ciudad y mostrar recomendaciones
 
 ## Estado
 
-TK07: recomendaciones recibidas desde Django con ubicación identificada y estados «Generado con IA» / «No disponible». Se muestra únicamente el texto del backend, sin ejecutar HTML ni crear consejos de reemplazo. El clima y el pronóstico disponibles permanecen visibles si falla la IA. Se conservan la conexión de TK05 y la presentación meteorológica de TK06.
+TK08: recuperación de errores y accesibilidad de las interacciones. Ciudad inexistente, conexión fallida, espera agotada y límite de solicitudes tienen mensajes y acciones explícitas. Se puede reintentar o cancelar; el foco y los anuncios de estado acompañan los cambios. Se conservan la conexión de TK05, el clima de TK06 y las recomendaciones de TK07.
 
 ## Consultar el clima
 
@@ -52,6 +52,25 @@ Al enviar se normaliza Unicode NFC, se recortan espacios exteriores, se reducen 
 | Nueva búsqueda mientras otra está pendiente | Se cancela la anterior y solo se aplica el resultado de la última consulta. |
 
 Los errores se retiran al editar o reenviar. El formulario permanece editable durante la carga para permitir una nueva búsqueda. Una consulta idéntica pendiente no inicia otro GET; al finalizar se permite reenviar explícitamente. `switchMap` cancela la suscripción anterior y `takeUntilDestroyed` cancela al salir de la página. Se limpian los datos de la consulta anterior al comenzar otra; un error no termina el flujo de búsquedas. No hay caché ni reintentos automáticos. Cada GET tiene un timeout de cliente de 45 segundos; cancelar en el navegador no garantiza cancelar trabajo ya recibido por Django/proveedores.
+
+## Recuperación y accesibilidad
+
+| Situación | Acción disponible |
+| --- | --- |
+| Ciudad inexistente (`404` con `CIUDAD_NO_ENCONTRADA`) | «Corregir búsqueda» lleva el foco a ciudad y conserva lo escrito. Un 404 sin ese código se trata como falla del servicio. |
+| Consulta inválida (`400`) | Corregir el campo indicado por Django: ciudad, país o región. La validación local enfoca primero el primer campo inválido. |
+| Ciudad ambigua (`409`) | Elegir un candidato o «Precisar ubicación»; foco en país si falta o en región si el país ya está indicado. |
+| Conexión fallida (`0`) | Revisar conexión y «Reintentar consulta». Un bloqueo CORS también puede aparecer como falla de conexión; no se exponen detalles técnicos. |
+| Espera agotada (`TimeoutError`) | Aviso específico y «Reintentar consulta», sin mantener el indicador de carga activo. |
+| Límite (`429`) | Aviso para intentar más tarde; el reintento siempre depende de la persona. |
+| Servicio no disponible o respuesta inválida | «Reintentar consulta», sin mostrar cuerpos privados de error. |
+| Búsqueda pendiente | «Cancelar búsqueda» cancela la suscripción, limpia los datos, anuncia la cancelación y vuelve a ciudad. |
+
+El reintento usa una copia de la última consulta normalizada que falló; no inventa filtros ni mezcla datos. Al editar se retiran el aviso y el reintento anterior, para no volver a enviar una búsqueda que ya no corresponda al formulario. Si se selecciona una ubicación o se reintenta, el foco queda en el botón de envío antes de retirar el control anterior. No se agregaron reintentos automáticos ni persistencia.
+
+Los errores remotos se anuncian mediante `role="alert"`. La carga, el resultado, la cancelación y la disponibilidad parcial se comunican con `role="status"` y `aria-atomic`; `aria-busy` se desactiva al terminar o fallar. El panel de errores de conexión/servicio recibe foco y permite llegar al reintento con Tab; las correcciones enfocan su campo. Los mensajes locales se asocian mediante `aria-describedby` y los campos inválidos llevan `aria-invalid`. El enlace «Saltar al contenido», el foco visible y los botones nativos permiten usar teclado sin una trampa de foco.
+
+Los botones de sugerencias y opciones tienen al menos 44 px de alto. Los bordes de campos se reforzaron para obtener 3,33:1 contra su fondo; se conserva el contraste de texto y foco revisado con axe y navegador. La preferencia de movimiento reducido desactiva las animaciones de carga. La revisión no incluyó un lector de pantalla real ni constituye una certificación completa de accesibilidad.
 
 ## Convenciones acordadas
 
@@ -198,3 +217,14 @@ Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25,
 - **57 pruebas aprobadas** con `npm test -- --watch=false`, ocho casos nuevos específicos de recomendaciones y coherencia entre consultas. Build de producción completado.
 - Chromium a 360, 768 y 1440 px: estados disponible/no disponible, texto con saltos, HTML literal y una palabra de 600 caracteres sin recorte ni desbordamiento. Sin errores de ejecución. Axe no detectó infracciones en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre ambos estados; no equivale a una auditoría completa.
 - Pruebas y revisión visual con respuestas HTTP simuladas, sin llamadas ni gasto en proveedores reales. README actualizado; backend, claves, `.env`, dependencias y documentos originales conservados. Sin commit ni despliegue. La revisión general de errores y accesibilidad corresponde a TK08.
+
+## Verificación de TK08
+
+Verificado el 24 de octubre de 2026 (America/Buenos_Aires), con Angular 21.2.25, Node 24.13.1, npm 11.10.0 y Chromium 156.0.8078.4. Se mantuvieron Angular/Google y frontend-design de Anthropic y la estética existente.
+
+- Casos del alcance local de CP03, CP08, CP09, CP10, CP11 y CP14: validación y corrección, ciudad inexistente, conexión, timeout, límite y servicio no disponible; recuperación explícita, carga finalizada y resultados anteriores retirados. Se conservan las pruebas de estados parciales y respuestas tardías de TK05–TK07.
+- **69 pruebas aprobadas** con `npm test -- --watch=false`; 12 casos nuevos. Incluyen reintentar la misma consulta normalizada una sola vez, corregir campo región, foco del primer campo inválido, cancelar, editar después de una falla y diferenciar un 404 de ruta de una ciudad inexistente.
+- Timeout de 45 segundos comprobado con reloj virtual y transporte XHR en memoria: se verifica la configuración, la traducción del evento de timeout de Angular a un aviso recuperable y el cierre del transporte. No requiere esperar 45 segundos reales ni acceder a la red.
+- Chromium a 360, 768 y 1440 px: búsqueda con Enter, enlace de salto, corrección de 404, reintento con Tab/Enter tras 429/503/conexión, timeout simulado, cancelación con retorno de foco, resultado parcial y región inválida. Sin carga bloqueada, desbordamiento horizontal ni errores de ejecución.
+- Axe sin infracciones detectadas en las reglas WCAG 2 A/AA y 2.1 AA ejecutadas sobre errores, resultado parcial y validación de región. Medidos borde de campo 3,33:1, botones de ejemplo de 44 px y animación desactivada con movimiento reducido. Revisados visualmente los paneles de recuperación y el foco.
+- Build de producción completado y formato/diff revisados. Revisión de navegador con respuestas HTTP y timeout simulados, sin llamar a proveedores reales. No se modificaron `.env`, claves, backend, dependencias ni documentos originales; sin commit ni despliegue. La regresión integral y su automatización versionada corresponden a TK09.

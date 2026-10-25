@@ -123,4 +123,27 @@ describe('CitySearch', () => {
     expect(submitted).toHaveBeenCalledWith({ city: 'Córdoba', country: 'AR', region: 'Córdoba' });
     expect(fixture.componentInstance.region.value).toBe('  Co\u0301rdoba ');
   });
+
+  it('focuses the region and associates its validation message', async () => {
+    const fixture = TestBed.createComponent(CitySearch);
+    await fixture.whenStable();
+    fixture.componentInstance.form.setValue({ city: 'Córdoba', country: 'AR' });
+    fixture.componentInstance.region.setValue('x'.repeat(101));
+    fixture.componentInstance.submit();
+    await fixture.whenStable();
+    const region = fixture.nativeElement.querySelector('#region');
+    expect(document.activeElement).toBe(region);
+    expect(region.getAttribute('aria-invalid')).toBe('true');
+    expect(region.getAttribute('aria-describedby')).toContain('region-error');
+    expect(fixture.nativeElement.querySelector('#region-error')).not.toBeNull();
+  });
+
+  it('focuses the first invalid field when both city and country are invalid', async () => {
+    const fixture = TestBed.createComponent(CitySearch);
+    await fixture.whenStable();
+    fixture.componentInstance.form.setValue({ city: ' ', country: 'Argentina' });
+    fixture.componentInstance.submit();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#city'));
+  });
 });

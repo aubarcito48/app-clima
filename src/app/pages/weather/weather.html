@@ -43,6 +43,7 @@
         [feedback]="feedback()"
         (queryEdited)="feedback.set(null)"
         (querySubmitted)="search($event)"
+        (retryRequested)="retry()"
       />
     </section>
     <div class="mt-7 flex min-h-8 flex-wrap items-center justify-between gap-2 sm:mt-8">
@@ -61,19 +62,31 @@
                 <span class="text-muted">· OpenWeather</span></span
               ></span
             >
+            <span class="sr-only"
+              >{{ weather()?.forecast?.length ? '' : 'Pronóstico no disponible.' }}
+              {{ weather()?.advice ? '' : 'Consejo de IA no disponible.' }}</span
+            >
           }
           @default {
-            Elegí una ciudad. Nosotros ponemos el contexto.
+            @if (cancelled()) {
+              Búsqueda cancelada. Podés consultar otra ciudad.
+            } @else if (feedback()) {
+              No se pudo completar la consulta de {{ requestedCity() }}. Revisá el aviso de
+              búsqueda.
+            } @else {
+              Elegí una ciudad. Nosotros ponemos el contexto.
+            }
           }
         }
       </p>
-      @if (state() === 'ready') {
+      @if (state() === 'ready' || state() === 'loading') {
         <button
           type="button"
-          (click)="reset()"
+          (click)="reset(); citySearch.focusCity()"
           class="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-secondary underline decoration-line underline-offset-4 hover:text-ink"
         >
-          <app-weather-icon name="close" [size]="14" /> Volver al inicio
+          <app-weather-icon name="close" [size]="14" />
+          {{ state() === 'loading' ? 'Cancelar búsqueda' : 'Volver al inicio' }}
         </button>
       }
     </div>

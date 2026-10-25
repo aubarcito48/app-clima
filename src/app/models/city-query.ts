@@ -14,7 +14,16 @@ export interface CountryChoice {
 
 // Estado de presentación adaptado a los errores públicos de Django.
 export interface CitySearchFeedback {
-  kind: 'ambiguous' | 'not-found' | 'invalid' | 'unavailable' | 'connection' | 'rate-limited';
+  kind:
+    | 'ambiguous'
+    | 'not-found'
+    | 'invalid'
+    | 'unavailable'
+    | 'connection'
+    | 'timeout'
+    | 'rate-limited';
   message: string;
+  retryable?: boolean;
+  field?: 'city' | 'country' | 'region';
   choices?: readonly CountryChoice[];
 }

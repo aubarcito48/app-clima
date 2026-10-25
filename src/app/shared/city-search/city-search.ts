@@ -23,6 +23,7 @@ export class CitySearch {
   readonly feedback = input<CitySearchFeedback | null>(null);
   readonly querySubmitted = output<CityQuery>();
   readonly queryEdited = output<void>();
+  readonly retryRequested = output<void>();
   readonly form = new FormGroup({
     city: new FormControl('', { nonNullable: true, validators: [cityRequired, nameLength] }),
     country: new FormControl('', { nonNullable: true, validators: [countryCode] }),
@@ -31,13 +32,16 @@ export class CitySearch {
   readonly examples = ['Córdoba', 'Buenos Aires', 'Mendoza'];
   private readonly cityField = viewChild.required<ElementRef<HTMLInputElement>>('cityField');
   private readonly countryField = viewChild.required<ElementRef<HTMLInputElement>>('countryField');
+  private readonly regionField = viewChild.required<ElementRef<HTMLInputElement>>('regionField');
+  private readonly feedbackPanel = viewChild<ElementRef<HTMLElement>>('feedbackPanel');
+  private readonly submitButton = viewChild.required<ElementRef<HTMLButtonElement>>('submitButton');
 
   constructor() {
     afterRenderEffect(() => {
       const feedback = this.feedback();
       if (feedback) {
-        const field = feedback.kind === 'ambiguous' ? this.countryField() : this.cityField();
-        field.nativeElement.focus();
+        if (feedback.retryable) this.feedbackPanel()?.nativeElement.focus();
+        else this.focusCorrection(feedback);
       }
     });
   }
@@ -53,7 +57,12 @@ export class CitySearch {
     this.form.markAllAsTouched();
     this.region.markAsTouched();
     if (this.form.invalid || this.region.invalid) {
-      (this.countryInvalid ? this.countryField() : this.cityField()).nativeElement.focus();
+      (this.cityInvalid
+        ? this.cityField()
+        : this.countryInvalid
+          ? this.countryField()
+          : this.regionField()
+      ).nativeElement.focus();
       return;
     }
     const query = normalizeCityQuery({ ...this.form.getRawValue(), region: this.region.value });
@@ -77,10 +86,28 @@ export class CitySearch {
     this.form.controls.country.setValue(choice.country);
     if (choice.city) this.form.controls.city.setValue(choice.city);
     this.region.setValue(choice.region ?? '');
+    this.submitButton().nativeElement.focus();
     this.submit();
   }
 
   onEdited(): void {
     this.queryEdited.emit();
+  }
+  focusCity(): void {
+    this.cityField().nativeElement.focus();
+  }
+  requestRetry(): void {
+    this.submitButton().nativeElement.focus();
+    this.retryRequested.emit();
+  }
+  focusCorrection(feedback = this.feedback()): void {
+    const field =
+      feedback?.field === 'region' ||
+      (feedback?.kind === 'ambiguous' && this.form.controls.country.value.trim())
+        ? this.regionField()
+        : feedback?.field === 'country' || feedback?.kind === 'ambiguous'
+          ? this.countryField()
+          : this.cityField();
+    field.nativeElement.focus();
   }
 }

@@ -95,6 +95,7 @@ export function climateFeedback(error: unknown): CitySearchFeedback {
         return {
           kind: 'unavailable',
           message: 'No se pudo interpretar la respuesta del servicio.',
+          retryable: true,
         };
       }
     }
@@ -102,8 +103,13 @@ export function climateFeedback(error: unknown): CitySearchFeedback {
       return {
         kind: 'invalid',
         message: 'Revisá la ciudad, el código de país de dos letras y la región.',
+        field: error.error?.errores?.pais
+          ? 'country'
+          : error.error?.errores?.region
+            ? 'region'
+            : 'city',
       };
-    if (error.status === 404)
+    if (error.status === 404 && error.error?.codigo === 'CIUDAD_NO_ENCONTRADA')
       return {
         kind: 'not-found',
         message: 'No encontramos esa ciudad. Revisá el nombre o precisá país y región.',
@@ -112,15 +118,24 @@ export function climateFeedback(error: unknown): CitySearchFeedback {
       return {
         kind: 'rate-limited',
         message: 'Se alcanzó el límite de consultas. Intentá más tarde.',
+        retryable: true,
+      };
+    if (error.status === 0 && error.error?.name === 'TimeoutError')
+      return {
+        kind: 'timeout',
+        message: 'Se agotó el tiempo de espera. Podés volver a intentar la consulta.',
+        retryable: true,
       };
     if (error.status === 0)
       return {
         kind: 'connection',
-        message: 'No se pudo conectar con el servicio o se agotó la espera. Volvé a intentar.',
+        message: 'No se pudo conectar con el servicio. Revisá tu conexión y volvé a intentar.',
+        retryable: true,
       };
   }
   return {
     kind: 'unavailable',
     message: 'El servicio no está disponible o devolvió datos inválidos. Volvé a intentar.',
+    retryable: true,
   };
 }

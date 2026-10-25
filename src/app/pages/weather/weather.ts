@@ -26,9 +26,11 @@ export class Weather {
   readonly feedback = signal<CitySearchFeedback | null>(null);
   readonly requestedCity = signal('');
   readonly response = signal<ClimateResponse | null>(null);
+  readonly cancelled = signal(false);
   private readonly api = inject(ClimateApi);
   private readonly searches = new Subject<CityQuery | null>();
   private activeKey = '';
+  private lastQuery: CityQuery | null = null;
   constructor() {
     this.searches
       .pipe(
@@ -56,6 +58,8 @@ export class Weather {
     const key = serializeCityQuery(normalized);
     if (this.state() === 'loading' && this.activeKey === key) return;
     this.activeKey = key;
+    this.lastQuery = { ...normalized };
+    this.cancelled.set(false);
     this.response.set(null);
     this.weather.set(null);
     this.feedback.set(null);
@@ -64,11 +68,15 @@ export class Weather {
     this.searches.next(normalized);
   }
   reset(): void {
+    this.cancelled.set(this.state() === 'loading');
     this.searches.next(null);
     this.activeKey = '';
     this.response.set(null);
     this.weather.set(null);
     this.feedback.set(null);
     this.state.set('initial');
+  }
+  retry(): void {
+    if (this.feedback()?.retryable && this.lastQuery) this.search({ ...this.lastQuery });
   }
 }

@@ -6,6 +6,7 @@
   --color-canvas: #f3f7fc;
   --color-sky: #edf3fd;
   --color-line: #dfe6f0;
+  --color-control-line: #7c8ca4;
   --color-lavender: #e9eefc;
   --color-lavender-line: #dce3f7;
   --color-blue: #3f65b1;
@@ -51,7 +52,7 @@
 @layer components {
   .field {
     height: 3.25rem;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--color-control-line);
     border-radius: 0.85rem;
     background: #fbfcfe;
     color: var(--color-ink);
@@ -76,7 +77,7 @@
     background: #28476d;
   }
   .example-button {
-    min-height: 2.25rem;
+    min-height: 2.75rem;
     padding: 0.3rem 0.8rem;
     border: 1px solid var(--color-line);
     border-radius: 2rem;

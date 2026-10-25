@@ -3,7 +3,7 @@
   (ngSubmit)="submit()"
   novalidate
   aria-label="Buscar el clima de una ciudad"
-  aria-describedby="demo-help"
+  aria-describedby="search-help"
 >
   <div class="grid items-end gap-3 sm:grid-cols-[minmax(0,1fr)_8rem_auto]">
     <div class="min-w-0">
@@ -25,7 +25,11 @@
           autocomplete="address-level2"
           required
           formControlName="city"
-          [attr.aria-invalid]="cityInvalid || feedback()?.kind === 'not-found' ? 'true' : null"
+          [attr.aria-invalid]="
+            cityInvalid || feedback()?.kind === 'not-found' || feedback()?.field === 'city'
+              ? 'true'
+              : null
+          "
           [attr.aria-describedby]="
             cityInvalid ? 'city-error' : feedback() ? 'search-feedback' : null
           "
@@ -45,11 +49,11 @@
         placeholder="Ej. AR"
         autocomplete="country"
         formControlName="country"
-        [attr.aria-invalid]="countryInvalid || feedback()?.kind === 'ambiguous' ? 'true' : null"
+        [attr.aria-invalid]="countryInvalid || feedback()?.field === 'country' ? 'true' : null"
         [attr.aria-describedby]="
           countryInvalid
             ? 'country-help country-error'
-            : feedback()?.kind === 'ambiguous'
+            : feedback()?.kind === 'ambiguous' || feedback()?.field === 'country'
               ? 'country-help search-feedback'
               : 'country-help'
         "
@@ -58,6 +62,7 @@
       />
     </div>
     <button
+      #submitButton
       type="submit"
       class="primary-button flex h-13 items-center justify-center gap-3 px-7 sm:min-w-39"
     >
@@ -71,13 +76,23 @@
     >
     <input
       id="region"
+      #regionField
       name="region"
       [formControl]="region"
       (input)="onEdited()"
       placeholder="Ej. Córdoba"
       autocomplete="address-level1"
       class="field w-full px-4"
-      aria-describedby="region-help"
+      [attr.aria-invalid]="
+        (region.touched && region.invalid) || feedback()?.field === 'region' ? 'true' : null
+      "
+      [attr.aria-describedby]="
+        region.touched && region.invalid
+          ? 'region-help region-error'
+          : feedback()?.field === 'region' || feedback()?.kind === 'ambiguous'
+            ? 'region-help search-feedback'
+            : 'region-help'
+      "
     />
     <p id="region-help" class="mt-2 text-xs text-muted">
       Provincia o estado para precisar ciudades con el mismo nombre.
@@ -89,7 +104,7 @@
     </p>
   }
   @if (region.touched && region.invalid) {
-    <p role="alert" class="mt-3 text-sm font-medium text-red-800">
+    <p id="region-error" role="alert" class="mt-3 text-sm font-medium text-red-800">
       La región admite hasta 100 caracteres.
     </p>
   }
@@ -100,10 +115,25 @@
     </p>
   }
   @if (feedback(); as issue) {
-    <div class="mt-4 rounded-xl border border-blue/20 bg-sky p-4">
+    <div
+      #feedbackPanel
+      tabindex="-1"
+      role="group"
+      aria-labelledby="search-feedback"
+      class="mt-4 rounded-xl border border-blue/20 bg-sky p-4"
+    >
       <p id="search-feedback" role="alert" class="text-sm leading-6 text-ink">
         {{ issue.message }}
       </p>
+      @if (issue.retryable) {
+        <button type="button" (click)="requestRetry()" class="primary-button mt-3 min-h-11 px-5">
+          Reintentar consulta
+        </button>
+      } @else {
+        <button type="button" (click)="focusCorrection()" class="example-button mt-3 min-h-11">
+          {{ issue.kind === 'ambiguous' ? 'Precisar ubicación' : 'Corregir búsqueda' }}
+        </button>
+      }
       @if (issue.choices?.length) {
         <ul aria-label="Opciones para precisar la ciudad" class="mt-3 flex flex-wrap gap-2">
           @for (choice of issue.choices; track choice.id ?? choice.country) {
@@ -125,7 +155,7 @@
       </button>
     }
   </div>
-  <p id="demo-help" class="mt-3 text-xs leading-relaxed text-muted">
+  <p id="search-help" class="mt-3 text-xs leading-relaxed text-muted">
     Consultá una ciudad o usá una búsqueda sugerida. Los datos se solicitan al servicio de clima.
   </p>
   <p id="country-help" class="mt-2 text-xs leading-relaxed text-muted">
