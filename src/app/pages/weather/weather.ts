@@ -9,7 +9,6 @@ import {
   untracked,
 } from '@angular/core';
 import { Language } from '../../service/language';
-import { LanguageToggle } from '../../shared/language-toggle/language-toggle';
 import { BackToTop } from '../../shared/back-to-top/back-to-top';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, EMPTY, map, of, Subject, switchMap, tap } from 'rxjs';
@@ -26,7 +25,6 @@ import { WeatherIcon } from '../../shared/weather-icon/weather-icon';
 import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { FavoritePlaces } from '../../service/favorite-places';
-import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
 import { WeatherAlerts } from '../../shared/weather-alerts/weather-alerts';
 import { EmergencyContacts } from '../../shared/emergency-contacts/emergency-contacts';
 import { ClimateAwareness } from '../../shared/climate-awareness/climate-awareness';
@@ -35,7 +33,6 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   selector: 'app-weather',
   imports: [
     Translate,
-    LanguageToggle,
     BackToTop,
     CitySearch,
     CurrentWeather,
@@ -43,7 +40,6 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
     WeatherIcon,
     WeatherLoading,
     WeatherSidebar,
-    ThemeToggle,
     WeatherAlerts,
     EmergencyContacts,
     ClimateAwareness,

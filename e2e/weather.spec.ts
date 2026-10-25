@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, climate, search } from './fixtures';
+import { test, expect, climate, search, changeTheme } from './fixtures';
 import type { Page } from '@playwright/test';
 
 test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho reducido', async ({
@@ -15,8 +15,10 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   }));
   api.body = data;
   await page.goto('/');
+  await openNavigation(page);
   const themeButton = page.locator('app-theme-toggle button');
   await expect(themeButton).toHaveAccessibleName('Activar modo claro');
+  await page.keyboard.press('Tab');
   await themeButton.focus();
   await expect(themeButton).toBeFocused();
   const focus = await themeButton.evaluate((e) => {
@@ -31,6 +33,7 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   await expect(themeButton).toHaveAccessibleName('Activar modo claro');
   await expect(themeButton).toBeFocused();
 
+  await closeNavigation(page);
   const locationButton = page.getByRole('button', { name: 'Usar mi ubicación', exact: true });
   await locationButton.hover();
   // Measure the final hover color, after its CSS transition settles.
@@ -114,6 +117,7 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   await expect(page.getByRole('button', { name: 'Abrir menú', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await audit();
+  await openNavigation(page);
   await themeButton.focus();
   await expect(themeButton).toBeInViewport();
   await info.attach('foco-modo-oscuro-320', {
@@ -135,10 +139,12 @@ test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();
   expect(initialDayAudit.violations).toEqual([]);
+  await openNavigation(page);
   const toggle = page.getByRole('button', { name: 'Activar modo oscuro', exact: true });
   await toggle.focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await closeNavigation(page);
   await search(page, 'Córdoba');
   await expect(page.locator('.temperature')).toBeVisible();
   await page.getByRole('button', { name: /^Guardar .+ en favoritos$/ }).click();
@@ -151,7 +157,7 @@ test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
   });
-  await page.getByRole('button', { name: 'Activar modo claro', exact: true }).click();
+  await changeTheme(page);
   await expect(page.locator('.temperature')).toHaveCSS('color', 'rgb(18, 57, 82)');
   await expect(page.locator('#advice-text')).toHaveCSS('color', 'rgb(18, 57, 82)');
   await expect(page.locator('.weather-panel')).not.toHaveCSS('background-image', 'none');
@@ -163,14 +169,16 @@ test('modo oscuro: teclado, contraste, persistencia y elección sobre el sistema
     body: await page.locator('app-current-weather').screenshot(),
     contentType: 'image/png',
   });
-  await page.getByRole('button', { name: 'Activar modo oscuro', exact: true }).click();
+  await changeTheme(page);
   await page.reload();
+  await openNavigation(page);
   await expect(page.getByRole('button', { name: 'Activar modo claro', exact: true })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.emulateMedia({ colorScheme: 'dark' });
-  await page.getByRole('button', { name: 'Activar modo claro', exact: true }).click();
+  await changeTheme(page);
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await page.reload();
+  await openNavigation(page);
   await expect(
     page.getByRole('button', { name: 'Activar modo oscuro', exact: true }),
   ).toBeVisible();
@@ -197,11 +205,12 @@ test('el tema sigue al dispositivo sin preferencia guardada y funciona sin almac
     });
   });
   await page.goto('/');
+  await openNavigation(page);
   await expect(page.getByRole('button', { name: 'Activar modo claro', exact: true })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await page.getByRole('button', { name: 'Activar modo oscuro', exact: true }).click();
+  await changeTheme(page);
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.emulateMedia({ colorScheme: 'light' });
@@ -433,10 +442,6 @@ test('validación y parámetros: teclado, país ASCII y caracteres reservados', 
   await expect(page.getByRole('link', { name: 'Saltar al contenido' })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('main')).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(
-    page.getByRole('button', { name: 'Activar modo oscuro', exact: true }),
-  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(
     page.getByRole('button', { name: 'Pausar presentación ambiental', exact: true }),

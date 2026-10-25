@@ -1,5 +1,5 @@
 import { Translate } from '../translate';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ColorTheme } from '../../service/color-theme';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 
@@ -11,5 +11,6 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemeToggle {
+  readonly compact = input(false);
   readonly theme = inject(ColorTheme);
 }

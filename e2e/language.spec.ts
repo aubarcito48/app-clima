@@ -1,12 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, climate, search } from './fixtures';
+import { test, expect, climate, search, chooseLanguage } from './fixtures';
 
 test('ES / EN translates the interface and persists after reloading', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Hola, explorador' })).toBeVisible();
-  await page.getByRole('button', { name: 'English', exact: true }).click();
+  await chooseLanguage(page, 'en');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('button', { name: 'English', exact: true })).toHaveAttribute(
+  await expect(page.locator('app-language-toggle button[lang="en"]')).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -24,7 +24,7 @@ test('ES / EN translates the interface and persists after reloading', async ({ p
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();
   expect(accessibility.violations).toEqual([]);
-  await page.getByRole('button', { name: 'Español', exact: true }).click();
+  await chooseLanguage(page, 'es');
   await expect(page.getByRole('heading', { name: 'Hola, explorador' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 });
@@ -42,13 +42,13 @@ test('changing language refreshes weather, advice and forecast dates', async ({ 
   await page.goto('/');
   await search(page, 'Córdoba');
   await expect(page.locator('#advice-text')).toContainText('Consejo ficticio');
-  await page.getByRole('button', { name: 'English', exact: true }).click();
+  await chooseLanguage(page, 'en');
   await expect(page.locator('#advice-text')).toHaveText('Bring a light jacket for the evening.');
   await expect(page.getByRole('heading', { name: 'Current weather', exact: true })).toBeVisible();
   await expect(page.locator('.current-details')).toContainText('Partly cloudy');
   await expect(page.locator('.day-choice').first()).toContainText('Oct');
   expect(api.requests.at(-1)?.searchParams.get('idioma')).toBe('en');
-  await page.getByRole('button', { name: 'Español', exact: true }).click();
+  await chooseLanguage(page, 'es');
   await expect(page.locator('#advice-text')).toContainText('Consejo ficticio');
   expect(api.requests.at(-1)?.searchParams.has('idioma')).toBe(false);
 });
@@ -62,9 +62,9 @@ test('language switching works when browser storage is blocked', async ({ page }
     });
   });
   await page.goto('/');
-  await page.getByRole('button', { name: 'English', exact: true }).click();
+  await chooseLanguage(page, 'en');
   await expect(page.getByRole('heading', { name: 'Hello, explorer' })).toBeVisible();
-  await page.getByRole('button', { name: 'Español', exact: true }).click();
+  await chooseLanguage(page, 'es');
   await expect(page.getByRole('heading', { name: 'Hola, explorador' })).toBeVisible();
 });
 
@@ -88,7 +88,7 @@ test('changing language during a pending search replaces the previous request', 
     await page.goto('/');
     await search(page, 'Córdoba');
     await expect.poll(() => api.requests.length).toBe(1);
-    await page.getByRole('button', { name: 'English', exact: true }).click();
+    await chooseLanguage(page, 'en');
     await expect(page.locator('#advice-text')).toHaveText(
       'English advice from the latest request.',
     );

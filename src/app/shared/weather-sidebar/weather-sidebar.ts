@@ -14,10 +14,12 @@ import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { FavoritePlaces } from '../../service/favorite-places';
 import { SavedPlace } from '../../models/saved-place';
+import { LanguageToggle } from '../language-toggle/language-toggle';
+import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-weather-sidebar',
-  imports: [Translate, WeatherIcon, NgTemplateOutlet],
+  imports: [Translate, WeatherIcon, NgTemplateOutlet, LanguageToggle, ThemeToggle],
   templateUrl: './weather-sidebar.html',
   styleUrl: './weather-sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

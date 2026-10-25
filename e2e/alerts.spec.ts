@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, climate, search } from './fixtures';
+import { test, expect, climate, search, changeTheme } from './fixtures';
 import { ALERTS_FIXTURE } from '../src/app/testing/alerts-fixture';
 
 test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambos temas', async ({
@@ -49,8 +49,7 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
     ALERTS_FIXTURE.alertas[0].url,
   );
   for (const mode of ['light', 'dark']) {
-    if ((await page.locator('html').getAttribute('data-theme')) !== mode)
-      await page.locator('app-theme-toggle button').click();
+    if ((await page.locator('html').getAttribute('data-theme')) !== mode) await changeTheme(page);
     const audit = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .analyze();

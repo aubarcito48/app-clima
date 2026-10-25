@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect } from './fixtures';
+import { test, expect, changeTheme } from './fixtures';
 
 test('slider ambiental: imágenes locales, posición, teclado, navegación y ambos temas', async ({
   page,
@@ -13,10 +13,8 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
     contacts = (await page.locator('app-emergency-contacts').boundingBox())!;
   expect(sliderBox.y + sliderBox.height).toBeLessThan(contacts.y);
   if (page.viewportSize()!.width >= 1280) {
-    const greeting = (await page.locator('h1').boundingBox())!,
-      toggle = (await page.locator('app-theme-toggle').boundingBox())!;
+    const greeting = (await page.locator('h1').boundingBox())!;
     expect(sliderBox.x).toBeGreaterThan(greeting.x + greeting.width);
-    expect(sliderBox.x + sliderBox.width).toBeLessThan(toggle.x);
   }
   await expect(slider.locator('.slider-button')).toHaveCount(0);
   await expect(slider.locator('.slide-dot')).toHaveCount(3);
@@ -37,8 +35,7 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   await slider.locator('.slide-dot').first().click();
   await expect(active.getByRole('heading')).toHaveText('Cuidemos nuestros bosques');
   for (const theme of ['light', 'dark']) {
-    if ((await page.locator('html').getAttribute('data-theme')) !== theme)
-      await page.locator('app-theme-toggle button').click();
+    if ((await page.locator('html').getAttribute('data-theme')) !== theme) await changeTheme(page);
     const audit = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .analyze();

@@ -38,6 +38,18 @@
 .sidebar-note {
   display: none;
 }
+.sidebar-preferences {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+}
+.sidebar-preferences.is-compact {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
 .sidebar-link {
   display: flex;
   width: 100%;

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, climate, search } from './fixtures';
+import { test, expect, climate, search, changeTheme } from './fixtures';
 
 test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en ambos temas', async ({
   page,
@@ -46,8 +46,7 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
   for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowLeft');
   await expect(previous).toBeDisabled();
   for (const mode of ['light', 'dark']) {
-    if ((await page.locator('html').getAttribute('data-theme')) !== mode)
-      await page.locator('app-theme-toggle button').click();
+    if ((await page.locator('html').getAttribute('data-theme')) !== mode) await changeTheme(page);
     const audit = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .analyze();

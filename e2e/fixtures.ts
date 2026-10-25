@@ -144,6 +144,32 @@ export const test = base.extend<{ api: ApiMock }>({
 });
 export { expect };
 
+export async function openNavigation(page: Page) {
+  await page.locator('.mobile-header, .desktop-shell').waitFor({ state: 'visible' });
+  const trigger = page.locator('.mobile-header button');
+  if (await trigger.isVisible()) {
+    const dialog = page.locator('.mobile-menu');
+    if (!(await dialog.isVisible())) await trigger.click();
+  }
+}
+
+export async function closeNavigation(page: Page) {
+  const close = page.locator('.mobile-menu [data-close-menu]');
+  if (await close.isVisible()) await close.click();
+}
+
+export async function chooseLanguage(page: Page, language: 'es' | 'en') {
+  await openNavigation(page);
+  await page.locator(`app-language-toggle button[lang="${language}"]`).click();
+  await closeNavigation(page);
+}
+
+export async function changeTheme(page: Page) {
+  await openNavigation(page);
+  await page.locator('app-theme-toggle button').click();
+  await closeNavigation(page);
+}
+
 export async function search(page: Page, city: string, country = 'AR', region = '') {
   await page.locator('#city').fill([city, region, country].filter(Boolean).join(', '));
   await page.locator('#city').press('Enter');

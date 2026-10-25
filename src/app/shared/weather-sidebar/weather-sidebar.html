@@ -29,7 +29,11 @@
       </button>
     }
   </div>
-  <nav [attr.aria-label]="'Navegación principal' | translate" class="relative mt-7 grid gap-2">
+  <div class="sidebar-preferences" [class.is-compact]="compact()">
+    <app-language-toggle [compact]="compact()" />
+    <app-theme-toggle [compact]="compact()" />
+  </div>
+  <nav [attr.aria-label]="'Navegación principal' | translate" class="relative mt-4 grid gap-2">
     <a
       href="#pronostico"
       class="sidebar-link"
