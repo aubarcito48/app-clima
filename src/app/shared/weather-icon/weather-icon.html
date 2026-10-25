@@ -8,23 +8,34 @@
   stroke-linecap="round"
   stroke-linejoin="round"
   focusable="false"
+  [class.weather-motion]="animated()"
+  [class.motion-paused]="paused()"
 >
   @switch (name()) {
     @case ('sun') {
       <circle cx="12" cy="12" r="4" fill="var(--color-sun-soft)" />
-      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+      <path
+        class="sun-rays"
+        d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+      />
     }
     @case ('cloud-sun') {
       <circle cx="9" cy="8" r="4" fill="var(--color-sun-soft)" stroke="var(--color-sun-stroke)" />
-      <path d="M9 1v1M2 8H1m3-5L3 2m11 1 1-1" stroke="var(--color-sun-stroke)" />
+      <path
+        class="partial-sun-rays"
+        d="M9 1v1M2 8H1m3-5L3 2m11 1 1-1"
+        stroke="var(--color-sun-stroke)"
+      />
       <path
         d="M17.5 21H6a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 16 12a4.5 4.5 0 1 1 1.5 9Z"
+        class="cloud-drift"
         fill="var(--color-cloud)"
       />
     }
     @case ('cloud') {
       <path
         d="M17.5 19H6a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 16 10a4.5 4.5 0 1 1 1.5 9Z"
+        class="cloud-drift"
         fill="var(--color-cloud)"
       />
     }
@@ -33,15 +44,20 @@
         d="M6 15a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 16 6a4.5 4.5 0 1 1 1.5 9"
         fill="var(--color-cloud)"
       />
-      <path d="m8 17-1 3m6-3-1 3m6-3-1 3" stroke="var(--color-blue)" />
+      <path class="rain-drops" d="m8 17-1 3m6-3-1 3m6-3-1 3" stroke="var(--color-blue)" />
     }
     @case ('moon') {
-      <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" fill="var(--color-sun-soft)" />
+      <path
+        class="moon-glow"
+        d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"
+        fill="var(--color-sun-soft)"
+      />
     }
     @case ('cloud-moon') {
       <path d="M15 3a5 5 0 0 0 6 6 6 6 0 0 1-10-2 6 6 0 0 1 4-4Z" fill="var(--color-sun-soft)" />
       <path
         d="M17 21H6a4 4 0 0 1-1-8 5 5 0 0 1 10-1 4.5 4.5 0 1 1 2 9Z"
+        class="cloud-drift"
         fill="var(--color-cloud)"
       />
     }

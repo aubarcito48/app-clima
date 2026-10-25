@@ -13,7 +13,7 @@
         @if (weather(); as data) {
           <button
             type="button"
-            class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-sun-soft hover:bg-white/20 focus-visible:outline-sun-soft"
+            class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-sun-soft hover:bg-white/20 focus-visible:outline-sun-soft"
             [attr.aria-label]="
               favorite()
                 ? 'Quitar ' + data.city + ' de favoritos'
@@ -65,8 +65,25 @@
           </div>
         </div>
         @if (data.condition; as condition) {
-          <div class="weather-art text-ink/80" aria-hidden="true">
-            <app-weather-icon [name]="condition" [size]="88" />
+          <div class="weather-art flex flex-col items-center text-ink/80">
+            <app-weather-icon
+              [name]="condition"
+              [size]="88"
+              [animated]="true"
+              [paused]="motionPaused()"
+            />
+            @if (canAnimate()) {
+              <button
+                type="button"
+                class="weather-motion-control min-h-11 items-center justify-center rounded-lg px-2 text-[11px] text-white/90 underline decoration-white/40 underline-offset-4 hover:bg-white/10 focus-visible:outline-sun-soft"
+                [attr.aria-label]="
+                  motionPaused() ? 'Reanudar animación del clima' : 'Pausar animación del clima'
+                "
+                (click)="motionPaused.set(!motionPaused())"
+              >
+                {{ motionPaused() ? 'Reanudar' : 'Pausar' }}
+              </button>
+            }
           </div>
         }
       </div>

@@ -31,89 +31,97 @@
         role="region"
         [attr.aria-label]="'Gráfico de ' + metricLabel() + '; desplazable horizontalmente'"
       >
-        <svg
-          [attr.viewBox]="'0 0 ' + width() + ' 180'"
-          class="block h-40 w-full min-w-120 sm:h-44"
-          role="img"
-          [attr.aria-label]="
-            label() +
-            '. ' +
-            metricLabel() +
-            ' en ' +
-            metricUnit() +
-            '. Valores exactos disponibles en la tabla del gráfico.'
-          "
-        >
-          @for (tick of graph.ticks; track tick.y) {
-            <line
-              x1="56"
-              [attr.x2]="width() - 32"
-              [attr.y1]="tick.y"
-              [attr.y2]="tick.y"
-              stroke="var(--color-line)"
-            />
-            <text
-              x="44"
-              [attr.y]="tick.y + 4"
-              text-anchor="end"
-              fill="var(--color-secondary)"
-              font-size="12"
-            >
-              {{ tick.value }}
-            </text>
-          }
-          @for (segment of graph.segments; track $index) {
-            <polyline
-              [attr.points]="segment"
-              fill="none"
-              stroke="var(--color-blue)"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-          }
-          @for (point of graph.points; track point.dateTime; let first = $first; let last = $last) {
-            <circle
-              [attr.cx]="point.x"
-              [attr.cy]="point.y"
-              r="5"
-              fill="var(--color-blue)"
-              stroke="white"
-              stroke-width="2"
-            >
-              <title>
-                {{ point.time }} h: {{ point.value }} {{ metricUnit()
-                }}{{
-                  metric() === 'wind'
-                    ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
-                    : ''
-                }}
-              </title>
-            </circle>
-            <text
-              [attr.x]="point.x"
-              [attr.y]="point.y - 14"
-              [attr.text-anchor]="first ? 'start' : last ? 'end' : 'middle'"
-              fill="var(--color-ink)"
-              font-size="13"
-              font-weight="600"
-            >
-              {{ point.value
-              }}{{ metric() === 'temperature' ? '°' : metric() === 'precipitation' ? '%' : '' }}
-              {{ metric() === 'wind' ? (point.windDirection?.abbreviation ?? '') : '' }}
-            </text>
-          }
-          @for (point of graph.timeline; track point.dateTime) {
-            <text
-              [attr.x]="point.x"
-              y="164"
-              text-anchor="middle"
-              fill="var(--color-secondary)"
-              font-size="12"
-            >
-              {{ point.time }}
-            </text>
-          }
-        </svg>
+        @for (key of [motionKey()]; track key) {
+          <svg
+            [attr.viewBox]="'0 0 ' + width() + ' 180'"
+            class="chart-motion block h-40 w-full min-w-120 sm:h-44"
+            role="img"
+            [attr.aria-label]="
+              label() +
+              '. ' +
+              metricLabel() +
+              ' en ' +
+              metricUnit() +
+              '. Valores exactos disponibles en la tabla del gráfico.'
+            "
+          >
+            @for (tick of graph.ticks; track tick.y) {
+              <line
+                x1="56"
+                [attr.x2]="width() - 32"
+                [attr.y1]="tick.y"
+                [attr.y2]="tick.y"
+                stroke="var(--color-line)"
+              />
+              <text
+                x="44"
+                [attr.y]="tick.y + 4"
+                text-anchor="end"
+                fill="var(--color-secondary)"
+                font-size="12"
+              >
+                {{ tick.value }}
+              </text>
+            }
+            @for (segment of graph.segments; track $index) {
+              <polyline
+                pathLength="100"
+                [attr.points]="segment"
+                fill="none"
+                stroke="var(--color-blue)"
+                stroke-width="3"
+                stroke-linejoin="round"
+              />
+            }
+            @for (
+              point of graph.points;
+              track point.dateTime;
+              let first = $first;
+              let last = $last
+            ) {
+              <circle
+                [attr.cx]="point.x"
+                [attr.cy]="point.y"
+                r="5"
+                fill="var(--color-blue)"
+                stroke="white"
+                stroke-width="2"
+              >
+                <title>
+                  {{ point.time }} h: {{ point.value }} {{ metricUnit()
+                  }}{{
+                    metric() === 'wind'
+                      ? ', ' + (point.windDirection?.label ?? 'dirección no disponible')
+                      : ''
+                  }}
+                </title>
+              </circle>
+              <text
+                [attr.x]="point.x"
+                [attr.y]="point.y - 14"
+                [attr.text-anchor]="first ? 'start' : last ? 'end' : 'middle'"
+                fill="var(--color-ink)"
+                font-size="13"
+                font-weight="600"
+              >
+                {{ point.value
+                }}{{ metric() === 'temperature' ? '°' : metric() === 'precipitation' ? '%' : '' }}
+                {{ metric() === 'wind' ? (point.windDirection?.abbreviation ?? '') : '' }}
+              </text>
+            }
+            @for (point of graph.timeline; track point.dateTime) {
+              <text
+                [attr.x]="point.x"
+                y="164"
+                text-anchor="middle"
+                fill="var(--color-secondary)"
+                font-size="12"
+              >
+                {{ point.time }}
+              </text>
+            }
+          </svg>
+        }
       </div>
     } @else {
       <p

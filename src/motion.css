@@ -1,0 +1,128 @@
+/* Motion stays optional; the global reduced-motion rule also covers future effects. */
+.weather-motion-control {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .weather-motion-control {
+    display: inline-flex;
+  }
+  .weather-layout {
+    transition: grid-template-columns 240ms ease;
+  }
+  .desktop-shell .stitch-sidebar {
+    transition: padding 240ms ease;
+  }
+  .desktop-collapse app-weather-icon {
+    transition: rotate 240ms ease;
+  }
+  .sidebar-link,
+  .menu-control,
+  .favorite-toggle {
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .favorite-toggle[aria-pressed='true'] app-weather-icon {
+    animation: favorite-beat 320ms ease-out;
+  }
+  .forecast-day {
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .forecast-day[aria-pressed='true'] {
+    animation: day-select 220ms ease-out;
+    box-shadow: 0 3px 8px #246b9112;
+  }
+  .forecast-day:hover {
+    box-shadow: 0 4px 12px #246b911c;
+  }
+  .suggestions-enter {
+    animation: suggestions-reveal 180ms ease-out;
+  }
+  .loading-stitch {
+    animation: loading-float 1.6s ease-in-out infinite;
+  }
+}
+@keyframes favorite-beat {
+  45% {
+    transform: scale(1.22);
+  }
+  75% {
+    transform: scale(0.96);
+  }
+}
+@keyframes day-select {
+  from {
+    transform: scale(0.97);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes suggestions-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes loading-float {
+  50% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+}
+
+@keyframes sunshine-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes cloud-drift {
+  35% {
+    transform: translateX(1px);
+  }
+  70% {
+    transform: translateX(-1px);
+  }
+}
+@keyframes rainfall {
+  from {
+    opacity: 0.5;
+    transform: translateY(-1px);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.5;
+    transform: translateY(1px);
+  }
+}
+@keyframes moon-glow {
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes chart-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes chart-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

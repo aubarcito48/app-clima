@@ -33,6 +33,7 @@
   padding: 0.25rem 0.125rem 0.75rem;
 }
 .forecast-day {
+  position: relative;
   display: flex;
   flex: 0 0 7.75rem;
   min-width: 0;

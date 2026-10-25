@@ -38,6 +38,13 @@ export class TemperatureChart {
   readonly label = input('Evolución de la temperatura');
   readonly unit = input<'C' | 'F'>('C');
   readonly metric = signal<'temperature' | 'precipitation' | 'wind'>('temperature');
+  // Recreate the SVG only when its data changes, never on container resize.
+  readonly motionKey = computed(() => ({
+    intervals: this.intervals(),
+    label: this.label(),
+    metric: this.metric(),
+    unit: this.unit(),
+  }));
   readonly metrics = [
     { key: 'temperature', label: 'Temperatura' },
     { key: 'precipitation', label: 'Precipitaciones' },

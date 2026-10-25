@@ -17,10 +17,13 @@ export type IconName =
 @Component({
   selector: 'app-weather-icon',
   templateUrl: './weather-icon.html',
+  styleUrl: './weather-icon.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'aria-hidden': 'true', class: 'inline-flex shrink-0 items-center justify-center' },
 })
 export class WeatherIcon {
+  readonly animated = input(false);
+  readonly paused = input(false);
   readonly filled = input(false);
   readonly name = input<IconName>('sun');
   readonly size = input(24);

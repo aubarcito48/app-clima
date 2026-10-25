@@ -1,0 +1,9 @@
+@media (prefers-reduced-motion: no-preference) {
+  .chart-motion {
+    animation: chart-reveal 180ms ease-out;
+  }
+  .chart-motion polyline {
+    stroke-dasharray: 100;
+    animation: chart-draw 450ms ease-out;
+  }
+}

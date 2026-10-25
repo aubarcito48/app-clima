@@ -54,7 +54,10 @@
         class="field h-11 w-full pr-4 pl-12"
       />
       @if (popupVisible) {
-        <div class="mt-2 overflow-hidden rounded-2xl border border-control-line bg-white shadow-sm">
+        <div
+          class="mt-2 overflow-hidden rounded-2xl border border-control-line bg-white shadow-sm"
+          animate.enter="suggestions-enter"
+        >
           <ul
             id="place-options"
             role="listbox"

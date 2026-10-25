@@ -1,0 +1,26 @@
+svg {
+  overflow: visible;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .weather-motion .sun-rays {
+    transform-origin: 12px 12px;
+    animation: sunshine-turn 24s linear infinite;
+  }
+  .weather-motion .partial-sun-rays {
+    transform-origin: 9px 8px;
+    animation: sunshine-turn 24s linear infinite;
+  }
+  .weather-motion .cloud-drift {
+    animation: cloud-drift 6s ease-in-out infinite;
+  }
+  .weather-motion .rain-drops {
+    animation: rainfall 1.2s ease-in infinite;
+  }
+  .weather-motion .moon-glow {
+    animation: moon-glow 4s ease-in-out;
+  }
+  .weather-motion.motion-paused path,
+  .weather-motion.motion-paused g {
+    animation-play-state: paused;
+  }
+}

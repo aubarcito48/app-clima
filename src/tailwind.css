@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './motion.css';
 @theme {
   --color-ink: #123952;
   --color-secondary: #365d75;

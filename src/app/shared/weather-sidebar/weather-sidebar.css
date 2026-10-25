@@ -150,3 +150,37 @@
 .is-collapsed .sidebar-note {
   display: none;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-menu {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease,
+      display 240ms allow-discrete,
+      overlay 240ms allow-discrete;
+  }
+  .mobile-menu[open] {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  .mobile-menu::backdrop {
+    background: #12395200;
+    transition:
+      background-color 240ms ease,
+      display 240ms allow-discrete,
+      overlay 240ms allow-discrete;
+  }
+  .mobile-menu[open]::backdrop {
+    background: #12395266;
+  }
+  @starting-style {
+    .mobile-menu[open] {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .mobile-menu[open]::backdrop {
+      background: #12395200;
+    }
+  }
+}
