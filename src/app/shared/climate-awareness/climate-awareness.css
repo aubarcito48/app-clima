@@ -13,7 +13,7 @@
 }
 .image-stage {
   position: relative;
-  height: 9.5rem;
+  height: clamp(11rem, 18vw, 15rem);
   touch-action: pan-y;
 }
 .image-toggle {
@@ -95,6 +95,28 @@
 .slide-dot:focus-visible {
   outline: 3px solid #ffe1a0;
   outline-offset: -3px;
+}
+@media (min-width: 640px) {
+  .awareness-slide figcaption {
+    width: min(40%, 25rem);
+    padding: 1.5rem 2rem 2.5rem;
+  }
+
+  .awareness-slide h2 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+
+  .awareness-slide p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+
+  .slider-controls {
+    left: 1rem;
+    bottom: 0.5rem;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   .awareness-slide {

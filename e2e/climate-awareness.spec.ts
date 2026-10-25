@@ -12,10 +12,10 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   const sliderBox = (await slider.boundingBox())!,
     contacts = (await page.locator('app-emergency-contacts').boundingBox())!;
   expect(sliderBox.y + sliderBox.height).toBeLessThan(contacts.y);
-  if (page.viewportSize()!.width >= 1280) {
-    const greeting = (await page.locator('h1').boundingBox())!;
-    expect(sliderBox.x).toBeGreaterThan(greeting.x + greeting.width);
-  }
+  const greeting = (await page.locator('h1').boundingBox())!;
+  expect(sliderBox.y).toBeGreaterThan(greeting.y + greeting.height);
+  expect(sliderBox.x).toBeCloseTo(greeting.x, 0);
+  expect(sliderBox.width).toBeCloseTo(greeting.width, 0);
   await expect(slider.locator('.slider-button')).toHaveCount(0);
   await expect(slider.locator('.slide-dot')).toHaveCount(3);
   const water = slider.locator('.slide-dot').nth(1);
