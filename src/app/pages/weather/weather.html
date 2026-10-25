@@ -75,8 +75,16 @@
           <app-weather-loading />
         } @else {
           <div class="grid items-stretch gap-6">
-            <app-current-weather [weather]="weather()" (searchRequested)="citySearch.focusCity()" />
-            <app-forecast [weather]="weather()" />
+            <app-current-weather
+              [weather]="weather()"
+              [unit]="temperatureUnit()"
+              (searchRequested)="citySearch.focusCity()"
+            />
+            <app-forecast
+              [weather]="weather()"
+              [unit]="temperatureUnit()"
+              (unitChange)="temperatureUnit.set($event)"
+            />
           </div>
         }
       </div>

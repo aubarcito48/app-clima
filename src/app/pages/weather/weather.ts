@@ -22,6 +22,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   host: { class: 'block min-w-0' },
 })
 export class Weather {
+  readonly temperatureUnit = signal<'C' | 'F'>('C');
   readonly today = new Intl.DateTimeFormat('es-AR', {
     weekday: 'long',
     day: 'numeric',

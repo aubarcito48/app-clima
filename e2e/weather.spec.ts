@@ -61,10 +61,14 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.locator('app-temperature-chart circle')).toHaveCount(8);
   await page.getByRole('button', { name: 'Temperatura', exact: true }).click();
   await expect(page.locator('app-forecast ol li').first()).toContainText('Lluvia: 0 %');
-  await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('F');
+  await page.getByLabel('Unidad de temperatura').selectOption('F');
   await expect(page.locator('app-forecast ol li').first()).toContainText('°F');
   await expect(page.locator('app-temperature-chart figcaption')).toContainText('°F');
-  await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('C');
+  await expect(page.locator('app-current-weather .temperature')).toContainText('32');
+  await expect(page.locator('app-current-weather .temperature-unit')).toHaveText('°F');
+  await expect(page.locator('app-current-weather')).toContainText('26.6 °F');
+  await page.getByLabel('Unidad de temperatura').selectOption('C');
+  await expect(page.locator('app-current-weather .temperature-unit')).toHaveText('°C');
   expect(api.requests).toHaveLength(1);
   await expect(page.locator('app-weather-sidebar iframe')).toHaveAttribute('height', '80');
   await info.attach('stitch-dias-horas-musica', {

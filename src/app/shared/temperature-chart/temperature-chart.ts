@@ -9,6 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ForecastInterval } from '../../models/weather-preview';
+import { displayTemperature } from '../../models/temperature';
 
 @Component({
   selector: 'app-temperature-chart',
@@ -60,10 +61,7 @@ export class TemperatureChart {
     const rows = this.intervals()
       .map((row) => ({
         ...row,
-        temperature:
-          this.unit() === 'C'
-            ? row.temperature
-            : Math.round(((row.temperature * 9) / 5 + 32) * 10) / 10,
+        temperature: displayTemperature(row.temperature, this.unit()),
       }))
       .sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime));
     if (!rows.length) return null;

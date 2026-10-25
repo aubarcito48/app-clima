@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, linkedSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, linkedSignal, model } from '@angular/core';
+import { displayTemperature, TemperatureUnit } from '../../models/temperature';
 import { computed } from '@angular/core';
 import { ForecastInterval, WeatherPreview } from '../../models/weather-preview';
 import { WeatherIcon } from '../weather-icon/weather-icon';
@@ -13,9 +14,9 @@ import { TemperatureChart } from '../temperature-chart/temperature-chart';
 })
 export class Forecast {
   readonly weather = input<WeatherPreview | null>(null);
-  readonly unit = signal<'C' | 'F'>('C');
+  readonly unit = model<TemperatureUnit>('C');
   temperature(value: number) {
-    return this.unit() === 'C' ? value : Math.round(((value * 9) / 5 + 32) * 10) / 10;
+    return displayTemperature(value, this.unit());
   }
   private dateLabel(key: string, options: Intl.DateTimeFormatOptions) {
     return new Intl.DateTimeFormat('es-AR', { ...options, timeZone: 'UTC' }).format(

@@ -6,6 +6,45 @@ import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
 import { Weather } from './weather';
 
 describe('Weather Django integration', () => {
+  it('shares Celsius/Fahrenheit across current weather and forecast without refetching, and keeps the preference', async () => {
+    const fixture = TestBed.createComponent(Weather);
+    await fixture.whenStable();
+    fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
+    const data = structuredClone(CLIMATE_FIXTURE);
+    data.actual.temperatura_c = 12.59;
+    data.actual.sensacion_c = 11.97;
+    http.expectOne(() => true).flush(data);
+    await fixture.whenStable();
+    const view: HTMLElement = fixture.nativeElement;
+    const selector = view.querySelector<HTMLSelectElement>('#forecast-unit')!;
+    selector.value = 'F';
+    selector.dispatchEvent(new Event('change', { bubbles: true }));
+    await fixture.whenStable();
+    expect(view.querySelector('.temperature')?.textContent?.replace(/\s/g, '')).toBe('54.7°F');
+    expect(view.querySelector('app-current-weather')?.textContent).toContain('53.5 °F');
+    expect(view.querySelector('app-forecast ol li')?.textContent).toContain('77');
+    expect(view.querySelector('app-temperature-chart figcaption')?.textContent).toContain('°F');
+    expect(view.querySelector('#advice-text')?.textContent).toBe(data.recomendacion.texto);
+    expect(fixture.componentInstance.weather()?.temperature).toBe(12.59);
+    http.expectNone(() => true);
+    fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
+    data.ubicacion.nombre = 'Mendoza';
+    data.actual.temperatura_c = 0;
+    data.actual.sensacion_c = null;
+    http.expectOne(() => true).flush(data);
+    await fixture.whenStable();
+    expect(view.querySelector('.temperature')?.textContent?.replace(/\s/g, '')).toBe('32°F');
+    expect(view.querySelector('app-current-weather')?.textContent).toContain(
+      'Sensación térmica: No disponible',
+    );
+    const newSelector = view.querySelector<HTMLSelectElement>('#forecast-unit')!;
+    expect(newSelector.value).toBe('F');
+    newSelector.value = 'C';
+    newSelector.dispatchEvent(new Event('change', { bubbles: true }));
+    await fixture.whenStable();
+    expect(view.querySelector('.temperature')?.textContent?.replace(/\s/g, '')).toBe('0°C');
+    http.expectNone(() => true);
+  });
   let http: HttpTestingController;
   beforeEach(() => {
     TestBed.configureTestingModule({

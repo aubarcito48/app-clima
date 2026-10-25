@@ -31,15 +31,19 @@
           </div>
           <div>
             <p class="temperature text-ink">
-              <span>{{ data.temperature }}</span
-              ><span class="temperature-unit">°C</span>
+              <span>{{ temperature(data.temperature) }}</span
+              ><span class="temperature-unit">°{{ unit() }}</span>
             </p>
             <p class="mt-2 text-base font-semibold text-ink">
               {{ data.description ?? 'Descripción no disponible' }}
             </p>
             <p class="mt-1 text-sm text-secondary">
               Sensación térmica:
-              {{ data.feelsLike === null ? 'No disponible' : data.feelsLike + ' °C' }}
+              {{
+                data.feelsLike === null
+                  ? 'No disponible'
+                  : temperature(data.feelsLike) + ' °' + unit()
+              }}
             </p>
           </div>
         </div>
@@ -72,6 +76,11 @@
             class="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink [overflow-wrap:anywhere]"
             [textContent]="advice.text"
           ></p>
+          @if (unit() === 'F') {
+            <p class="mt-1 text-[11px] leading-5 text-secondary">
+              El consejo de IA conserva las unidades originales en °C.
+            </p>
+          }
         } @else {
           <p class="mt-2 text-xs leading-5 text-secondary">
             El consejo de ropa no está disponible por el momento.
