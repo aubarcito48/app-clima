@@ -1,5 +1,9 @@
 :host {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: block;
+  align-self: start;
   min-width: 0;
 }
 .stitch-sidebar {
@@ -51,9 +55,12 @@
   background: var(--color-hover);
 }
 @media (min-width: 1024px) {
+  :host {
+    height: 100dvh;
+  }
+
   .stitch-sidebar {
-    position: sticky;
-    top: 0;
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -92,6 +99,9 @@
   gap: 1rem;
   background: var(--color-sidebar);
   padding: 1rem 1.25rem;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  border-bottom: 1px solid var(--color-line);
+  box-shadow: 0 4px 14px #1239520a;
 }
 .mobile-menu {
   margin: 0;
@@ -113,8 +123,7 @@
   padding: 1.5rem;
 }
 .desktop-shell {
-  position: sticky;
-  top: 0;
+  position: relative;
   height: 100dvh;
 }
 .desktop-shell .stitch-sidebar {

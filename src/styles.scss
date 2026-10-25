@@ -1,3 +1,10 @@
+/* Leave room for the sticky mobile navigation when following page anchors. */
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top));
+  }
+}
+
 /* Page scrollbar follows the same ocean palette as the weather controls. */
 @media (forced-colors: none) {
   html {
