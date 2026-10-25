@@ -8,9 +8,7 @@
         <h1 class="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
           Hola, explorador
         </h1>
-        <p class="mt-2 text-sm leading-6 text-secondary">
-          Tu clima, tus planes y una banda sonora para el día.
-        </p>
+        <p class="mt-2 text-sm leading-6 text-secondary">Tu clima y tus planes para el día.</p>
       </header>
       <section
         id="pronostico"
@@ -47,8 +45,7 @@
               >
               <span class="sr-only"
                 >{{ weather()?.forecast?.length ? '' : 'Pronóstico no disponible.' }}
-                {{ weather()?.advice ? '' : 'Consejo de IA no disponible.' }}</span
-              >
+              </span>
             }
             @default {
               @if (cancelled()) {
@@ -79,10 +76,6 @@
         } @else {
           <div class="grid items-stretch gap-6">
             <app-current-weather [weather]="weather()" (searchRequested)="citySearch.focusCity()" />
-            <div class="grid items-stretch gap-5 xl:grid-cols-2">
-              <app-recommendation [weather]="weather()" />
-              <app-weather-music [weather]="weather()" />
-            </div>
             <app-forecast [weather]="weather()" />
           </div>
         }
@@ -93,8 +86,8 @@
       >
         <app-weather-icon name="sparkles" [size]="16" class="mt-1" />
         <p>
-          La disponibilidad del pronóstico y del consejo puede variar. Consultá las condiciones
-          antes de organizar tus planes.
+          La disponibilidad del pronóstico puede variar. Consultá las condiciones antes de organizar
+          tus planes.
         </p>
       </aside>
     </main>

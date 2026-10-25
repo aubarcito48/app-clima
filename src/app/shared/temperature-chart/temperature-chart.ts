@@ -11,10 +11,17 @@ import { ForecastInterval } from '../../models/weather-preview';
 export class TemperatureChart {
   readonly intervals = input<readonly ForecastInterval[]>([]);
   readonly label = input('Evolución de la temperatura');
+  readonly unit = input<'C' | 'F'>('C');
   readonly chart = computed(() => {
-    const rows = [...this.intervals()].sort(
-      (a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime),
-    );
+    const rows = this.intervals()
+      .map((row) => ({
+        ...row,
+        temperature:
+          this.unit() === 'C'
+            ? row.temperature
+            : Math.round(((row.temperature * 9) / 5 + 32) * 10) / 10,
+      }))
+      .sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime));
     if (!rows.length) return null;
     const values = rows.map((row) => row.temperature);
     const low = Math.floor(Math.min(...values) - 1);

@@ -10,24 +10,13 @@ import { WeatherPreview } from '../../models/weather-preview';
 import { CitySearch } from '../../shared/city-search/city-search';
 import { CurrentWeather } from '../../shared/current-weather/current-weather';
 import { Forecast } from '../../shared/forecast/forecast';
-import { Recommendation } from '../../shared/recommendation/recommendation';
 import { WeatherIcon } from '../../shared/weather-icon/weather-icon';
 import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
-import { WeatherMusic } from '../../shared/weather-music/weather-music';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
 @Component({
   selector: 'app-weather',
-  imports: [
-    CitySearch,
-    CurrentWeather,
-    Forecast,
-    Recommendation,
-    WeatherIcon,
-    WeatherLoading,
-    WeatherMusic,
-    WeatherSidebar,
-  ],
+  imports: [CitySearch, CurrentWeather, Forecast, WeatherIcon, WeatherLoading, WeatherSidebar],
   templateUrl: './weather.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block min-w-0' },

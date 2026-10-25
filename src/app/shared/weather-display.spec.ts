@@ -78,8 +78,8 @@ describe('Current weather and forecast rendering (TK06)', () => {
     await fixture.whenStable();
     const view: HTMLElement = fixture.nativeElement;
     expect(view.querySelectorAll('ol li')).toHaveLength(2);
-    const expand = Array.from(view.querySelectorAll('button')).find((button) =>
-      button.textContent?.includes('Ver todos los intervalos'),
+    const expand = Array.from(view.querySelectorAll('button')).find(
+      (button) => button.getAttribute('aria-label') === 'Ver todos los intervalos',
     )!;
     expand.click();
     await fixture.whenStable();

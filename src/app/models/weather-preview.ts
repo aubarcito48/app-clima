@@ -18,6 +18,7 @@ export interface WeatherPreview {
   updatedAt: string;
   observedAtUtc: string;
   observedTime: string;
+  observedDayKey?: string;
   sunrise?: string | null;
   sunset?: string | null;
   updatedAtUtc: string;

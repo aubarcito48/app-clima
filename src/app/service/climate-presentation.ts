@@ -44,6 +44,7 @@ export function climatePresentation(data: ClimateResponse): WeatherPreview {
       hourCycle: 'h23',
     }),
     observedAtUtc: data.actual.fecha_utc,
+    observedDayKey: new Date(Date.parse(data.actual.fecha_utc) + offset).toISOString().slice(0, 10),
     sunrise: data.actual.amanecer_utc
       ? local(data.actual.amanecer_utc, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
       : null,

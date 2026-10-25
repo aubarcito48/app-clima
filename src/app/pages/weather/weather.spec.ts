@@ -42,9 +42,8 @@ describe('Weather Django integration', () => {
     expect(view.querySelector('app-forecast ol')?.children.length).toBe(
       CLIMATE_FIXTURE.pronostico.intervalos.length,
     );
-    expect(view.querySelector('app-recommendation')?.textContent).toContain(
-      CLIMATE_FIXTURE.recomendacion.texto,
-    );
+    expect(view.querySelector('app-recommendation')).toBeNull();
+    expect(view.querySelector('app-weather-music')).toBeNull();
     expect(view.textContent).not.toContain('Datos ficticios');
     expect(city.value).toBe('  Córdoba  ');
   });
@@ -108,7 +107,7 @@ describe('Weather Django integration', () => {
     expect(view.querySelector('app-current-weather')?.textContent).toContain('0 %');
     expect(view.querySelector('app-current-weather')?.textContent).toContain('No disponible');
     expect(view.querySelector('app-forecast')?.textContent).toContain('Pronóstico no disponible');
-    expect(view.querySelector('app-recommendation')?.textContent).toContain('no está disponible');
+    expect(view.querySelector('app-recommendation')).toBeNull();
     expect(view.textContent).not.toMatch(/undefined|NaN/);
   });
 
@@ -159,7 +158,7 @@ describe('Weather Django integration', () => {
     expect(fixture.componentInstance.feedback()).toBeNull();
   });
 
-  it('renders AI output as literal text', async () => {
+  it('does not render removed blocks even when the response includes AI content', async () => {
     const fixture = TestBed.createComponent(Weather);
     await fixture.whenStable();
     fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
@@ -168,7 +167,8 @@ describe('Weather Django integration', () => {
     http.expectOne(() => true).flush(data);
     await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('app-recommendation img')).toBeNull();
-    expect(fixture.nativeElement.querySelector('app-recommendation').textContent).toContain('<img');
+    expect(fixture.nativeElement.querySelector('app-recommendation')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-weather-music')).toBeNull();
   });
 
   it('never mixes an earlier recommendation with the latest city when AI is unavailable', async () => {
@@ -177,9 +177,10 @@ describe('Weather Django integration', () => {
     fixture.componentInstance.search({ city: 'Córdoba', country: 'AR' });
     http.expectOne(() => true).flush(CLIMATE_FIXTURE);
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('#advice-text').textContent).toBe(
+    expect(fixture.componentInstance.weather()?.advice?.text).toBe(
       CLIMATE_FIXTURE.recomendacion.texto,
     );
+    expect(fixture.nativeElement.querySelector('#advice-text')).toBeNull();
     fixture.componentInstance.search({ city: 'Buenos Aires', country: 'AR' });
     const older = http.expectOne(() => true);
     fixture.componentInstance.search({ city: 'Mendoza', country: 'AR' });
@@ -195,10 +196,8 @@ describe('Weather Django integration', () => {
     const view: HTMLElement = fixture.nativeElement;
     expect(view.querySelector('app-current-weather h3')?.textContent).toContain('Mendoza');
     expect(view.querySelector('app-forecast ol')).not.toBeNull();
-    expect(view.querySelector('app-recommendation')?.textContent).toContain(
-      'Para tu día en Mendoza',
-    );
-    expect(view.querySelector('app-recommendation')?.textContent).toContain('no está disponible');
+    expect(fixture.componentInstance.weather()?.advice).toBeNull();
+    expect(view.querySelector('app-recommendation')).toBeNull();
     expect(view.querySelector('#advice-text')).toBeNull();
     expect(view.textContent).not.toContain(CLIMATE_FIXTURE.recomendacion.texto);
   });

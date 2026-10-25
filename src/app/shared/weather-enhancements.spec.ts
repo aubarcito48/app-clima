@@ -18,6 +18,23 @@ function multiDay() {
 }
 
 describe('Días, evolución y música', () => {
+  it('converts forecast cards, daily ranges and the line together without changing API values', async () => {
+    const fixture = TestBed.createComponent(Forecast);
+    const data = multiDay();
+    fixture.componentRef.setInput('weather', data);
+    await fixture.whenStable();
+    fixture.componentInstance.unit.set('F');
+    await fixture.whenStable();
+    const view: HTMLElement = fixture.nativeElement;
+    expect(view.querySelector('ol li p')?.textContent).toContain('28.4');
+    expect(view.querySelector('ol li p')?.textContent).toContain('°F');
+    expect(view.querySelector('.day-choice')?.getAttribute('aria-label')).toContain('28.4 a 32');
+    expect(view.querySelector('app-temperature-chart figcaption')?.textContent).toContain('°F');
+    expect(view.querySelector('app-temperature-chart circle title')?.textContent).toContain(
+      '28.4 °F',
+    );
+    expect(data.forecast[0].temperature).toBe(-2);
+  });
   it('changes the day and chart together, exposes all intervals, and resets on a new query', async () => {
     const fixture = TestBed.createComponent(Forecast);
     fixture.componentRef.setInput('weather', multiDay());

@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.hour-strip {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.125rem 0.75rem;
+}
+.hour-card {
+  display: flex;
+  flex: 0 0 6.25rem;
+  min-width: 0;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-radius: 1.2rem;
+  background: white;
+  border: 1px solid transparent;
+  padding: 1rem 0.65rem;
+}
+.hour-strip > .hour-card {
+  border-color: #9cd5e8;
+  background: #d9f5fb;
+}
+.forecast-day {
+  display: grid;
+  grid-template-columns: 4.25rem 2rem minmax(0, 1fr) auto;
+  width: 100%;
+  min-height: 4.25rem;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid transparent;
+  border-radius: 1.2rem;
+  background: white;
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+.forecast-day[aria-pressed='true'] {
+  border-color: var(--color-blue);
+}
+.forecast-day:hover {
+  background: #f8fdff;
+  border-color: var(--color-blue);
+}
+@media (max-width: 479px) {
+  .forecast-day {
+    grid-template-columns: 3rem 1.5rem minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    padding: 0.85rem 0.75rem;
+  }
+}

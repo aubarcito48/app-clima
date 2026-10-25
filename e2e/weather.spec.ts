@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search } from './fixtures';
 
-test('StitchWeather: elegir día actualiza horas y línea; Spotify se carga solo al pedirlo', async ({
+test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async ({
   page,
   api,
 }, info) => {
@@ -25,6 +25,13 @@ test('StitchWeather: elegir día actualiza horas y línea; Spotify se carga solo
   await expect(page.locator('app-current-weather')).toContainText('19:30');
   await expect(page.locator('.weather-art')).toBeVisible();
   await expect(page.locator('app-forecast ol li')).toHaveCount(6);
+  const firstDayBox = (await page.locator('.day-choice').nth(0).boundingBox())!;
+  const secondDayBox = (await page.locator('.day-choice').nth(1).boundingBox())!;
+  expect(secondDayBox.y).toBeGreaterThan(firstDayBox.y);
+  expect(secondDayBox.x).toBeCloseTo(firstDayBox.x, 0);
+  const hoursBox = (await page.locator('#hourly-intervals').boundingBox())!;
+  expect(hoursBox.y).toBeLessThan(firstDayBox.y);
+  await expect(page.locator('#hourly-intervals')).toContainText('Ahora');
   await page.locator('.day-choice').nth(1).focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('.day-choice').nth(1)).toHaveAttribute('aria-pressed', 'true');
@@ -32,22 +39,18 @@ test('StitchWeather: elegir día actualiza horas y línea; Spotify se carga solo
   await expect(page.locator('app-temperature-chart circle')).toHaveCount(8);
   await expect(page.locator('app-temperature-chart polyline')).toHaveCount(1);
   await expect(page.locator('app-forecast ol li').first()).toContainText('Lluvia: 0 %');
+  await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('F');
+  await expect(page.locator('app-forecast ol li').first()).toContainText('°F');
+  await expect(page.locator('app-temperature-chart figcaption')).toContainText('°F');
+  await page.getByLabel('Unidad de temperatura del pronóstico').selectOption('C');
   expect(api.requests).toHaveLength(1);
   expect(api.spotifyRequests).toHaveLength(0);
   await info.attach('stitch-dias-horas-musica', {
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
   });
-  await page.getByRole('button', { name: 'Cargar reproductor de Spotify' }).click();
-  const iframe = page.locator('app-weather-music iframe');
-  await iframe.scrollIntoViewIfNeeded();
-  await expect(iframe).toHaveAttribute(
-    'src',
-    /open\.spotify\.com\/embed\/playlist\/37i9dQZF1DX4sWSpwq3Li/,
-  );
-  await expect.poll(() => api.spotifyRequests.length).toBe(1);
-  await page.getByRole('button', { name: 'Cerrar reproductor' }).click();
-  await expect(iframe).toHaveCount(0);
+  await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
+  await expect(page.locator('a[href="#consejo-ia"], a[href="#musica"]')).toHaveCount(0);
   await page.locator('#city').fill('Otro lugar');
   await expect(page.locator('.temperature')).toHaveCount(0);
   await expect(page.locator('app-temperature-chart svg')).toHaveCount(0);
@@ -96,8 +99,8 @@ test('flujo principal: clima, unidades y consejo de la misma consulta', async ({
   await expect(page.locator('app-current-weather')).toContainText('-3 °C');
   await expect(page.locator('app-current-weather dd').nth(0)).toHaveText('0 %');
   await expect(page.locator('app-current-weather dd').nth(1)).toHaveText('9.123 km/h');
-  await expect(page.locator('#advice-location')).toContainText('Mendoza');
-  await expect(page.locator('#advice-text')).toHaveText('Consejo ficticio de prueba para Mendoza.');
+  await expect(page.locator('app-recommendation, app-weather-music')).toHaveCount(0);
+  await expect(page.locator('#advice-text')).toHaveCount(0);
   await expect(page.locator('app-forecast ol li')).toHaveCount(2);
   await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
   await info.attach('resultado', {
@@ -114,9 +117,9 @@ test('clima disponible con IA no disponible y aviso anunciable', async ({ page, 
   await search(page, 'Córdoba');
   await expect(page.locator('.temperature')).toBeVisible();
   await expect(page.locator('app-forecast ol li')).toHaveCount(2);
-  await expect(page.locator('app-recommendation')).toContainText('No disponible');
+  await expect(page.locator('app-recommendation')).toHaveCount(0);
   await expect(page.locator('#advice-text')).toHaveCount(0);
-  await expect(page.getByRole('status')).toContainText('Consejo de IA no disponible');
+  await expect(page.getByRole('status')).not.toContainText('Consejo de IA');
   await info.attach('IA-no-disponible', {
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
@@ -264,7 +267,7 @@ test('una respuesta tardía y un duplicado pendiente no reemplazan la última b�
   } finally {
     await release?.();
   }
-  await expect(page.locator('#advice-text')).toHaveText('Consejo ficticio de prueba para Mendoza.');
+  await expect(page.locator('#advice-text')).toHaveCount(0);
   await expect(page.locator('app-current-weather h3')).toHaveText('Mendoza');
 });
 
@@ -274,7 +277,7 @@ test('texto literal, accesibilidad y ausencia de desbordamiento', async ({ page,
   api.body = data;
   await page.goto('/');
   await search(page, 'Córdoba');
-  await expect(page.locator('#advice-text')).toHaveText(data.recomendacion.texto);
+  await expect(page.locator('#advice-text')).toHaveCount(0);
   await expect(page.locator('app-recommendation script, app-recommendation img')).toHaveCount(0);
   const dimensions = await page.evaluate(() => ({
     viewport: innerWidth,
