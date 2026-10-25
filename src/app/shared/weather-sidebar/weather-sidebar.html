@@ -1,11 +1,11 @@
-<aside class="stitch-sidebar">
+<ng-template #brand>
   <a
     href="./"
     aria-label="StitchWeather, inicio"
     class="relative flex items-center gap-3 rounded-xl"
   >
     <span class="stitch-logo" aria-hidden="true">S</span>
-    <span
+    <span [class.sr-only]="compact()"
       ><span class="block font-display text-lg font-bold tracking-tight text-ink"
         >Stitch<span class="text-orange-800">Weather</span></span
       ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
@@ -13,14 +13,32 @@
       ></span
     >
   </a>
+</ng-template>
+<ng-template #content>
+  <div class="relative flex items-center justify-between gap-2">
+    <ng-container [ngTemplateOutlet]="brand" />
+    @if (!desktop()) {
+      <button
+        data-close-menu
+        type="button"
+        aria-label="Cerrar menú"
+        class="menu-control shrink-0"
+        (click)="closeMenu()"
+      >
+        <app-weather-icon name="close" [size]="22" />
+      </button>
+    }
+  </div>
   <nav aria-label="Navegación principal" class="relative mt-7 grid gap-2">
     <a
       href="#pronostico"
       class="sidebar-link"
       [class.bg-white]="!placesOpen()"
       [attr.aria-current]="!placesOpen() ? 'location' : null"
-      (click)="placesOpen.set(false)"
-      ><app-weather-icon name="cloud-sun" [size]="20" />Pronóstico</a
+      (click)="forecastSelected()"
+      ><app-weather-icon name="cloud-sun" [size]="20" /><span [class.sr-only]="compact()"
+        >Pronóstico</span
+      ></a
     >
     <button
       #placesButton
@@ -29,10 +47,12 @@
       [class.bg-white]="placesOpen()"
       [attr.aria-expanded]="placesOpen()"
       aria-controls="favorite-places"
-      (click)="placesOpen.set(!placesOpen())"
+      (click)="togglePlaces()"
     >
-      <app-weather-icon name="heart" [size]="20" />Mis lugares<span
-        class="ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-ink"
+      <app-weather-icon name="heart" [size]="20" /><span [class.sr-only]="compact()"
+        >Mis lugares</span
+      ><span
+        class="favorite-count ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-ink"
         >{{ favorites.places().length }}</span
       >
     </button>
@@ -43,7 +63,7 @@
   }
   <section
     id="favorite-places"
-    [hidden]="!placesOpen()"
+    [hidden]="!placesOpen() || compact()"
     aria-labelledby="favorite-heading"
     class="relative mt-4 min-w-0"
   >
@@ -55,7 +75,7 @@
             <button
               type="button"
               class="min-h-11 min-w-0 flex-1 rounded-lg px-1 text-left"
-              (click)="placeSelected.emit(place); placesOpen.set(false)"
+              (click)="selectPlace(place)"
             >
               <span class="block break-words text-sm font-semibold text-ink">{{ place.name }}</span
               ><span class="mt-1 block break-words text-xs text-secondary"
@@ -82,10 +102,7 @@
     }
     <p class="mt-2 text-[11px] leading-5 text-muted">Guardados en este navegador.</p>
   </section>
-  <div class="relative mt-6 min-w-0">
-    <app-weather-music [weather]="weather()" />
-  </div>
-  <div class="sidebar-note">
+  <div class="sidebar-note" [hidden]="compact()">
     <img
       src="stitch-coast.svg"
       alt=""
@@ -97,4 +114,49 @@
     <p class="font-display text-base font-bold">Un clima para cada aventura.</p>
     <p class="mt-2 text-xs leading-6">Buscá tu lugar y descubrí cómo sigue el día.</p>
   </div>
-</aside>
+</ng-template>
+
+@if (desktop()) {
+  <div class="desktop-shell">
+    <aside id="desktop-navigation" class="stitch-sidebar" [class.is-collapsed]="collapsed()">
+      <ng-container [ngTemplateOutlet]="content" />
+    </aside>
+    <button
+      type="button"
+      class="desktop-collapse menu-control"
+      [attr.aria-label]="collapsed() ? 'Expandir menú lateral' : 'Contraer menú lateral'"
+      [attr.title]="collapsed() ? 'Expandir menú' : 'Contraer menú'"
+      [attr.aria-expanded]="!collapsed()"
+      aria-controls="desktop-navigation"
+      (click)="toggleCollapsed()"
+    >
+      <app-weather-icon name="arrow" [size]="18" [class.rotate-180]="!collapsed()" />
+    </button>
+  </div>
+} @else {
+  <header class="mobile-header">
+    <ng-container [ngTemplateOutlet]="brand" /><button
+      #menuTrigger
+      type="button"
+      class="menu-control"
+      aria-label="Abrir menú"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="mobileOpen()"
+      aria-controls="mobile-navigation"
+      (click)="openMenu()"
+    >
+      <app-weather-icon name="menu" [size]="23" />
+    </button>
+  </header>
+  <dialog
+    #mobileMenu
+    id="mobile-navigation"
+    class="mobile-menu"
+    aria-label="Navegación principal"
+    (cancel)="cancelMenu($event)"
+    (close)="dialogClosed()"
+    (click)="backdropClick($event)"
+  >
+    <aside class="stitch-sidebar"><ng-container [ngTemplateOutlet]="content" /></aside>
+  </dialog>
+}

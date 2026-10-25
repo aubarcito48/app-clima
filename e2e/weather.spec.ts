@@ -1,13 +1,84 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search } from './fixtures';
+import type { Page } from '@playwright/test';
+
+async function openNavigation(page: Page) {
+  if (
+    page.viewportSize()!.width < 1024 &&
+    !(await page.getByRole('dialog', { name: 'Navegación principal' }).isVisible())
+  ) {
+    await page.getByRole('button', { name: 'Abrir menú', exact: true }).click();
+  }
+}
+async function closeNavigation(page: Page) {
+  const close = page.getByRole('button', { name: 'Cerrar menú', exact: true });
+  if (await close.isVisible()) await close.click();
+}
+
+test('navegación adaptable: hamburguesa, Escape, fondo y barra contraíble', async ({
+  page,
+}, info) => {
+  await page.goto('/');
+  if (page.viewportSize()!.width < 1024) {
+    const trigger = page.getByRole('button', { name: 'Abrir menú', exact: true });
+    const dialog = page.getByRole('dialog', { name: 'Navegación principal' });
+    await expect(dialog).not.toBeVisible();
+    await trigger.click();
+    await expect(dialog).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Cerrar menú', exact: true })).toBeFocused();
+    expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+    await page.keyboard.press('Tab');
+    await expect(dialog.getByRole('link', { name: 'Pronóstico', exact: true })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.getByRole('button', { name: 'Cerrar menú', exact: true })).toBeFocused();
+    const audit = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .analyze();
+    expect(audit.violations).toEqual([]);
+    await info.attach('menu-abierto', {
+      body: await page.screenshot({ fullPage: true }),
+      contentType: 'image/png',
+    });
+    await page.keyboard.press('Escape');
+    await expect(dialog).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+    expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+    await trigger.click();
+    await page.mouse.click(page.viewportSize()!.width - 4, 250);
+    await expect(dialog).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await expect(
+      page.getByRole('button', { name: 'Contraer menú lateral', exact: true }),
+    ).toBeVisible();
+    expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+  }
+  const before = (await page.locator('main').boundingBox())!;
+  await page.getByRole('button', { name: 'Contraer menú lateral', exact: true }).click();
+  await expect(page.locator('#desktop-navigation')).toHaveClass(/is-collapsed/);
+  const after = (await page.locator('main').boundingBox())!;
+  expect(after.width).toBeGreaterThan(before.width + 100);
+  await expect(
+    page.getByRole('button', { name: 'Expandir menú lateral', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: /^Mis lugares/ }).click();
+  await expect(
+    page.getByRole('button', { name: 'Contraer menú lateral', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('#favorite-places')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
 
 test('favoritos: corazón, contador, persistencia y consulta por coordenadas', async ({
   page,
   api,
 }, info) => {
   await page.goto('/');
+  await openNavigation(page);
   await page.getByRole('button', { name: /^Mis lugares/ }).click();
   await expect(page.locator('#favorite-places')).toContainText('Todavía no guardaste lugares');
+  await closeNavigation(page);
   await search(page, 'Córdoba');
   const heart = page.getByRole('button', { name: 'Guardar Córdoba en favoritos', exact: true });
   await expect(heart).toHaveAttribute('aria-pressed', 'false');
@@ -15,10 +86,12 @@ test('favoritos: corazón, contador, persistencia y consulta por coordenadas', a
   await expect(
     page.getByRole('button', { name: 'Quitar Córdoba de favoritos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
+  await openNavigation(page);
   await expect(page.getByRole('button', { name: /^Mis lugares/ })).toContainText('1');
   await page.reload();
   await expect(page.locator('#city')).toBeVisible();
   expect(api.requests).toHaveLength(1);
+  await openNavigation(page);
   await page.getByRole('button', { name: /^Mis lugares/ }).click();
   await expect(page.locator('#favorite-places li')).toHaveCount(1);
   await info.attach('mis-lugares', {
@@ -38,16 +111,19 @@ test('favoritos: corazón, contador, persistencia y consulta por coordenadas', a
   await expect(
     page.getByRole('button', { name: 'Quitar Córdoba de favoritos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
+  await openNavigation(page);
   await page.getByRole('button', { name: /^Mis lugares/ }).click();
   await page
     .getByRole('button', { name: 'Eliminar Córdoba, AR de Mis lugares', exact: true })
     .click();
   await expect(page.getByRole('button', { name: /^Mis lugares/ })).toBeFocused();
   await expect(page.getByRole('button', { name: /^Mis lugares/ })).toContainText('0');
+  await closeNavigation(page);
   await expect(
     page.getByRole('button', { name: 'Guardar Córdoba en favoritos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'false');
   await page.reload();
+  await openNavigation(page);
   await page.getByRole('button', { name: /^Mis lugares/ }).click();
   await expect(page.locator('#favorite-places li')).toHaveCount(0);
 });
@@ -121,7 +197,8 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await page.getByLabel('Unidad de temperatura').selectOption('C');
   await expect(page.locator('app-current-weather .temperature-unit')).toHaveText('°C');
   expect(api.requests).toHaveLength(1);
-  await expect(page.locator('app-weather-sidebar iframe')).toHaveAttribute('height', '80');
+  await expect(page.locator('app-weather-sidebar iframe')).toHaveCount(0);
+  expect(api.spotifyRequests).toHaveLength(0);
   await info.attach('stitch-dias-horas-musica', {
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
@@ -131,16 +208,7 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     data.recomendacion.texto!,
   );
   await expect(page.locator('a[href="#musica"]')).toHaveCount(0);
-  await expect(page.locator('app-weather-sidebar iframe')).toHaveAttribute(
-    'title',
-    'Spotify: Peaceful Piano',
-  );
-  await expect(page.locator('app-weather-sidebar a[href="#evolucion"]')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Cargar reproductor de Spotify' })).toHaveCount(0);
-  const player = page.locator('app-weather-sidebar iframe');
-  await player.scrollIntoViewIfNeeded();
-  await expect(player).toHaveAttribute('src', /open\.spotify\.com\/embed\/playlist/);
-  await expect.poll(() => api.spotifyRequests.length).toBe(1);
+  await expect(page.locator('app-weather-music')).toHaveCount(0);
   await page.locator('#city').fill('Otro lugar');
   await expect(page.locator('app-weather-sidebar iframe')).toHaveCount(0);
   await expect(page.locator('.temperature')).toHaveCount(0);

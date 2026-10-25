@@ -1,7 +1,11 @@
 <a href="#main-content" class="skip-link">Saltar al contenido</a>
-<div class="mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]">
+<div
+  [style.--sidebar-width]="sidebarCollapsed() ? '5rem' : '16.5rem'"
+  class="mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]"
+>
   <app-weather-sidebar
-    [weather]="weather()"
+    [collapsed]="sidebarCollapsed()"
+    (collapsedChange)="sidebarCollapsed.set($event)"
     (placeSelected)="citySearch.chooseSuggestion($event)"
   />
   <div class="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:py-10">

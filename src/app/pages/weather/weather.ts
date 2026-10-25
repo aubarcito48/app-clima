@@ -23,6 +23,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   host: { class: 'block min-w-0' },
 })
 export class Weather {
+  readonly sidebarCollapsed = signal(false);
   readonly favorites = inject(FavoritePlaces);
   toggleFavorite(): void {
     const location = this.response()?.ubicacion;
