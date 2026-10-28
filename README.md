@@ -30,10 +30,12 @@ con `@bible-strong/avatar-core`, sin consultar un CDN. Su diseño original se co
 Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
 de Groq de una consulta en español una sola vez. Podés silenciarla
 tocando el avatar de Isa. Otro toque activa la voz. La elección dura durante la sesión y vuelve a estar
-activada al recargar. La voz es Dora (`ef_dora`) de Kokoro,
-igual que en Aubar, y requiere instalar `requirements-voice.txt` y los modelos en
-el backend; los pasos están en su README. No requiere una API key adicional.
+activada al recargar. El backend genera el audio con Piper y la voz femenina
+Sharvard (`F = 1`), en español de España. Requiere instalar `requirements-voice.txt`
+y el modelo en el backend; los pasos están en su README. No requiere una API key adicional.
 En producción hay que instalar el motor y modelos también en el servidor.
+El audio es WAV PCM16 mono a 22.050 Hz; el frontend lee su frecuencia para
+sincronizar la boca. La voz funciona en el despliegue gratuito de Render.
 
 Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
 bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.

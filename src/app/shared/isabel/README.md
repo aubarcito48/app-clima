@@ -40,7 +40,10 @@ Los ojos se abren progresivamente al despertar (1100 ms) y se cierran al dormir
 visible y conserva las medidas configuradas; también funciona con movimiento
 reducido. Durante la transición se omite el parpadeo automático.
 
-La voz requiere el endpoint `/api/v1/voz/` del backend y su instalación de Kokoro.
+La voz requiere el endpoint `/api/v1/voz/` del backend y su instalación de Piper
+con el modelo `es_ES-sharvard-medium`, hablante femenino `F = 1`.
+El WAV es PCM16 mono a 22.050 Hz. La envolvente lee la frecuencia del archivo
+para sincronizar la boca y no requiere una API key adicional.
 Arranca activada sin hablar hasta recibir texto. Se puede silenciar y reactivar
 durante la sesión, y solo lee recomendaciones en español. Al consultar otro lugar, borrar el resultado,
 cambiar el idioma o desmontar el componente, se detiene el audio anterior.

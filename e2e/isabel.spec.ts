@@ -10,7 +10,8 @@ import {
 } from './fixtures';
 
 function wav(seconds = 8) {
-  const dataSize = 24000 * 2 * seconds;
+  const sampleRate = 22050;
+  const dataSize = sampleRate * 2 * seconds;
   const buffer = Buffer.alloc(44 + dataSize);
   buffer.write('RIFF', 0);
   buffer.writeUInt32LE(36 + dataSize, 4);
@@ -18,17 +19,17 @@ function wav(seconds = 8) {
   buffer.writeUInt32LE(16, 16);
   buffer.writeUInt16LE(1, 20);
   buffer.writeUInt16LE(1, 22);
-  buffer.writeUInt32LE(24000, 24);
-  buffer.writeUInt32LE(48000, 28);
+  buffer.writeUInt32LE(sampleRate, 24);
+  buffer.writeUInt32LE(sampleRate * 2, 28);
   buffer.writeUInt16LE(2, 32);
   buffer.writeUInt16LE(16, 34);
   buffer.write('data', 36);
   buffer.writeUInt32LE(dataSize, 40);
   // Alterna voz y pausas para comprobar que la boca sigue el audio real.
   for (let index = 0; index < dataSize / 2; index++) {
-    const speaking = Math.floor(index / 12000) % 2 === 0;
+    const speaking = Math.floor(index / (sampleRate / 2)) % 2 === 0;
     buffer.writeInt16LE(
-      speaking ? Math.round(Math.sin((index * 2 * Math.PI * 220) / 24000) * 12000) : 0,
+      speaking ? Math.round(Math.sin((index * 2 * Math.PI * 220) / sampleRate) * 12000) : 0,
       44 + index * 2,
     );
   }
