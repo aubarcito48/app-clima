@@ -44,6 +44,13 @@ al estado del audio y al contenido de las frases automáticamente, respetando mo
 
 ## Comandos
 
+El despliegue en Vercel utiliza las cabeceras de `vercel.json`: bloqueo de embedding,
+nosniff, permisos de ubicación limitados al propio origen y CSP para base, objetos
+y ancestros. No es una CSP completa para scripts. Las pruebas `e2e/security.spec.ts`
+verifican que el contenido externo se muestra como texto y no ejecuta HTML.
+El backend aplica presupuestos de solicitudes en producción; ver su informe
+[de seguridad](https://github.com/aubarcito48/app-clima-backend/blob/main/SECURITY_REVIEW.md).
+
 ```powershell
 npm run build                 # Compilación de producción
 npm test -- --watch=false     # Pruebas unitarias
