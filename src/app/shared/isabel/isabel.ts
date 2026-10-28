@@ -57,16 +57,16 @@ export class Isabel {
     effect((onCleanup) => {
       const text = this.text();
       const enabled = this.voice.enabled();
-      const spanish = this.language.code() === 'es';
+      const language = this.language.code();
       if (text !== previousText) {
         previousText = text;
         attempted = false;
       }
       untracked(() => {
         this.voice.stop();
-        if (text && enabled && spanish && !attempted) {
+        if (text && enabled && !attempted) {
           attempted = true;
-          this.voice.speak(text);
+          this.voice.speak(text, language);
         }
       });
       onCleanup(() => this.voice.stop());

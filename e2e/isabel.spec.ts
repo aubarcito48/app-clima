@@ -7,7 +7,51 @@ import {
   climate,
   openNavigation,
   closeNavigation,
+  chooseLanguage,
 } from './fixtures';
+
+test('Isa reads English advice after changing language and keeps mute available', async ({
+  page,
+  api,
+}) => {
+  const requests: { texto: string; idioma?: string }[] = [];
+  const english = 'Wear a light jacket with 19 °C and wind at 12 km/h.';
+  api.handler = async (route, url) => {
+    const data = climate();
+    if (url.searchParams.get('idioma') === 'en') data.recomendacion.texto = english;
+    await api.fulfill(route, data);
+  };
+  await page.route('**/api/v1/voz/', async (route) => {
+    requests.push(route.request().postDataJSON());
+    await route.fulfill({
+      contentType: 'audio/wav',
+      body: wav(),
+      headers: { 'access-control-allow-origin': '*' },
+    });
+  });
+  await page.goto('/');
+  await search(page, 'Córdoba');
+  await expect.poll(() => requests.length).toBe(1);
+  await chooseLanguage(page, 'en');
+  await expect(page.locator('#advice-text')).toHaveText(english);
+  await openNavigation(page);
+  const isa = page.locator('app-isabel');
+  await expect(isa.getByRole('status')).toContainText('Isa is speaking');
+  expect(requests).toEqual([
+    { texto: climate().recomendacion.texto },
+    { texto: english, idioma: 'en' },
+  ]);
+  const avatar = isa.getByRole('button', { name: 'Isa', exact: true });
+  await expect(avatar).toBeEnabled();
+  await expect(avatar).toHaveAttribute('aria-description', 'Mute');
+  await avatar.click();
+  await expect(avatar).toHaveAttribute('aria-pressed', 'false');
+  await chooseLanguage(page, 'es');
+  await expect(page.locator('#advice-text')).toHaveText(climate().recomendacion.texto!);
+  await openNavigation(page);
+  await expect(avatar).toHaveAttribute('aria-pressed', 'false');
+  expect(requests).toHaveLength(2);
+});
 
 function wav(seconds = 8) {
   const sampleRate = 22050;

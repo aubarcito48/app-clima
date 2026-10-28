@@ -48,14 +48,37 @@ describe('Isa follows the current weather advice', () => {
     TestBed.inject(Language).set('en');
     await fixture.whenStable();
     expect(request.cancelled).toBe(true);
-    expect(fixture.nativeElement.textContent).toContain('available in Spanish');
+    expect(fixture.nativeElement.querySelector('button').disabled).toBe(false);
+    http.expectNone(() => true); // No leer el consejo anterior con la voz del nuevo idioma.
+    fixture.componentRef.setInput('text', 'Wear a light jacket.');
+    await fixture.whenStable();
+    const english = http.expectOne(() => true);
+    expect(english.request.body).toEqual({ texto: 'Wear a light jacket.', idioma: 'en' });
     TestBed.inject(Language).set('es');
     await fixture.whenStable();
+    expect(english.cancelled).toBe(true);
     http.expectNone(() => true);
     fixture.componentRef.setInput('text', 'Consejo de otra consulta');
     await fixture.whenStable();
     const next = http.expectOne(() => true);
     fixture.destroy();
     expect(next.cancelled).toBe(true);
+  });
+
+  it('reads an initial English consultation and preserves mute across languages', async () => {
+    TestBed.inject(Language).set('en');
+    const fixture = TestBed.createComponent(Isabel);
+    fixture.componentRef.setInput('text', 'Take an umbrella.');
+    await fixture.whenStable();
+    const request = http.expectOne(() => true);
+    expect(request.request.body).toEqual({ texto: 'Take an umbrella.', idioma: 'en' });
+    fixture.componentInstance.toggleVoice();
+    await fixture.whenStable();
+    expect(request.cancelled).toBe(true);
+    TestBed.inject(Language).set('es');
+    fixture.componentRef.setInput('text', 'Lleva paraguas.');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.voice.enabled()).toBe(false);
+    http.expectNone(() => true);
   });
 });

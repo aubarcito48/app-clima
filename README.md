@@ -28,10 +28,12 @@ Isa usa el avatar del ZIP elegido en Bible Strong Avatar Lab. Se carga localment
 con `@bible-strong/avatar-core`, sin consultar un CDN. Su diseño original se conserva.
 
 Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
-de Groq de una consulta en español una sola vez. Podés silenciarla
+de Groq de una consulta en español o inglés una sola vez. Podés silenciarla
 tocando el avatar de Isa. Otro toque activa la voz. La elección dura durante la sesión y vuelve a estar
 activada al recargar. El backend genera el audio con Piper y la voz femenina
-Sharvard (`F = 1`), en español de España. Requiere instalar `requirements-voice.txt`
+Sharvard (`F = 1`) en español de España y Lessac en inglés de Estados Unidos.
+El idioma de la página selecciona la voz; silenciarla funciona en ambos idiomas.
+Requiere instalar `requirements-voice.txt`
 y el modelo en el backend; los pasos están en su README. No requiere una API key adicional.
 En producción hay que instalar el motor y modelos también en el servidor.
 El audio es WAV PCM16 mono a 22.050 Hz; el frontend lee su frecuencia para

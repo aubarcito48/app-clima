@@ -25,7 +25,7 @@ export class IsabelVoice {
     if (!value) this.stop();
   }
 
-  speak(text: string): void {
+  speak(text: string, language: 'es' | 'en' = 'es'): void {
     this.stop();
     if (!this.enabled() || !text.trim()) return;
     const generation = this.generation;
@@ -33,7 +33,7 @@ export class IsabelVoice {
     this.request = this.http
       .post(
         `${environment.apiBaseUrl}/api/v1/voz/`,
-        { texto: text },
+        language === 'es' ? { texto: text } : { texto: text, idioma: language },
         {
           responseType: 'blob',
           timeout: 50000,
