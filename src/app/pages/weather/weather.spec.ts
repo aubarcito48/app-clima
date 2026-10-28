@@ -6,6 +6,7 @@ import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
 import { Weather } from './weather';
+import { IsabelVoice } from '../../service/isabel-voice';
 
 describe('Weather Django integration', () => {
   it('shares Celsius/Fahrenheit across current weather and forecast without refetching, and keeps the preference', async () => {
@@ -58,6 +59,7 @@ describe('Weather Django integration', () => {
       ],
     });
     http = TestBed.inject(HttpTestingController);
+    TestBed.inject(IsabelVoice).setEnabled(false); // Estas pruebas consultan el clima con Isa silenciada.
   });
   afterEach(() => http.verify());
 

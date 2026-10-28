@@ -4,7 +4,7 @@
     aria-labelledby="current-heading"
   >
     <div class="relative z-10 flex items-center justify-between gap-3">
-      <h2 id="current-heading" class="text-sm font-semibold text-ink">
+      <h2 id="current-heading" class="font-display text-base font-bold text-ink">
         {{ 'Clima actual' | translate }}
       </h2>
       <div class="flex shrink-0 items-center gap-2">
@@ -130,10 +130,6 @@
             '{date} a las {time} h' | translate: { date: data.dateLabel, time: data.observedTime }
           }}</time
           >.
-        </p>
-        <p>
-          {{ 'Consultado el' | translate }}
-          <time [attr.datetime]="data.updatedAtUtc">{{ data.updatedAt }}&nbsp;h</time>.
         </p>
       </div>
     } @else {

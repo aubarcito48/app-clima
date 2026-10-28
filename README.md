@@ -22,6 +22,24 @@ Si ya existe `.env`, conservá el archivo. La aplicación abre en `http://localh
 
 Para cambiar la API, ajustá `PUBLIC_API_BASE_URL_DEVELOPMENT` o `PUBLIC_API_BASE_URL_PRODUCTION` en `.env` y reiniciá o recompilá. La URL de producción de la plantilla es un marcador: reemplazala antes de publicar.
 
+## Isabel (Isa)
+
+Isa usa el avatar del ZIP elegido en Bible Strong Avatar Lab. Se carga localmente
+con `@bible-strong/avatar-core`, sin consultar un CDN. Su diseño original se conserva.
+
+Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
+de Groq de una consulta en español una sola vez. Podés silenciarla
+tocando el avatar de Isa. Otro toque activa la voz. La elección dura durante la sesión y vuelve a estar
+activada al recargar. La voz es Dora (`ef_dora`) de Kokoro,
+igual que en Aubar, y requiere instalar `requirements-voice.txt` y los modelos en
+el backend; los pasos están en su README. No requiere una API key adicional.
+En producción hay que instalar el motor y modelos también en el servidor.
+
+Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
+bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.
+Si falla la voz, el texto del clima continúa disponible. Las animaciones responden
+al estado del audio y al contenido de las frases automáticamente, respetando movimiento reducido.
+
 ## Comandos
 
 ```powershell

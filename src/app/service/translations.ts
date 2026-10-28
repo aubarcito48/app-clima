@@ -1,5 +1,17 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Tu compañera del clima. Te leo el consejo para tu día.':
+    'Your weather companion. I read your daily advice aloud.',
+  Silenciar: 'Mute',
+  'Activar voz': 'Enable voice',
+  Detener: 'Stop',
+  'La voz de Isa está disponible en español.': 'Isa’s voice is available in Spanish.',
+  'Isa está preparando tu audio…': 'Isa is preparing your audio…',
+  'Isa está hablando…': 'Isa is speaking…',
+  'El navegador bloqueó el audio. El consejo sigue disponible como texto.':
+    'The browser blocked the audio. The advice is still available as text.',
+  'No pudimos reproducir la voz. El consejo sigue disponible como texto.':
+    'Could not play the voice. The advice is still available as text.',
   'Volver arriba': 'Back to top',
   'Observado el': 'Observed on',
   '{date} a las {time} h': '{date} at {time}',

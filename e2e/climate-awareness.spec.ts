@@ -8,6 +8,9 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   await page.goto('/');
   const slider = page.locator('app-climate-awareness');
   const active = slider.locator('figure:not([hidden])');
+  const mascot = slider.locator('.slider-mascot');
+  await expect(mascot).toBeVisible();
+  await expect(page.locator('app-weather-sidebar img[src="stitch-coast.svg"]')).toHaveCount(0);
   await expect(active.getByRole('heading')).toHaveText('Cuidemos nuestros bosques');
   const sliderBox = (await slider.boundingBox())!,
     contacts = (await page.locator('app-emergency-contacts').boundingBox())!;
@@ -16,6 +19,11 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   expect(sliderBox.y).toBeGreaterThan(greeting.y + greeting.height);
   expect(sliderBox.x).toBeCloseTo(greeting.x, 0);
   expect(sliderBox.width).toBeCloseTo(greeting.width, 0);
+  const mascotBox = (await mascot.boundingBox())!;
+  expect(mascotBox.x + mascotBox.width).toBeGreaterThan(sliderBox.x + sliderBox.width - 20);
+  expect(mascotBox.y).toBeLessThan(sliderBox.y + 12);
+  const titleBox = (await active.getByRole('heading').boundingBox())!;
+  expect(mascotBox.y + mascotBox.height).toBeLessThan(titleBox.y);
   await expect(slider.locator('.slider-button')).toHaveCount(0);
   await expect(slider.locator('.slide-dot')).toHaveCount(3);
   const water = slider.locator('.slide-dot').nth(1);

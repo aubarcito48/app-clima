@@ -8,6 +8,7 @@ import { of, throwError } from 'rxjs';
 import { ClimateApi } from '../../service/climate-api';
 import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
 import { Weather } from './weather';
+import { IsabelVoice } from '../../service/isabel-voice';
 
 describe('Recovery and accessible interactions (TK08)', () => {
   let http: HttpTestingController;
@@ -21,6 +22,7 @@ describe('Recovery and accessible interactions (TK08)', () => {
       ],
     });
     http = TestBed.inject(HttpTestingController);
+    TestBed.inject(IsabelVoice).setEnabled(false); // La lectura se verifica en las pruebas de Isa.
   });
   afterEach(() => http.verify());
 
@@ -39,7 +41,9 @@ describe('Recovery and accessible interactions (TK08)', () => {
       expect(view.querySelector('app-weather-loading')).toBeNull();
       expect(view.querySelector('[role="alert"]')).not.toBeNull();
       expect(view.textContent).not.toContain('PRIVATE-ERROR');
-      expect(document.activeElement).toBe(view.querySelector('[aria-labelledby="search-feedback"]'));
+      expect(document.activeElement).toBe(
+        view.querySelector('[aria-labelledby="search-feedback"]'),
+      );
       const retry = Array.from(view.querySelectorAll<HTMLButtonElement>('button')).find(
         (b) => b.textContent?.trim() === 'Reintentar consulta',
       )!;
@@ -145,7 +149,9 @@ describe('Recovery and accessible interactions (TK08)', () => {
     await fixture.whenStable();
     expect(pending.cancelled).toBe(true);
     expect(document.activeElement).toBe(view.querySelector('#city'));
-    expect(view.querySelector('[role="status"]')?.textContent).toContain('Búsqueda cancelada');
+    expect(
+      view.querySelector('[aria-label="Estado de la consulta del clima"]')?.textContent,
+    ).toContain('Búsqueda cancelada');
     expect(view.querySelector('[aria-busy="true"]')).toBeNull();
   });
 

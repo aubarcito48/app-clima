@@ -13,7 +13,11 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
   ).toBeVisible();
   const carouselBox = (await carousel.boundingBox())!,
     searchBox = (await page.locator('#pronostico').boundingBox())!;
-  expect(carouselBox.y + carouselBox.height).toBeLessThanOrEqual(searchBox.y);
+  expect(carouselBox.y).toBeGreaterThan(searchBox.y + searchBox.height);
+  const forecastBox = (await page.locator('app-forecast').boundingBox())!;
+  expect(carouselBox.y).toBeGreaterThan(forecastBox.y + forecastBox.height);
+  const footerBox = (await page.locator('footer').boundingBox())!;
+  expect(carouselBox.y + carouselBox.height).toBeLessThan(footerBox.y);
   const links = carousel.locator('a[href^="tel:"]');
   await expect(links).toHaveCount(6);
   expect(

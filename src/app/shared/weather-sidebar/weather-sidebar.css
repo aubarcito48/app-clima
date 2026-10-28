@@ -36,7 +36,9 @@
   box-shadow: 0 2px 4px #12395216;
 }
 .sidebar-note {
-  display: none;
+  position: relative;
+  display: block;
+  margin-top: 1.5rem;
 }
 .sidebar-preferences {
   position: relative;

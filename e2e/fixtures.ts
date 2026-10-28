@@ -124,6 +124,10 @@ export const test = base.extend<{ api: ApiMock }>({
             contentType: 'text/html',
             body: '<!doctype html><html lang="es"><title>Spotify de prueba</title><body>Reproductor simulado</body></html>',
           });
+        } else if (url.origin === apiURL.origin && url.pathname === '/api/v1/voz/') {
+          // La voz ahora arranca activada: también se aísla de Django en las
+          // pruebas del clima. Las pruebas de Isa reemplazan este handler.
+          await api.fulfill(route, { codigo: 'VOZ_NO_DISPONIBLE' }, 503);
         } else if (url.origin === appOrigin) {
           await route.continue();
         } else {
@@ -149,13 +153,17 @@ export async function openNavigation(page: Page) {
   const trigger = page.locator('.mobile-header button');
   if (await trigger.isVisible()) {
     const dialog = page.locator('.mobile-menu');
-    if (!(await dialog.isVisible())) await trigger.click();
+    if (!(await dialog.evaluate((element: HTMLDialogElement) => element.open)))
+      await trigger.click();
   }
 }
 
 export async function closeNavigation(page: Page) {
   const close = page.locator('.mobile-menu [data-close-menu]');
-  if (await close.isVisible()) await close.click();
+  if (await close.isVisible()) {
+    await close.click();
+    await expect(page.locator('.mobile-menu')).not.toBeVisible();
+  }
 }
 
 export async function chooseLanguage(page: Page, language: 'es' | 'en') {

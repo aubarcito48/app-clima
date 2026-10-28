@@ -1,0 +1,86 @@
+:host {
+  display: block;
+}
+.isa-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+:host(.is-sidebar) .isa-card {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: center;
+}
+:host(.is-sidebar) .isa-stage {
+  width: 112px;
+  height: 120px;
+  flex-basis: auto;
+}
+.isa-stage {
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  width: 108px;
+  height: 116px;
+  flex: 0 0 108px;
+  border-radius: 40%;
+  background: radial-gradient(ellipse, #fce5f0, transparent 72%);
+}
+.isa-avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.isa-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+.isa-status {
+  min-height: 3.75rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.isa-stage:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.isa-stage:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.is-speaking .isa-avatar {
+  animation: isa-speaking 0.65s ease-in-out infinite alternate;
+}
+@keyframes isa-speaking {
+  from {
+    transform: translateY(0) rotate(-2deg);
+  }
+  to {
+    transform: translateY(-4px) rotate(2deg);
+  }
+}
+@media (max-width: 480px) {
+  .isa-card {
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .isa-stage {
+    width: 76px;
+    height: 90px;
+    flex-basis: 76px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-speaking .isa-avatar {
+    animation: none;
+  }
+}

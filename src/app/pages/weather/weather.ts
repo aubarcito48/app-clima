@@ -1,4 +1,5 @@
 import { Translate } from '../../shared/translate';
+import { Isabel } from '../../shared/isabel/isabel';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,6 +33,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
 @Component({
   selector: 'app-weather',
   imports: [
+    Isabel,
     Translate,
     BackToTop,
     CitySearch,

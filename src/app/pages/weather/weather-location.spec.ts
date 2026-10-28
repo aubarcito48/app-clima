@@ -9,6 +9,7 @@ import { CoordinatesQuery } from '../../models/city-query';
 import { CurrentLocation, LocationFailure } from '../../service/current-location';
 import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
 import { Weather } from './weather';
+import { IsabelVoice } from '../../service/isabel-voice';
 
 describe('Location and automatic search cannot overwrite one another', () => {
   let http: HttpTestingController;
@@ -22,6 +23,7 @@ describe('Location and automatic search cannot overwrite one another', () => {
       ],
     });
     http = TestBed.inject(HttpTestingController);
+    TestBed.inject(IsabelVoice).setEnabled(false); // La lectura se verifica en las pruebas de Isa.
   });
   afterEach(() => http.verify());
   it('sends browser coordinates only to Django', async () => {

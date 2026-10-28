@@ -68,6 +68,9 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   await page.locator('#city').press('ArrowDown');
   await expect(page.getByRole('option').first()).toHaveAttribute('aria-selected', 'true');
   const audit = async () => {
+    // Audit from a stable viewport: auto-scroll to the search field can leave
+    // the slider's offscreen controls partially covered by the sticky header.
+    await page.evaluate(() => window.scrollTo(0, 0));
     const result = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .analyze();
@@ -243,7 +246,19 @@ test('navegación adaptable: hamburguesa, Escape, fondo y barra contraíble', as
     await expect(page.getByRole('button', { name: 'Cerrar menú', exact: true })).toBeFocused();
     expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
     await page.keyboard.press('Tab');
+    await expect(dialog.getByRole('button', { name: 'Español', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(dialog.getByRole('button', { name: 'English', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(dialog.locator('app-theme-toggle button')).toBeFocused();
+    await page.keyboard.press('Tab');
     await expect(dialog.getByRole('link', { name: 'Pronóstico', exact: true })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialog.locator('app-theme-toggle button')).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialog.getByRole('button', { name: 'English', exact: true })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialog.getByRole('button', { name: 'Español', exact: true })).toBeFocused();
     await page.keyboard.press('Shift+Tab');
     await expect(page.getByRole('button', { name: 'Cerrar menú', exact: true })).toBeFocused();
     const audit = await new AxeBuilder({ page })

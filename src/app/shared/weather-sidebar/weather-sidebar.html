@@ -120,18 +120,7 @@
     </p>
   </section>
   <div class="sidebar-note" [hidden]="compact()">
-    <img
-      src="stitch-coast.svg"
-      alt=""
-      aria-hidden="true"
-      width="160"
-      height="135"
-      class="mx-auto mb-3 w-32"
-    />
-    <p class="font-display text-base font-bold">{{ 'Un clima para cada aventura.' | translate }}</p>
-    <p class="mt-2 text-xs leading-6">
-      {{ 'Buscá tu lugar y descubrí cómo sigue el día.' | translate }}
-    </p>
+    <ng-content select="app-isabel" />
   </div>
 </ng-template>
 

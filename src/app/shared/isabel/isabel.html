@@ -1,0 +1,54 @@
+<section
+  class="isa-card rounded-2xl border border-line bg-surface p-4 text-ink"
+  aria-label="Isa"
+>
+  <button
+    type="button"
+    class="isa-stage"
+    [class.is-speaking]="voice.state() === 'speaking' && !reducedMotion()"
+    aria-label="Isa"
+    [attr.aria-pressed]="voice.enabled()"
+    [attr.aria-description]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
+    [attr.title]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
+    [disabled]="language.code() !== 'es'"
+    (click)="toggleVoice()"
+  >
+    <span #avatar class="isa-avatar" aria-hidden="true"></span>
+    @if (avatarFailed()) {
+      <span class="isa-fallback" aria-hidden="true">Isa</span>
+    }
+  </button>
+  <div class="min-w-0 flex-1">
+    <p class="mt-1 text-sm leading-6 text-secondary">
+      {{ 'Tu compañera del clima. Te leo el consejo para tu día.' | translate }}
+    </p>
+    <p
+      class="isa-status mt-2 text-xs leading-5 text-secondary"
+      role="status"
+      aria-live="polite"
+    >
+      @if (language.code() !== 'es') {
+        {{ 'La voz de Isa está disponible en español.' | translate }}
+      } @else {
+        @switch (voice.state()) {
+          @case ('loading') {
+            {{ 'Isa está preparando tu audio…' | translate }}
+          }
+          @case ('speaking') {
+            {{ 'Isa está hablando…' | translate }}
+          }
+          @case ('blocked') {
+            {{
+              'El navegador bloqueó el audio. El consejo sigue disponible como texto.' | translate
+            }}
+          }
+          @case ('error') {
+            {{
+              'No pudimos reproducir la voz. El consejo sigue disponible como texto.' | translate
+            }}
+          }
+        }
+      }
+    </p>
+  </div>
+</section>

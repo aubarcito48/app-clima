@@ -13,7 +13,7 @@
 }
 .image-stage {
   position: relative;
-  height: clamp(11rem, 18vw, 15rem);
+  height: clamp(13rem, 18vw, 15rem);
   touch-action: pan-y;
 }
 .image-toggle {
@@ -51,7 +51,7 @@
   width: min(66%, 21rem);
   flex-direction: column;
   justify-content: center;
-  padding: 0.75rem 1rem 3rem;
+  padding: 3.5rem 1rem 2.5rem;
   background: #0a263be8;
   color: #ffffff;
 }
@@ -65,6 +65,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.25rem;
+}
+.slider-mascot {
+  position: absolute;
+  z-index: 2;
+  top: 0.5rem;
+  right: 0.75rem;
+  width: 3.25rem;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
 }
 .slide-dot {
   display: inline-flex;
@@ -99,7 +109,10 @@
 @media (min-width: 640px) {
   .awareness-slide figcaption {
     width: min(40%, 25rem);
-    padding: 1.5rem 2rem 2.5rem;
+    padding: 4.25rem 2rem 2.5rem;
+  }
+  .slider-mascot {
+    width: 4rem;
   }
 
   .awareness-slide h2 {
