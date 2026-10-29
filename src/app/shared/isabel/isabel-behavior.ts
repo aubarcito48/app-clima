@@ -27,11 +27,14 @@ export function isaBehaviorDefinition(original: Readonly<AvatarDefinition>): Ava
   awake.eyes.left.angle = awake.eyes.right.angle = 0;
   const right = structuredClone(awake);
   right.head = { x: 0, y: 28, z: 0 };
+  const down = structuredClone(awake);
+  down.head = { x: -25, y: 0, z: 0 };
   const expressions: Record<string, AvatarExpressionDefinition> = {
     'isa-awake': awake,
     'isa-front': front,
     'isa-sleep': sleep,
     'isa-right': right,
+    'isa-down': down,
   };
   for (const key of ['joyful-wide', 'small-attentive', 'gentle-downward-gaze', 'attentive-left']) {
     const expression = structuredClone(front);
@@ -62,6 +65,7 @@ export function isaBehaviorDefinition(original: Readonly<AvatarDefinition>): Ava
     'isa-sleep': hold('isa-sleep', true),
     'isa-front': hold('isa-front'),
     'isa-right': hold('isa-right'),
+    'isa-down': hold('isa-down'),
   };
   for (const key of Object.keys(expressions).filter((key) => key.startsWith('isa-speech-')))
     animations[key] = hold(key);

@@ -69,7 +69,7 @@ export function createIsaAvatar(host: HTMLElement, input: unknown) {
     const target = definition.expressions[key];
     if (!target) return;
     // El giro comparte los ojos del frente; no reiniciar su apertura al girar.
-    const facing = ['isa-awake', 'isa-right'];
+    const facing = ['isa-awake', 'isa-right', 'isa-down'];
     if (facing.includes(key) && facing.includes(state.activeExpression)) return;
     eyeTransition = {
       from: { ...pose },

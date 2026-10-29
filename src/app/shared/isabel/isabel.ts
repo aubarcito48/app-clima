@@ -33,6 +33,7 @@ export class Isabel {
   readonly language = inject(Language);
   readonly avatarFailed = signal(false);
   readonly reducedMotion = signal(false);
+  private readonly horizontalNavbar = signal(false);
   private readonly host = viewChild.required<ElementRef<HTMLElement>>('avatar');
   private readonly ready = signal(false);
   private controller?: ReturnType<typeof createIsaAvatar>;
@@ -42,6 +43,9 @@ export class Isabel {
   private lastPose = '';
   private readonly destroyRef = inject(DestroyRef);
   private motionQuery?: MediaQueryList;
+  private layoutQuery?: MediaQueryList;
+  private readonly layoutChanged = (event: MediaQueryListEvent) =>
+    this.horizontalNavbar.set(event.matches);
   private readonly motionChanged = (event: MediaQueryListEvent) =>
     this.reducedMotion.set(event.matches);
 
@@ -50,6 +54,9 @@ export class Isabel {
       this.motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
       this.reducedMotion.set(this.motionQuery?.matches ?? false);
       this.motionQuery?.addEventListener('change', this.motionChanged);
+      this.layoutQuery = window.matchMedia?.('(max-width: 1023px)');
+      this.horizontalNavbar.set(this.layoutQuery?.matches ?? false);
+      this.layoutQuery?.addEventListener('change', this.layoutChanged);
       void this.loadAvatar();
     });
     let previousText: string | null = null;
@@ -81,6 +88,7 @@ export class Isabel {
       const state = this.voice.state();
       const reducedMotion = this.reducedMotion();
       const phase = this.phase();
+      const lookDown = this.sidebar() && this.horizontalNavbar();
       if (!ready || !this.controller) return;
       const expression =
         state === 'speaking' || phase === 'awake'
@@ -88,7 +96,9 @@ export class Isabel {
           : phase === 'sleeping'
             ? 'isa-sleep'
             : phase === 'right'
-              ? 'isa-right'
+              ? lookDown
+                ? 'isa-down'
+                : 'isa-right'
               : 'isa-awake';
       const animation = expression;
       const poseKey = `${reducedMotion ? 'static' : 'animated'}:${reducedMotion ? expression : animation}`;
@@ -106,6 +116,7 @@ export class Isabel {
       this.voice.stop();
       this.controller?.destroy();
       this.motionQuery?.removeEventListener('change', this.motionChanged);
+      this.layoutQuery?.removeEventListener('change', this.layoutChanged);
     });
     effect(() => {
       if (!this.ready()) return;

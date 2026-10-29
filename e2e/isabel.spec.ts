@@ -51,6 +51,46 @@ test('Isa permanece visible en el navbar y fuera del menú al cambiar de resoluc
   }
 });
 
+test('Isa adapta la mirada al girar la pantalla sin reiniciar la solicitud de voz', async ({
+  page,
+}, info) => {
+  let releaseAudio!: () => void;
+  let requests = 0;
+  const audioReady = new Promise<void>((resolve) => {
+    releaseAudio = resolve;
+  });
+  await page.route('**/api/v1/voz/', async (route) => {
+    requests++;
+    await audioReady;
+    await route.fulfill({
+      status: 503,
+      contentType: 'application/json',
+      body: '{}',
+      headers: { 'access-control-allow-origin': '*' },
+    });
+  });
+  await page.goto('/');
+  await search(page, 'Córdoba');
+  const isa = page.locator('app-isabel');
+  const svg = isa.locator('.isa-avatar svg');
+  await expect(isa.getByRole('status')).toContainText('Isa está preparando');
+  for (const width of [768, 1440, 360, 1024, 1023]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await expect(svg).toBeVisible();
+    await expect(svg).toHaveAttribute(
+      'data-isa-expression',
+      width < 1024 ? 'isa-down' : 'isa-right',
+    );
+    await expect(isa.getByRole('status')).toContainText('Isa está preparando');
+    expect(requests).toBe(1);
+    if (width === 360) {
+      await page.screenshot({ path: info.outputPath('isa-looking-down-mobile.png') });
+    }
+  }
+  releaseAudio();
+  await expect(isa.getByRole('status')).toContainText('No pudimos reproducir la voz');
+});
+
 test('Isa reads English advice after changing language and keeps mute available', async ({
   page,
   api,
@@ -224,7 +264,7 @@ test('Isa lee el texto exacto, se detiene y vuelve a leer una consulta nueva', a
   expect(texts).toHaveLength(2);
 });
 
-test('Isa despierta al consultar, mira a la derecha, habla al frente y duerme cinco segundos después', async ({
+test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y vuelve a dormir', async ({
   page,
   api,
 }) => {
@@ -272,7 +312,10 @@ test('Isa despierta al consultar, mira a la derecha, habla al frente y duerme ci
   expect(openingHeight).toBeLessThan(openHeight);
   releaseWeather();
   await expect(isa.getByRole('status')).toContainText('Isa está preparando');
-  await expect(svg).toHaveAttribute('data-isa-animation', 'isa-right');
+  await expect(svg).toHaveAttribute(
+    'data-isa-animation',
+    page.viewportSize()!.width < 1024 ? 'isa-down' : 'isa-right',
+  );
   releaseAudio();
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   await expect(svg).toHaveAttribute('data-isa-animation', 'isa-awake');
@@ -309,7 +352,10 @@ test('los ojos se entrecierran realmente durante el audio incluso con movimiento
   await page.goto('/');
   await search(page, 'Córdoba');
   const isa = page.locator('app-isabel');
-  await expect(isa.locator('svg')).toHaveAttribute('data-isa-expression', 'isa-right');
+  await expect(isa.locator('svg')).toHaveAttribute(
+    'data-isa-expression',
+    page.viewportSize()!.width < 1024 ? 'isa-down' : 'isa-right',
+  );
   await expect(isa.locator('svg')).toHaveAttribute('data-isa-eye-transition', '1.000');
   releaseAudio();
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
