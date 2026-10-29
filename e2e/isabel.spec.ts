@@ -292,6 +292,20 @@ test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y
   await page.goto('/');
   const isa = page.locator('app-isabel');
   const svg = isa.locator('.isa-avatar svg');
+  const checkMobileStatus = async () => {
+    if (page.viewportSize()!.width > 640) return;
+    const status = await isa.getByRole('status').boundingBox();
+    const logo = await page.locator('.mobile-header > a').boundingBox();
+    const menu = await page.locator('.mobile-header > .menu-control').boundingBox();
+    expect(status!.width).toBeGreaterThan(100);
+    expect(status!.height).toBeLessThanOrEqual(32);
+    expect(status!.x).toBeGreaterThanOrEqual(logo!.x + logo!.width);
+    expect(status!.x + status!.width).toBeLessThanOrEqual(menu!.x);
+    await expect(isa.locator('.isa-copy > p:first-child')).toBeHidden();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  };
   await expect(svg).toHaveAttribute('data-isa-animation', 'isa-sleep');
   const eyeHeight = () =>
     isa
@@ -312,12 +326,14 @@ test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y
   expect(openingHeight).toBeLessThan(openHeight);
   releaseWeather();
   await expect(isa.getByRole('status')).toContainText('Isa está preparando');
+  await checkMobileStatus();
   await expect(svg).toHaveAttribute(
     'data-isa-animation',
     page.viewportSize()!.width < 1024 ? 'isa-down' : 'isa-right',
   );
   releaseAudio();
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
+  await checkMobileStatus();
   await expect(svg).toHaveAttribute('data-isa-animation', 'isa-awake');
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   await expect(isa.getByRole('status')).toHaveText('');
