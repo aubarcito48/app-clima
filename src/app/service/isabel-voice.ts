@@ -28,12 +28,16 @@ export class IsabelVoice {
   speak(text: string, language: 'es' | 'en' = 'es'): void {
     this.stop();
     if (!this.enabled() || !text.trim()) return;
+    const narration =
+      language === 'es'
+        ? `¡Buenas, explorador!\n${text.trim()}\n¡Hasta luego, explorador!`
+        : `Hello, explorer!\n${text.trim()}\nSee you later, explorer!`;
     const generation = this.generation;
     this.state.set('loading');
     this.request = this.http
       .post(
         `${environment.apiBaseUrl}/api/v1/voz/`,
-        language === 'es' ? { texto: text } : { texto: text, idioma: language },
+        language === 'es' ? { texto: narration } : { texto: narration, idioma: language },
         {
           responseType: 'blob',
           timeout: 50000,

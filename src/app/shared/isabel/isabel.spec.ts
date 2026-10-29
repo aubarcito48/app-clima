@@ -26,7 +26,9 @@ describe('Isa follows the current weather advice', () => {
     fixture.componentRef.setInput('text', 'Consejo de Groq');
     await fixture.whenStable();
     const request = http.expectOne(() => true);
-    expect(request.request.body).toEqual({ texto: 'Consejo de Groq' });
+    expect(request.request.body).toEqual({
+      texto: '¡Buenas, explorador!\nConsejo de Groq\n¡Hasta luego, explorador!',
+    });
     fixture.componentInstance.toggleVoice();
     await fixture.whenStable();
     fixture.componentInstance.toggleVoice();
@@ -53,7 +55,10 @@ describe('Isa follows the current weather advice', () => {
     fixture.componentRef.setInput('text', 'Wear a light jacket.');
     await fixture.whenStable();
     const english = http.expectOne(() => true);
-    expect(english.request.body).toEqual({ texto: 'Wear a light jacket.', idioma: 'en' });
+    expect(english.request.body).toEqual({
+      texto: 'Hello, explorer!\nWear a light jacket.\nSee you later, explorer!',
+      idioma: 'en',
+    });
     TestBed.inject(Language).set('es');
     await fixture.whenStable();
     expect(english.cancelled).toBe(true);
@@ -71,7 +76,10 @@ describe('Isa follows the current weather advice', () => {
     fixture.componentRef.setInput('text', 'Take an umbrella.');
     await fixture.whenStable();
     const request = http.expectOne(() => true);
-    expect(request.request.body).toEqual({ texto: 'Take an umbrella.', idioma: 'en' });
+    expect(request.request.body).toEqual({
+      texto: 'Hello, explorer!\nTake an umbrella.\nSee you later, explorer!',
+      idioma: 'en',
+    });
     fixture.componentInstance.toggleVoice();
     await fixture.whenStable();
     expect(request.cancelled).toBe(true);

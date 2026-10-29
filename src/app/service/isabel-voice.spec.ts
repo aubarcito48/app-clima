@@ -47,13 +47,15 @@ describe('Isa voice playback lifecycle', () => {
     vi.unstubAllGlobals();
   });
 
-  it('starts enabled, stays silent without text and sends the exact advice as JSON', () => {
+  it('starts enabled, stays silent without advice and adds a greeting and farewell to the audio', () => {
     expect(voice.enabled()).toBe(true);
     voice.speak('');
     http.expectNone(() => true);
     voice.speak('Llevá abrigo.\nEn Córdoba refresca.');
     const request = http.expectOne((r) => r.url.endsWith('/api/v1/voz/'));
-    expect(request.request.body).toEqual({ texto: 'Llevá abrigo.\nEn Córdoba refresca.' });
+    expect(request.request.body).toEqual({
+      texto: '¡Buenas, explorador!\nLlevá abrigo.\nEn Córdoba refresca.\n¡Hasta luego, explorador!',
+    });
     expect(request.request.method).toBe('POST');
     expect(voice.state()).toBe('loading');
     request.flush(wav());

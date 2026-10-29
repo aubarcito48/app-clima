@@ -118,8 +118,8 @@ test('Isa reads English advice after changing language and keeps mute available'
   const isa = page.locator('app-isabel');
   await expect(isa.getByRole('status')).toContainText('Isa is speaking');
   expect(requests).toEqual([
-    { texto: climate().recomendacion.texto },
-    { texto: english, idioma: 'en' },
+    { texto: `¡Buenas, explorador!\n${climate().recomendacion.texto}\n¡Hasta luego, explorador!` },
+    { texto: `Hello, explorer!\n${english}\nSee you later, explorer!`, idioma: 'en' },
   ]);
   const avatar = isa.getByRole('button', { name: 'Isa', exact: true });
   await expect(avatar).toBeEnabled();
@@ -199,7 +199,7 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   expect(nightAudit.violations).toEqual([]);
 });
 
-test('Isa lee el texto exacto, se detiene y vuelve a leer una consulta nueva', async ({
+test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas', async ({
   page,
   api,
 }) => {
@@ -229,7 +229,10 @@ test('Isa lee el texto exacto, se detiene y vuelve a leer una consulta nueva', a
   await expect
     .poll(async () => Number(await isa.locator('[data-isa-mouth]').getAttribute('data-opening')))
     .toBe(0);
-  expect(texts).toEqual([climate().recomendacion.texto]);
+  expect(texts).toEqual([
+    `¡Buenas, explorador!\n${climate().recomendacion.texto}\n¡Hasta luego, explorador!`,
+  ]);
+  await expect(page.locator('#advice-text')).toHaveText(climate().recomendacion.texto!);
   const eyeOpenness = async () =>
     Number(await isa.locator('.isa-avatar svg').getAttribute('data-isa-eye-openness'));
   await expect.poll(eyeOpenness).toBeLessThan(0.9);
@@ -250,7 +253,9 @@ test('Isa lee el texto exacto, se detiene y vuelve a leer una consulta nueva', a
   expect(texts).toHaveLength(1);
   await isa.getByRole('button', { name: 'Isa', exact: true }).click();
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
-  expect(texts.at(-1)).toBe(climate('Mendoza').recomendacion.texto);
+  expect(texts.at(-1)).toBe(
+    `¡Buenas, explorador!\n${climate('Mendoza').recomendacion.texto}\n¡Hasta luego, explorador!`,
+  );
   await isa.getByRole('button', { name: 'Isa', exact: true }).click();
   await isa.getByRole('button', { name: 'Isa', exact: true }).click();
   await expect(isa.getByRole('button', { name: 'Detener', exact: true })).toHaveCount(0);
