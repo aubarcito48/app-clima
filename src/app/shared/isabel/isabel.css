@@ -84,3 +84,40 @@
     animation: none;
   }
 }
+@media (max-width: 1023px) {
+  :host(.is-sidebar) .isa-card {
+    flex-direction: row;
+    gap: 0.75rem;
+    text-align: left;
+  }
+  :host(.is-sidebar) .isa-stage {
+    width: 64px;
+    height: 68px;
+    flex: 0 0 64px;
+  }
+  :host(.is-sidebar) .isa-copy {
+    max-width: 15rem;
+  }
+  :host(.is-sidebar) .isa-status {
+    min-height: 0;
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 640px) {
+  :host(.is-sidebar) .isa-stage {
+    width: 48px;
+    height: 52px;
+    flex-basis: 48px;
+  }
+  :host(.is-sidebar) .isa-copy {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

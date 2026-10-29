@@ -117,6 +117,26 @@
   border-bottom: 1px solid var(--color-line);
   box-shadow: 0 4px 14px #1239520a;
 }
+.header-assistant {
+  min-width: 0;
+  margin-left: auto;
+}
+@media (max-width: 640px) {
+  .mobile-header {
+    gap: 0.75rem;
+    padding-block: 0.5rem;
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+  }
+  .mobile-header .brand-copy {
+    display: none;
+  }
+  .mobile-header .stitch-logo {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.8rem;
+    font-size: 1.15rem;
+  }
+}
 .mobile-menu {
   margin: 0;
   width: min(20rem, calc(100vw - 2.5rem));

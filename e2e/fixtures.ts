@@ -150,7 +150,7 @@ export { expect };
 
 export async function openNavigation(page: Page) {
   await page.locator('.mobile-header, .desktop-shell').waitFor({ state: 'visible' });
-  const trigger = page.locator('.mobile-header button');
+  const trigger = page.locator('.mobile-header > .menu-control');
   if (await trigger.isVisible()) {
     const dialog = page.locator('.mobile-menu');
     if (!(await dialog.evaluate((element: HTMLDialogElement) => element.open)))

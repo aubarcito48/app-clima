@@ -5,7 +5,7 @@
     class="relative flex items-center gap-3 rounded-xl"
   >
     <span class="stitch-logo" aria-hidden="true">S</span>
-    <span [class.sr-only]="compact()"
+    <span class="brand-copy" [class.sr-only]="compact()"
       ><span class="block font-display text-lg font-bold tracking-tight text-ink"
         >Stitch<span class="text-brand-accent">Weather</span></span
       ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{
@@ -13,6 +13,9 @@
       }}</span></span
     >
   </a>
+</ng-template>
+<ng-template #assistant>
+  <ng-content select="app-isabel" />
 </ng-template>
 <ng-template #content>
   <div class="relative flex items-center justify-between gap-2">
@@ -119,9 +122,11 @@
       {{ 'Guardados en este navegador.' | translate }}
     </p>
   </section>
-  <div class="sidebar-note" [hidden]="compact()">
-    <ng-content select="app-isabel" />
-  </div>
+  @if (desktop()) {
+    <div class="sidebar-note" [hidden]="compact()">
+      <ng-container [ngTemplateOutlet]="assistant" />
+    </div>
+  }
 </ng-template>
 
 @if (desktop()) {
@@ -145,7 +150,11 @@
   </div>
 } @else {
   <header class="mobile-header">
-    <ng-container [ngTemplateOutlet]="brand" /><button
+    <ng-container [ngTemplateOutlet]="brand" />
+    <div class="header-assistant">
+      <ng-container [ngTemplateOutlet]="assistant" />
+    </div>
+    <button
       #menuTrigger
       type="button"
       class="menu-control"
