@@ -24,8 +24,13 @@ Para cambiar la API, ajustá `PUBLIC_API_BASE_URL_DEVELOPMENT` o `PUBLIC_API_BAS
 
 ## Isabel (Isa)
 
-Isa usa el avatar del ZIP elegido en Bible Strong Avatar Lab. Se carga localmente
-con `@bible-strong/avatar-core`, sin consultar un CDN. Su diseño original se conserva.
+Isa usa un personaje ilustrado inspirado en la referencia aportada por el usuario.
+Se dibuja en canvas desde una hoja WebP local de 23 cuadros, extraídos de su video
+y sus imágenes. Conserva reposo, despertar, mirada a la derecha en escritorio,
+mirada hacia abajo en móvil y regreso al frente al hablar. No sigue el cursor.
+Los originales permanecen en `public/isa-bot`, excluidos de los assets publicados;
+la app solo carga `public/isa-bot/runtime`. El detalle del proceso está en
+[`src/app/shared/isabel/README.md`](src/app/shared/isabel/README.md).
 
 Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
 de Groq de una consulta en español o inglés una sola vez. Podés silenciarla
@@ -41,8 +46,9 @@ sincronizar la boca. La voz funciona en el despliegue gratuito de Render.
 
 Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
 bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.
-Si falla la voz, el texto del clima continúa disponible. Las animaciones responden
-al estado del audio y al contenido de las frases automáticamente, respetando movimiento reducido.
+Si falla la voz, el texto del clima continúa disponible. Las poses responden
+al estado de la consulta y del audio, respetando movimiento reducido. La apertura
+de boca aproxima la energía de la voz; no es sincronización por fonemas.
 
 ## Comandos
 

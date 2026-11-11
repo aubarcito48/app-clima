@@ -10,8 +10,9 @@
     (click)="toggleVoice()"
   >
     <span #avatar class="isa-avatar" aria-hidden="true"></span>
-    @if (avatarFailed()) {
-      <span class="isa-fallback" aria-hidden="true">Isa</span>
+    @if (!portraitReady() || avatarFailed()) {
+      <img class="isa-fallback" src="isa-bot/runtime/isa-sleep-v1.webp"
+        width="256" height="288" alt="" aria-hidden="true" />
     }
   </button>
   <div class="isa-copy min-w-0 flex-1">

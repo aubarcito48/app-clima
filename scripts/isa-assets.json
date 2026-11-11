@@ -1,0 +1,24 @@
+{
+  "fps": 8,
+  "videoFrames": 80,
+  "videoCrop": [360, 0, 512, 576],
+  "selectedFrames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 56, 57, 58, 59, 60, 61, 62],
+  "stills": {
+    "sleep": {
+      "file": "dormida-Photoroom.webp",
+      "crop": [535, 44, 1764, 1426]
+    }
+  },
+  "mouth": {
+    "file": "hablando-Photoroom.webp",
+    "crop": [1104, 690, 1308, 804],
+    "size": [42, 24],
+    "position": [117, 136]
+  },
+  "animation": {
+    "front": 0,
+    "right": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "down": [0, 14, 15, 16, 17, 18, 19, 20],
+    "blink": [0, 8, 9, 8, 0]
+  }
+}

@@ -11,7 +11,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import type { createIsaAvatar } from './isabel-avatar';
+import type { createIsaPortrait } from './isa-portrait';
 import { IsabelVoice } from '../../service/isabel-voice';
 import { Language } from '../../service/language';
 import { Translate } from '../translate';
@@ -36,7 +36,8 @@ export class Isabel {
   private readonly horizontalNavbar = signal(false);
   private readonly host = viewChild.required<ElementRef<HTMLElement>>('avatar');
   private readonly ready = signal(false);
-  private controller?: ReturnType<typeof createIsaAvatar>;
+  protected readonly portraitReady = this.ready.asReadonly();
+  private controller?: Awaited<ReturnType<typeof createIsaPortrait>>;
   private destroyed = false;
   private readonly phase = signal<IsaPhase>('sleeping');
   private readonly lifecycle = new IsaLifecycle((phase) => this.phase.set(phase));
@@ -137,12 +138,14 @@ export class Isabel {
 
   private async loadAvatar(): Promise<void> {
     try {
-      const [{ createIsaAvatar }, { default: definition }] = await Promise.all([
-        import('./isabel-avatar'),
-        import('./isabel.avatar.json'),
-      ]);
+      const { createIsaPortrait } = await import('./isa-portrait');
       if (this.destroyed) return;
-      this.controller = createIsaAvatar(this.host().nativeElement, { ...definition, name: 'Isa' });
+      const controller = await createIsaPortrait(this.host().nativeElement);
+      if (this.destroyed) {
+        controller.destroy();
+        return;
+      }
+      this.controller = controller;
       this.ready.set(true);
     } catch {
       if (!this.destroyed) this.avatarFailed.set(true);
