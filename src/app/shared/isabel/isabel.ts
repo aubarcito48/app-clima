@@ -121,15 +121,11 @@ export class Isabel {
     });
     effect(() => {
       if (!this.ready()) return;
-      this.controller?.setSpeaking(this.voice.state() === 'speaking');
+      const state = this.voice.state();
+      this.controller?.setWorking(this.busy() || state === 'loading');
+      this.controller?.setSpeaking(state === 'speaking');
     });
-    effect(() => {
-      if (!this.ready()) return;
-      const opening = this.voice.mouthOpening();
-      this.controller?.setMouthOpening(
-        this.voice.state() === 'speaking' && !this.reducedMotion() ? opening : 0,
-      );
-    });
+
   }
 
   toggleVoice(): void {

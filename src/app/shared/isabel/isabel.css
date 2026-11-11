@@ -16,10 +16,10 @@
   text-align: center;
 }
 :host(.is-sidebar) .isa-stage {
-  width: 180px;
+  width: 200px;
   max-width: 100%;
   height: auto;
-  aspect-ratio: 8 / 9;
+  aspect-ratio: 1;
   flex-basis: auto;
 }
 .isa-stage {
@@ -61,17 +61,6 @@
   opacity: 0.6;
   cursor: default;
 }
-.is-speaking .isa-avatar {
-  animation: isa-speaking 0.65s ease-in-out infinite alternate;
-}
-@keyframes isa-speaking {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-1px);
-  }
-}
 @media (max-width: 480px) {
   .isa-card {
     align-items: flex-start;
@@ -96,7 +85,7 @@
   }
   :host(.is-sidebar) .isa-stage {
     width: 80px;
-    height: 90px;
+    height: 80px;
     flex: 0 0 80px;
   }
   :host(.is-sidebar) .isa-copy {
@@ -116,8 +105,8 @@
     text-align: center;
   }
   :host(.is-sidebar) .isa-stage {
-    width: 72px;
-    height: 81px;
+    width: 88px;
+    height: 88px;
     flex-basis: auto;
   }
   :host(.is-sidebar) .isa-copy {

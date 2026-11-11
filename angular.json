@@ -28,7 +28,7 @@
               {
                 "glob": "**/*",
                 "input": "public",
-                "ignore": ["isa-bot/original/**", "isa-bot/sin-fondo/**", "isa-bot/isa-video.mp4"]
+                "ignore": ["isa-bot/original/**", "isa-bot/sin-fondo/**", "isa-bot/*.mp4"]
               }
             ],
             "styles": ["src/tailwind.css", "src/styles.scss"]

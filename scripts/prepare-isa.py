@@ -59,56 +59,50 @@ def review(ffmpeg: str) -> None:
 
 def prepare(ffmpeg: str, config: dict, reuse_frames: bool = False) -> None:
     WORK.mkdir(parents=True, exist_ok=True)
-    frames_dir = WORK / "frames"
+    version = config["version"]
+    frames_dir = WORK / f"frames-{version}"
     frames_dir.mkdir(exist_ok=True)
+    size = tuple(config["size"])
     fps = config["fps"]
-    # Scale only after cropping, so background removal runs on small frames.
     x, y, w, h = config["videoCrop"]
     if not reuse_frames:
         run([ffmpeg, "-hide_banner", "-loglevel", "error", "-nostdin", "-y",
              "-threads", "1", "-i", str(SOURCE / "isa-video.mp4"),
-             "-vf", f"fps={fps},crop={w}:{h}:{x}:{y},scale={SIZE[0]}:{SIZE[1]}",
+             "-vf", f"fps={fps},crop={w}:{h}:{x}:{y},scale={size[0]}:{size[1]}",
              "-filter_threads", "1", "-frames:v", str(config["videoFrames"]),
-             str(frames_dir / "%03d.png")])
+             "-start_number", "0", str(frames_dir / "%03d.png")])
+    # Source-frame indices, never separate image renders or a pasted mouth.
+    selected = sorted(set(config["blink"] + [i for track in config["tracks"].values() for i in track]))
+    lookup = {source: index for index, source in enumerate(selected)}
     frames = []
-    for i in config["selectedFrames"]:
-        with Image.open(frames_dir / f"{i + 1:03d}.png") as im:
+    for index in selected:
+        with Image.open(frames_dir / f"{index:03d}.png") as im:
             frames.append(remove_background(im))
-    poses = {}
-    for name, value in config["stills"].items():
-        with Image.open(SOURCE / "sin-fondo" / value["file"]) as im:
-            frames.append(im.crop(tuple(value["crop"])).resize(SIZE, Image.Resampling.LANCZOS))
-        poses[name] = len(frames) - 1
-    # Keep the same head/body while speaking: only use a feathered mouth patch.
-    mouth = config["mouth"]
-    with Image.open(SOURCE / "sin-fondo" / mouth["file"]) as im:
-        patch = im.crop(tuple(mouth["crop"])).resize(tuple(mouth["size"]), Image.Resampling.LANCZOS)
-    mask = Image.new("L", patch.size)
-    ImageDraw.Draw(mask).ellipse((2, 2, patch.width - 3, patch.height - 3), fill=255)
-    patch.putalpha(mask.filter(ImageFilter.GaussianBlur(2)))
-    tile = Image.new("RGBA", SIZE)
-    tile.paste(patch, tuple(mouth["position"]))
-    frames.append(tile)
-    poses["mouth"] = len(frames) - 1
     columns = 8
-    atlas = Image.new("RGBA", (columns * SIZE[0], ((len(frames) + columns - 1) // columns) * SIZE[1]))
+    atlas = Image.new("RGBA", (columns * size[0], ((len(frames) + columns - 1) // columns) * size[1]))
     for i, frame in enumerate(frames):
-        atlas.paste(frame, (i % columns * SIZE[0], i // columns * SIZE[1]))
+        atlas.paste(frame, (i % columns * size[0], i // columns * size[1]))
     output = SOURCE / "runtime"
     output.mkdir(exist_ok=True)
-    atlas.save(output / "isa-atlas-v1.webp", quality=85, method=4)
-    frames[poses["sleep"]].save(output / "isa-sleep-v1.webp", quality=85, method=4)
-    manifest = {"image": "isa-bot/runtime/isa-atlas-v1.webp", "width": SIZE[0],
-                "height": SIZE[1], "columns": columns, "poses": poses,
-                "fps": fps, **config["animation"]}
+    filename = f"isa-atlas-{version}.webp"
+    atlas.save(output / filename, quality=88, method=4)
+    tracks = {name: [lookup[i] for i in track] for name, track in config["tracks"].items()}
+    frames[tracks["sleep"][-1]].save(output / f"isa-sleep-{version}.webp", quality=88, method=4)
+    manifest = {"image": "isa-bot/runtime/" + filename, "width": size[0],
+                "height": size[1], "columns": columns, "fps": fps, "front": lookup[config["front"]],
+                "sourceFrames": selected, "tracks": tracks,
+                "blink": [lookup[i] for i in config["blink"]]}
     (ROOT / "src/app/shared/isabel/isa-portrait-manifest.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    sheet = Image.new("RGB", (len(poses) * SIZE[0], SIZE[1] + 24), "#243448")
-    for n, (name, index) in enumerate(poses.items()):
-        sheet.paste(frames[index], (n * SIZE[0], 0), frames[index])
-        ImageDraw.Draw(sheet).text((n * SIZE[0] + 5, SIZE[1] + 5), name, fill="white")
-    sheet.save(WORK / "prepared-poses.jpg")
-    print(f"{len(frames)} frames; atlas {atlas.size}; {(output / 'isa-atlas-v1.webp').stat().st_size} bytes")
+    # Small authoring contact sheet, no browser or automatic test run.
+    sheet = Image.new("RGB", (6 * size[0], ((len(frames) + 5) // 6) * (size[1] + 24)), "#243448")
+    for n, frame in enumerate(frames):
+        px, py = n % 6 * size[0], n // 6 * (size[1] + 24)
+        sheet.paste(frame, (px, py), frame)
+        ImageDraw.Draw(sheet).text((px + 5, py + size[1] + 4), str(selected[n]), fill="white")
+    sheet.thumbnail((960, 1600))
+    sheet.save(WORK / f"prepared-{version}.jpg")
+    print(f"{len(frames)} frames; atlas {atlas.size}; {(output / filename).stat().st_size} bytes")
 
 
 if __name__ == "__main__":
