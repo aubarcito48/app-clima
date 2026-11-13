@@ -1,5 +1,63 @@
 # Isa: retrato animado
 
+## Actualización: habla y cuadros adicionales
+
+La configuración vigente usa `isa-atlas-v3.webp`: **61 cuadros de 320 × 320**
+seleccionados del video original (la v2 tenía 36). Se recuperaron cuadros
+intermedios de los giros; el parpadeo/sueño conserva sus seis cuadros útiles.
+El fallback es `isa-sleep-v3.webp`. Las versiones anteriores se conservan como
+referencia, pero el reproductor carga v3.
+
+El video nuevo `public/isa-bot/isa-hablando-video.mp4` dura 10 segundos, con
+240 cuadros a 24 fps y resolución 1280 × 720. Se conservó intacto y se prepararon
+**204 cuadros**, del 12 al 215, en cinco páginas `isa-speech-v1-0.webp` a
+`isa-speech-v1-4.webp`. El manifiesto es `isa-speech-manifest.json`.
+Cada página contiene hasta 48 cuadros; se cargan al comenzar el habla y solo
+se retienen la actual y la siguiente, para limitar memoria en móvil.
+
+El habla muestra cuadros completos del video nuevo, sin pegar una boca de otra
+imagen. La energía RMS del audio que ya calcula `IsabelVoice` activa la secuencia
+por encima de 0,03. Durante pausas, al terminar o silenciar, se funde hacia el
+frontal original. Es una animación general a 24 fps, repetida si la narración
+dura más; **no sincroniza los fonemas ni cada palabra**. Piper no cambió.
+
+Ambos videos usan el mismo recorte de 704 × 704 con origen (300, 8), reducido a
+320 × 320. El habla elimina además fragmentos blancos desconectados del
+personaje/escritorio. Se revisaron contactos sobre fondo oscuro; los videos
+generados por separado aún pueden diferir levemente en expresión y contornos.
+Los fundidos suavizan el cambio, no reconstruyen una identidad idéntica.
+
+Con movimiento reducido no se animan ni cargan las páginas de habla. El bucle
+se suspende al ocultar la página o el avatar; si falla una página de habla,
+se mantiene el retrato original y el audio sigue siendo independiente.
+
+Preparación secuencial, desde la raíz del frontend (Python con Pillow y FFmpeg):
+
+```powershell
+python scripts/prepare-isa.py --ffmpeg tmp/isa-tools/ffmpeg.exe --config scripts/isa-assets.json
+python scripts/prepare-isa-speech.py --ffmpeg tmp/isa-tools/ffmpeg.exe
+```
+
+Ambos admiten `--reuse-frames` para cambiar máscaras/selección sin decodificar
+otra vez; no usarlo si cambia el video, recorte, escala o fps. Los scripts no
+se ejecutan al iniciar, compilar o instalar. La configuración del habla está en
+`scripts/isa-speech-assets.json`. Los MP4 originales siguen excluidos del build.
+
+Revisión local: `tmp/isa-review/prepared-v3.jpg`, `speech-contact.jpg` y
+`speech-prepared-v1.jpg`. Las cuatro pruebas de `isa-portrait.spec.ts` pasaron:
+carga diferida, habla/silencio/fin, movimiento reducido, fallos de imágenes,
+visibilidad y limpieza. Compilación de producción aprobada con un solo worker.
+Queda pendiente aprobar visualmente el habla con audio real en el navegador;
+no se ejecutó la suite E2E completa.
+
+---
+
+## Historial de la primera implementación
+
+El resto de este documento describe la versión inicial, anterior a v2/v3 y al
+video de habla. Sus cifras y la composición de boca no representan el renderer
+actual; prevalece la actualización anterior.
+
 El personaje usa las imágenes y el video aportados por el usuario, inspirados en
 su madre. El video fuente dura 10 segundos, mide 1280 × 720 y tiene 24 fps.
 La aplicación no reproduce el MP4 ni consulta servicios de imágenes.

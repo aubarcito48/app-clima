@@ -25,8 +25,8 @@ Para cambiar la API, ajustá `PUBLIC_API_BASE_URL_DEVELOPMENT` o `PUBLIC_API_BAS
 ## Isabel (Isa)
 
 Isa usa un personaje ilustrado inspirado en la referencia aportada por el usuario.
-Se dibuja en canvas desde una hoja WebP local de 23 cuadros, extraídos de su video
-y sus imágenes. Conserva reposo, despertar, mirada a la derecha en escritorio,
+Se dibuja en canvas con 61 cuadros seleccionados del video original y 204 cuadros
+del nuevo video de habla, preparados en WebP. Conserva reposo, despertar, mirada a la derecha en escritorio,
 mirada hacia abajo en móvil y regreso al frente al hablar. No sigue el cursor.
 Los originales permanecen en `public/isa-bot`, excluidos de los assets publicados;
 la app solo carga `public/isa-bot/runtime`. El detalle del proceso está en
@@ -47,8 +47,9 @@ sincronizar la boca. La voz funciona en el despliegue gratuito de Render.
 Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
 bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.
 Si falla la voz, el texto del clima continúa disponible. Las poses responden
-al estado de la consulta y del audio, respetando movimiento reducido. La apertura
-de boca aproxima la energía de la voz; no es sincronización por fonemas.
+al estado de la consulta y del audio, respetando movimiento reducido. El habla usa
+cuadros completos del nuevo video y fundidos hacia el reposo durante las pausas
+detectadas en el audio; no es sincronización por fonemas.
 
 ## Comandos
 

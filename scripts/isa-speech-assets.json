@@ -1,0 +1,8 @@
+{
+  "source": "isa-hablando-video.mp4",
+  "fps": 24,
+  "videoCrop": [300, 8, 704, 704],
+  "size": [320, 320],
+  "first": 12,
+  "last": 215
+}

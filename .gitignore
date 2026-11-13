@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /tmp
+__pycache__/
 /out-tsc
 /bazel-out
 

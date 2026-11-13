@@ -125,6 +125,9 @@ export class Isabel {
       this.controller?.setWorking(this.busy() || state === 'loading');
       this.controller?.setSpeaking(state === 'speaking');
     });
+    effect(() => {
+      if (this.ready()) this.controller?.setMouthOpening(this.voice.mouthOpening());
+    });
 
   }
 
