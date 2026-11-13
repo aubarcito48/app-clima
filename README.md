@@ -36,7 +36,7 @@ Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
 de Groq de una consulta en español o inglés una sola vez. Podés silenciarla
 tocando el avatar de Isa. Otro toque activa la voz. La elección dura durante la sesión y vuelve a estar
 activada al recargar. El backend genera el audio con Piper y la voz femenina
-Sharvard (`F = 1`) en español de España y Lessac en inglés de Estados Unidos.
+Daniela en español de Argentina y Lessac en inglés de Estados Unidos.
 El idioma de la página selecciona la voz; silenciarla funciona en ambos idiomas.
 Requiere instalar `requirements-voice.txt`
 y el modelo en el backend; los pasos están en su README. No requiere una API key adicional.
