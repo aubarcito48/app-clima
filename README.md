@@ -48,8 +48,9 @@ Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
 bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.
 Si falla la voz, el texto del clima continúa disponible. Las poses responden
 al estado de la consulta y del audio, respetando movimiento reducido. El habla usa
-cuadros completos del nuevo video y fundidos hacia el reposo durante las pausas
-detectadas en el audio; no es sincronización por fonemas.
+cuadros completos del nuevo video: mantiene la continuidad entre sílabas y busca
+una boca cerrada dentro del mismo tramo para las pausas largas. Solo cambia al
+retrato de reposo al terminar; no es sincronización por fonemas.
 
 ## Comandos
 

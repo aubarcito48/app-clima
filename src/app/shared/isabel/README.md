@@ -16,10 +16,20 @@ Cada página contiene hasta 48 cuadros; se cargan al comenzar el habla y solo
 se retienen la actual y la siguiente, para limitar memoria en móvil.
 
 El habla muestra cuadros completos del video nuevo, sin pegar una boca de otra
-imagen. La energía RMS del audio que ya calcula `IsabelVoice` activa la secuencia
-por encima de 0,03. Durante pausas, al terminar o silenciar, se funde hacia el
-frontal original. Es una animación general a 24 fps, repetida si la narración
-dura más; **no sincroniza los fonemas ni cada palabra**. Piper no cambió.
+imagen. La energía RMS que ya calcula `IsabelVoice` distingue pausas largas:
+se ignoran huecos menores de 320 ms para no detener el video entre sílabas.
+La reproducción mantiene 24 fps y mezcla cuadros adyacentes, también en límites
+de página. En una pausa larga se recorre el cierre de boca más cercano dentro
+del mismo video y se sostiene ese cuadro, sin sustituir cuerpo/cabeza por el
+retrato original. Los cierres revisados están en `closedFrames` de la configuración
+y en `closed` del manifiesto. Al terminar o silenciar cierra y funde hacia el
+frontal original. Es una animación general, repetida si la narración dura más;
+**no sincroniza los fonemas ni cada palabra**. Piper no cambió.
+
+Se corrigió el rebote visible en `resultado-isabot-hablando.mp4`: el primer
+reproductor cambiaba de fuente y frenaba cuadros con cada caída instantánea
+de volumen. Ahora un retraso de carga también conserva el último cuadro visible
+en lugar de mostrar fugazmente el frontal de otra fuente.
 
 Ambos videos usan el mismo recorte de 704 × 704 con origen (300, 8), reducido a
 320 × 320. El habla elimina además fragmentos blancos desconectados del
@@ -44,11 +54,13 @@ se ejecutan al iniciar, compilar o instalar. La configuración del habla está e
 `scripts/isa-speech-assets.json`. Los MP4 originales siguen excluidos del build.
 
 Revisión local: `tmp/isa-review/prepared-v3.jpg`, `speech-contact.jpg` y
-`speech-prepared-v1.jpg`. Las cuatro pruebas de `isa-portrait.spec.ts` pasaron:
+`speech-prepared-v1.jpg`. Las pruebas de `isa-portrait.spec.ts` comprueban:
 carga diferida, habla/silencio/fin, movimiento reducido, fallos de imágenes,
-visibilidad y limpieza. Compilación de producción aprobada con un solo worker.
-Queda pendiente aprobar visualmente el habla con audio real en el navegador;
-no se ejecutó la suite E2E completa.
+visibilidad, limpieza y continuidad a velocidad nativa entre huecos de sílabas.
+La comparación local con Chromium y el mismo WAV mide los retornos involuntarios
+al frontal y guarda una grabación antes/después en `tmp/isa-smooth-qa`.
+La aprobación visual final corresponde al usuario. No se ejecuta la suite E2E
+completa para esta corrección.
 
 ---
 

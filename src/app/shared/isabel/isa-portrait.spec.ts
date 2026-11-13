@@ -8,6 +8,8 @@ describe('Isa video speech lifecycle', () => {
   let controller: Awaited<ReturnType<typeof createIsaPortrait>> | undefined;
   let host: HTMLElement;
   let failSpeech: boolean;
+  let delaySecondPage: boolean;
+  let releaseSecondPage: (() => void) | undefined;
   const requests: string[] = [];
 
   async function advance(frames: number) {
@@ -25,6 +27,8 @@ describe('Isa video speech lifecycle', () => {
     serial = 0;
     callbacks = new Map();
     failSpeech = false;
+    delaySecondPage = false;
+    releaseSecondPage = undefined;
     requests.length = 0;
     vi.spyOn(performance, 'now').mockImplementation(() => now);
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
@@ -34,6 +38,9 @@ describe('Isa video speech lifecycle', () => {
       src = '';
       decode() {
         requests.push(this.src);
+        if (delaySecondPage && this.src.includes('isa-speech-v1-1.webp')) {
+          return new Promise<void>(resolve => { releaseSecondPage = resolve; });
+        }
         return failSpeech && this.src.includes('speech') ? Promise.reject(new Error('Offline')) : Promise.resolve();
       }
     });
@@ -67,10 +74,34 @@ describe('Isa video speech lifecycle', () => {
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(0);
     controller!.setMouthOpening(0);
     await advance(35);
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
+    // Real pauses settle inside the same video, without replacing the whole body.
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+    const pausedFrame = canvas.dataset['isaSpeechFrame'];
+    await advance(20);
+    expect(canvas.dataset['isaSpeechFrame']).toBe(pausedFrame);
     controller!.setSpeaking(false);
-    await advance(5);
+    await advance(70);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
     expect(callbacks.size).toBe(0);
+  });
+
+  it('keeps native playback speed and the same video across short syllable gaps', async () => {
+    controller!.play('isa-awake');
+    await advance(160);
+    controller!.setMouthOpening(0.7);
+    controller!.setSpeaking(true);
+    await advance(30);
+    const canvas = host.querySelector('canvas')!;
+    const start = Number(canvas.dataset['isaSpeechFrame']);
+    for (let i = 0; i < 10; i++) {
+      controller!.setMouthOpening(0);
+      await advance(3);
+      controller!.setMouthOpening(0.7);
+      await advance(3);
+      expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+    }
+    expect(Number(canvas.dataset['isaSpeechFrame']) - start).toBeGreaterThanOrEqual(23);
+    expect(Number(canvas.dataset['isaSpeechFrame']) - start).toBeLessThanOrEqual(25);
   });
 
   it('does not load speech or animate with reduced motion', async () => {
@@ -80,6 +111,25 @@ describe('Isa video speech lifecycle', () => {
     await advance(10);
     expect(requests).toHaveLength(1);
     expect(callbacks.size).toBe(0);
+  });
+
+  it('holds the last speech image across a late atlas page instead of flashing neutral', async () => {
+    delaySecondPage = true;
+    controller!.play('isa-awake');
+    await advance(160);
+    controller!.setMouthOpening(0.7);
+    controller!.setSpeaking(true);
+    await advance(180);
+    const canvas = host.querySelector('canvas')!;
+    const waitingFrame = canvas.dataset['isaSpeechFrame'];
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+    await advance(20);
+    expect(canvas.dataset['isaSpeechFrame']).toBe(waitingFrame);
+    expect(releaseSecondPage).toBeDefined();
+    releaseSecondPage!();
+    await advance(30);
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(Number(waitingFrame));
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
   });
 
   it('keeps the portrait usable if speech images fail and releases work on destroy', async () => {

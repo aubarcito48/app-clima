@@ -63,7 +63,8 @@ def prepare(ffmpeg, reuse):
         ImageDraw.Draw(sheet).text((px+5, py+163), f'{source} / {source/24:.2f}s', fill='white')
     sheet.save(base.WORK/'speech-prepared-v1.jpg')
     manifest = {'width': width, 'height': height, 'columns': columns, 'fps': 24,
-        'source': config['source'], 'sourceFrames': selected, 'pages': pages}
+        'source': config['source'], 'sourceFrames': selected, 'pages': pages,
+        'closed': [selected.index(frame) for frame in config['closedFrames']]}
     (ROOT/'src/app/shared/isabel/isa-speech-manifest.json').write_text(
         json.dumps(manifest, indent=2)+'\n', encoding='utf-8')
     print(f'{len(selected)} speech frames in {len(pages)} pages', flush=True)

@@ -26,6 +26,11 @@ export async function createIsaPortrait(host: HTMLElement) {
   let speechPosition = 0;
   let speechAmount = 0;
   let mouthOpening = 0;
+  let speechSilence = 0;
+  let speechRestTarget: number | undefined;
+  let speechRestSpeed = speechAtlas.fps;
+  let speechStopping = false;
+  let lastSpeechTile: { image: HTMLImageElement; index: number } | undefined;
   let blinkStarted: number | undefined;
   let reduced = false;
   let working = false;
@@ -66,7 +71,28 @@ export async function createIsaPortrait(host: HTMLElement) {
     loadSpeechPage(speechPage);
     loadSpeechPage(nextPage);
     const page = speechAtlas.pages[speechPage];
-    return { image: speechImages.get(speechPage), index: index - page.first };
+    const image = speechImages.get(speechPage);
+    if (image) lastSpeechTile = { image, index: index - page.first };
+    // A late page must not flash the unrelated neutral portrait mid-sentence.
+    return { ...lastSpeechTile, ready: !!image };
+  }
+
+  function restDistance(target: number) {
+    const count = speechAtlas.sourceFrames.length;
+    return ((target - speechPosition + count * 1.5) % count) - count / 2;
+  }
+
+  function nearestRest() {
+    return speechAtlas.closed.reduce((best, value) =>
+      Math.abs(restDistance(value)) < Math.abs(restDistance(best)) ? value : best);
+  }
+
+  function drawSpeechTile(source: HTMLImageElement, index: number, alpha: number) {
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(source,
+      index % speechAtlas.columns * speechAtlas.width,
+      Math.floor(index / speechAtlas.columns) * speechAtlas.height,
+      speechAtlas.width, speechAtlas.height, 0, 0, canvas.width, canvas.height);
   }
 
   function draw(now = performance.now()) {
@@ -95,11 +121,15 @@ export async function createIsaPortrait(host: HTMLElement) {
     }
     if (speech?.image && mix > 0) {
       ctx.globalCompositeOperation = 'lighter';
-      ctx.globalAlpha = mix;
-      ctx.drawImage(speech.image,
-        speech.index % speechAtlas.columns * speechAtlas.width,
-        Math.floor(speech.index / speechAtlas.columns) * speechAtlas.height,
-        speechAtlas.width, speechAtlas.height, 0, 0, canvas.width, canvas.height);
+      const fraction = speech.ready ? speechPosition % 1 : 0;
+      const nextIndex = (Math.floor(speechPosition) + 1) % speechAtlas.sourceFrames.length;
+      const nextPage = speechAtlas.pages.findIndex(page => nextIndex >= page.first && nextIndex < page.first + page.count);
+      const nextImage = speechImages.get(nextPage);
+      // Blend neighboring native frames, including atlas page and loop boundaries.
+      drawSpeechTile(speech.image, speech.index!, mix * (nextImage ? 1 - fraction : 1));
+      if (nextImage && fraction > 0.001) {
+        drawSpeechTile(nextImage, nextIndex - speechAtlas.pages[nextPage].first, mix * fraction);
+      }
       ctx.globalCompositeOperation = 'source-over';
     }
     ctx.globalAlpha = 1;
@@ -116,15 +146,36 @@ export async function createIsaPortrait(host: HTMLElement) {
     const seconds = Math.min(Math.max(0, (now - lastTime) / 1000), 0.05);
     motion.advance(seconds);
     const talking = speaking && !working && !reduced && motion.pose === 'isa-awake' && !motion.moving;
-    const target = talking && mouthOpening > 0.03 ? 1 : 0;
-    speechAmount += (target - speechAmount) * (1 - Math.exp(-seconds * (target ? 14 : 22)));
-    if (speechAmount < 0.001 && target === 0) speechAmount = 0;
-    if (talking && target) {
-      speechPosition = (speechPosition + seconds * speechAtlas.fps) % speechAtlas.sourceFrames.length;
+    const speech = talking || speechStopping ? speechTile() : undefined;
+    if (speechStopping && !speech?.ready) speechStopping = false;
+    if (talking) speechSilence = mouthOpening > 0.03 ? 0 : speechSilence + seconds;
+    if (speech?.ready) {
+      if (talking && speechSilence < 0.32) {
+        // Word/syllable gaps do not stop the video or switch the whole person.
+        speechRestTarget = undefined;
+        speechPosition = (speechPosition + seconds * speechAtlas.fps) % speechAtlas.sourceFrames.length;
+      } else if (talking || speechStopping) {
+        if (speechRestTarget === undefined) {
+          speechRestTarget = nearestRest();
+          speechRestSpeed = Math.max(speechAtlas.fps, Math.abs(restDistance(speechRestTarget)) / 0.25);
+        }
+        const distance = restDistance(speechRestTarget);
+        const step = seconds * speechRestSpeed;
+        if (Math.abs(distance) <= step) {
+          speechPosition = speechRestTarget;
+          speechStopping = false;
+        } else {
+          speechPosition = (speechPosition + Math.sign(distance) * step + speechAtlas.sourceFrames.length)
+            % speechAtlas.sourceFrames.length;
+        }
+      }
     }
+    const target = !reduced && (talking || speechStopping) && speech?.image ? 1 : 0;
+    speechAmount += (target - speechAmount) * (1 - Math.exp(-seconds * (target ? 10 : 12)));
+    if (speechAmount < 0.001 && target === 0) speechAmount = 0;
     lastTime = now;
     draw(now);
-    if (motion.moving || blinkStarted !== undefined || speaking || speechAmount > 0) schedule();
+    if (motion.moving || blinkStarted !== undefined || speaking || speechStopping || speechAmount > 0) schedule();
   }
 
   function schedule() {
@@ -153,7 +204,10 @@ export async function createIsaPortrait(host: HTMLElement) {
   function setPose(key: string, immediate: boolean) {
     if (!['isa-sleep', 'isa-awake', 'isa-right', 'isa-down'].includes(key)) return;
     reduced = immediate;
-    if (immediate) speechAmount = 0;
+    if (immediate) {
+      speechAmount = 0;
+      speechStopping = false;
+    }
     blinkStarted = undefined;
     // Do not copy the canvas or return to frame zero on an interrupted movement.
     motion.request(key as IsaPose, immediate);
@@ -215,8 +269,14 @@ export async function createIsaPortrait(host: HTMLElement) {
       clearTimeout(blinkTimer);
       if (value) {
         speechPosition = 0;
+        speechSilence = 0;
+        speechRestTarget = undefined;
+        speechStopping = false;
+        lastSpeechTile = undefined;
         if (!reduced) speechTile();
       } else {
+        speechStopping = !reduced && speechAmount > 0.001;
+        speechRestTarget = undefined;
         blinkStarted = undefined;
         planIdleBlink();
       }
@@ -232,6 +292,7 @@ export async function createIsaPortrait(host: HTMLElement) {
       if (frameId !== undefined) cancelAnimationFrame(frameId);
       clearTimeout(blinkTimer);
       speechImages.clear();
+      lastSpeechTile = undefined;
       observer?.disconnect();
       document.removeEventListener('visibilitychange', visibilityChanged);
       canvas.remove();
