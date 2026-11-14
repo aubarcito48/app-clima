@@ -173,6 +173,15 @@ se eliminan observadores, eventos y solicitudes de animación.
 El renderer SVG anterior y sus auxiliares se conservan como referencia, con sus
 pruebas unitarias, pero el componente ya no los importa.
 
+## Auditoría actual para dirección local
+
+La descripción histórica de superposición de una boca por RMS no corresponde
+al renderizador activo `isa-portrait.ts`: actualmente reproduce fotogramas de habla
+completos siguiendo el reloj del audio, y su método `setMouthOpening` no cambia
+la imagen. No hay clasificación de fonemas ni visemas en el camino activo.
+El inventario reproducible y las tres etapas de la nueva prueba están en
+[el plan de Isa local](../../../../docs/isa-local/PLAN.md).
+
 ## Preparación explícita de recursos
 
 Requiere FFmpeg y Python con Pillow. No se ejecuta al instalar, iniciar, compilar

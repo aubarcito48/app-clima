@@ -27,6 +27,12 @@ reducido y compatibilidad sin View Transitions).
 
 ## Ejecución local
 
+El trabajo para reducir la dependencia de Groq en la actuación de Isa se divide
+en tres commits: auditoría de recursos, director local y prototipo de boca guiada
+por audio. Estado y criterios en [el plan de Isa local](docs/isa-local/PLAN.md).
+La primera etapa solo genera un inventario y hojas de revisión: no cambia la
+animación ni la voz de la app publicada.
+
 Requiere Node.js 24 y npm. Desde esta carpeta, en PowerShell:
 
 ```powershell
