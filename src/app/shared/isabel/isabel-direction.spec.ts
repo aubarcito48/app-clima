@@ -10,7 +10,7 @@ describe('Isa applies the voice performance to the existing portrait', () => {
     vi.unstubAllGlobals();
   });
 
-  it('follows directed gaze while speaking, respects reduced motion and returns to rest', async () => {
+  it('gives continuous speech priority over directed gaze, respects reduced motion and rests', async () => {
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
       clearRect: vi.fn(),
       drawImage: vi.fn(),
@@ -44,7 +44,7 @@ describe('Isa applies the voice performance to the existing portrait', () => {
     isa.voice.state.set('speaking');
     isa.voice.gesture.set('isa-right');
     await fixture.whenStable();
-    expect(canvas.dataset['isaExpression']).toBe('isa-right');
+    expect(canvas.dataset['isaExpression']).toBe('isa-awake');
     expect(canvas.dataset['isaSpeaking']).toBe('true');
     isa.voice.gesture.set('isa-awake');
     await fixture.whenStable();

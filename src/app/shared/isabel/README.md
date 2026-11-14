@@ -10,10 +10,11 @@ La dirección se consulta con `audio.currentTime`, sin estimaciones por longitud
 del texto ni temporizadores acumulados. El audio sigue funcionando sin ese chunk.
 
 El catálogo vigente es el del retrato: `isa-awake` (frente y video de habla),
-`isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Las miradas
-elegidas por Groq aparecen hasta 1.2 segundos al comenzar el fragmento y en su
-pausa final; entre ellas vuelve al frente. Los giros y regresos usan `IsaMotion`
-y los fundidos existentes; no reinician el video de habla. No se inventan
+`isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Durante el
+audio, el habla tiene prioridad sobre las miradas elegidas por fragmento: Isa
+mantiene el video frontal completo hasta finalizar. Groq sigue controlando ritmo,
+energía y pausas de la voz, pero estas no detienen ni sustituyen la animación.
+Las miradas de espera permanecen antes de la narración. No se inventan
 expresiones ni boca lateral: solo hay video de habla frontal.
 
 Silenciar, cancelar, cambiar idioma o destruir el componente descarta la dirección
@@ -33,17 +34,18 @@ El video nuevo `public/isa-bot/isa-hablando-video.mp4` dura 10 segundos, con
 240 cuadros a 24 fps y resolución 1280 × 720. Se conservó intacto y se prepararon
 **204 cuadros**, del 12 al 215, en cinco páginas `isa-speech-v1-0.webp` a
 `isa-speech-v1-4.webp`. El manifiesto es `isa-speech-manifest.json`.
-Cada página contiene hasta 48 cuadros; se cargan al comenzar el habla y solo
+Cada página contiene hasta 48 cuadros; las primeras se precargan al preparar la voz y solo
 se retienen la actual y la siguiente, para limitar memoria en móvil.
 
 El habla muestra cuadros completos del video nuevo, sin pegar una boca de otra
-imagen. La energía RMS que ya calcula `IsabelVoice` distingue pausas largas:
-se ignoran huecos menores de 320 ms para no detener el video entre sílabas.
+imagen. La reproducción continúa también durante silencios entre frases:
+la energía RMS no congela ni reinicia el personaje.
 La reproducción mantiene 24 fps y mezcla cuadros adyacentes, también en límites
-de página. En una pausa larga se recorre el cierre de boca más cercano dentro
-del mismo video y se sostiene ese cuadro, sin sustituir cuerpo/cabeza por el
-retrato original. Los cierres revisados están en `closedFrames` de la configuración
-y en `closed` del manifiesto. Al terminar o silenciar cierra y funde hacia el
+de página. El bucle activo usa los índices 12 a 191 del atlas (7.5 segundos),
+omitiendo la entrada y salida en reposo del video fuente. No se repiten esos
+cuadros de descanso cuando el texto es largo. Los cierres revisados están en
+`closedFrames` de la configuración y en `closed` del manifiesto.
+Solo al terminar o silenciar se busca el cierre más cercano y se funde hacia el
 frontal original. Es una animación general, repetida si la narración dura más;
 **no sincroniza los fonemas ni cada palabra**. Piper no cambió.
 
@@ -80,6 +82,11 @@ carga diferida, habla/silencio/fin, movimiento reducido, fallos de imágenes,
 visibilidad, limpieza y continuidad a velocidad nativa entre huecos de sílabas.
 La comparación local con Chromium y el mismo WAV mide los retornos involuntarios
 al frontal y guarda una grabación antes/después en `tmp/isa-smooth-qa`.
+La revisión de `unknown_2026.11.14-01.53.mp4` agregó una comparación de 18.5 segundos
+con su audio, dos vueltas del bucle, miradas por fragmento y un silencio de dos
+segundos: `continuity-before-after.webm` y `continuity-report.json`. La versión
+corregida no volvió al frontal quieto durante el audio ni reprodujo cuadros de
+entrada/salida. La prueba unitaria también cubre 25 segundos y tres vueltas.
 La aprobación visual final corresponde al usuario. No se ejecuta la suite E2E
 completa para esta corrección.
 

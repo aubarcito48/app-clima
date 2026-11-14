@@ -4,7 +4,7 @@ import { IsaLifecycle } from './isa-lifecycle';
 describe('Isa wake, speech and sleep sequence', () => {
   afterEach(() => vi.useRealTimers());
 
-  it('looks right while preparing, briefly enlarges eyes while speaking, then rests five seconds', () => {
+  it('looks right while preparing, stays in speech, then rests five seconds', () => {
     vi.useFakeTimers();
     const change = vi.fn();
     const lifecycle = new IsaLifecycle(change);
@@ -17,11 +17,12 @@ describe('Isa wake, speech and sleep sequence', () => {
     lifecycle.update(false, 'speaking');
     expect(change).toHaveBeenLastCalledWith('front');
     vi.advanceTimersByTime(450);
-    expect(change).toHaveBeenLastCalledWith('expressive');
+    expect(change).toHaveBeenLastCalledWith('front');
     vi.advanceTimersByTime(900);
     expect(change).toHaveBeenLastCalledWith('front');
     vi.advanceTimersByTime(2000);
     expect(change).toHaveBeenLastCalledWith('front');
+    expect(change.mock.calls.map(call => call[0])).toEqual(['awake', 'right', 'front']);
     lifecycle.update(false, 'idle');
     expect(change).toHaveBeenLastCalledWith('resting');
     vi.advanceTimersByTime(4999);

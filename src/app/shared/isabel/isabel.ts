@@ -98,9 +98,7 @@ export class Isabel {
       if (!ready || !this.controller) return;
       const expression =
         state === 'speaking'
-          ? reducedMotion
-            ? 'isa-awake'
-            : this.voice.gesture()
+          ? 'isa-awake'
           : phase === 'awake'
             ? 'isa-awake'
             : phase === 'sleeping'
@@ -133,9 +131,6 @@ export class Isabel {
       const state = this.voice.state();
       this.controller?.setWorking(this.busy() || state === 'loading');
       this.controller?.setSpeaking(state === 'speaking');
-    });
-    effect(() => {
-      if (this.ready()) this.controller?.setMouthOpening(this.voice.mouthOpening());
     });
   }
 

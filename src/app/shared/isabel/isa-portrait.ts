@@ -2,6 +2,11 @@ import atlas from './isa-portrait-manifest.json';
 import speechAtlas from './isa-speech-manifest.json';
 import { IsaMotion, type IsaPose } from './isa-motion';
 
+// Omit the source video's opening/closing idle poses in a long narration's loop.
+// Keep all frames available to close the mouth when the audio actually ends.
+const SPEECH_START = 12;
+const SPEECH_END = 192;
+
 /** Continuous pose tracks and supplied speech frames; no pasted facial parts. */
 export async function createIsaPortrait(host: HTMLElement) {
   const image = new Image();
@@ -23,10 +28,8 @@ export async function createIsaPortrait(host: HTMLElement) {
   const speechPending = new Set<number>();
   const speechFailed = new Set<number>();
   let speechPage = 0;
-  let speechPosition = 0;
+  let speechPosition = SPEECH_START;
   let speechAmount = 0;
-  let mouthOpening = 0;
-  let speechSilence = 0;
   let speechRestTarget: number | undefined;
   let speechRestSpeed = speechAtlas.fps;
   let speechStopping = false;
@@ -55,16 +58,22 @@ export async function createIsaPortrait(host: HTMLElement) {
       if (destroyed) return;
       // Retain only the current page and its successor, rather than decoding
       // one giant atlas on mobile or loading speech before it is needed.
-      if (index === speechPage || index === (speechPage + 1) % speechAtlas.pages.length) {
+      if (index === speechPage || index === nextSpeechPage()) {
         speechImages.set(index, page);
       }
     }).catch(() => { speechFailed.add(index); }).finally(() => { speechPending.delete(index); });
   }
 
+  function nextSpeechPage() {
+    const page = speechAtlas.pages[speechPage];
+    return speaking && page.first + page.count >= SPEECH_END
+      ? 0 : (speechPage + 1) % speechAtlas.pages.length;
+  }
+
   function speechTile() {
     const index = Math.floor(speechPosition) % speechAtlas.sourceFrames.length;
     speechPage = speechAtlas.pages.findIndex(page => index >= page.first && index < page.first + page.count);
-    const nextPage = (speechPage + 1) % speechAtlas.pages.length;
+    const nextPage = nextSpeechPage();
     for (const key of speechImages.keys()) {
       if (key !== speechPage && key !== nextPage) speechImages.delete(key);
     }
@@ -122,7 +131,9 @@ export async function createIsaPortrait(host: HTMLElement) {
     if (speech?.image && mix > 0) {
       ctx.globalCompositeOperation = 'lighter';
       const fraction = speech.ready ? speechPosition % 1 : 0;
-      const nextIndex = (Math.floor(speechPosition) + 1) % speechAtlas.sourceFrames.length;
+      const nextFrame = Math.floor(speechPosition) + 1;
+      const nextIndex = speaking && nextFrame >= SPEECH_END
+        ? SPEECH_START : nextFrame % speechAtlas.sourceFrames.length;
       const nextPage = speechAtlas.pages.findIndex(page => nextIndex >= page.first && nextIndex < page.first + page.count);
       const nextImage = speechImages.get(nextPage);
       // Blend neighboring native frames, including atlas page and loop boundaries.
@@ -145,16 +156,17 @@ export async function createIsaPortrait(host: HTMLElement) {
     if (destroyed || !visible || document.hidden) return;
     const seconds = Math.min(Math.max(0, (now - lastTime) / 1000), 0.05);
     motion.advance(seconds);
-    const talking = speaking && !working && !reduced && motion.pose === 'isa-awake' && !motion.moving;
+    // Audio playback owns the portrait, including quiet gaps and the initial
+    // turn: never expose a neutral pose between spoken fragments.
+    const talking = speaking && !reduced;
     const speech = talking || speechStopping ? speechTile() : undefined;
     if (speechStopping && !speech?.ready) speechStopping = false;
-    if (talking) speechSilence = mouthOpening > 0.03 ? 0 : speechSilence + seconds;
     if (speech?.ready) {
-      if (talking && speechSilence < 0.32) {
-        // Word/syllable gaps do not stop the video or switch the whole person.
+      if (talking) {
         speechRestTarget = undefined;
-        speechPosition = (speechPosition + seconds * speechAtlas.fps) % speechAtlas.sourceFrames.length;
-      } else if (talking || speechStopping) {
+        speechPosition = SPEECH_START +
+          (speechPosition - SPEECH_START + seconds * speechAtlas.fps) % (SPEECH_END - SPEECH_START);
+      } else if (speechStopping) {
         if (speechRestTarget === undefined) {
           speechRestTarget = nearestRest();
           speechRestSpeed = Math.max(speechAtlas.fps, Math.abs(restDistance(speechRestTarget)) / 0.25);
@@ -184,7 +196,7 @@ export async function createIsaPortrait(host: HTMLElement) {
   }
 
   function blink() {
-    if (destroyed || reduced || working || !visible || document.hidden
+    if (destroyed || reduced || working || speaking || !visible || document.hidden
         || motion.pose !== 'isa-awake' || motion.moving) return;
     blinkStarted = performance.now();
     lastTime = blinkStarted;
@@ -203,6 +215,7 @@ export async function createIsaPortrait(host: HTMLElement) {
 
   function setPose(key: string, immediate: boolean) {
     if (!['isa-sleep', 'isa-awake', 'isa-right', 'isa-down'].includes(key)) return;
+    if (speaking) key = 'isa-awake';
     reduced = immediate;
     if (immediate) {
       speechAmount = 0;
@@ -259,6 +272,8 @@ export async function createIsaPortrait(host: HTMLElement) {
       working = value;
       blinkStarted = undefined;
       clearTimeout(blinkTimer);
+      // Decode initial speech pages while Piper prepares the audio.
+      if (value && !reduced) speechTile();
       if (!value) planIdleBlink();
       draw();
     },
@@ -268,8 +283,11 @@ export async function createIsaPortrait(host: HTMLElement) {
       canvas.dataset['isaSpeaking'] = String(value);
       clearTimeout(blinkTimer);
       if (value) {
-        speechPosition = 0;
-        speechSilence = 0;
+        motion.request('isa-awake', reduced);
+        canvas.dataset['isaExpression'] = 'isa-awake';
+        canvas.dataset['isaAnimation'] = reduced ? '' : 'isa-awake';
+        blinkStarted = undefined;
+        speechPosition = SPEECH_START;
         speechRestTarget = undefined;
         speechStopping = false;
         lastSpeechTile = undefined;
@@ -284,8 +302,8 @@ export async function createIsaPortrait(host: HTMLElement) {
       draw();
       if (!reduced && (value || speechAmount > 0)) schedule();
     },
-    setMouthOpening(value: number) {
-      mouthOpening = Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+    setMouthOpening(_value: number) {
+      // Compatibility with existing callers: amplitude no longer stops speech.
     },
     destroy() {
       destroyed = true;

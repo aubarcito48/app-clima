@@ -1,9 +1,8 @@
-export type IsaPhase = 'sleeping' | 'awake' | 'right' | 'front' | 'expressive' | 'resting';
+export type IsaPhase = 'sleeping' | 'awake' | 'right' | 'front' | 'resting';
 
 export class IsaLifecycle {
   private active = false;
   private speaking = false;
-  private gestureTimer?: ReturnType<typeof setTimeout>;
   private restTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private readonly change: (phase: IsaPhase) => void) {}
@@ -14,12 +13,7 @@ export class IsaLifecycle {
     if (speaking) {
       clearTimeout(this.restTimer);
       if (!this.speaking) {
-        clearTimeout(this.gestureTimer);
         this.change('front');
-        this.gestureTimer = setTimeout(() => {
-          this.change('expressive');
-          this.gestureTimer = setTimeout(() => this.change('front'), 900);
-        }, 450);
       }
     } else if (active) {
       this.clearTimers();
@@ -38,7 +32,6 @@ export class IsaLifecycle {
   }
 
   private clearTimers(): void {
-    clearTimeout(this.gestureTimer);
     clearTimeout(this.restTimer);
   }
 }

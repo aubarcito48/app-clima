@@ -62,7 +62,7 @@ describe('Isa video speech lifecycle', () => {
     vi.unstubAllGlobals();
   });
 
-  it('loads speech only on demand, animates and closes on silence/stop', async () => {
+  it('keeps speech moving through quiet gaps and closes only when playback ends', async () => {
     expect(requests).toHaveLength(1);
     controller!.play('isa-awake');
     await advance(160);
@@ -74,11 +74,11 @@ describe('Isa video speech lifecycle', () => {
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(0);
     controller!.setMouthOpening(0);
     await advance(35);
-    // Real pauses settle inside the same video, without replacing the whole body.
+    // Even a long quiet gap must not pause and restart the speaking character.
     expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
     const pausedFrame = canvas.dataset['isaSpeechFrame'];
     await advance(20);
-    expect(canvas.dataset['isaSpeechFrame']).toBe(pausedFrame);
+    expect(canvas.dataset['isaSpeechFrame']).not.toBe(pausedFrame);
     controller!.setSpeaking(false);
     await advance(70);
     expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
@@ -104,7 +104,7 @@ describe('Isa video speech lifecycle', () => {
     expect(Number(canvas.dataset['isaSpeechFrame']) - start).toBeLessThanOrEqual(25);
   });
 
-  it('blends directed glances and resumes speech without restarting the video', async () => {
+  it('keeps speaking when a gesture or loading update arrives mid-narration', async () => {
     controller!.play('isa-awake');
     await advance(160);
     controller!.setMouthOpening(.7);
@@ -113,14 +113,45 @@ describe('Isa video speech lifecycle', () => {
     const canvas = host.querySelector('canvas')!;
     const before = Number(canvas.dataset['isaSpeechFrame']);
     controller!.play('isa-down');
+    controller!.setWorking(true);
     await advance(60);
-    expect(canvas.dataset['isaExpression']).toBe('isa-down');
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeLessThan(.01);
+    expect(canvas.dataset['isaExpression']).toBe('isa-awake');
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
     controller!.play('isa-awake');
     await advance(160);
     expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.9);
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(before);
     expect(canvas.dataset['isaSpeaking']).toBe('true');
+  });
+
+  it('enters speech during the initial turn without waiting at the neutral portrait', async () => {
+    controller!.play('isa-right');
+    controller!.setWorking(true);
+    await advance(100);
+    expect(requests.some(request => request.includes('isa-speech-v1-0'))).toBe(true);
+    controller!.setWorking(false);
+    controller!.setSpeaking(true);
+    await advance(15);
+    const canvas = host.querySelector('canvas')!;
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.85);
+    expect(canvas.dataset['isaExpression']).toBe('isa-awake');
+  });
+
+  it('loops a long narration without playing the source intro or outro', async () => {
+    controller!.setSpeaking(true);
+    const canvas = host.querySelector('canvas')!;
+    let wraps = 0;
+    let previous = 12;
+    for (let i = 0; i < 1500; i++) {
+      await advance(1);
+      const frame = Number(canvas.dataset['isaSpeechFrame']);
+      expect(frame).toBeGreaterThanOrEqual(12);
+      expect(frame).toBeLessThan(192);
+      if (frame < previous) wraps++;
+      if (i > 40) expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
+      previous = frame;
+    }
+    expect(wraps).toBeGreaterThanOrEqual(3);
   });
 
   it('does not load speech or animate with reduced motion', async () => {
