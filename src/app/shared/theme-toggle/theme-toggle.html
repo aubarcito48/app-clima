@@ -13,8 +13,8 @@
   "
   (click)="theme.toggle($event)"
 >
-  <app-weather-icon [name]="theme.mode() === 'dark' ? 'sun' : 'moon'" [size]="18" />
+  <app-weather-icon [name]="theme.mode() === 'dark' ? 'moon' : 'sun'" [size]="18" />
   <span class="whitespace-nowrap">{{
-    theme.mode() === 'dark' ? ('Modo claro' | translate) : ('Modo oscuro' | translate)
+    theme.mode() === 'dark' ? ('Modo oscuro' | translate) : ('Modo claro' | translate)
   }}</span>
 </button>
