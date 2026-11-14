@@ -59,6 +59,7 @@ describe('Isa voice playback lifecycle', () => {
       texto: '¡Buenas, explorador!\nLlevá abrigo.\nEn Córdoba refresca.\n¡Hasta luego, explorador!',
     });
     expect(request.request.method).toBe('POST');
+    expect(request.request.timeout).toBe(120000);
     expect(voice.state()).toBe('loading');
     request.flush(wav());
     FakeAudio.instances[0].onplaying?.();

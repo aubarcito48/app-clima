@@ -74,7 +74,8 @@ export class IsabelVoice {
         { texto: narration, ...(language === 'en' ? { idioma: language } : {}), ...performance },
         {
           responseType: 'blob',
-          timeout: 50000,
+          // Piper may take 45 s, then the optional Rhubarb probe up to 60 s.
+          timeout: 120000,
         },
       )
       .subscribe({
