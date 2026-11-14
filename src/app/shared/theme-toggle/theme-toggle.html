@@ -11,7 +11,7 @@
       ? ('Activar modo claro' | translate)
       : ('Activar modo oscuro' | translate)
   "
-  (click)="theme.toggle()"
+  (click)="theme.toggle($event)"
 >
   <app-weather-icon [name]="theme.mode() === 'dark' ? 'sun' : 'moon'" [size]="18" />
   <span class="whitespace-nowrap">{{

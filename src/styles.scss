@@ -1,3 +1,22 @@
+/* Reveal the actual next theme from its control, without recoloring photos or Isa. */
+html.theme-reveal::view-transition-group(root) {
+  animation: none;
+}
+
+html.theme-reveal::view-transition-old(root),
+html.theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-reveal::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  z-index: 2;
+}
+
 /* Leave room for the sticky mobile navigation when following page anchors. */
 @media (max-width: 1023px) {
   html {

@@ -6,6 +6,23 @@ Consume la API de [app-clima-backend](https://github.com/aubarcito48/app-clima-b
 
 **Publicado en Vercel:** [https://app-clima-ecru.vercel.app/](https://app-clima-ecru.vercel.app/)
 
+## Cambio de tema con revelado circular
+
+El botón de tema revela la nueva paleta con un círculo que se expande desde el
+centro del control durante 600 ms, tanto al pasar a oscuro como al volver a claro.
+La implementación usa View Transitions y Web Animations nativas del navegador,
+sin dependencias adicionales. Cambia la paleta real; no invierte los colores de
+las imágenes ni de IsaBot. El foco de teclado y la preferencia guardada se conservan.
+
+Con movimiento reducido o sin soporte de View Transitions, el tema cambia de
+forma inmediata. Los cambios del sistema y la sincronización entre pestañas
+tampoco disparan el efecto. Los clics rápidos cancelan la animación anterior y
+respetan la última elección. La referencia visual fue `video-idea-darkmode.mp4`.
+
+Verificación: compilación de producción, tipado E2E y nueve casos de navegador
+en celular, tablet y escritorio (revelado, teclado, clics rápidos, movimiento
+reducido y compatibilidad sin View Transitions).
+
 [![Vista previa del portfolio](public/app-clima.png)](https://app-clima-ecru.vercel.app/)
 
 ## Ejecución local
