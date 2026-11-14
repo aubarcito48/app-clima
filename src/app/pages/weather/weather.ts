@@ -52,7 +52,6 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
 })
 export class Weather {
   readonly language = inject(Language);
-  readonly sidebarCollapsed = signal(false);
   readonly favorites = inject(FavoritePlaces);
   toggleFavorite(): void {
     const location = this.response()?.ubicacion;

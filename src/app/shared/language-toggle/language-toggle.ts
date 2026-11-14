@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Language } from '../../service/language';
 
 @Component({
@@ -6,7 +6,6 @@ import { Language } from '../../service/language';
   template: `
     <div
       class="language-control"
-      [class.compact]="compact()"
       role="group"
       [attr.aria-label]="language.text('Idioma')"
     >
@@ -67,21 +66,9 @@ import { Language } from '../../service/language';
       outline: 2px solid var(--color-blue);
       outline-offset: 1px;
     }
-    .language-control.compact {
-      flex-direction: column;
-      width: 44px;
-      padding: 0;
-    }
-    .compact > span {
-      display: none;
-    }
-    .compact button {
-      width: 42px;
-    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LanguageToggle {
-  readonly compact = input(false);
   readonly language = inject(Language);
 }

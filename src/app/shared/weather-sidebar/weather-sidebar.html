@@ -5,7 +5,7 @@
     class="relative flex items-center gap-3 rounded-xl"
   >
     <span class="stitch-logo" aria-hidden="true">S</span>
-    <span class="brand-copy" [class.sr-only]="compact()"
+    <span class="brand-copy"
       ><span class="block font-display text-lg font-bold tracking-tight text-ink"
         >Stitch<span class="text-brand-accent">Weather</span></span
       ><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{
@@ -32,9 +32,9 @@
       </button>
     }
   </div>
-  <div class="sidebar-preferences" [class.is-compact]="compact()">
-    <app-language-toggle [compact]="compact()" />
-    <app-theme-toggle [compact]="compact()" />
+  <div class="sidebar-preferences">
+    <app-language-toggle />
+    <app-theme-toggle />
   </div>
   <nav [attr.aria-label]="'Navegación principal' | translate" class="relative mt-4 grid gap-2">
     <a
@@ -43,7 +43,7 @@
       [class.bg-surface]="!placesOpen()"
       [attr.aria-current]="!placesOpen() ? 'location' : null"
       (click)="forecastSelected()"
-      ><app-weather-icon name="cloud-sun" [size]="20" /><span [class.sr-only]="compact()">{{
+      ><app-weather-icon name="cloud-sun" [size]="20" /><span>{{
         'Pronóstico' | translate
       }}</span></a
     >
@@ -56,7 +56,7 @@
       aria-controls="favorite-places"
       (click)="togglePlaces()"
     >
-      <app-weather-icon name="heart" [size]="20" /><span [class.sr-only]="compact()">{{
+      <app-weather-icon name="heart" [size]="20" /><span>{{
         'Mis lugares' | translate
       }}</span
       ><span
@@ -75,7 +75,7 @@
   }
   <section
     id="favorite-places"
-    [hidden]="!placesOpen() || compact()"
+    [hidden]="!placesOpen()"
     aria-labelledby="favorite-heading"
     class="relative mt-4 min-w-0"
   >
@@ -123,7 +123,7 @@
     </p>
   </section>
   @if (desktop()) {
-    <div class="sidebar-note" [hidden]="compact()">
+    <div class="sidebar-note">
       <ng-container [ngTemplateOutlet]="assistant" />
     </div>
   }
@@ -131,22 +131,9 @@
 
 @if (desktop()) {
   <div class="desktop-shell">
-    <aside id="desktop-navigation" class="stitch-sidebar" [class.is-collapsed]="collapsed()">
+    <aside id="desktop-navigation" class="stitch-sidebar">
       <ng-container [ngTemplateOutlet]="content" />
     </aside>
-    <button
-      type="button"
-      class="desktop-collapse menu-control"
-      [attr.aria-label]="
-        collapsed() ? ('Expandir menú lateral' | translate) : ('Contraer menú lateral' | translate)
-      "
-      [attr.title]="collapsed() ? ('Expandir menú' | translate) : ('Contraer menú' | translate)"
-      [attr.aria-expanded]="!collapsed()"
-      aria-controls="desktop-navigation"
-      (click)="toggleCollapsed()"
-    >
-      <app-weather-icon name="arrow" [size]="18" [class.rotate-180]="!collapsed()" />
-    </button>
   </div>
 } @else {
   <header class="mobile-header">

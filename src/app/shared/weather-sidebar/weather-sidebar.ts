@@ -5,7 +5,6 @@ import {
   DestroyRef,
   ElementRef,
   inject,
-  model,
   output,
   signal,
   viewChild,
@@ -27,7 +26,6 @@ import { ThemeToggle } from '../theme-toggle/theme-toggle';
 export class WeatherSidebar {
   private readonly document = inject(DOCUMENT);
   readonly desktop = signal(true);
-  readonly collapsed = model(false);
   readonly mobileOpen = signal(false);
   readonly mobileMenu = viewChild<ElementRef<HTMLDialogElement>>('mobileMenu');
   readonly menuTrigger = viewChild<ElementRef<HTMLButtonElement>>('menuTrigger');
@@ -49,9 +47,6 @@ export class WeatherSidebar {
   readonly placesOpen = signal(false);
   readonly placeSelected = output<SavedPlace>();
   readonly placesButton = viewChild<ElementRef<HTMLButtonElement>>('placesButton');
-  compact() {
-    return this.desktop() && this.collapsed();
-  }
   openMenu() {
     const dialog = this.mobileMenu()?.nativeElement;
     if (!dialog || dialog.open) return;
@@ -94,15 +89,8 @@ export class WeatherSidebar {
       this.previousOverflow = null;
     }
   }
-  toggleCollapsed() {
-    this.collapsed.update((value) => !value);
-    this.placesOpen.set(false);
-  }
   togglePlaces() {
-    if (this.compact()) {
-      this.collapsed.set(false);
-      this.placesOpen.set(true);
-    } else this.placesOpen.update((value) => !value);
+    this.placesOpen.update((value) => !value);
   }
   forecastSelected() {
     this.placesOpen.set(false);

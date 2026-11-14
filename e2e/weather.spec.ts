@@ -233,7 +233,7 @@ async function closeNavigation(page: Page) {
   if (await close.isVisible()) await close.click();
 }
 
-test('navegación adaptable: hamburguesa, Escape, fondo y barra contraíble', async ({
+test('navegación adaptable: hamburguesa, Escape, fondo y barra lateral fija', async ({
   page,
 }, info) => {
   await page.goto('/');
@@ -279,23 +279,11 @@ test('navegación adaptable: hamburguesa, Escape, fondo y barra contraíble', as
     await expect(trigger).toBeFocused();
     await trigger.click();
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await expect(
-      page.getByRole('button', { name: 'Contraer menú lateral', exact: true }),
-    ).toBeVisible();
+    await expect(page.locator('#desktop-navigation')).toBeVisible();
     expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
   }
-  const before = (await page.locator('main').boundingBox())!;
-  await page.getByRole('button', { name: 'Contraer menú lateral', exact: true }).click();
-  await expect(page.locator('#desktop-navigation')).toHaveClass(/is-collapsed/);
-  const after = (await page.locator('main').boundingBox())!;
-  expect(after.width).toBeGreaterThan(before.width + 100);
-  await expect(
-    page.getByRole('button', { name: 'Expandir menú lateral', exact: true }),
-  ).toBeVisible();
   await page.getByRole('button', { name: /^Mis lugares/ }).click();
-  await expect(
-    page.getByRole('button', { name: 'Contraer menú lateral', exact: true }),
-  ).toBeVisible();
+  await expect(page.locator('#desktop-navigation')).toBeVisible();
   await expect(page.locator('#favorite-places')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });

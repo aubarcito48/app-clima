@@ -48,10 +48,6 @@
   gap: 0.5rem;
   margin-top: 1.75rem;
 }
-.sidebar-preferences.is-compact {
-  flex-direction: column;
-  flex-wrap: nowrap;
-}
 .sidebar-link {
   display: flex;
   width: 100%;
@@ -117,14 +113,14 @@
   border-bottom: 1px solid var(--color-line);
   box-shadow: 0 4px 14px #1239520a;
 }
-:is(.mobile-header > .menu-control, .desktop-collapse) {
+.mobile-header > .menu-control {
   color: #ffffff;
 }
-:host-context(html[data-theme='light']) :is(.mobile-header > .menu-control, .desktop-collapse) {
+:host-context(html[data-theme='light']) .mobile-header > .menu-control {
   border-color: var(--color-primary);
   background: var(--color-primary);
 }
-:host-context(html[data-theme='light']) :is(.mobile-header > .menu-control, .desktop-collapse):hover {
+:host-context(html[data-theme='light']) .mobile-header > .menu-control:hover {
   background: var(--color-primary-hover);
 }
 .header-assistant {
@@ -173,35 +169,6 @@
 .desktop-shell .stitch-sidebar {
   height: 100%;
   position: relative;
-}
-.desktop-collapse {
-  position: absolute;
-  z-index: 10;
-  right: -1.375rem;
-  top: 1.75rem;
-  border-radius: 50%;
-  box-shadow: 0 3px 12px #12395216;
-}
-.is-collapsed {
-  padding: 2rem 0.75rem;
-}
-.is-collapsed > div:first-child {
-  justify-content: center;
-}
-.is-collapsed .sidebar-link {
-  position: relative;
-  justify-content: center;
-  padding: 0.5rem;
-}
-.is-collapsed .favorite-count {
-  position: absolute;
-  right: 0;
-  top: -0.15rem;
-  padding: 0.1rem 0.3rem;
-  font-size: 0.6rem;
-}
-.is-collapsed .sidebar-note {
-  display: none;
 }
 @media (prefers-reduced-motion: no-preference) {
   .mobile-menu {

@@ -14,9 +14,7 @@
   (click)="theme.toggle()"
 >
   <app-weather-icon [name]="theme.mode() === 'dark' ? 'sun' : 'moon'" [size]="18" />
-  @if (!compact()) {
-    <span class="whitespace-nowrap">{{
-      theme.mode() === 'dark' ? ('Modo claro' | translate) : ('Modo oscuro' | translate)
-    }}</span>
-  }
+  <span class="whitespace-nowrap">{{
+    theme.mode() === 'dark' ? ('Modo claro' | translate) : ('Modo oscuro' | translate)
+  }}</span>
 </button>
