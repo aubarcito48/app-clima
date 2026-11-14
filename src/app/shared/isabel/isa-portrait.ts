@@ -29,6 +29,7 @@ export async function createIsaPortrait(host: HTMLElement) {
   const speechFailed = new Set<number>();
   let speechPage = 0;
   let speechPosition = SPEECH_START;
+  let speechTime: number | undefined;
   let speechAmount = 0;
   let speechRestTarget: number | undefined;
   let speechRestSpeed = speechAtlas.fps;
@@ -164,8 +165,10 @@ export async function createIsaPortrait(host: HTMLElement) {
     if (speech?.ready) {
       if (talking) {
         speechRestTarget = undefined;
-        speechPosition = SPEECH_START +
-          (speechPosition - SPEECH_START + seconds * speechAtlas.fps) % (SPEECH_END - SPEECH_START);
+        const frames = speechTime === undefined
+          ? speechPosition - SPEECH_START + seconds * speechAtlas.fps
+          : speechTime * speechAtlas.fps;
+        speechPosition = SPEECH_START + frames % (SPEECH_END - SPEECH_START);
       } else if (speechStopping) {
         if (speechRestTarget === undefined) {
           speechRestTarget = nearestRest();
@@ -288,6 +291,7 @@ export async function createIsaPortrait(host: HTMLElement) {
         canvas.dataset['isaAnimation'] = reduced ? '' : 'isa-awake';
         blinkStarted = undefined;
         speechPosition = SPEECH_START;
+        speechTime = undefined;
         speechRestTarget = undefined;
         speechStopping = false;
         lastSpeechTile = undefined;
@@ -304,6 +308,12 @@ export async function createIsaPortrait(host: HTMLElement) {
     },
     setMouthOpening(_value: number) {
       // Compatibility with existing callers: amplitude no longer stops speech.
+    },
+    setSpeechTime(seconds: number) {
+      if (!speaking || !Number.isFinite(seconds) || seconds < 0) return;
+      speechTime = seconds;
+      if (frameId === undefined) lastTime = performance.now();
+      schedule();
     },
     destroy() {
       destroyed = true;

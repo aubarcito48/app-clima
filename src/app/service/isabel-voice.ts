@@ -8,6 +8,7 @@ import {
   IsaGesture,
   IsaSegment,
   isaGestureAt,
+  isaSpeechTimeAt,
   readIsaSegments,
   readIsaTimeline,
 } from '../models/isa-performance';
@@ -20,6 +21,7 @@ export class IsabelVoice {
   readonly enabled = signal(true);
   readonly progress = signal(0);
   readonly mouthOpening = signal(0);
+  readonly speechTime = signal(0);
   readonly gesture = signal<IsaGesture>('isa-awake');
   readonly state = signal<'idle' | 'loading' | 'speaking' | 'blocked' | 'error'>('idle');
   private request?: Subscription;
@@ -112,6 +114,9 @@ export class IsabelVoice {
               const frame = Math.floor(audio.currentTime / VOICE_FRAME_SECONDS);
               const level = audio.paused ? 0 : (this.envelope[frame] ?? 0);
               this.mouthOpening.set(Math.round(level * 20) / 20);
+              this.speechTime.set(
+                isaSpeechTimeAt(this.cues, performance.segmentos ?? [], audio.currentTime),
+              );
               this.gesture.set(
                 audio.paused ? 'isa-awake' : isaGestureAt(this.cues, audio.currentTime),
               );
@@ -147,6 +152,7 @@ export class IsabelVoice {
     this.mouthFrame = undefined;
     this.envelope = new Float32Array();
     this.mouthOpening.set(0);
+    this.speechTime.set(0);
     this.gesture.set('isa-awake');
     this.cues = [];
     this.request?.unsubscribe();

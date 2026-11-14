@@ -121,8 +121,10 @@ describe('Isa voice playback lifecycle', () => {
     audio.currentTime = 2.2;
     audio.onplaying?.();
     expect(voice.gesture()).toBe('isa-down');
+    expect(voice.speechTime()).toBeCloseTo(2.18);
     audio.currentTime = 3.4;
     frame?.(0);
+    expect(voice.speechTime()).toBeCloseTo(3.26);
     expect(voice.gesture()).toBe('isa-awake');
     audio.currentTime = 3.8;
     frame?.(0);
@@ -131,6 +133,7 @@ describe('Isa voice playback lifecycle', () => {
     expect(voice.gesture()).toBe('isa-awake');
     frame?.(0);
     expect(voice.state()).toBe('idle');
+    expect(voice.speechTime()).toBe(0);
   });
 
   it('reports blocked autoplay without sending another synthesis request', async () => {

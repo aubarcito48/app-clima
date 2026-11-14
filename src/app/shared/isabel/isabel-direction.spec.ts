@@ -46,6 +46,8 @@ describe('Isa applies the voice performance to the existing portrait', () => {
     await fixture.whenStable();
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');
     expect(canvas.dataset['isaSpeaking']).toBe('true');
+    isa.voice.speechTime.set(1.5);
+    await fixture.whenStable();
     isa.voice.gesture.set('isa-awake');
     await fixture.whenStable();
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');

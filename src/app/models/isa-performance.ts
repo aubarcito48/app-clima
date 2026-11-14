@@ -119,3 +119,24 @@ export function isaGestureAt(cues: readonly IsaCue[], seconds: number): IsaGestu
     ? cue.gesture
     : 'isa-awake';
 }
+
+/** Animation time follows actual audio time, weighted by Piper's segment pace.
+ * Pauses keep moving at normal pace; no frame is held between phrases.
+ * Without matching metadata, the audio clock remains the source of truth.
+ */
+export function isaSpeechTimeAt(
+  cues: readonly IsaCue[],
+  segments: readonly IsaSegment[],
+  seconds: number,
+): number {
+  if (!Number.isFinite(seconds) || seconds < 0) return 0;
+  if (!cues.length || cues.length !== segments.length) return seconds;
+  let time = seconds;
+  for (let i = 0; i < cues.length; i++) {
+    const cue = cues[i];
+    const spoken = Math.max(0, Math.min(seconds, cue.speech_end) - cue.from);
+    time += spoken * (segments[i].speed - 1);
+    if (seconds < cue.until) break;
+  }
+  return Math.max(0, time);
+}

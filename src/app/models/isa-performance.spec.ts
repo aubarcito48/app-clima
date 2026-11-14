@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   isaGestureAt,
+  isaSpeechTimeAt,
   readIsaSegments,
   readIsaTimeline,
   type IsaCue,
@@ -56,5 +57,19 @@ describe('Isa direction and sample-derived timing', () => {
       );
     }
     expect(readIsaTimeline(new ArrayBuffer(0))).toEqual([]);
+  });
+
+  it('follows Piper pace on the audio clock without resetting between fragments', () => {
+    const segments: IsaSegment[] = [
+      { text: 'Primero.', gesture: 'isa-awake', speed: 0.8, energy: 1, pause_ms: 300 },
+      { text: 'Después.', gesture: 'isa-awake', speed: 1.2, energy: 1, pause_ms: 200 },
+    ];
+    expect(isaSpeechTimeAt(cues, segments, 1)).toBeCloseTo(0.8);
+    expect(isaSpeechTimeAt(cues, segments, 2.8)).toBeCloseTo(2.8 - 2.7 * 0.2);
+    expect(isaSpeechTimeAt(cues, segments, 3)).toBeCloseTo(3 - 2.7 * 0.2);
+    expect(isaSpeechTimeAt(cues, segments, 4)).toBeCloseTo(4 - 2.7 * 0.2 + 0.2);
+    expect(isaSpeechTimeAt([], segments, 4)).toBe(4);
+    expect(isaSpeechTimeAt(cues, [], 4)).toBe(4);
+    expect(isaSpeechTimeAt(cues, segments, NaN)).toBe(0);
   });
 });

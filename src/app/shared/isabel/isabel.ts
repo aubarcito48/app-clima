@@ -132,6 +132,11 @@ export class Isabel {
       this.controller?.setWorking(this.busy() || state === 'loading');
       this.controller?.setSpeaking(state === 'speaking');
     });
+    effect(() => {
+      if (this.ready() && this.voice.state() === 'speaking') {
+        this.controller?.setSpeechTime(this.voice.speechTime());
+      }
+    });
   }
 
   toggleVoice(): void {

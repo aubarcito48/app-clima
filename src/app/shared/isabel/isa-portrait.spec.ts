@@ -163,6 +163,25 @@ describe('Isa video speech lifecycle', () => {
     expect(callbacks.size).toBe(0);
   });
 
+  it('uses the audio clock across stalls, quiet gaps and loops instead of drifting', async () => {
+    controller!.setSpeaking(true);
+    controller!.setSpeechTime(1);
+    await advance(60);
+    const canvas = host.querySelector('canvas')!;
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(36);
+    await advance(60);
+    // A paused audio clock must not run ahead on a separate animation timer.
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(36);
+    controller!.setSpeechTime(9);
+    await advance(10);
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(48);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
+    controller!.setSpeechTime(NaN);
+    controller!.setSpeechTime(-1);
+    await advance(10);
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(48);
+  });
+
   it('holds the last speech image across a late atlas page instead of flashing neutral', async () => {
     delaySecondPage = true;
     controller!.play('isa-awake');

@@ -9,6 +9,18 @@ los tiempos reales de cada fragmento dentro del chunk RIFF `isac` del WAV.
 La dirección se consulta con `audio.currentTime`, sin estimaciones por longitud
 del texto ni temporizadores acumulados. El audio sigue funcionando sin ese chunk.
 
+El avance del video también usa `audio.currentTime`, mediante `speechTime` y
+`setSpeechTime`, en lugar de acumular el tiempo de los cuadros de pantalla.
+`isaSpeechTimeAt` aplica a cada tramo hablado el mismo `speed` enviado a Piper;
+durante las pausas mantiene movimiento a ritmo normal. No reinicia el video al
+cambiar de fragmento y no acumula retraso si el navegador pierde cuadros o si
+una página del atlas tarda en decodificarse. Sin metadatos usa el reloj del audio
+a velocidad normal. El sintetizador ya recibe ritmo, energía y pausas de Groq;
+no se cambia la voz ni se fuerza una velocidad global distinta de su plan.
+
+Esto coordina el inicio y la cadencia general, no los fonemas: la boca pertenece
+a un video pregrabado y no reproduce las palabras exactas de Piper.
+
 El catálogo vigente es el del retrato: `isa-awake` (frente y video de habla),
 `isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Durante el
 audio, el habla tiene prioridad sobre las miradas elegidas por fragmento: Isa
@@ -87,6 +99,11 @@ con su audio, dos vueltas del bucle, miradas por fragmento y un silencio de dos
 segundos: `continuity-before-after.webm` y `continuity-report.json`. La versión
 corregida no volvió al frontal quieto durante el audio ni reprodujo cuadros de
 entrada/salida. La prueba unitaria también cubre 25 segundos y tres vueltas.
+La revisión de `video-prueba.mp4`, entre 1:22 y 1:24, comprobó además que la web
+publicada todavía cargaba `chunk-VL5ULGWK.js`, con el reproductor anterior que
+esperaba el fin del giro y frenaba en silencios de 320 ms. La validación local
+del reloj de audio se guarda en `audio-clock-before-after.webm` y
+`audio-clock-report.json`: usa un WAV real de Piper con ritmos 0.85 y 1.15.
 La aprobación visual final corresponde al usuario. No se ejecuta la suite E2E
 completa para esta corrección.
 
