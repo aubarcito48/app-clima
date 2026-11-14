@@ -104,6 +104,25 @@ describe('Isa video speech lifecycle', () => {
     expect(Number(canvas.dataset['isaSpeechFrame']) - start).toBeLessThanOrEqual(25);
   });
 
+  it('blends directed glances and resumes speech without restarting the video', async () => {
+    controller!.play('isa-awake');
+    await advance(160);
+    controller!.setMouthOpening(.7);
+    controller!.setSpeaking(true);
+    await advance(60);
+    const canvas = host.querySelector('canvas')!;
+    const before = Number(canvas.dataset['isaSpeechFrame']);
+    controller!.play('isa-down');
+    await advance(60);
+    expect(canvas.dataset['isaExpression']).toBe('isa-down');
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeLessThan(.01);
+    controller!.play('isa-awake');
+    await advance(160);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.9);
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(before);
+    expect(canvas.dataset['isaSpeaking']).toBe('true');
+  });
+
   it('does not load speech or animate with reduced motion', async () => {
     controller!.setExpression('isa-awake');
     controller!.setSpeaking(true);

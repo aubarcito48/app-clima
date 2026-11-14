@@ -94,6 +94,7 @@ export function climatePresentation(data: ClimateResponse, locale = 'es-AR'): We
       data.recomendacion.estado === 'disponible'
         ? {
             text: data.recomendacion.texto!,
+            ...(data.recomendacion.segmentos ? { segments: data.recomendacion.segmentos } : {}),
           }
         : null,
   };

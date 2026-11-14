@@ -1,5 +1,26 @@
 # Isa: retrato animado
 
+## Dirección de Groq durante la narración
+
+El consejo puede incluir `segmentos` con texto, mirada, velocidad, energía y pausa.
+El componente recibe el plan junto al consejo; `IsabelVoice` agrega saludo y
+despedida neutrales y envía todo en una única petición de voz. Piper devuelve
+los tiempos reales de cada fragmento dentro del chunk RIFF `isac` del WAV.
+La dirección se consulta con `audio.currentTime`, sin estimaciones por longitud
+del texto ni temporizadores acumulados. El audio sigue funcionando sin ese chunk.
+
+El catálogo vigente es el del retrato: `isa-awake` (frente y video de habla),
+`isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Las miradas
+elegidas por Groq aparecen hasta 1.2 segundos al comenzar el fragmento y en su
+pausa final; entre ellas vuelve al frente. Los giros y regresos usan `IsaMotion`
+y los fundidos existentes; no reinician el video de habla. No se inventan
+expresiones ni boca lateral: solo hay video de habla frontal.
+
+Silenciar, cancelar, cambiar idioma o destruir el componente descarta la dirección
+anterior junto con el audio. Con movimiento reducido se conserva el frente
+durante la voz sin animaciones. Sin plan válido se mantiene la narración habitual.
+No se generan ni descargan recursos visuales nuevos.
+
 ## Actualización: habla y cuadros adicionales
 
 La configuración vigente usa `isa-atlas-v3.webp`: **61 cuadros de 320 × 320**

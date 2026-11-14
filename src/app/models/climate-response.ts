@@ -1,3 +1,5 @@
+import { IsaSegment, readIsaSegments } from './isa-performance';
+
 // Contrato JSON v1 de Django, independiente del modelo de presentación.
 export interface ClimateLocation {
   nombre: string;
@@ -32,7 +34,11 @@ export interface ClimateResponse {
       icono?: string | null;
     }[];
   };
-  recomendacion: { estado: 'disponible' | 'no_disponible'; texto: string | null };
+  recomendacion: {
+    estado: 'disponible' | 'no_disponible';
+    texto: string | null;
+    segmentos?: IsaSegment[];
+  };
   meta: {
     fuente_meteorologica: 'OpenWeather';
     consultado_en_utc: string;
@@ -121,6 +127,7 @@ export function readClimateResponse(value: unknown): ClimateResponse {
     throw new InvalidClimateResponse();
   const adviceState = state(advice['estado']);
   const adviceText = adviceState === 'disponible' ? text(advice['texto']) : null;
+  const adviceSegments = adviceText ? readIsaSegments(advice['segmentos'], adviceText) : undefined;
   if (
     (adviceState === 'no_disponible' && advice['texto'] !== null) ||
     (adviceText && adviceText.length > 600)
@@ -165,7 +172,11 @@ export function readClimateResponse(value: unknown): ClimateResponse {
         };
       }),
     },
-    recomendacion: { estado: adviceState, texto: adviceText },
+    recomendacion: {
+      estado: adviceState,
+      texto: adviceText,
+      ...(adviceSegments ? { segmentos: adviceSegments } : {}),
+    },
     meta: {
       fuente_meteorologica: 'OpenWeather',
       consultado_en_utc: utc(meta['consultado_en_utc']),

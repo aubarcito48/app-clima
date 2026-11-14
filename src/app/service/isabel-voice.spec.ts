@@ -3,6 +3,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { IsabelVoice } from './isabel-voice';
+import { isaVoiceWav } from '../testing/isa-voice-fixture';
+import type { IsaSegment } from '../models/isa-performance';
 
 class FakeAudio {
   static instances: FakeAudio[] = [];
@@ -83,6 +85,52 @@ describe('Isa voice playback lifecycle', () => {
     expect(voice.state()).toBe('idle');
     voice.speak('No debe hablar mientras está silenciada');
     http.expectNone(() => true);
+  });
+
+  it('uses audio time for directed glances, includes greetings and clears direction on mute', async () => {
+    let frame: FrameRequestCallback | undefined;
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frame = callback;
+      return 1;
+    });
+    vi.stubGlobal('cancelAnimationFrame', vi.fn());
+    const plan: IsaSegment[] = [
+      { text: 'Llevá abrigo.', gesture: 'isa-down', speed: 0.9, energy: 0.8, pause_ms: 300 },
+    ];
+    voice.speak('Llevá abrigo.', 'es', plan);
+    const request = http.expectOne(() => true);
+    expect(request.request.body.segmentos).toHaveLength(3);
+    expect(request.request.body.segmentos[1]).toEqual(plan[0]);
+    expect(request.request.body.segmentos.map((part: IsaSegment) => part.text).join(' ')).toBe(
+      request.request.body.texto.replace(/\n/gu, ' '),
+    );
+    request.flush(
+      new Blob(
+        [
+          isaVoiceWav([
+            { from: 0, speech_end: 1.8, until: 2, gesture: 'isa-awake' },
+            { from: 2, speech_end: 3.7, until: 4, gesture: 'isa-down' },
+            { from: 4, speech_end: 6, until: 6, gesture: 'isa-awake' },
+          ]),
+        ],
+        { type: 'audio/wav' },
+      ),
+    );
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const audio = FakeAudio.instances[0];
+    audio.currentTime = 2.2;
+    audio.onplaying?.();
+    expect(voice.gesture()).toBe('isa-down');
+    audio.currentTime = 3.4;
+    frame?.(0);
+    expect(voice.gesture()).toBe('isa-awake');
+    audio.currentTime = 3.8;
+    frame?.(0);
+    expect(voice.gesture()).toBe('isa-down');
+    voice.setEnabled(false);
+    expect(voice.gesture()).toBe('isa-awake');
+    frame?.(0);
+    expect(voice.state()).toBe('idle');
   });
 
   it('reports blocked autoplay without sending another synthesis request', async () => {

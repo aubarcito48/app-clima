@@ -1,3 +1,5 @@
+import type { IsaSegment } from './isa-performance';
+
 // Modelo de presentación adaptado al contrato de Django, sin valores de reemplazo.
 export type WeatherCondition =
   'sun' | 'cloud-sun' | 'cloud' | 'rain' | 'moon' | 'snow' | 'mist' | 'storm' | 'cloud-moon';
@@ -34,5 +36,5 @@ export interface WeatherPreview {
   condition: WeatherCondition | null;
   description: string | null;
   forecast: readonly ForecastInterval[];
-  advice: { text: string } | null;
+  advice: { text: string; segments?: IsaSegment[] } | null;
 }

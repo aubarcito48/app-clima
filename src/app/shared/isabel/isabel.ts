@@ -16,6 +16,7 @@ import { IsabelVoice } from '../../service/isabel-voice';
 import { Language } from '../../service/language';
 import { Translate } from '../translate';
 import { IsaLifecycle, type IsaPhase } from './isa-lifecycle';
+import type { IsaSegment } from '../../models/isa-performance';
 
 @Component({
   selector: 'app-isabel',
@@ -29,6 +30,7 @@ export class Isabel {
   readonly sidebar = input(false);
   readonly busy = input(false);
   readonly text = input<string | null>(null);
+  readonly segments = input<IsaSegment[] | undefined>();
   readonly voice = inject(IsabelVoice);
   readonly language = inject(Language);
   readonly avatarFailed = signal(false);
@@ -61,20 +63,23 @@ export class Isabel {
       void this.loadAvatar();
     });
     let previousText: string | null = null;
+    let previousSegments: IsaSegment[] | undefined;
     let attempted = false;
     effect((onCleanup) => {
       const text = this.text();
+      const segments = this.segments();
       const enabled = this.voice.enabled();
       const language = this.language.code();
-      if (text !== previousText) {
+      if (text !== previousText || segments !== previousSegments) {
         previousText = text;
+        previousSegments = segments;
         attempted = false;
       }
       untracked(() => {
         this.voice.stop();
         if (text && enabled && !attempted) {
           attempted = true;
-          this.voice.speak(text, language);
+          this.voice.speak(text, language, segments);
         }
       });
       onCleanup(() => this.voice.stop());
@@ -92,15 +97,19 @@ export class Isabel {
       const lookDown = this.sidebar() && this.horizontalNavbar();
       if (!ready || !this.controller) return;
       const expression =
-        state === 'speaking' || phase === 'awake'
-          ? 'isa-awake'
-          : phase === 'sleeping'
-            ? 'isa-sleep'
-            : phase === 'right'
-              ? lookDown
-                ? 'isa-down'
-                : 'isa-right'
-              : 'isa-awake';
+        state === 'speaking'
+          ? reducedMotion
+            ? 'isa-awake'
+            : this.voice.gesture()
+          : phase === 'awake'
+            ? 'isa-awake'
+            : phase === 'sleeping'
+              ? 'isa-sleep'
+              : phase === 'right'
+                ? lookDown
+                  ? 'isa-down'
+                  : 'isa-right'
+                : 'isa-awake';
       const animation = expression;
       const poseKey = `${reducedMotion ? 'static' : 'animated'}:${reducedMotion ? expression : animation}`;
       if (poseKey === this.lastPose) return;
@@ -128,7 +137,6 @@ export class Isabel {
     effect(() => {
       if (this.ready()) this.controller?.setMouthOpening(this.voice.mouthOpening());
     });
-
   }
 
   toggleVoice(): void {
