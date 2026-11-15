@@ -207,8 +207,16 @@ El proceso es secuencial, usa un hilo de FFmpeg y no modifica originales. La cop
 portátil autorizada está en `tmp/isa-tools`, ignorada por Git, sin cambios en PATH
 ni instalación en Windows.
 
-## Verificación pendiente
+## Integración 3C y verificación
 
-Se inspeccionaron las hojas de cuadros y la composición de boca como imágenes.
-Se adaptaron las pruebas E2E que dependían del SVG. No se ejecutaron builds,
-pruebas ni navegadores de QA, respetando la preferencia de recursos del usuario.
+El reproductor incorpora `isa-playback.ts`: usa las marcas Rhubarb del audio real
+y sus pausas acústicas para adaptar el avance de cuadros completos. El método
+`setMouthOpening` sigue sin reemplazar la boca por una imagen fija. La actuación
+facial, el ciclo nativo y la salida del habla permanecen en este renderizador.
+Sin marcas válidas se usa el reloj anterior.
+
+La integración fue verificada con pruebas de voz y retrato, comparación contra las
+muestras aprobadas, audios largos, build y reproducción en Chromium móvil y escritorio.
+Decisiones y límites en [PRODUCTION-3C.md](../../../../docs/isa-local/PRODUCTION-3C.md).
+Los prototipos anteriores se conservan en el
+[archivo reproducible](../../../../docs/isa-local/reference-2026-11-15/README.md).

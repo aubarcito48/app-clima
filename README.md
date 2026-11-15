@@ -59,7 +59,7 @@ Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
 de Groq de una consulta en español o inglés una sola vez. Podés silenciarla
 tocando el avatar de Isa. Otro toque activa la voz. La elección dura durante la sesión y vuelve a estar
 activada al recargar. El backend genera el audio con Piper y la voz femenina
-Sharvard (`F = 1`) en español de España y Lessac en inglés de Estados Unidos.
+Sharvard (`F = 1`) en español de España y Cori en inglés británico, un 8 % más pausada.
 El idioma de la página selecciona la voz; silenciarla funciona en ambos idiomas.
 Requiere instalar `requirements-voice.txt`
 y el modelo en el backend; los pasos están en su README. No requiere una API key adicional.
@@ -71,9 +71,15 @@ Al cambiar de búsqueda o idioma se cancela la lectura anterior. Si el navegador
 bloquea la reproducción, se informa el motivo y el consejo queda disponible como texto.
 Si falla la voz, el texto del clima continúa disponible. Las poses responden
 al estado de la consulta y del audio, respetando movimiento reducido. El habla usa
-cuadros completos del nuevo video: mantiene la continuidad entre sílabas y busca
-una boca cerrada dentro del mismo tramo para las pausas largas. Solo cambia al
-retrato de reposo al terminar; no es sincronización por fonemas.
+cuadros completos del video: conserva parpadeos, cabeza y expresión facial. Con
+marcas Rhubarb válidas, el selector 3C limita los saltos hacia adelante y adapta
+el reloj a pausas y microsilencios del audio real. No vuelve a reposo entre palabras.
+Sin esas marcas conserva la reproducción anterior. Solo cambia al retrato de reposo
+al terminar. La correspondencia de bocas es aproximada; no garantiza cada fonema.
+
+Las pruebas originales, sus generadores y audios quedan conservados y se pueden
+reconstruir siguiendo [el archivo de referencia](docs/isa-local/reference-2026-11-15/README.md).
+La integración aprobada se describe en [Isa 3C en producción](docs/isa-local/PRODUCTION-3C.md).
 
 ## Comandos
 

@@ -3,6 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { voiceEnvelope, VOICE_FRAME_SECONDS } from './voice-envelope';
+import { createIsaPlayback } from '../shared/isabel/isa-playback';
 import {
   IsaCue,
   IsaGesture,
@@ -31,6 +32,7 @@ export class IsabelVoice {
   private envelope: Float32Array = new Float32Array();
   private mouthFrame?: number;
   private cues: IsaCue[] = [];
+  private playback?: ReturnType<typeof createIsaPlayback>;
 
   setEnabled(value: boolean): void {
     this.enabled.set(value);
@@ -87,12 +89,13 @@ export class IsabelVoice {
           }
           this.url = URL.createObjectURL(blob);
           const audio = (this.audio = new Audio(this.url));
-          void blob
+          const prepared = blob
             .arrayBuffer()
             .then((buffer) => {
               if (generation === this.generation) {
                 this.envelope = voiceEnvelope(buffer);
                 this.cues = plan ? readIsaTimeline(buffer) : [];
+                this.playback = createIsaPlayback(buffer);
               }
             })
             .catch(() => {
@@ -116,7 +119,8 @@ export class IsabelVoice {
               const level = audio.paused ? 0 : (this.envelope[frame] ?? 0);
               this.mouthOpening.set(Math.round(level * 20) / 20);
               this.speechTime.set(
-                isaSpeechTimeAt(this.cues, performance.segmentos ?? [], audio.currentTime),
+                this.playback?.sourceSecondsAt(audio.currentTime) ??
+                  isaSpeechTimeAt(this.cues, performance.segmentos ?? [], audio.currentTime),
               );
               this.gesture.set(
                 audio.paused ? 'isa-awake' : isaGestureAt(this.cues, audio.currentTime),
@@ -131,15 +135,20 @@ export class IsabelVoice {
             this.stop();
             this.state.set('error');
           };
-          void audio.play().catch((error: unknown) => {
-            if (generation !== this.generation) return;
-            if (error instanceof DOMException && error.name === 'NotAllowedError') {
-              this.state.set('blocked');
-            } else {
-              this.stop();
-              this.state.set('error');
-            }
-          });
+          void prepared
+            .then(() => {
+              if (generation !== this.generation || audio !== this.audio) return;
+              return audio.play();
+            })
+            .catch((error: unknown) => {
+              if (generation !== this.generation) return;
+              if (error instanceof DOMException && error.name === 'NotAllowedError') {
+                this.state.set('blocked');
+              } else {
+                this.stop();
+                this.state.set('error');
+              }
+            });
         },
         error: () => {
           if (generation === this.generation) this.state.set('error');
@@ -156,6 +165,7 @@ export class IsabelVoice {
     this.speechTime.set(0);
     this.gesture.set('isa-awake');
     this.cues = [];
+    this.playback = undefined;
     this.request?.unsubscribe();
     this.request = undefined;
     if (this.audio) {

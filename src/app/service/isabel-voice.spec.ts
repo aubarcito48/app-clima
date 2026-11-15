@@ -142,8 +142,7 @@ describe('Isa voice playback lifecycle', () => {
     FakeAudio.blocked = true;
     voice.speak('Hola');
     http.expectOne(() => true).flush(wav());
-    await Promise.resolve();
-    expect(voice.state()).toBe('blocked');
+    await vi.waitFor(() => expect(voice.state()).toBe('blocked'));
     expect(URL.revokeObjectURL).not.toHaveBeenCalled();
     http.expectNone(() => true);
     expect(FakeAudio.instances[0].play).toHaveBeenCalledTimes(1);
@@ -160,5 +159,23 @@ describe('Isa voice playback lifecycle', () => {
     http.expectOne(() => true).flush(new Blob(['not wav'], { type: 'text/plain' }));
     expect(voice.state()).toBe('error');
     expect(FakeAudio.instances).toHaveLength(0);
+  });
+
+  it('does not start audio after a cancelled asynchronous playback analysis', async () => {
+    let finish!: (buffer: ArrayBuffer) => void;
+    const pending = new Promise<ArrayBuffer>((resolve) => {
+      finish = resolve;
+    });
+    const blob = wav();
+    vi.spyOn(blob, 'arrayBuffer').mockReturnValue(pending);
+    voice.speak('Anterior');
+    http.expectOne(() => true).flush(blob);
+    const audio = FakeAudio.instances[0];
+    expect(audio.play).not.toHaveBeenCalled();
+    voice.stop();
+    finish(new ArrayBuffer(44));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(audio.play).not.toHaveBeenCalled();
+    expect(voice.state()).toBe('idle');
   });
 });
