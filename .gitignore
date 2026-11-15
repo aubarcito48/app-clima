@@ -51,3 +51,8 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Local Isa source backups and unconverted image masters
+/public/isa-bot/isa-originales-backup/
+/public/isa-bot/rhubarb/original/*
+!/public/isa-bot/rhubarb/original/.gitkeep

@@ -28,7 +28,13 @@
               {
                 "glob": "**/*",
                 "input": "public",
-                "ignore": ["isa-bot/original/**", "isa-bot/sin-fondo/**", "isa-bot/*.mp4"]
+                "ignore": [
+                  "isa-bot/original/**",
+                  "isa-bot/sin-fondo/**",
+                  "isa-bot/*.mp4",
+                  "isa-bot/isa-originales-backup/**",
+                  "isa-bot/rhubarb/**"
+                ]
               }
             ],
             "styles": ["src/tailwind.css", "src/styles.scss"]

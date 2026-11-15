@@ -1,0 +1,77 @@
+﻿{
+    "date":  "2026-11-15",
+    "selected":  [
+                     {
+                         "source":  "isa-mouth-A-new-rama.jfif",
+                         "target":  "isa-mouth-A.jfif",
+                         "sha256":  "D2D069F4B8901BA8A8D0DB304EFDAA09AF76B8AD6802F846D961A05F4576A8F9"
+                     },
+                     {
+                         "source":  "isa-mouth-b-v4-nuevo-chat-rama.jfif",
+                         "target":  "isa-mouth-B.jfif",
+                         "sha256":  "DD7C45CB125FE90C5EEA076B460D49639C1A5FD48E011E1F763E591460D697A9"
+                     },
+                     {
+                         "source":  "isa-mouth-C.jfif",
+                         "target":  "isa-mouth-C.jfif",
+                         "sha256":  "769D77B9AC40EA807FA226FCF38B66671A5025A756C8BA89CF0DFB384C832FF8"
+                     },
+                     {
+                         "source":  "isa-mouth-d.jfif",
+                         "target":  "isa-mouth-D.jfif",
+                         "sha256":  "E83F9DAB8515D81563D90E74CBD08B68062E0A18712A4D43E1BC07BEBC5F5855"
+                     },
+                     {
+                         "source":  "isa-mouth-e.jfif",
+                         "target":  "isa-mouth-E.jfif",
+                         "sha256":  "E976B110C0DE824864CABA3388FB16D300E7EF1550CD104C3C461C7DF7B38BB8"
+                     },
+                     {
+                         "source":  "isa-mouth-f.jfif",
+                         "target":  "isa-mouth-F.jfif",
+                         "sha256":  "4A9D84546B60C58543E2877471AB2D4D98211756A4A309518A07FD414D6825A4"
+                     },
+                     {
+                         "source":  "isa-mouth-g.jfif",
+                         "target":  "isa-mouth-G.jfif",
+                         "sha256":  "14B31507F34C20CB1B65C994814E7A4A88137861D57B625AA33F4049077D9577"
+                     },
+                     {
+                         "source":  "isa-mouth-h.jfif",
+                         "target":  "isa-mouth-H.jfif",
+                         "sha256":  "740B41B170DDB567507AC2D06C29DCE8CE4782F54344ECB27528FB2C04FAC725"
+                     }
+                 ],
+    "removedTrials":  [
+                          {
+                              "source":  "isa-mouth-A-con-formato.jfif",
+                              "sha256":  "A15A6C5F74D7BEF888F02E3380A46AAD13744AEB3110FC37D3C004A8DAE999BE"
+                          },
+                          {
+                              "source":  "isa-mouth-A-nuevo-chat-rama.jfif",
+                              "sha256":  "E683DAD5F8DFE2AF2235A4C665E275185B31A5E654E1E1D7AEB1AD1D02047E6F"
+                          },
+                          {
+                              "source":  "isa-mouth-A-nuevo-chat.jfif",
+                              "sha256":  "9E5037CBCB23DE209B58F83C7F2F4C94D0A6349CBA5B2B863A12F65B4173F5EC"
+                          },
+                          {
+                              "source":  "isa-mouth-A.jfif",
+                              "sha256":  "78DF26542F177A1F17DC8873C86B28ACC6A631BC9C34FCCE8BBF957DF39D6B07"
+                          },
+                          {
+                              "source":  "isa-mouth-b-nuevo-chat-rama.jfif",
+                              "sha256":  "634DD54C63FDD984FC85B01F831FA9DB0B2FC1ECF825D118E017F2CA52BC9A4B"
+                          },
+                          {
+                              "source":  "isa-mouth-b-v2-nuevo-chat-rama.jfif",
+                              "sha256":  "89AEA70F5D8F83AE4C4ED1B346072130990A1886715322D472D8AA2FC51E188F"
+                          },
+                          {
+                              "source":  "isa-mouth-b-v3-nuevo-chat-rama.jfif",
+                              "sha256":  "6BFE3EC4EE50934D63A77C790624C546E887496170D9DDCC29045A159C841115"
+                          }
+                      ],
+    "restSource":  "isa-originales-backup/original/mirando-al-frente.jfif",
+    "restSha256":  "EC662A7845D398C114E23B191DA07DE72F754D96C7734E46147F1EB7E7AAB52B"
+}
