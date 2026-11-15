@@ -129,6 +129,7 @@ export class Isabel {
     effect(() => {
       if (!this.ready()) return;
       const state = this.voice.state();
+      this.controller?.setSpeechLanguage(this.language.code());
       this.controller?.setWorking(this.busy() || state === 'loading');
       this.controller?.setSpeaking(state === 'speaking');
     });

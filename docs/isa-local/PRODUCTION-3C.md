@@ -36,3 +36,12 @@ texto. Tras desplegar se debe observar la latencia y memoria reales de Render;
 las mediciones locales no sustituyen esos datos. Configuración requerida:
 `ISA_DIRECTOR=local`, `ISA_LIP_SYNC=rhubarb` y el tiempo de espera de Rhubarb
 configurado para permitir el análisis completo (en la prueba, 60 segundos).
+
+## Variante inglesa del panel 3
+
+Por pedido posterior de Nahuel, Cori utiliza los cuadros completos de
+`isa-video-ingles.mp4`, su catálogo de boca y las pausas/micropausas del audio real.
+El español conserva su configuración aprobada. La selección del idioma afecta
+tanto el análisis 3C como el atlas del retrato. El ciclo inglés dura siete segundos
+y conserva todos sus cuadros en vueltas completas; el cierre usa sus propias
+referencias. Detalles y validación en [CORI-ENGLISH-VIDEO.md](CORI-ENGLISH-VIDEO.md).

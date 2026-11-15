@@ -62,6 +62,23 @@ describe('Isa video speech lifecycle', () => {
     vi.unstubAllGlobals();
   });
 
+  it('selects only English atlases for Cori and restores Spanish on language change', async () => {
+    controller!.setSpeechLanguage('en');
+    controller!.setSpeaking(true);
+    controller!.setSpeechTime(8);
+    await advance(20);
+    const canvas = host.querySelector('canvas')!;
+    expect(canvas.dataset['isaSpeechLanguage']).toBe('en');
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBeLessThan(180);
+    expect(requests.some(src => src.includes('isa-speech-en-v1-'))).toBe(true);
+    controller!.setSpeaking(false);
+    controller!.setSpeechLanguage('es');
+    controller!.setSpeaking(true);
+    await advance(20);
+    expect(canvas.dataset['isaSpeechLanguage']).toBe('es');
+    expect(requests.some(src => src.includes('isa-speech-v1-'))).toBe(true);
+  });
+
   it('keeps speech moving through quiet gaps and closes only when playback ends', async () => {
     expect(requests).toHaveLength(1);
     controller!.play('isa-awake');

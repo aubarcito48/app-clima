@@ -29,6 +29,7 @@ for (const language of ['es', 'en'] as const) {
     await search(page, 'Cordoba');
     const canvas = page.locator('app-isabel canvas');
     await expect(canvas).toHaveAttribute('data-isa-speaking', 'true', { timeout: 15000 });
+    await expect(canvas).toHaveAttribute('data-isa-speech-language', language);
     await page.evaluate(() => {
       (window as unknown as { isaTestAudio: HTMLAudioElement }).isaTestAudio.currentTime = 8;
     });

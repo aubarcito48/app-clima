@@ -46,5 +46,31 @@ Resultados y capturas en `tmp/isa-mouth-preview/english-take-1`.
 
 La evaluación de naturalidad queda pendiente de Nahuel. La frase dura alrededor
 de cuatro segundos: esta prueba no valida aún otros consejos, bucles ni el cierre
-final del reproductor de producción. Prueba conservada en un commit local por
-pedido de Nahuel, sin push ni integración en producción. Revisión pendiente.
+final del reproductor de producción. La prueba fue conservada primero en el commit
+local `deb2b93`. Más tarde Nahuel pidió probar el panel 3 en producción; el HTML
+aislado se conserva sin cambios como referencia.
+
+## Integración para evaluación en producción
+
+Se mantienen el WAV de Cori pausada, el director local y el análisis Rhubarb del
+backend. El frontend elige el nuevo catálogo y atlas únicamente para `en`.
+Español conserva sus cuadros, catálogo y parámetros anteriores. El generador
+`scripts/prepare-isa-english-speech.py` prepara los recursos desde esta prueba
+y verifica que el hash del video coincida con el revisado.
+
+Las muestras cortas reproducen exactamente la selección y el reloj del panel 3,
+verificados a 120 muestras por segundo. Para lecturas largas, se conserva el
+ciclo nativo inglés de siete segundos (fuente 24–191), excluyendo la entrada y la
+sonrisa de cierre. Los ciclos completos no omiten cuadros; la última parte puede
+usar selección conservadora 3C. La salida conserva el avance breve y la mezcla
+hacia reposo, con referencias de boca cerrada propias del nuevo video.
+
+Al cambiar de idioma se vacía la caché de habla y se descartan decodificaciones
+del idioma anterior. Se siguen reteniendo solo dos páginas del atlas por idioma
+activo. Los cinco atlas ingleses ocupan 3.256.322 bytes en disco; no se cargan sus
+imágenes al hablar español ni se envían videos a la app publicada.
+
+Verificado antes del push: equivalencia con el panel 3, muestras españolas
+anteriores, reloj monótono en audio inglés largo, 19 pruebas de voz/retrato,
+cuatro casos Chromium móvil/escritorio con ciclo y cierre, y build de producción.
+La naturalidad con consejos reales queda para evaluación en la app desplegada.

@@ -1,4 +1,6 @@
 import catalog from './isa-speech-selection.json';
+import englishCatalog from './isa-speech-selection-en.json';
+import ranges from './isa-speech-ranges.json';
 
 export interface AudioPause {
   start: number;
@@ -24,18 +26,18 @@ interface PcmVoice {
 }
 
 const FPS = 24;
-const FIRST = 12;
-const END = 192;
-const CYCLE = END - FIRST;
-const shapes = catalog.sourceFrames.map((_, index) => {
-  let nearest = 0;
-  for (let j = 1; j < catalog.candidates.length; j++) {
-    if (Math.abs(index - catalog.candidates[j]) < Math.abs(index - catalog.candidates[nearest]))
-      nearest = j;
-  }
-  return catalog.labels[nearest];
-});
-const jumps = catalog.jumps as Record<string, Jump[]>;
+function catalogData(language: 'es' | 'en') {
+  const selected = language === 'en' ? englishCatalog : catalog;
+  const shapes = selected.sourceFrames.map((_, index) => {
+    let nearest = 0;
+    for (let j = 1; j < selected.candidates.length; j++) {
+      if (Math.abs(index - selected.candidates[j]) < Math.abs(index - selected.candidates[nearest]))
+        nearest = j;
+    }
+    return selected.labels[nearest];
+  });
+  return { shapes, jumps: selected.jumps as Record<string, Jump[]> };
+}
 const fallbackShapes: Record<string, string> = { A: 'X', G: 'B', H: 'C' };
 const mapped = (shape: string) => fallbackShapes[shape] ?? shape;
 const evenRound = (value: number) =>
@@ -279,7 +281,15 @@ export function playbackClock(
   return rows;
 }
 
-export function speechCycle(cues: MouthCue[], start: number, duration: number): number[] {
+export function speechCycle(
+  cues: MouthCue[],
+  start: number,
+  duration: number,
+  language: 'es' | 'en' = 'es',
+): number[] {
+  const { first: FIRST, end: END } = ranges[language],
+    CYCLE = END - FIRST;
+  const { shapes, jumps } = catalogData(language);
   const count = Math.min(CYCLE, Math.max(1, Math.round(duration * FPS)));
   const baseline = Array.from({ length: count }, (_, i) => FIRST + i);
   // A complete native loop has no spare tail for forward skips. Keep it intact
@@ -328,14 +338,18 @@ export function speechCycle(cues: MouthCue[], start: number, duration: number): 
 }
 
 /** Optional local playback analysis. Missing/invalid Rhubarb data keeps legacy playback. */
-export function createIsaPlayback(buffer: ArrayBuffer) {
+export function createIsaPlayback(buffer: ArrayBuffer, language: 'es' | 'en' = 'es') {
+  const { first: FIRST, end: END } = ranges[language],
+    CYCLE = END - FIRST;
   const pcm = readPcm(buffer);
   if (!pcm) return undefined;
   const { pauses, micro } = acousticPauses(pcm.samples, pcm.rate);
   const rows = playbackClock(pcm.duration, pauses, micro),
     cycles: number[][] = [];
   for (let start = 0; start < pcm.duration; start += CYCLE / FPS)
-    cycles.push(speechCycle(pcm.cues, start, Math.min(CYCLE / FPS, pcm.duration - start)));
+    cycles.push(
+      speechCycle(pcm.cues, start, Math.min(CYCLE / FPS, pcm.duration - start), language),
+    );
   return {
     duration: pcm.duration,
     pauses,

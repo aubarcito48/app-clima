@@ -95,7 +95,7 @@ export class IsabelVoice {
               if (generation === this.generation) {
                 this.envelope = voiceEnvelope(buffer);
                 this.cues = plan ? readIsaTimeline(buffer) : [];
-                this.playback = createIsaPlayback(buffer);
+                  this.playback = createIsaPlayback(buffer, language);
               }
             })
             .catch(() => {

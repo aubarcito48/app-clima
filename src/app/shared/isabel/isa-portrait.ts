@@ -1,15 +1,20 @@
 import atlas from './isa-portrait-manifest.json';
-import speechAtlas from './isa-speech-manifest.json';
+import spanishSpeechAtlas from './isa-speech-manifest.json';
+import englishSpeechAtlas from './isa-speech-manifest-en.json';
+import ranges from './isa-speech-ranges.json';
 import { IsaMotion, type IsaPose } from './isa-motion';
 
 // Omit the source video's opening/closing idle poses in a long narration's loop.
 // Keep all frames available to close the mouth when the audio actually ends.
-const SPEECH_START = 12;
-const SPEECH_END = 192;
-const SPEECH_RELEASE_FRAMES = speechAtlas.fps * 0.25;
+const SPEECH_RELEASE_FRAMES = spanishSpeechAtlas.fps * 0.25;
 
 /** Continuous pose tracks and supplied speech frames; no pasted facial parts. */
 export async function createIsaPortrait(host: HTMLElement) {
+  let speechAtlas = spanishSpeechAtlas;
+  let speechLanguage: 'es' | 'en' = 'es';
+  let SPEECH_START = ranges.es.first,
+    SPEECH_END = ranges.es.end;
+  let speechGeneration = 0;
   const image = new Image();
   image.src = new URL(atlas.image, document.baseURI).href;
   await image.decode();
@@ -45,35 +50,56 @@ export async function createIsaPortrait(host: HTMLElement) {
 
   function drawTile(index: number, alpha: number) {
     ctx.globalAlpha = alpha;
-    ctx.drawImage(image, index % atlas.columns * atlas.width,
-      Math.floor(index / atlas.columns) * atlas.height, atlas.width, atlas.height,
-      0, 0, atlas.width, atlas.height);
+    ctx.drawImage(
+      image,
+      (index % atlas.columns) * atlas.width,
+      Math.floor(index / atlas.columns) * atlas.height,
+      atlas.width,
+      atlas.height,
+      0,
+      0,
+      atlas.width,
+      atlas.height,
+    );
   }
 
   function loadSpeechPage(index: number) {
-    if (destroyed || speechImages.has(index) || speechPending.has(index) || speechFailed.has(index)) return;
+    if (destroyed || speechImages.has(index) || speechPending.has(index) || speechFailed.has(index))
+      return;
     speechPending.add(index);
+    const generation = speechGeneration;
     const page = new Image();
     page.src = new URL(speechAtlas.pages[index].image, document.baseURI).href;
-    void page.decode().then(() => {
-      if (destroyed) return;
-      // Retain only the current page and its successor, rather than decoding
-      // one giant atlas on mobile or loading speech before it is needed.
-      if (index === speechPage || index === nextSpeechPage()) {
-        speechImages.set(index, page);
-      }
-    }).catch(() => { speechFailed.add(index); }).finally(() => { speechPending.delete(index); });
+    void page
+      .decode()
+      .then(() => {
+        if (destroyed || generation !== speechGeneration) return;
+        // Retain only the current page and its successor, rather than decoding
+        // one giant atlas on mobile or loading speech before it is needed.
+        if (index === speechPage || index === nextSpeechPage()) {
+          speechImages.set(index, page);
+        }
+      })
+      .catch(() => {
+        if (generation === speechGeneration) speechFailed.add(index);
+      })
+      .finally(() => {
+        if (generation === speechGeneration) speechPending.delete(index);
+      });
   }
 
   function nextSpeechPage() {
     const page = speechAtlas.pages[speechPage];
     return speaking && page.first + page.count >= SPEECH_END
-      ? 0 : (speechPage + 1) % speechAtlas.pages.length;
+      ? 0
+      : (speechPage + 1) % speechAtlas.pages.length;
   }
 
   function speechTile() {
     const index = Math.floor(speechPosition) % speechAtlas.sourceFrames.length;
-    speechPage = speechAtlas.pages.findIndex(page => index >= page.first && index < page.first + page.count);
+    speechPage = speechAtlas.pages.findIndex(
+      (page) => index >= page.first && index < page.first + page.count,
+    );
     const nextPage = nextSpeechPage();
     for (const key of speechImages.keys()) {
       if (key !== speechPage && key !== nextPage) speechImages.delete(key);
@@ -90,17 +116,29 @@ export async function createIsaPortrait(host: HTMLElement) {
   function forwardRest() {
     // Never rewind or accelerate the head/body to find a closed mouth. If the
     // next rest is distant, finish the blend within a short forward-only tail.
-    const limit = Math.min(speechPosition + SPEECH_RELEASE_FRAMES, speechAtlas.sourceFrames.length - 1);
-    return speechAtlas.closed.reduce((target, frame) =>
-      frame >= speechPosition && frame < target ? frame : target, limit);
+    const limit = Math.min(
+      speechPosition + SPEECH_RELEASE_FRAMES,
+      speechAtlas.sourceFrames.length - 1,
+    );
+    return speechAtlas.closed.reduce(
+      (target, frame) => (frame >= speechPosition && frame < target ? frame : target),
+      limit,
+    );
   }
 
   function drawSpeechTile(source: HTMLImageElement, index: number, alpha: number) {
     ctx.globalAlpha = alpha;
-    ctx.drawImage(source,
-      index % speechAtlas.columns * speechAtlas.width,
+    ctx.drawImage(
+      source,
+      (index % speechAtlas.columns) * speechAtlas.width,
       Math.floor(index / speechAtlas.columns) * speechAtlas.height,
-      speechAtlas.width, speechAtlas.height, 0, 0, canvas.width, canvas.height);
+      speechAtlas.width,
+      speechAtlas.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
   }
 
   function draw(now = performance.now()) {
@@ -131,9 +169,13 @@ export async function createIsaPortrait(host: HTMLElement) {
       ctx.globalCompositeOperation = 'lighter';
       const fraction = speech.ready ? speechPosition % 1 : 0;
       const nextFrame = Math.floor(speechPosition) + 1;
-      const nextIndex = speaking && nextFrame >= SPEECH_END
-        ? SPEECH_START : nextFrame % speechAtlas.sourceFrames.length;
-      const nextPage = speechAtlas.pages.findIndex(page => nextIndex >= page.first && nextIndex < page.first + page.count);
+      const nextIndex =
+        speaking && nextFrame >= SPEECH_END
+          ? SPEECH_START
+          : nextFrame % speechAtlas.sourceFrames.length;
+      const nextPage = speechAtlas.pages.findIndex(
+        (page) => nextIndex >= page.first && nextIndex < page.first + page.count,
+      );
       const nextImage = speechImages.get(nextPage);
       // Blend neighboring native frames, including atlas page and loop boundaries.
       drawSpeechTile(speech.image, speech.index!, mix * (nextImage ? 1 - fraction : 1));
@@ -163,10 +205,11 @@ export async function createIsaPortrait(host: HTMLElement) {
     if (speech?.ready) {
       if (talking) {
         speechRestTarget = undefined;
-        const frames = speechTime === undefined
-          ? speechPosition - SPEECH_START + seconds * speechAtlas.fps
-          : speechTime * speechAtlas.fps;
-        speechPosition = SPEECH_START + frames % (SPEECH_END - SPEECH_START);
+        const frames =
+          speechTime === undefined
+            ? speechPosition - SPEECH_START + seconds * speechAtlas.fps
+            : speechTime * speechAtlas.fps;
+        speechPosition = SPEECH_START + (frames % (SPEECH_END - SPEECH_START));
       } else if (speechStopping) {
         if (speechRestTarget === undefined) {
           speechRestTarget = forwardRest();
@@ -182,7 +225,14 @@ export async function createIsaPortrait(host: HTMLElement) {
     if (speechAmount < 0.001 && target === 0) speechAmount = 0;
     lastTime = now;
     draw(now);
-    if (motion.moving || blinkStarted !== undefined || speaking || speechStopping || speechAmount > 0) schedule();
+    if (
+      motion.moving ||
+      blinkStarted !== undefined ||
+      speaking ||
+      speechStopping ||
+      speechAmount > 0
+    )
+      schedule();
   }
 
   function schedule() {
@@ -191,8 +241,17 @@ export async function createIsaPortrait(host: HTMLElement) {
   }
 
   function blink() {
-    if (destroyed || reduced || working || speaking || !visible || document.hidden
-        || motion.pose !== 'isa-awake' || motion.moving) return;
+    if (
+      destroyed ||
+      reduced ||
+      working ||
+      speaking ||
+      !visible ||
+      document.hidden ||
+      motion.pose !== 'isa-awake' ||
+      motion.moving
+    )
+      return;
     blinkStarted = performance.now();
     lastTime = blinkStarted;
     schedule();
@@ -200,12 +259,23 @@ export async function createIsaPortrait(host: HTMLElement) {
 
   function planIdleBlink() {
     clearTimeout(blinkTimer);
-    if (destroyed || reduced || working || speaking || !visible || document.hidden
-        || motion.pose !== 'isa-awake') return;
-    blinkTimer = setTimeout(() => {
-      blink();
-      planIdleBlink();
-    }, 4500 + Math.random() * 2000);
+    if (
+      destroyed ||
+      reduced ||
+      working ||
+      speaking ||
+      !visible ||
+      document.hidden ||
+      motion.pose !== 'isa-awake'
+    )
+      return;
+    blinkTimer = setTimeout(
+      () => {
+        blink();
+        planIdleBlink();
+      },
+      4500 + Math.random() * 2000,
+    );
   }
 
   function setPose(key: string, immediate: boolean) {
@@ -247,19 +317,42 @@ export async function createIsaPortrait(host: HTMLElement) {
     }
   }
   document.addEventListener('visibilitychange', visibilityChanged);
-  const observer = typeof IntersectionObserver === 'undefined' ? undefined
-    : new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting === visible) return;
-      visible = entry.isIntersecting;
-      visibilityChanged();
-    });
+  const observer =
+    typeof IntersectionObserver === 'undefined'
+      ? undefined
+      : new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting === visible) return;
+          visible = entry.isIntersecting;
+          visibilityChanged();
+        });
   observer?.observe(host);
   canvas.dataset['isaExpression'] = motion.pose;
   canvas.dataset['isaAnimation'] = motion.pose;
   canvas.dataset['isaSpeaking'] = 'false';
+  canvas.dataset['isaSpeechLanguage'] = speechLanguage;
   draw();
 
   return {
+    setSpeechLanguage(language: 'es' | 'en') {
+      if (speechLanguage === language) return;
+      speechLanguage = language;
+      speechGeneration++;
+      speechAtlas = language === 'en' ? englishSpeechAtlas : spanishSpeechAtlas;
+      SPEECH_START = ranges[language].first;
+      SPEECH_END = ranges[language].end;
+      speechImages.clear();
+      speechPending.clear();
+      speechFailed.clear();
+      lastSpeechTile = undefined;
+      speechPosition = SPEECH_START;
+      speechTime = undefined;
+      speechRestTarget = undefined;
+      speechStopping = false;
+      speechAmount = 0;
+      canvas.dataset['isaSpeechLanguage'] = language;
+      if (working && !reduced) speechTile();
+      draw();
+    },
     play: (key: string) => setPose(key, false),
     setExpression: (key: string) => setPose(key, true),
     setWorking(value: boolean) {

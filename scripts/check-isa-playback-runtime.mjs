@@ -10,9 +10,11 @@ import {microPauseTimeline} from './isa-micro-pauses.mjs';
 import {englishPhaseAt,englishSourceAt} from './isa-english-rhythm.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),folder=path.join(root,'tmp/isa-mouth-preview');
-const catalog=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel/isa-speech-selection.json'),'utf8'));
 let source=await readFile(path.join(root,'src/app/shared/isabel/isa-playback.ts'),'utf8');
-source=source.replace(/^import catalog.*$/m,`const catalog=${JSON.stringify(catalog)};`);
+for(const match of [...source.matchAll(/^import (\w+) from '(.*\.json)';$/gm)]){
+ const value=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel',match[2]),'utf8'));
+ source=source.replace(match[0],`const ${match[1]}=${JSON.stringify(value)};`);
+}
 const code=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
 const runtime=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 const toBuffer=bytes=>Uint8Array.from(bytes).buffer;
@@ -48,5 +50,26 @@ for(const name of ['es_long','en_long']){
  assert.ok(wraps>=1);reports.push({key:name,duration:actual.duration,cycles:actual.cycles.length,wraps});
 }
 assert.equal(runtime.createIsaPlayback(new ArrayBuffer(0)),undefined);
+// English integration must reproduce panel 3, with that take's own catalog.
+const englishData=JSON.parse((await readFile(path.join(folder,'index-3c-cori-video-ingles.html'),'utf8')).split('const data=')[1].split(/;\r?\nconst \$=/)[0]);
+for(const sample of englishData.cases){
+ const actual=runtime.createIsaPlayback(toBuffer(Buffer.from(sample.audio.split(',')[1],'base64')),'en');
+ const selection=selectForwardSequence({...englishData.new,...sample},englishData.new.labels);
+ assert.deepEqual(actual.cycles[0],selection.plan);
+ assert.deepEqual(actual.pauses,sample.acoustics.pauses);assert.deepEqual(actual.micro,sample.micro.gaps);
+ const base=pauseTimeline(sample.duration,sample.acoustics.pauses,.8),clock=microPauseTimeline(base,sample.micro.gaps,sample.acoustics.pauses,1);
+ for(let n=0;n<sample.duration*120;n++){
+  const expected=englishSourceAt(selection.plan,englishPhaseAt(clock.rows,n/120).phase,24,sample.duration);
+  assert.equal(12+Math.floor(actual.sourceSecondsAt(n/120)*24+1e-7)%168,expected);
+ }
+ reports.push({key:sample.id,englishPanel3:true,frameDifferences:0});
+}
+const englishLong=runtime.createIsaPlayback(toBuffer(await readFile(path.join(root,'docs/isa-local/reference-2026-11-15/backend/tmp/isa-rhubarb/en_long.wav'))),'en');
+assert.deepEqual(englishLong.cycles[0],Array.from({length:168},(_,i)=>12+i));
+let lastEnglish=-1;
+for(let n=0;n<=englishLong.duration*120;n++){
+ const seconds=englishLong.sourceSecondsAt(n/120);assert.ok(seconds>=lastEnglish);lastEnglish=seconds;
+ const frame=12+(seconds*24)%168;assert.ok(frame>=12&&frame<180);
+}
 console.log('OK: production PCM detection/clock/3C matches all approved samples, no per-frame differences; real long audio loops remain bounded and native; missing or malformed Rhubarb falls back.');
 console.log(JSON.stringify(reports,null,2));

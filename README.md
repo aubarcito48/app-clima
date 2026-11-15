@@ -80,6 +80,9 @@ al terminar. La correspondencia de bocas es aproximada; no garantiza cada fonema
 Las pruebas originales, sus generadores y audios quedan conservados y se pueden
 reconstruir siguiendo [el archivo de referencia](docs/isa-local/reference-2026-11-15/README.md).
 La integración aprobada se describe en [Isa 3C en producción](docs/isa-local/PRODUCTION-3C.md).
+Para Cori se usa una toma de habla inglesa con su propio catálogo de boca,
+conservando la toma española para Sharvard. La prueba y sus criterios están en
+[Cori con video inglés](docs/isa-local/CORI-ENGLISH-VIDEO.md).
 
 ## Comandos
 
