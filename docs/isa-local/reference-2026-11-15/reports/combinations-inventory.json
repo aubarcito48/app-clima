@@ -1,0 +1,8545 @@
+{
+  "experiment": "5C",
+  "reviewed": false,
+  "policy": {
+    "maxPoseDistance": 0.06,
+    "maxMotionDistance": 0.04,
+    "minimumLabelGain": 2,
+    "gapFrames": 12,
+    "maximumUsesPerNewTake": 1,
+    "note": "Heuristic limits; visual review required."
+  },
+  "candidateEvents": 852,
+  "audioClipSeconds": [
+    3,
+    9
+  ],
+  "audioSha256": "e8174c7642eba331be7f8565dd9224942a191f4fa18ab2074b575f06b1673809",
+  "sourceSha256": {
+    "2": "d17e6d0754ebdbd13a67d71f4e822aaa5fed19f0ed2a6b88882efed2002819f7",
+    "3": "0708196336ecec08bfd146969a9528a95593ef72a472b6be7c6fd0a7e502ce04"
+  },
+  "phoneticAccuracy": "not measured; same provisional visual labels as trial 5",
+  "events": [
+    {
+      "take": 2,
+      "target": 12,
+      "start": 0,
+      "length": 24,
+      "entry": 0.050138,
+      "exit": 0.075749,
+      "entryMotion": 0.023872,
+      "exitMotion": 0.018706
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 6,
+      "length": 24,
+      "entry": 0.066772,
+      "exit": 0.071333,
+      "entryMotion": 0.025211,
+      "exitMotion": 0.018757
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 12,
+      "length": 24,
+      "entry": 0.076341,
+      "exit": 0.063745,
+      "entryMotion": 0.019992,
+      "exitMotion": 0.018968
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 18,
+      "length": 24,
+      "entry": 0.086572,
+      "exit": 0.056342,
+      "entryMotion": 0.020468,
+      "exitMotion": 0.018346
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 24,
+      "length": 24,
+      "entry": 0.08429,
+      "exit": 0.043503,
+      "entryMotion": 0.019818,
+      "exitMotion": 0.023366
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 30,
+      "length": 24,
+      "entry": 0.079493,
+      "exit": 0.066322,
+      "entryMotion": 0.019443,
+      "exitMotion": 0.02226
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 36,
+      "length": 24,
+      "entry": 0.072494,
+      "exit": 0.069046,
+      "entryMotion": 0.019506,
+      "exitMotion": 0.018842
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 42,
+      "length": 24,
+      "entry": 0.065359,
+      "exit": 0.089,
+      "entryMotion": 0.020066,
+      "exitMotion": 0.02915
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 48,
+      "length": 24,
+      "entry": 0.051738,
+      "exit": 0.089817,
+      "entryMotion": 0.020212,
+      "exitMotion": 0.022286
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 54,
+      "length": 24,
+      "entry": 0.080718,
+      "exit": 0.080856,
+      "entryMotion": 0.023667,
+      "exitMotion": 0.019164
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 60,
+      "length": 24,
+      "entry": 0.079482,
+      "exit": 0.069306,
+      "entryMotion": 0.019798,
+      "exitMotion": 0.019432
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 66,
+      "length": 24,
+      "entry": 0.100156,
+      "exit": 0.075325,
+      "entryMotion": 0.022336,
+      "exitMotion": 0.029668
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 72,
+      "length": 24,
+      "entry": 0.096706,
+      "exit": 0.0756,
+      "entryMotion": 0.020895,
+      "exitMotion": 0.018389
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 78,
+      "length": 24,
+      "entry": 0.088433,
+      "exit": 0.073995,
+      "entryMotion": 0.019541,
+      "exitMotion": 0.019236
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 84,
+      "length": 24,
+      "entry": 0.077798,
+      "exit": 0.051148,
+      "entryMotion": 0.019334,
+      "exitMotion": 0.032087
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 90,
+      "length": 24,
+      "entry": 0.082113,
+      "exit": 0.050498,
+      "entryMotion": 0.021274,
+      "exitMotion": 0.028147
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 96,
+      "length": 24,
+      "entry": 0.077728,
+      "exit": 0.062618,
+      "entryMotion": 0.019571,
+      "exitMotion": 0.022055
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 102,
+      "length": 24,
+      "entry": 0.075413,
+      "exit": 0.047485,
+      "entryMotion": 0.021345,
+      "exitMotion": 0.025435
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 108,
+      "length": 24,
+      "entry": 0.039234,
+      "exit": 0.072671,
+      "entryMotion": 0.034688,
+      "exitMotion": 0.01906
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 114,
+      "length": 24,
+      "entry": 0.025385,
+      "exit": 0.075634,
+      "entryMotion": 0.021685,
+      "exitMotion": 0.021196
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 120,
+      "length": 24,
+      "entry": 0.053021,
+      "exit": 0.067266,
+      "entryMotion": 0.018682,
+      "exitMotion": 0.02309
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 126,
+      "length": 24,
+      "entry": 0.054363,
+      "exit": 0.058206,
+      "entryMotion": 0.020171,
+      "exitMotion": 0.023997
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 132,
+      "length": 24,
+      "entry": 0.086053,
+      "exit": 0.050876,
+      "entryMotion": 0.023205,
+      "exitMotion": 0.018613
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 138,
+      "length": 24,
+      "entry": 0.087324,
+      "exit": 0.047966,
+      "entryMotion": 0.025457,
+      "exitMotion": 0.018217
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 144,
+      "length": 24,
+      "entry": 0.07459,
+      "exit": 0.048551,
+      "entryMotion": 0.021081,
+      "exitMotion": 0.017954
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 150,
+      "length": 24,
+      "entry": 0.070972,
+      "exit": 0.052921,
+      "entryMotion": 0.019829,
+      "exitMotion": 0.018303
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 0,
+      "length": 24,
+      "entry": 0.03587,
+      "exit": 0.09193,
+      "entryMotion": 0.016791,
+      "exitMotion": 0.017796
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 6,
+      "length": 24,
+      "entry": 0.056542,
+      "exit": 0.08988,
+      "entryMotion": 0.013966,
+      "exitMotion": 0.017198
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 12,
+      "length": 24,
+      "entry": 0.066612,
+      "exit": 0.082568,
+      "entryMotion": 0.02067,
+      "exitMotion": 0.017277
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 18,
+      "length": 24,
+      "entry": 0.068075,
+      "exit": 0.075995,
+      "entryMotion": 0.012003,
+      "exitMotion": 0.017044
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 24,
+      "length": 24,
+      "entry": 0.067188,
+      "exit": 0.088933,
+      "entryMotion": 0.010617,
+      "exitMotion": 0.026616
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 30,
+      "length": 24,
+      "entry": 0.062324,
+      "exit": 0.089212,
+      "entryMotion": 0.010514,
+      "exitMotion": 0.022205
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 36,
+      "length": 24,
+      "entry": 0.056361,
+      "exit": 0.108764,
+      "entryMotion": 0.010675,
+      "exitMotion": 0.020345
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 42,
+      "length": 24,
+      "entry": 0.051567,
+      "exit": 0.104036,
+      "entryMotion": 0.011147,
+      "exitMotion": 0.034147
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 48,
+      "length": 24,
+      "entry": 0.045569,
+      "exit": 0.104455,
+      "entryMotion": 0.013778,
+      "exitMotion": 0.019546
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 54,
+      "length": 24,
+      "entry": 0.056311,
+      "exit": 0.100974,
+      "entryMotion": 0.015201,
+      "exitMotion": 0.018293
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 60,
+      "length": 24,
+      "entry": 0.061514,
+      "exit": 0.091449,
+      "entryMotion": 0.01428,
+      "exitMotion": 0.017383
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 66,
+      "length": 24,
+      "entry": 0.085551,
+      "exit": 0.085184,
+      "entryMotion": 0.014725,
+      "exitMotion": 0.029195
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 72,
+      "length": 24,
+      "entry": 0.080549,
+      "exit": 0.082603,
+      "entryMotion": 0.013437,
+      "exitMotion": 0.017423
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 78,
+      "length": 24,
+      "entry": 0.070254,
+      "exit": 0.07605,
+      "entryMotion": 0.011462,
+      "exitMotion": 0.017814
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 84,
+      "length": 24,
+      "entry": 0.058874,
+      "exit": 0.079854,
+      "entryMotion": 0.011604,
+      "exitMotion": 0.038829
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 90,
+      "length": 24,
+      "entry": 0.074037,
+      "exit": 0.077014,
+      "entryMotion": 0.01178,
+      "exitMotion": 0.02369
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 96,
+      "length": 24,
+      "entry": 0.074157,
+      "exit": 0.09101,
+      "entryMotion": 0.010633,
+      "exitMotion": 0.020002
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 102,
+      "length": 24,
+      "entry": 0.075792,
+      "exit": 0.09482,
+      "entryMotion": 0.014612,
+      "exitMotion": 0.020269
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 108,
+      "length": 24,
+      "entry": 0.069065,
+      "exit": 0.098585,
+      "entryMotion": 0.023117,
+      "exitMotion": 0.018779
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 114,
+      "length": 24,
+      "entry": 0.056539,
+      "exit": 0.111005,
+      "entryMotion": 0.011887,
+      "exitMotion": 0.017948
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 120,
+      "length": 24,
+      "entry": 0.06416,
+      "exit": 0.099322,
+      "entryMotion": 0.014549,
+      "exitMotion": 0.020782
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 126,
+      "length": 24,
+      "entry": 0.040224,
+      "exit": 0.075286,
+      "entryMotion": 0.021383,
+      "exitMotion": 0.027654
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 132,
+      "length": 24,
+      "entry": 0.061357,
+      "exit": 0.067151,
+      "entryMotion": 0.01373,
+      "exitMotion": 0.016666
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 138,
+      "length": 24,
+      "entry": 0.067432,
+      "exit": 0.061843,
+      "entryMotion": 0.021828,
+      "exitMotion": 0.01646
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 144,
+      "length": 24,
+      "entry": 0.047697,
+      "exit": 0.056469,
+      "entryMotion": 0.014517,
+      "exitMotion": 0.016473
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 150,
+      "length": 24,
+      "entry": 0.053364,
+      "exit": 0.053949,
+      "entryMotion": 0.011728,
+      "exitMotion": 0.016965
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 0,
+      "length": 24,
+      "entry": 0.029296,
+      "exit": 0.108535,
+      "entryMotion": 0.0191,
+      "exitMotion": 0.033669
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 6,
+      "length": 24,
+      "entry": 0.06462,
+      "exit": 0.107689,
+      "entryMotion": 0.021739,
+      "exitMotion": 0.033611
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 12,
+      "length": 24,
+      "entry": 0.074487,
+      "exit": 0.103003,
+      "entryMotion": 0.026252,
+      "exitMotion": 0.033848
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 18,
+      "length": 24,
+      "entry": 0.070886,
+      "exit": 0.098606,
+      "entryMotion": 0.019396,
+      "exitMotion": 0.033503
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 24,
+      "length": 24,
+      "entry": 0.069592,
+      "exit": 0.105049,
+      "entryMotion": 0.018178,
+      "exitMotion": 0.039001
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 30,
+      "length": 24,
+      "entry": 0.064536,
+      "exit": 0.104996,
+      "entryMotion": 0.017975,
+      "exitMotion": 0.034017
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 36,
+      "length": 24,
+      "entry": 0.056793,
+      "exit": 0.1202,
+      "entryMotion": 0.017691,
+      "exitMotion": 0.034394
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 42,
+      "length": 24,
+      "entry": 0.049951,
+      "exit": 0.115373,
+      "entryMotion": 0.017483,
+      "exitMotion": 0.039991
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 48,
+      "length": 24,
+      "entry": 0.05077,
+      "exit": 0.115897,
+      "entryMotion": 0.022022,
+      "exitMotion": 0.035475
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 54,
+      "length": 24,
+      "entry": 0.059601,
+      "exit": 0.114617,
+      "entryMotion": 0.018582,
+      "exitMotion": 0.033475
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 60,
+      "length": 24,
+      "entry": 0.070594,
+      "exit": 0.109125,
+      "entryMotion": 0.022153,
+      "exitMotion": 0.034607
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 66,
+      "length": 24,
+      "entry": 0.088764,
+      "exit": 0.092816,
+      "entryMotion": 0.019443,
+      "exitMotion": 0.035644
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 72,
+      "length": 24,
+      "entry": 0.084322,
+      "exit": 0.088413,
+      "entryMotion": 0.020211,
+      "exitMotion": 0.033371
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 78,
+      "length": 24,
+      "entry": 0.074327,
+      "exit": 0.080563,
+      "entryMotion": 0.018255,
+      "exitMotion": 0.033069
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 84,
+      "length": 24,
+      "entry": 0.061914,
+      "exit": 0.090624,
+      "entryMotion": 0.01845,
+      "exitMotion": 0.045517
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 90,
+      "length": 24,
+      "entry": 0.074338,
+      "exit": 0.090053,
+      "entryMotion": 0.017971,
+      "exitMotion": 0.040181
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 96,
+      "length": 24,
+      "entry": 0.073236,
+      "exit": 0.107646,
+      "entryMotion": 0.018006,
+      "exitMotion": 0.033331
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 102,
+      "length": 24,
+      "entry": 0.072698,
+      "exit": 0.111673,
+      "entryMotion": 0.020848,
+      "exitMotion": 0.035586
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 108,
+      "length": 24,
+      "entry": 0.06719,
+      "exit": 0.110703,
+      "entryMotion": 0.029905,
+      "exitMotion": 0.033427
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 114,
+      "length": 24,
+      "entry": 0.053834,
+      "exit": 0.120971,
+      "entryMotion": 0.020022,
+      "exitMotion": 0.033556
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 120,
+      "length": 24,
+      "entry": 0.066571,
+      "exit": 0.112447,
+      "entryMotion": 0.021207,
+      "exitMotion": 0.037352
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 126,
+      "length": 24,
+      "entry": 0.050167,
+      "exit": 0.100768,
+      "entryMotion": 0.028115,
+      "exitMotion": 0.036897
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 132,
+      "length": 24,
+      "entry": 0.066832,
+      "exit": 0.096314,
+      "entryMotion": 0.016331,
+      "exitMotion": 0.033953
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 138,
+      "length": 24,
+      "entry": 0.075019,
+      "exit": 0.091333,
+      "entryMotion": 0.02958,
+      "exitMotion": 0.03345
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 144,
+      "length": 24,
+      "entry": 0.055133,
+      "exit": 0.084966,
+      "entryMotion": 0.019433,
+      "exitMotion": 0.033433
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 150,
+      "length": 24,
+      "entry": 0.05371,
+      "exit": 0.078679,
+      "entryMotion": 0.018367,
+      "exitMotion": 0.033034
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 0,
+      "length": 24,
+      "entry": 0.069067,
+      "exit": 0.114486,
+      "entryMotion": 0.021691,
+      "exitMotion": 0.008926
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 6,
+      "length": 24,
+      "entry": 0.102347,
+      "exit": 0.112175,
+      "entryMotion": 0.015858,
+      "exitMotion": 0.008643
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 12,
+      "length": 24,
+      "entry": 0.110556,
+      "exit": 0.105956,
+      "entryMotion": 0.021933,
+      "exitMotion": 0.008988
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 18,
+      "length": 24,
+      "entry": 0.09288,
+      "exit": 0.099762,
+      "entryMotion": 0.012724,
+      "exitMotion": 0.008806
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 24,
+      "length": 24,
+      "entry": 0.089558,
+      "exit": 0.104816,
+      "entryMotion": 0.013021,
+      "exitMotion": 0.022071
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 30,
+      "length": 24,
+      "entry": 0.087122,
+      "exit": 0.111609,
+      "entryMotion": 0.012669,
+      "exitMotion": 0.013708
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 36,
+      "length": 24,
+      "entry": 0.079512,
+      "exit": 0.124509,
+      "entryMotion": 0.013096,
+      "exitMotion": 0.012005
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 42,
+      "length": 24,
+      "entry": 0.074235,
+      "exit": 0.123481,
+      "entryMotion": 0.013687,
+      "exitMotion": 0.027119
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 48,
+      "length": 24,
+      "entry": 0.092575,
+      "exit": 0.123883,
+      "entryMotion": 0.015524,
+      "exitMotion": 0.013312
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 54,
+      "length": 24,
+      "entry": 0.090928,
+      "exit": 0.121296,
+      "entryMotion": 0.019394,
+      "exitMotion": 0.009566
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 60,
+      "length": 24,
+      "entry": 0.108597,
+      "exit": 0.113861,
+      "entryMotion": 0.015425,
+      "exitMotion": 0.00961
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 66,
+      "length": 24,
+      "entry": 0.102518,
+      "exit": 0.105914,
+      "entryMotion": 0.015799,
+      "exitMotion": 0.026371
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 72,
+      "length": 24,
+      "entry": 0.102871,
+      "exit": 0.100277,
+      "entryMotion": 0.016147,
+      "exitMotion": 0.008514
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 78,
+      "length": 24,
+      "entry": 0.098035,
+      "exit": 0.093855,
+      "entryMotion": 0.013251,
+      "exitMotion": 0.009858
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 84,
+      "length": 24,
+      "entry": 0.088079,
+      "exit": 0.082093,
+      "entryMotion": 0.013456,
+      "exitMotion": 0.036686
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 90,
+      "length": 24,
+      "entry": 0.085306,
+      "exit": 0.082128,
+      "entryMotion": 0.013545,
+      "exitMotion": 0.018817
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 96,
+      "length": 24,
+      "entry": 0.080327,
+      "exit": 0.10437,
+      "entryMotion": 0.012492,
+      "exitMotion": 0.012219
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 102,
+      "length": 24,
+      "entry": 0.073105,
+      "exit": 0.114208,
+      "entryMotion": 0.015839,
+      "exitMotion": 0.01345
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 108,
+      "length": 24,
+      "entry": 0.084834,
+      "exit": 0.118709,
+      "entryMotion": 0.023382,
+      "exitMotion": 0.009992
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 114,
+      "length": 24,
+      "entry": 0.075864,
+      "exit": 0.126804,
+      "entryMotion": 0.015178,
+      "exitMotion": 0.009948
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 120,
+      "length": 24,
+      "entry": 0.092427,
+      "exit": 0.118912,
+      "entryMotion": 0.017952,
+      "exitMotion": 0.015955
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 126,
+      "length": 24,
+      "entry": 0.094812,
+      "exit": 0.105125,
+      "entryMotion": 0.021722,
+      "exitMotion": 0.018774
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 132,
+      "length": 24,
+      "entry": 0.100158,
+      "exit": 0.098001,
+      "entryMotion": 0.017791,
+      "exitMotion": 0.009323
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 138,
+      "length": 24,
+      "entry": 0.109698,
+      "exit": 0.090848,
+      "entryMotion": 0.021227,
+      "exitMotion": 0.008605
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 144,
+      "length": 24,
+      "entry": 0.096194,
+      "exit": 0.080818,
+      "entryMotion": 0.015913,
+      "exitMotion": 0.008609
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 150,
+      "length": 24,
+      "entry": 0.071252,
+      "exit": 0.070385,
+      "entryMotion": 0.012934,
+      "exitMotion": 0.008639
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 0,
+      "length": 24,
+      "entry": 0.08491,
+      "exit": 0.108402,
+      "entryMotion": 0.034335,
+      "exitMotion": 0.014285
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 6,
+      "length": 24,
+      "entry": 0.114371,
+      "exit": 0.105866,
+      "entryMotion": 0.030351,
+      "exitMotion": 0.014523
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 12,
+      "length": 24,
+      "entry": 0.119912,
+      "exit": 0.099233,
+      "entryMotion": 0.032207,
+      "exitMotion": 0.015099
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 18,
+      "length": 24,
+      "entry": 0.110687,
+      "exit": 0.092315,
+      "entryMotion": 0.02903,
+      "exitMotion": 0.014647
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 24,
+      "length": 24,
+      "entry": 0.109126,
+      "exit": 0.094298,
+      "entryMotion": 0.029088,
+      "exitMotion": 0.021684
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 30,
+      "length": 24,
+      "entry": 0.106684,
+      "exit": 0.103749,
+      "entryMotion": 0.029306,
+      "exitMotion": 0.020149
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 36,
+      "length": 24,
+      "entry": 0.100086,
+      "exit": 0.116794,
+      "entryMotion": 0.029555,
+      "exitMotion": 0.017028
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 42,
+      "length": 24,
+      "entry": 0.0945,
+      "exit": 0.118435,
+      "entryMotion": 0.030003,
+      "exitMotion": 0.031184
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 48,
+      "length": 24,
+      "entry": 0.103864,
+      "exit": 0.119009,
+      "entryMotion": 0.028257,
+      "exitMotion": 0.017993
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 54,
+      "length": 24,
+      "entry": 0.106649,
+      "exit": 0.11564,
+      "entryMotion": 0.033173,
+      "exitMotion": 0.015128
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 60,
+      "length": 24,
+      "entry": 0.119472,
+      "exit": 0.107581,
+      "entryMotion": 0.02869,
+      "exitMotion": 0.015287
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 66,
+      "length": 24,
+      "entry": 0.119559,
+      "exit": 0.101061,
+      "entryMotion": 0.031368,
+      "exitMotion": 0.028894
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 72,
+      "length": 24,
+      "entry": 0.119173,
+      "exit": 0.09584,
+      "entryMotion": 0.029963,
+      "exitMotion": 0.014739
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 78,
+      "length": 24,
+      "entry": 0.115538,
+      "exit": 0.089416,
+      "entryMotion": 0.029764,
+      "exitMotion": 0.016087
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 84,
+      "length": 24,
+      "entry": 0.107916,
+      "exit": 0.069183,
+      "entryMotion": 0.029283,
+      "exitMotion": 0.036023
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 90,
+      "length": 24,
+      "entry": 0.099384,
+      "exit": 0.069391,
+      "entryMotion": 0.029654,
+      "exitMotion": 0.021404
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 96,
+      "length": 24,
+      "entry": 0.093955,
+      "exit": 0.095392,
+      "entryMotion": 0.028642,
+      "exitMotion": 0.017729
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 102,
+      "length": 24,
+      "entry": 0.085537,
+      "exit": 0.105246,
+      "entryMotion": 0.029727,
+      "exitMotion": 0.017121
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 108,
+      "length": 24,
+      "entry": 0.08351,
+      "exit": 0.111089,
+      "entryMotion": 0.03395,
+      "exitMotion": 0.016579
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 114,
+      "length": 24,
+      "entry": 0.079778,
+      "exit": 0.119301,
+      "entryMotion": 0.029054,
+      "exitMotion": 0.015938
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 120,
+      "length": 24,
+      "entry": 0.103451,
+      "exit": 0.111364,
+      "entryMotion": 0.029969,
+      "exitMotion": 0.019464
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 126,
+      "length": 24,
+      "entry": 0.109377,
+      "exit": 0.098581,
+      "entryMotion": 0.032064,
+      "exitMotion": 0.022294
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 132,
+      "length": 24,
+      "entry": 0.113807,
+      "exit": 0.090883,
+      "entryMotion": 0.032581,
+      "exitMotion": 0.015486
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 138,
+      "length": 24,
+      "entry": 0.120369,
+      "exit": 0.083269,
+      "entryMotion": 0.032074,
+      "exitMotion": 0.014993
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 144,
+      "length": 24,
+      "entry": 0.110479,
+      "exit": 0.072559,
+      "entryMotion": 0.031138,
+      "exitMotion": 0.014855
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 150,
+      "length": 24,
+      "entry": 0.099735,
+      "exit": 0.061268,
+      "entryMotion": 0.029033,
+      "exitMotion": 0.014819
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 0,
+      "length": 24,
+      "entry": 0.090757,
+      "exit": 0.089401,
+      "entryMotion": 0.018625,
+      "exitMotion": 0.015637
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 6,
+      "length": 24,
+      "entry": 0.118709,
+      "exit": 0.085801,
+      "entryMotion": 0.012805,
+      "exitMotion": 0.015364
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 12,
+      "length": 24,
+      "entry": 0.12378,
+      "exit": 0.0767,
+      "entryMotion": 0.018147,
+      "exitMotion": 0.01519
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 18,
+      "length": 24,
+      "entry": 0.115936,
+      "exit": 0.066902,
+      "entryMotion": 0.009832,
+      "exitMotion": 0.015967
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 24,
+      "length": 24,
+      "entry": 0.11395,
+      "exit": 0.066997,
+      "entryMotion": 0.008499,
+      "exitMotion": 0.028992
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 30,
+      "length": 24,
+      "entry": 0.11136,
+      "exit": 0.080881,
+      "entryMotion": 0.007999,
+      "exitMotion": 0.016906
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 36,
+      "length": 24,
+      "entry": 0.104679,
+      "exit": 0.096327,
+      "entryMotion": 0.008523,
+      "exitMotion": 0.017137
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 42,
+      "length": 24,
+      "entry": 0.099089,
+      "exit": 0.103175,
+      "entryMotion": 0.009594,
+      "exitMotion": 0.029104
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 48,
+      "length": 24,
+      "entry": 0.108126,
+      "exit": 0.104256,
+      "entryMotion": 0.012255,
+      "exitMotion": 0.017882
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 54,
+      "length": 24,
+      "entry": 0.113328,
+      "exit": 0.098096,
+      "entryMotion": 0.0162,
+      "exitMotion": 0.015501
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 60,
+      "length": 24,
+      "entry": 0.125147,
+      "exit": 0.086941,
+      "entryMotion": 0.011123,
+      "exitMotion": 0.015971
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 66,
+      "length": 24,
+      "entry": 0.12421,
+      "exit": 0.084457,
+      "entryMotion": 0.013822,
+      "exitMotion": 0.03017
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 72,
+      "length": 24,
+      "entry": 0.123912,
+      "exit": 0.081146,
+      "entryMotion": 0.011475,
+      "exitMotion": 0.015548
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 78,
+      "length": 24,
+      "entry": 0.120253,
+      "exit": 0.075098,
+      "entryMotion": 0.009031,
+      "exitMotion": 0.015986
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 84,
+      "length": 24,
+      "entry": 0.112568,
+      "exit": 0.05255,
+      "entryMotion": 0.009147,
+      "exitMotion": 0.042786
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 90,
+      "length": 24,
+      "entry": 0.104626,
+      "exit": 0.053815,
+      "entryMotion": 0.010299,
+      "exitMotion": 0.023038
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 96,
+      "length": 24,
+      "entry": 0.099113,
+      "exit": 0.077756,
+      "entryMotion": 0.008225,
+      "exitMotion": 0.015833
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 102,
+      "length": 24,
+      "entry": 0.091234,
+      "exit": 0.080456,
+      "entryMotion": 0.012336,
+      "exitMotion": 0.017693
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 108,
+      "length": 24,
+      "entry": 0.083443,
+      "exit": 0.090738,
+      "entryMotion": 0.021461,
+      "exitMotion": 0.015996
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 114,
+      "length": 24,
+      "entry": 0.083346,
+      "exit": 0.100138,
+      "entryMotion": 0.011274,
+      "exitMotion": 0.015686
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 120,
+      "length": 24,
+      "entry": 0.106512,
+      "exit": 0.090297,
+      "entryMotion": 0.014903,
+      "exitMotion": 0.02103
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 126,
+      "length": 24,
+      "entry": 0.115279,
+      "exit": 0.075299,
+      "entryMotion": 0.018142,
+      "exitMotion": 0.022153
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 132,
+      "length": 24,
+      "entry": 0.120525,
+      "exit": 0.065041,
+      "entryMotion": 0.015351,
+      "exitMotion": 0.016284
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 138,
+      "length": 24,
+      "entry": 0.12658,
+      "exit": 0.055937,
+      "entryMotion": 0.018202,
+      "exitMotion": 0.015686
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 144,
+      "length": 24,
+      "entry": 0.1167,
+      "exit": 0.045599,
+      "entryMotion": 0.012491,
+      "exitMotion": 0.016144
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 150,
+      "length": 24,
+      "entry": 0.104909,
+      "exit": 0.038262,
+      "entryMotion": 0.009335,
+      "exitMotion": 0.015988
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 0,
+      "length": 24,
+      "entry": 0.081535,
+      "exit": 0.080426,
+      "entryMotion": 0.018058,
+      "exitMotion": 0.01188
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 6,
+      "length": 24,
+      "entry": 0.112919,
+      "exit": 0.075832,
+      "entryMotion": 0.015033,
+      "exitMotion": 0.012547
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 12,
+      "length": 24,
+      "entry": 0.118362,
+      "exit": 0.067688,
+      "entryMotion": 0.018785,
+      "exitMotion": 0.01326
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 18,
+      "length": 24,
+      "entry": 0.110624,
+      "exit": 0.058576,
+      "entryMotion": 0.012563,
+      "exitMotion": 0.012896
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 24,
+      "length": 24,
+      "entry": 0.108651,
+      "exit": 0.037741,
+      "entryMotion": 0.010992,
+      "exitMotion": 0.019901
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 30,
+      "length": 24,
+      "entry": 0.105754,
+      "exit": 0.072463,
+      "entryMotion": 0.010786,
+      "exitMotion": 0.016388
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 36,
+      "length": 24,
+      "entry": 0.098644,
+      "exit": 0.073809,
+      "entryMotion": 0.011089,
+      "exitMotion": 0.013788
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 42,
+      "length": 24,
+      "entry": 0.092328,
+      "exit": 0.094708,
+      "entryMotion": 0.011652,
+      "exitMotion": 0.028134
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 48,
+      "length": 24,
+      "entry": 0.100643,
+      "exit": 0.095156,
+      "entryMotion": 0.014794,
+      "exitMotion": 0.015951
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 54,
+      "length": 24,
+      "entry": 0.107023,
+      "exit": 0.08646,
+      "entryMotion": 0.016678,
+      "exitMotion": 0.012727
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 60,
+      "length": 24,
+      "entry": 0.119556,
+      "exit": 0.074751,
+      "entryMotion": 0.013093,
+      "exitMotion": 0.013697
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 66,
+      "length": 24,
+      "entry": 0.120235,
+      "exit": 0.07886,
+      "entryMotion": 0.015761,
+      "exitMotion": 0.027066
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 72,
+      "length": 24,
+      "entry": 0.119537,
+      "exit": 0.075897,
+      "entryMotion": 0.012767,
+      "exitMotion": 0.012272
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 78,
+      "length": 24,
+      "entry": 0.115391,
+      "exit": 0.073037,
+      "entryMotion": 0.01143,
+      "exitMotion": 0.014131
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 84,
+      "length": 24,
+      "entry": 0.107061,
+      "exit": 0.044411,
+      "entryMotion": 0.011399,
+      "exitMotion": 0.034317
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 90,
+      "length": 24,
+      "entry": 0.100455,
+      "exit": 0.046892,
+      "entryMotion": 0.012321,
+      "exitMotion": 0.022851
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 96,
+      "length": 24,
+      "entry": 0.095011,
+      "exit": 0.060697,
+      "entryMotion": 0.011037,
+      "exitMotion": 0.014313
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 102,
+      "length": 24,
+      "entry": 0.08688,
+      "exit": 0.053006,
+      "entryMotion": 0.014202,
+      "exitMotion": 0.017434
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 108,
+      "length": 24,
+      "entry": 0.075773,
+      "exit": 0.08013,
+      "entryMotion": 0.023335,
+      "exitMotion": 0.013309
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 114,
+      "length": 24,
+      "entry": 0.073787,
+      "exit": 0.08018,
+      "entryMotion": 0.012956,
+      "exitMotion": 0.014198
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 120,
+      "length": 24,
+      "entry": 0.099927,
+      "exit": 0.07553,
+      "entryMotion": 0.016095,
+      "exitMotion": 0.018145
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 126,
+      "length": 24,
+      "entry": 0.108495,
+      "exit": 0.067825,
+      "entryMotion": 0.018757,
+      "exitMotion": 0.020796
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 132,
+      "length": 24,
+      "entry": 0.114566,
+      "exit": 0.060405,
+      "entryMotion": 0.016051,
+      "exitMotion": 0.012826
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 138,
+      "length": 24,
+      "entry": 0.121132,
+      "exit": 0.054869,
+      "entryMotion": 0.020161,
+      "exitMotion": 0.011925
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 144,
+      "length": 24,
+      "entry": 0.110185,
+      "exit": 0.051528,
+      "entryMotion": 0.014223,
+      "exitMotion": 0.012075
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 150,
+      "length": 24,
+      "entry": 0.098883,
+      "exit": 0.052185,
+      "entryMotion": 0.011866,
+      "exitMotion": 0.012442
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 0,
+      "length": 24,
+      "entry": 0.049415,
+      "exit": 0.055823,
+      "entryMotion": 0.025538,
+      "exitMotion": 0.022621
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 6,
+      "length": 24,
+      "entry": 0.089206,
+      "exit": 0.051271,
+      "entryMotion": 0.01922,
+      "exitMotion": 0.022807
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 12,
+      "length": 24,
+      "entry": 0.096989,
+      "exit": 0.044332,
+      "entryMotion": 0.01992,
+      "exitMotion": 0.022858
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 18,
+      "length": 24,
+      "entry": 0.093471,
+      "exit": 0.039669,
+      "entryMotion": 0.016657,
+      "exitMotion": 0.023609
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 24,
+      "length": 24,
+      "entry": 0.091594,
+      "exit": 0.036336,
+      "entryMotion": 0.016177,
+      "exitMotion": 0.035933
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 30,
+      "length": 24,
+      "entry": 0.087399,
+      "exit": 0.041138,
+      "entryMotion": 0.015642,
+      "exitMotion": 0.017351
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 36,
+      "length": 24,
+      "entry": 0.078492,
+      "exit": 0.05795,
+      "entryMotion": 0.015641,
+      "exitMotion": 0.023765
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 42,
+      "length": 24,
+      "entry": 0.069388,
+      "exit": 0.073778,
+      "entryMotion": 0.016503,
+      "exitMotion": 0.029008
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 48,
+      "length": 24,
+      "entry": 0.071928,
+      "exit": 0.076265,
+      "entryMotion": 0.017028,
+      "exitMotion": 0.023959
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 54,
+      "length": 24,
+      "entry": 0.085991,
+      "exit": 0.062694,
+      "entryMotion": 0.023179,
+      "exitMotion": 0.022562
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 60,
+      "length": 24,
+      "entry": 0.097789,
+      "exit": 0.049718,
+      "entryMotion": 0.015812,
+      "exitMotion": 0.023709
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 66,
+      "length": 24,
+      "entry": 0.107529,
+      "exit": 0.06654,
+      "entryMotion": 0.020453,
+      "exitMotion": 0.034329
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 72,
+      "length": 24,
+      "entry": 0.105759,
+      "exit": 0.072173,
+      "entryMotion": 0.017094,
+      "exitMotion": 0.022521
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 78,
+      "length": 24,
+      "entry": 0.099158,
+      "exit": 0.074444,
+      "entryMotion": 0.016118,
+      "exitMotion": 0.022155
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 84,
+      "length": 24,
+      "entry": 0.088133,
+      "exit": 0.070535,
+      "entryMotion": 0.01557,
+      "exitMotion": 0.046112
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 90,
+      "length": 24,
+      "entry": 0.087063,
+      "exit": 0.074097,
+      "entryMotion": 0.017644,
+      "exitMotion": 0.028587
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 96,
+      "length": 24,
+      "entry": 0.081513,
+      "exit": 0.073514,
+      "entryMotion": 0.015696,
+      "exitMotion": 0.022973
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 102,
+      "length": 24,
+      "entry": 0.074868,
+      "exit": 0.054289,
+      "entryMotion": 0.017194,
+      "exitMotion": 0.024881
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 108,
+      "length": 24,
+      "entry": 0.056703,
+      "exit": 0.052251,
+      "entryMotion": 0.025419,
+      "exitMotion": 0.020649
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 114,
+      "length": 24,
+      "entry": 0.045794,
+      "exit": 0.061253,
+      "entryMotion": 0.016213,
+      "exitMotion": 0.021398
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 120,
+      "length": 24,
+      "entry": 0.078457,
+      "exit": 0.051383,
+      "entryMotion": 0.01924,
+      "exitMotion": 0.029618
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 126,
+      "length": 24,
+      "entry": 0.080789,
+      "exit": 0.053312,
+      "entryMotion": 0.019007,
+      "exitMotion": 0.025368
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 132,
+      "length": 24,
+      "entry": 0.094973,
+      "exit": 0.053819,
+      "entryMotion": 0.02232,
+      "exitMotion": 0.023177
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 138,
+      "length": 24,
+      "entry": 0.101194,
+      "exit": 0.054331,
+      "entryMotion": 0.020078,
+      "exitMotion": 0.02212
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 144,
+      "length": 24,
+      "entry": 0.088284,
+      "exit": 0.059316,
+      "entryMotion": 0.017872,
+      "exitMotion": 0.022379
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 150,
+      "length": 24,
+      "entry": 0.078983,
+      "exit": 0.0655,
+      "entryMotion": 0.016341,
+      "exitMotion": 0.021897
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 0,
+      "length": 24,
+      "entry": 0.030847,
+      "exit": 0.038896,
+      "entryMotion": 0.016563,
+      "exitMotion": 0.015764
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 6,
+      "length": 24,
+      "entry": 0.066173,
+      "exit": 0.042415,
+      "entryMotion": 0.015215,
+      "exitMotion": 0.01577
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 12,
+      "length": 24,
+      "entry": 0.076014,
+      "exit": 0.046921,
+      "entryMotion": 0.02345,
+      "exitMotion": 0.01622
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 18,
+      "length": 24,
+      "entry": 0.079951,
+      "exit": 0.053926,
+      "entryMotion": 0.013738,
+      "exitMotion": 0.016129
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 24,
+      "length": 24,
+      "entry": 0.078423,
+      "exit": 0.063571,
+      "entryMotion": 0.012688,
+      "exitMotion": 0.026981
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 30,
+      "length": 24,
+      "entry": 0.073356,
+      "exit": 0.031739,
+      "entryMotion": 0.013015,
+      "exitMotion": 0.019495
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 36,
+      "length": 24,
+      "entry": 0.064606,
+      "exit": 0.06163,
+      "entryMotion": 0.01278,
+      "exitMotion": 0.018872
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 42,
+      "length": 24,
+      "entry": 0.054994,
+      "exit": 0.051531,
+      "entryMotion": 0.013601,
+      "exitMotion": 0.032548
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 48,
+      "length": 24,
+      "entry": 0.044957,
+      "exit": 0.054771,
+      "entryMotion": 0.016295,
+      "exitMotion": 0.016321
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 54,
+      "length": 24,
+      "entry": 0.071047,
+      "exit": 0.045319,
+      "entryMotion": 0.015599,
+      "exitMotion": 0.016415
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 60,
+      "length": 24,
+      "entry": 0.076956,
+      "exit": 0.043379,
+      "entryMotion": 0.016525,
+      "exitMotion": 0.016677
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 66,
+      "length": 24,
+      "entry": 0.097486,
+      "exit": 0.057241,
+      "entryMotion": 0.016423,
+      "exitMotion": 0.028651
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 72,
+      "length": 24,
+      "entry": 0.093805,
+      "exit": 0.070895,
+      "entryMotion": 0.015579,
+      "exitMotion": 0.016027
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 78,
+      "length": 24,
+      "entry": 0.084406,
+      "exit": 0.075555,
+      "entryMotion": 0.013534,
+      "exitMotion": 0.017219
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 84,
+      "length": 24,
+      "entry": 0.072121,
+      "exit": 0.088973,
+      "entryMotion": 0.013921,
+      "exitMotion": 0.036508
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 90,
+      "length": 24,
+      "entry": 0.07897,
+      "exit": 0.091465,
+      "entryMotion": 0.013428,
+      "exitMotion": 0.022466
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 96,
+      "length": 24,
+      "entry": 0.074782,
+      "exit": 0.085346,
+      "entryMotion": 0.012872,
+      "exitMotion": 0.018137
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 102,
+      "length": 24,
+      "entry": 0.071984,
+      "exit": 0.068558,
+      "entryMotion": 0.016947,
+      "exitMotion": 0.018695
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 108,
+      "length": 24,
+      "entry": 0.05479,
+      "exit": 0.039758,
+      "entryMotion": 0.024227,
+      "exitMotion": 0.016895
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 114,
+      "length": 24,
+      "entry": 0.045392,
+      "exit": 0.059591,
+      "entryMotion": 0.01402,
+      "exitMotion": 0.016318
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 120,
+      "length": 24,
+      "entry": 0.063589,
+      "exit": 0.047373,
+      "entryMotion": 0.017258,
+      "exitMotion": 0.021883
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 126,
+      "length": 24,
+      "entry": 0.055678,
+      "exit": 0.057047,
+      "entryMotion": 0.023643,
+      "exitMotion": 0.023662
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 132,
+      "length": 24,
+      "entry": 0.07899,
+      "exit": 0.065162,
+      "entryMotion": 0.014412,
+      "exitMotion": 0.016541
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 138,
+      "length": 24,
+      "entry": 0.082499,
+      "exit": 0.069288,
+      "entryMotion": 0.023841,
+      "exitMotion": 0.016299
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 144,
+      "length": 24,
+      "entry": 0.068447,
+      "exit": 0.076444,
+      "entryMotion": 0.016317,
+      "exitMotion": 0.016272
+    },
+    {
+      "take": 2,
+      "target": 108,
+      "start": 150,
+      "length": 24,
+      "entry": 0.067267,
+      "exit": 0.082744,
+      "entryMotion": 0.013629,
+      "exitMotion": 0.016137
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 0,
+      "length": 36,
+      "entry": 0.050138,
+      "exit": 0.082568,
+      "entryMotion": 0.023872,
+      "exitMotion": 0.017277
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 6,
+      "length": 36,
+      "entry": 0.066772,
+      "exit": 0.075995,
+      "entryMotion": 0.025211,
+      "exitMotion": 0.017044
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 12,
+      "length": 36,
+      "entry": 0.076341,
+      "exit": 0.088933,
+      "entryMotion": 0.019992,
+      "exitMotion": 0.026616
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 18,
+      "length": 36,
+      "entry": 0.086572,
+      "exit": 0.089212,
+      "entryMotion": 0.020468,
+      "exitMotion": 0.022205
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 24,
+      "length": 36,
+      "entry": 0.08429,
+      "exit": 0.108764,
+      "entryMotion": 0.019818,
+      "exitMotion": 0.020345
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 30,
+      "length": 36,
+      "entry": 0.079493,
+      "exit": 0.104036,
+      "entryMotion": 0.019443,
+      "exitMotion": 0.034147
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 36,
+      "length": 36,
+      "entry": 0.072494,
+      "exit": 0.104455,
+      "entryMotion": 0.019506,
+      "exitMotion": 0.019546
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 42,
+      "length": 36,
+      "entry": 0.065359,
+      "exit": 0.100974,
+      "entryMotion": 0.020066,
+      "exitMotion": 0.018293
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 48,
+      "length": 36,
+      "entry": 0.051738,
+      "exit": 0.091449,
+      "entryMotion": 0.020212,
+      "exitMotion": 0.017383
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 54,
+      "length": 36,
+      "entry": 0.080718,
+      "exit": 0.085184,
+      "entryMotion": 0.023667,
+      "exitMotion": 0.029195
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 60,
+      "length": 36,
+      "entry": 0.079482,
+      "exit": 0.082603,
+      "entryMotion": 0.019798,
+      "exitMotion": 0.017423
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 66,
+      "length": 36,
+      "entry": 0.100156,
+      "exit": 0.07605,
+      "entryMotion": 0.022336,
+      "exitMotion": 0.017814
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 72,
+      "length": 36,
+      "entry": 0.096706,
+      "exit": 0.079854,
+      "entryMotion": 0.020895,
+      "exitMotion": 0.038829
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 78,
+      "length": 36,
+      "entry": 0.088433,
+      "exit": 0.077014,
+      "entryMotion": 0.019541,
+      "exitMotion": 0.02369
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 84,
+      "length": 36,
+      "entry": 0.077798,
+      "exit": 0.09101,
+      "entryMotion": 0.019334,
+      "exitMotion": 0.020002
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 90,
+      "length": 36,
+      "entry": 0.082113,
+      "exit": 0.09482,
+      "entryMotion": 0.021274,
+      "exitMotion": 0.020269
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 96,
+      "length": 36,
+      "entry": 0.077728,
+      "exit": 0.098585,
+      "entryMotion": 0.019571,
+      "exitMotion": 0.018779
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 102,
+      "length": 36,
+      "entry": 0.075413,
+      "exit": 0.111005,
+      "entryMotion": 0.021345,
+      "exitMotion": 0.017948
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 108,
+      "length": 36,
+      "entry": 0.039234,
+      "exit": 0.099322,
+      "entryMotion": 0.034688,
+      "exitMotion": 0.020782
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 114,
+      "length": 36,
+      "entry": 0.025385,
+      "exit": 0.075286,
+      "entryMotion": 0.021685,
+      "exitMotion": 0.027654
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 120,
+      "length": 36,
+      "entry": 0.053021,
+      "exit": 0.067151,
+      "entryMotion": 0.018682,
+      "exitMotion": 0.016666
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 126,
+      "length": 36,
+      "entry": 0.054363,
+      "exit": 0.061843,
+      "entryMotion": 0.020171,
+      "exitMotion": 0.01646
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 132,
+      "length": 36,
+      "entry": 0.086053,
+      "exit": 0.056469,
+      "entryMotion": 0.023205,
+      "exitMotion": 0.016473
+    },
+    {
+      "take": 2,
+      "target": 12,
+      "start": 138,
+      "length": 36,
+      "entry": 0.087324,
+      "exit": 0.053949,
+      "entryMotion": 0.025457,
+      "exitMotion": 0.016965
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 0,
+      "length": 36,
+      "entry": 0.03587,
+      "exit": 0.103003,
+      "entryMotion": 0.016791,
+      "exitMotion": 0.033848
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 6,
+      "length": 36,
+      "entry": 0.056542,
+      "exit": 0.098606,
+      "entryMotion": 0.013966,
+      "exitMotion": 0.033503
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 12,
+      "length": 36,
+      "entry": 0.066612,
+      "exit": 0.105049,
+      "entryMotion": 0.02067,
+      "exitMotion": 0.039001
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 18,
+      "length": 36,
+      "entry": 0.068075,
+      "exit": 0.104996,
+      "entryMotion": 0.012003,
+      "exitMotion": 0.034017
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 24,
+      "length": 36,
+      "entry": 0.067188,
+      "exit": 0.1202,
+      "entryMotion": 0.010617,
+      "exitMotion": 0.034394
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 30,
+      "length": 36,
+      "entry": 0.062324,
+      "exit": 0.115373,
+      "entryMotion": 0.010514,
+      "exitMotion": 0.039991
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 36,
+      "length": 36,
+      "entry": 0.056361,
+      "exit": 0.115897,
+      "entryMotion": 0.010675,
+      "exitMotion": 0.035475
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 42,
+      "length": 36,
+      "entry": 0.051567,
+      "exit": 0.114617,
+      "entryMotion": 0.011147,
+      "exitMotion": 0.033475
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 48,
+      "length": 36,
+      "entry": 0.045569,
+      "exit": 0.109125,
+      "entryMotion": 0.013778,
+      "exitMotion": 0.034607
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 54,
+      "length": 36,
+      "entry": 0.056311,
+      "exit": 0.092816,
+      "entryMotion": 0.015201,
+      "exitMotion": 0.035644
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 60,
+      "length": 36,
+      "entry": 0.061514,
+      "exit": 0.088413,
+      "entryMotion": 0.01428,
+      "exitMotion": 0.033371
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 66,
+      "length": 36,
+      "entry": 0.085551,
+      "exit": 0.080563,
+      "entryMotion": 0.014725,
+      "exitMotion": 0.033069
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 72,
+      "length": 36,
+      "entry": 0.080549,
+      "exit": 0.090624,
+      "entryMotion": 0.013437,
+      "exitMotion": 0.045517
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 78,
+      "length": 36,
+      "entry": 0.070254,
+      "exit": 0.090053,
+      "entryMotion": 0.011462,
+      "exitMotion": 0.040181
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 84,
+      "length": 36,
+      "entry": 0.058874,
+      "exit": 0.107646,
+      "entryMotion": 0.011604,
+      "exitMotion": 0.033331
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 90,
+      "length": 36,
+      "entry": 0.074037,
+      "exit": 0.111673,
+      "entryMotion": 0.01178,
+      "exitMotion": 0.035586
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 96,
+      "length": 36,
+      "entry": 0.074157,
+      "exit": 0.110703,
+      "entryMotion": 0.010633,
+      "exitMotion": 0.033427
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 102,
+      "length": 36,
+      "entry": 0.075792,
+      "exit": 0.120971,
+      "entryMotion": 0.014612,
+      "exitMotion": 0.033556
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 108,
+      "length": 36,
+      "entry": 0.069065,
+      "exit": 0.112447,
+      "entryMotion": 0.023117,
+      "exitMotion": 0.037352
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 114,
+      "length": 36,
+      "entry": 0.056539,
+      "exit": 0.100768,
+      "entryMotion": 0.011887,
+      "exitMotion": 0.036897
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 120,
+      "length": 36,
+      "entry": 0.06416,
+      "exit": 0.096314,
+      "entryMotion": 0.014549,
+      "exitMotion": 0.033953
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 126,
+      "length": 36,
+      "entry": 0.040224,
+      "exit": 0.091333,
+      "entryMotion": 0.021383,
+      "exitMotion": 0.03345
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 132,
+      "length": 36,
+      "entry": 0.061357,
+      "exit": 0.084966,
+      "entryMotion": 0.01373,
+      "exitMotion": 0.033433
+    },
+    {
+      "take": 2,
+      "target": 24,
+      "start": 138,
+      "length": 36,
+      "entry": 0.067432,
+      "exit": 0.078679,
+      "entryMotion": 0.021828,
+      "exitMotion": 0.033034
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 0,
+      "length": 36,
+      "entry": 0.029296,
+      "exit": 0.105956,
+      "entryMotion": 0.0191,
+      "exitMotion": 0.008988
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 6,
+      "length": 36,
+      "entry": 0.06462,
+      "exit": 0.099762,
+      "entryMotion": 0.021739,
+      "exitMotion": 0.008806
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 12,
+      "length": 36,
+      "entry": 0.074487,
+      "exit": 0.104816,
+      "entryMotion": 0.026252,
+      "exitMotion": 0.022071
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 18,
+      "length": 36,
+      "entry": 0.070886,
+      "exit": 0.111609,
+      "entryMotion": 0.019396,
+      "exitMotion": 0.013708
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 24,
+      "length": 36,
+      "entry": 0.069592,
+      "exit": 0.124509,
+      "entryMotion": 0.018178,
+      "exitMotion": 0.012005
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 30,
+      "length": 36,
+      "entry": 0.064536,
+      "exit": 0.123481,
+      "entryMotion": 0.017975,
+      "exitMotion": 0.027119
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 36,
+      "length": 36,
+      "entry": 0.056793,
+      "exit": 0.123883,
+      "entryMotion": 0.017691,
+      "exitMotion": 0.013312
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 42,
+      "length": 36,
+      "entry": 0.049951,
+      "exit": 0.121296,
+      "entryMotion": 0.017483,
+      "exitMotion": 0.009566
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 48,
+      "length": 36,
+      "entry": 0.05077,
+      "exit": 0.113861,
+      "entryMotion": 0.022022,
+      "exitMotion": 0.00961
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 54,
+      "length": 36,
+      "entry": 0.059601,
+      "exit": 0.105914,
+      "entryMotion": 0.018582,
+      "exitMotion": 0.026371
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 60,
+      "length": 36,
+      "entry": 0.070594,
+      "exit": 0.100277,
+      "entryMotion": 0.022153,
+      "exitMotion": 0.008514
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 66,
+      "length": 36,
+      "entry": 0.088764,
+      "exit": 0.093855,
+      "entryMotion": 0.019443,
+      "exitMotion": 0.009858
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 72,
+      "length": 36,
+      "entry": 0.084322,
+      "exit": 0.082093,
+      "entryMotion": 0.020211,
+      "exitMotion": 0.036686
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 78,
+      "length": 36,
+      "entry": 0.074327,
+      "exit": 0.082128,
+      "entryMotion": 0.018255,
+      "exitMotion": 0.018817
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 84,
+      "length": 36,
+      "entry": 0.061914,
+      "exit": 0.10437,
+      "entryMotion": 0.01845,
+      "exitMotion": 0.012219
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 90,
+      "length": 36,
+      "entry": 0.074338,
+      "exit": 0.114208,
+      "entryMotion": 0.017971,
+      "exitMotion": 0.01345
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 96,
+      "length": 36,
+      "entry": 0.073236,
+      "exit": 0.118709,
+      "entryMotion": 0.018006,
+      "exitMotion": 0.009992
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 102,
+      "length": 36,
+      "entry": 0.072698,
+      "exit": 0.126804,
+      "entryMotion": 0.020848,
+      "exitMotion": 0.009948
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 108,
+      "length": 36,
+      "entry": 0.06719,
+      "exit": 0.118912,
+      "entryMotion": 0.029905,
+      "exitMotion": 0.015955
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 114,
+      "length": 36,
+      "entry": 0.053834,
+      "exit": 0.105125,
+      "entryMotion": 0.020022,
+      "exitMotion": 0.018774
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 120,
+      "length": 36,
+      "entry": 0.066571,
+      "exit": 0.098001,
+      "entryMotion": 0.021207,
+      "exitMotion": 0.009323
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 126,
+      "length": 36,
+      "entry": 0.050167,
+      "exit": 0.090848,
+      "entryMotion": 0.028115,
+      "exitMotion": 0.008605
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 132,
+      "length": 36,
+      "entry": 0.066832,
+      "exit": 0.080818,
+      "entryMotion": 0.016331,
+      "exitMotion": 0.008609
+    },
+    {
+      "take": 2,
+      "target": 36,
+      "start": 138,
+      "length": 36,
+      "entry": 0.075019,
+      "exit": 0.070385,
+      "entryMotion": 0.02958,
+      "exitMotion": 0.008639
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 0,
+      "length": 36,
+      "entry": 0.069067,
+      "exit": 0.099233,
+      "entryMotion": 0.021691,
+      "exitMotion": 0.015099
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 6,
+      "length": 36,
+      "entry": 0.102347,
+      "exit": 0.092315,
+      "entryMotion": 0.015858,
+      "exitMotion": 0.014647
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 12,
+      "length": 36,
+      "entry": 0.110556,
+      "exit": 0.094298,
+      "entryMotion": 0.021933,
+      "exitMotion": 0.021684
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 18,
+      "length": 36,
+      "entry": 0.09288,
+      "exit": 0.103749,
+      "entryMotion": 0.012724,
+      "exitMotion": 0.020149
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 24,
+      "length": 36,
+      "entry": 0.089558,
+      "exit": 0.116794,
+      "entryMotion": 0.013021,
+      "exitMotion": 0.017028
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 30,
+      "length": 36,
+      "entry": 0.087122,
+      "exit": 0.118435,
+      "entryMotion": 0.012669,
+      "exitMotion": 0.031184
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 36,
+      "length": 36,
+      "entry": 0.079512,
+      "exit": 0.119009,
+      "entryMotion": 0.013096,
+      "exitMotion": 0.017993
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 42,
+      "length": 36,
+      "entry": 0.074235,
+      "exit": 0.11564,
+      "entryMotion": 0.013687,
+      "exitMotion": 0.015128
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 48,
+      "length": 36,
+      "entry": 0.092575,
+      "exit": 0.107581,
+      "entryMotion": 0.015524,
+      "exitMotion": 0.015287
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 54,
+      "length": 36,
+      "entry": 0.090928,
+      "exit": 0.101061,
+      "entryMotion": 0.019394,
+      "exitMotion": 0.028894
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 60,
+      "length": 36,
+      "entry": 0.108597,
+      "exit": 0.09584,
+      "entryMotion": 0.015425,
+      "exitMotion": 0.014739
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 66,
+      "length": 36,
+      "entry": 0.102518,
+      "exit": 0.089416,
+      "entryMotion": 0.015799,
+      "exitMotion": 0.016087
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 72,
+      "length": 36,
+      "entry": 0.102871,
+      "exit": 0.069183,
+      "entryMotion": 0.016147,
+      "exitMotion": 0.036023
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 78,
+      "length": 36,
+      "entry": 0.098035,
+      "exit": 0.069391,
+      "entryMotion": 0.013251,
+      "exitMotion": 0.021404
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 84,
+      "length": 36,
+      "entry": 0.088079,
+      "exit": 0.095392,
+      "entryMotion": 0.013456,
+      "exitMotion": 0.017729
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 90,
+      "length": 36,
+      "entry": 0.085306,
+      "exit": 0.105246,
+      "entryMotion": 0.013545,
+      "exitMotion": 0.017121
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 96,
+      "length": 36,
+      "entry": 0.080327,
+      "exit": 0.111089,
+      "entryMotion": 0.012492,
+      "exitMotion": 0.016579
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 102,
+      "length": 36,
+      "entry": 0.073105,
+      "exit": 0.119301,
+      "entryMotion": 0.015839,
+      "exitMotion": 0.015938
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 108,
+      "length": 36,
+      "entry": 0.084834,
+      "exit": 0.111364,
+      "entryMotion": 0.023382,
+      "exitMotion": 0.019464
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 114,
+      "length": 36,
+      "entry": 0.075864,
+      "exit": 0.098581,
+      "entryMotion": 0.015178,
+      "exitMotion": 0.022294
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 120,
+      "length": 36,
+      "entry": 0.092427,
+      "exit": 0.090883,
+      "entryMotion": 0.017952,
+      "exitMotion": 0.015486
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 126,
+      "length": 36,
+      "entry": 0.094812,
+      "exit": 0.083269,
+      "entryMotion": 0.021722,
+      "exitMotion": 0.014993
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 132,
+      "length": 36,
+      "entry": 0.100158,
+      "exit": 0.072559,
+      "entryMotion": 0.017791,
+      "exitMotion": 0.014855
+    },
+    {
+      "take": 2,
+      "target": 48,
+      "start": 138,
+      "length": 36,
+      "entry": 0.109698,
+      "exit": 0.061268,
+      "entryMotion": 0.021227,
+      "exitMotion": 0.014819
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 0,
+      "length": 36,
+      "entry": 0.08491,
+      "exit": 0.0767,
+      "entryMotion": 0.034335,
+      "exitMotion": 0.01519
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 6,
+      "length": 36,
+      "entry": 0.114371,
+      "exit": 0.066902,
+      "entryMotion": 0.030351,
+      "exitMotion": 0.015967
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 12,
+      "length": 36,
+      "entry": 0.119912,
+      "exit": 0.066997,
+      "entryMotion": 0.032207,
+      "exitMotion": 0.028992
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 18,
+      "length": 36,
+      "entry": 0.110687,
+      "exit": 0.080881,
+      "entryMotion": 0.02903,
+      "exitMotion": 0.016906
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 24,
+      "length": 36,
+      "entry": 0.109126,
+      "exit": 0.096327,
+      "entryMotion": 0.029088,
+      "exitMotion": 0.017137
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 30,
+      "length": 36,
+      "entry": 0.106684,
+      "exit": 0.103175,
+      "entryMotion": 0.029306,
+      "exitMotion": 0.029104
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 36,
+      "length": 36,
+      "entry": 0.100086,
+      "exit": 0.104256,
+      "entryMotion": 0.029555,
+      "exitMotion": 0.017882
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 42,
+      "length": 36,
+      "entry": 0.0945,
+      "exit": 0.098096,
+      "entryMotion": 0.030003,
+      "exitMotion": 0.015501
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 48,
+      "length": 36,
+      "entry": 0.103864,
+      "exit": 0.086941,
+      "entryMotion": 0.028257,
+      "exitMotion": 0.015971
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 54,
+      "length": 36,
+      "entry": 0.106649,
+      "exit": 0.084457,
+      "entryMotion": 0.033173,
+      "exitMotion": 0.03017
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 60,
+      "length": 36,
+      "entry": 0.119472,
+      "exit": 0.081146,
+      "entryMotion": 0.02869,
+      "exitMotion": 0.015548
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 66,
+      "length": 36,
+      "entry": 0.119559,
+      "exit": 0.075098,
+      "entryMotion": 0.031368,
+      "exitMotion": 0.015986
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 72,
+      "length": 36,
+      "entry": 0.119173,
+      "exit": 0.05255,
+      "entryMotion": 0.029963,
+      "exitMotion": 0.042786
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 78,
+      "length": 36,
+      "entry": 0.115538,
+      "exit": 0.053815,
+      "entryMotion": 0.029764,
+      "exitMotion": 0.023038
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 84,
+      "length": 36,
+      "entry": 0.107916,
+      "exit": 0.077756,
+      "entryMotion": 0.029283,
+      "exitMotion": 0.015833
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 90,
+      "length": 36,
+      "entry": 0.099384,
+      "exit": 0.080456,
+      "entryMotion": 0.029654,
+      "exitMotion": 0.017693
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 96,
+      "length": 36,
+      "entry": 0.093955,
+      "exit": 0.090738,
+      "entryMotion": 0.028642,
+      "exitMotion": 0.015996
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 102,
+      "length": 36,
+      "entry": 0.085537,
+      "exit": 0.100138,
+      "entryMotion": 0.029727,
+      "exitMotion": 0.015686
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 108,
+      "length": 36,
+      "entry": 0.08351,
+      "exit": 0.090297,
+      "entryMotion": 0.03395,
+      "exitMotion": 0.02103
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 114,
+      "length": 36,
+      "entry": 0.079778,
+      "exit": 0.075299,
+      "entryMotion": 0.029054,
+      "exitMotion": 0.022153
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 120,
+      "length": 36,
+      "entry": 0.103451,
+      "exit": 0.065041,
+      "entryMotion": 0.029969,
+      "exitMotion": 0.016284
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 126,
+      "length": 36,
+      "entry": 0.109377,
+      "exit": 0.055937,
+      "entryMotion": 0.032064,
+      "exitMotion": 0.015686
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 132,
+      "length": 36,
+      "entry": 0.113807,
+      "exit": 0.045599,
+      "entryMotion": 0.032581,
+      "exitMotion": 0.016144
+    },
+    {
+      "take": 2,
+      "target": 60,
+      "start": 138,
+      "length": 36,
+      "entry": 0.120369,
+      "exit": 0.038262,
+      "entryMotion": 0.032074,
+      "exitMotion": 0.015988
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 0,
+      "length": 36,
+      "entry": 0.090757,
+      "exit": 0.067688,
+      "entryMotion": 0.018625,
+      "exitMotion": 0.01326
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 6,
+      "length": 36,
+      "entry": 0.118709,
+      "exit": 0.058576,
+      "entryMotion": 0.012805,
+      "exitMotion": 0.012896
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 12,
+      "length": 36,
+      "entry": 0.12378,
+      "exit": 0.037741,
+      "entryMotion": 0.018147,
+      "exitMotion": 0.019901
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 18,
+      "length": 36,
+      "entry": 0.115936,
+      "exit": 0.072463,
+      "entryMotion": 0.009832,
+      "exitMotion": 0.016388
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 24,
+      "length": 36,
+      "entry": 0.11395,
+      "exit": 0.073809,
+      "entryMotion": 0.008499,
+      "exitMotion": 0.013788
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 30,
+      "length": 36,
+      "entry": 0.11136,
+      "exit": 0.094708,
+      "entryMotion": 0.007999,
+      "exitMotion": 0.028134
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 36,
+      "length": 36,
+      "entry": 0.104679,
+      "exit": 0.095156,
+      "entryMotion": 0.008523,
+      "exitMotion": 0.015951
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 42,
+      "length": 36,
+      "entry": 0.099089,
+      "exit": 0.08646,
+      "entryMotion": 0.009594,
+      "exitMotion": 0.012727
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 48,
+      "length": 36,
+      "entry": 0.108126,
+      "exit": 0.074751,
+      "entryMotion": 0.012255,
+      "exitMotion": 0.013697
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 54,
+      "length": 36,
+      "entry": 0.113328,
+      "exit": 0.07886,
+      "entryMotion": 0.0162,
+      "exitMotion": 0.027066
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 60,
+      "length": 36,
+      "entry": 0.125147,
+      "exit": 0.075897,
+      "entryMotion": 0.011123,
+      "exitMotion": 0.012272
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 66,
+      "length": 36,
+      "entry": 0.12421,
+      "exit": 0.073037,
+      "entryMotion": 0.013822,
+      "exitMotion": 0.014131
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 72,
+      "length": 36,
+      "entry": 0.123912,
+      "exit": 0.044411,
+      "entryMotion": 0.011475,
+      "exitMotion": 0.034317
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 78,
+      "length": 36,
+      "entry": 0.120253,
+      "exit": 0.046892,
+      "entryMotion": 0.009031,
+      "exitMotion": 0.022851
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 84,
+      "length": 36,
+      "entry": 0.112568,
+      "exit": 0.060697,
+      "entryMotion": 0.009147,
+      "exitMotion": 0.014313
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 90,
+      "length": 36,
+      "entry": 0.104626,
+      "exit": 0.053006,
+      "entryMotion": 0.010299,
+      "exitMotion": 0.017434
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 96,
+      "length": 36,
+      "entry": 0.099113,
+      "exit": 0.08013,
+      "entryMotion": 0.008225,
+      "exitMotion": 0.013309
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 102,
+      "length": 36,
+      "entry": 0.091234,
+      "exit": 0.08018,
+      "entryMotion": 0.012336,
+      "exitMotion": 0.014198
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 108,
+      "length": 36,
+      "entry": 0.083443,
+      "exit": 0.07553,
+      "entryMotion": 0.021461,
+      "exitMotion": 0.018145
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 114,
+      "length": 36,
+      "entry": 0.083346,
+      "exit": 0.067825,
+      "entryMotion": 0.011274,
+      "exitMotion": 0.020796
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 120,
+      "length": 36,
+      "entry": 0.106512,
+      "exit": 0.060405,
+      "entryMotion": 0.014903,
+      "exitMotion": 0.012826
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 126,
+      "length": 36,
+      "entry": 0.115279,
+      "exit": 0.054869,
+      "entryMotion": 0.018142,
+      "exitMotion": 0.011925
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 132,
+      "length": 36,
+      "entry": 0.120525,
+      "exit": 0.051528,
+      "entryMotion": 0.015351,
+      "exitMotion": 0.012075
+    },
+    {
+      "take": 2,
+      "target": 72,
+      "start": 138,
+      "length": 36,
+      "entry": 0.12658,
+      "exit": 0.052185,
+      "entryMotion": 0.018202,
+      "exitMotion": 0.012442
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 0,
+      "length": 36,
+      "entry": 0.081535,
+      "exit": 0.044332,
+      "entryMotion": 0.018058,
+      "exitMotion": 0.022858
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 6,
+      "length": 36,
+      "entry": 0.112919,
+      "exit": 0.039669,
+      "entryMotion": 0.015033,
+      "exitMotion": 0.023609
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 12,
+      "length": 36,
+      "entry": 0.118362,
+      "exit": 0.036336,
+      "entryMotion": 0.018785,
+      "exitMotion": 0.035933
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 18,
+      "length": 36,
+      "entry": 0.110624,
+      "exit": 0.041138,
+      "entryMotion": 0.012563,
+      "exitMotion": 0.017351
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 24,
+      "length": 36,
+      "entry": 0.108651,
+      "exit": 0.05795,
+      "entryMotion": 0.010992,
+      "exitMotion": 0.023765
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 30,
+      "length": 36,
+      "entry": 0.105754,
+      "exit": 0.073778,
+      "entryMotion": 0.010786,
+      "exitMotion": 0.029008
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 36,
+      "length": 36,
+      "entry": 0.098644,
+      "exit": 0.076265,
+      "entryMotion": 0.011089,
+      "exitMotion": 0.023959
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 42,
+      "length": 36,
+      "entry": 0.092328,
+      "exit": 0.062694,
+      "entryMotion": 0.011652,
+      "exitMotion": 0.022562
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 48,
+      "length": 36,
+      "entry": 0.100643,
+      "exit": 0.049718,
+      "entryMotion": 0.014794,
+      "exitMotion": 0.023709
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 54,
+      "length": 36,
+      "entry": 0.107023,
+      "exit": 0.06654,
+      "entryMotion": 0.016678,
+      "exitMotion": 0.034329
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 60,
+      "length": 36,
+      "entry": 0.119556,
+      "exit": 0.072173,
+      "entryMotion": 0.013093,
+      "exitMotion": 0.022521
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 66,
+      "length": 36,
+      "entry": 0.120235,
+      "exit": 0.074444,
+      "entryMotion": 0.015761,
+      "exitMotion": 0.022155
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 72,
+      "length": 36,
+      "entry": 0.119537,
+      "exit": 0.070535,
+      "entryMotion": 0.012767,
+      "exitMotion": 0.046112
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 78,
+      "length": 36,
+      "entry": 0.115391,
+      "exit": 0.074097,
+      "entryMotion": 0.01143,
+      "exitMotion": 0.028587
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 84,
+      "length": 36,
+      "entry": 0.107061,
+      "exit": 0.073514,
+      "entryMotion": 0.011399,
+      "exitMotion": 0.022973
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 90,
+      "length": 36,
+      "entry": 0.100455,
+      "exit": 0.054289,
+      "entryMotion": 0.012321,
+      "exitMotion": 0.024881
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 96,
+      "length": 36,
+      "entry": 0.095011,
+      "exit": 0.052251,
+      "entryMotion": 0.011037,
+      "exitMotion": 0.020649
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 102,
+      "length": 36,
+      "entry": 0.08688,
+      "exit": 0.061253,
+      "entryMotion": 0.014202,
+      "exitMotion": 0.021398
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 108,
+      "length": 36,
+      "entry": 0.075773,
+      "exit": 0.051383,
+      "entryMotion": 0.023335,
+      "exitMotion": 0.029618
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 114,
+      "length": 36,
+      "entry": 0.073787,
+      "exit": 0.053312,
+      "entryMotion": 0.012956,
+      "exitMotion": 0.025368
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 120,
+      "length": 36,
+      "entry": 0.099927,
+      "exit": 0.053819,
+      "entryMotion": 0.016095,
+      "exitMotion": 0.023177
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 126,
+      "length": 36,
+      "entry": 0.108495,
+      "exit": 0.054331,
+      "entryMotion": 0.018757,
+      "exitMotion": 0.02212
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 132,
+      "length": 36,
+      "entry": 0.114566,
+      "exit": 0.059316,
+      "entryMotion": 0.016051,
+      "exitMotion": 0.022379
+    },
+    {
+      "take": 2,
+      "target": 84,
+      "start": 138,
+      "length": 36,
+      "entry": 0.121132,
+      "exit": 0.0655,
+      "entryMotion": 0.020161,
+      "exitMotion": 0.021897
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 0,
+      "length": 36,
+      "entry": 0.049415,
+      "exit": 0.046921,
+      "entryMotion": 0.025538,
+      "exitMotion": 0.01622
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 6,
+      "length": 36,
+      "entry": 0.089206,
+      "exit": 0.053926,
+      "entryMotion": 0.01922,
+      "exitMotion": 0.016129
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 12,
+      "length": 36,
+      "entry": 0.096989,
+      "exit": 0.063571,
+      "entryMotion": 0.01992,
+      "exitMotion": 0.026981
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 18,
+      "length": 36,
+      "entry": 0.093471,
+      "exit": 0.031739,
+      "entryMotion": 0.016657,
+      "exitMotion": 0.019495
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 24,
+      "length": 36,
+      "entry": 0.091594,
+      "exit": 0.06163,
+      "entryMotion": 0.016177,
+      "exitMotion": 0.018872
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 30,
+      "length": 36,
+      "entry": 0.087399,
+      "exit": 0.051531,
+      "entryMotion": 0.015642,
+      "exitMotion": 0.032548
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 36,
+      "length": 36,
+      "entry": 0.078492,
+      "exit": 0.054771,
+      "entryMotion": 0.015641,
+      "exitMotion": 0.016321
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 42,
+      "length": 36,
+      "entry": 0.069388,
+      "exit": 0.045319,
+      "entryMotion": 0.016503,
+      "exitMotion": 0.016415
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 48,
+      "length": 36,
+      "entry": 0.071928,
+      "exit": 0.043379,
+      "entryMotion": 0.017028,
+      "exitMotion": 0.016677
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 54,
+      "length": 36,
+      "entry": 0.085991,
+      "exit": 0.057241,
+      "entryMotion": 0.023179,
+      "exitMotion": 0.028651
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 60,
+      "length": 36,
+      "entry": 0.097789,
+      "exit": 0.070895,
+      "entryMotion": 0.015812,
+      "exitMotion": 0.016027
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 66,
+      "length": 36,
+      "entry": 0.107529,
+      "exit": 0.075555,
+      "entryMotion": 0.020453,
+      "exitMotion": 0.017219
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 72,
+      "length": 36,
+      "entry": 0.105759,
+      "exit": 0.088973,
+      "entryMotion": 0.017094,
+      "exitMotion": 0.036508
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 78,
+      "length": 36,
+      "entry": 0.099158,
+      "exit": 0.091465,
+      "entryMotion": 0.016118,
+      "exitMotion": 0.022466
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 84,
+      "length": 36,
+      "entry": 0.088133,
+      "exit": 0.085346,
+      "entryMotion": 0.01557,
+      "exitMotion": 0.018137
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 90,
+      "length": 36,
+      "entry": 0.087063,
+      "exit": 0.068558,
+      "entryMotion": 0.017644,
+      "exitMotion": 0.018695
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 96,
+      "length": 36,
+      "entry": 0.081513,
+      "exit": 0.039758,
+      "entryMotion": 0.015696,
+      "exitMotion": 0.016895
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 102,
+      "length": 36,
+      "entry": 0.074868,
+      "exit": 0.059591,
+      "entryMotion": 0.017194,
+      "exitMotion": 0.016318
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 108,
+      "length": 36,
+      "entry": 0.056703,
+      "exit": 0.047373,
+      "entryMotion": 0.025419,
+      "exitMotion": 0.021883
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 114,
+      "length": 36,
+      "entry": 0.045794,
+      "exit": 0.057047,
+      "entryMotion": 0.016213,
+      "exitMotion": 0.023662
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 120,
+      "length": 36,
+      "entry": 0.078457,
+      "exit": 0.065162,
+      "entryMotion": 0.01924,
+      "exitMotion": 0.016541
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 126,
+      "length": 36,
+      "entry": 0.080789,
+      "exit": 0.069288,
+      "entryMotion": 0.019007,
+      "exitMotion": 0.016299
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 132,
+      "length": 36,
+      "entry": 0.094973,
+      "exit": 0.076444,
+      "entryMotion": 0.02232,
+      "exitMotion": 0.016272
+    },
+    {
+      "take": 2,
+      "target": 96,
+      "start": 138,
+      "length": 36,
+      "entry": 0.101194,
+      "exit": 0.082744,
+      "entryMotion": 0.020078,
+      "exitMotion": 0.016137
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 0,
+      "length": 24,
+      "entry": 0.048861,
+      "exit": 0.07697,
+      "entryMotion": 0.048588,
+      "exitMotion": 0.023375
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 6,
+      "length": 24,
+      "entry": 0.057838,
+      "exit": 0.076783,
+      "entryMotion": 0.02093,
+      "exitMotion": 0.018499
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 12,
+      "length": 24,
+      "entry": 0.0452,
+      "exit": 0.078002,
+      "entryMotion": 0.035204,
+      "exitMotion": 0.018449
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 18,
+      "length": 24,
+      "entry": 0.041229,
+      "exit": 0.081883,
+      "entryMotion": 0.018609,
+      "exitMotion": 0.018337
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 24,
+      "length": 24,
+      "entry": 0.086174,
+      "exit": 0.087657,
+      "entryMotion": 0.020488,
+      "exitMotion": 0.018298
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 30,
+      "length": 24,
+      "entry": 0.081837,
+      "exit": 0.095406,
+      "entryMotion": 0.020558,
+      "exitMotion": 0.018656
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 36,
+      "length": 24,
+      "entry": 0.081437,
+      "exit": 0.102368,
+      "entryMotion": 0.019663,
+      "exitMotion": 0.018722
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 42,
+      "length": 24,
+      "entry": 0.082445,
+      "exit": 0.107379,
+      "entryMotion": 0.020086,
+      "exitMotion": 0.018504
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 48,
+      "length": 24,
+      "entry": 0.086538,
+      "exit": 0.110823,
+      "entryMotion": 0.020496,
+      "exitMotion": 0.037077
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 54,
+      "length": 24,
+      "entry": 0.092902,
+      "exit": 0.07858,
+      "entryMotion": 0.019919,
+      "exitMotion": 0.025278
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 60,
+      "length": 24,
+      "entry": 0.09991,
+      "exit": 0.050475,
+      "entryMotion": 0.019562,
+      "exitMotion": 0.038951
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 66,
+      "length": 24,
+      "entry": 0.104343,
+      "exit": 0.055533,
+      "entryMotion": 0.019297,
+      "exitMotion": 0.018408
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 72,
+      "length": 24,
+      "entry": 0.107828,
+      "exit": 0.072852,
+      "entryMotion": 0.037156,
+      "exitMotion": 0.02044
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 78,
+      "length": 24,
+      "entry": 0.061209,
+      "exit": 0.065766,
+      "entryMotion": 0.022246,
+      "exitMotion": 0.018492
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 84,
+      "length": 24,
+      "entry": 0.070503,
+      "exit": 0.059784,
+      "entryMotion": 0.023515,
+      "exitMotion": 0.020247
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 90,
+      "length": 24,
+      "entry": 0.067805,
+      "exit": 0.076257,
+      "entryMotion": 0.02342,
+      "exitMotion": 0.019533
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 96,
+      "length": 24,
+      "entry": 0.082439,
+      "exit": 0.089663,
+      "entryMotion": 0.0199,
+      "exitMotion": 0.018324
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 102,
+      "length": 24,
+      "entry": 0.076806,
+      "exit": 0.091086,
+      "entryMotion": 0.021897,
+      "exitMotion": 0.018602
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 108,
+      "length": 24,
+      "entry": 0.066861,
+      "exit": 0.0907,
+      "entryMotion": 0.022701,
+      "exitMotion": 0.018563
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 114,
+      "length": 24,
+      "entry": 0.077533,
+      "exit": 0.087424,
+      "entryMotion": 0.022062,
+      "exitMotion": 0.018401
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 120,
+      "length": 24,
+      "entry": 0.086348,
+      "exit": 0.073814,
+      "entryMotion": 0.019564,
+      "exitMotion": 0.044579
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 126,
+      "length": 24,
+      "entry": 0.086808,
+      "exit": 0.049167,
+      "entryMotion": 0.01887,
+      "exitMotion": 0.040896
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 132,
+      "length": 24,
+      "entry": 0.086155,
+      "exit": 0.057434,
+      "entryMotion": 0.019239,
+      "exitMotion": 0.023649
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 138,
+      "length": 24,
+      "entry": 0.083226,
+      "exit": 0.071594,
+      "entryMotion": 0.019145,
+      "exitMotion": 0.021692
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 144,
+      "length": 24,
+      "entry": 0.074382,
+      "exit": 0.076541,
+      "entryMotion": 0.02738,
+      "exitMotion": 0.032686
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 150,
+      "length": 24,
+      "entry": 0.064789,
+      "exit": 0.081552,
+      "entryMotion": 0.031115,
+      "exitMotion": 0.025613
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 0,
+      "length": 24,
+      "entry": 0.05374,
+      "exit": 0.02935,
+      "entryMotion": 0.041875,
+      "exitMotion": 0.030582
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 6,
+      "length": 24,
+      "entry": 0.074967,
+      "exit": 0.025437,
+      "entryMotion": 0.024309,
+      "exitMotion": 0.02057
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 12,
+      "length": 24,
+      "entry": 0.057136,
+      "exit": 0.034861,
+      "entryMotion": 0.021057,
+      "exitMotion": 0.016844
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 18,
+      "length": 24,
+      "entry": 0.067464,
+      "exit": 0.042856,
+      "entryMotion": 0.027467,
+      "exitMotion": 0.016282
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 24,
+      "length": 24,
+      "entry": 0.081992,
+      "exit": 0.05152,
+      "entryMotion": 0.012049,
+      "exitMotion": 0.016786
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 30,
+      "length": 24,
+      "entry": 0.080548,
+      "exit": 0.062879,
+      "entryMotion": 0.011046,
+      "exitMotion": 0.017365
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 36,
+      "length": 24,
+      "entry": 0.083897,
+      "exit": 0.07243,
+      "entryMotion": 0.010506,
+      "exitMotion": 0.017439
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 42,
+      "length": 24,
+      "entry": 0.088324,
+      "exit": 0.078807,
+      "entryMotion": 0.010405,
+      "exitMotion": 0.017689
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 48,
+      "length": 24,
+      "entry": 0.095418,
+      "exit": 0.083655,
+      "entryMotion": 0.010497,
+      "exitMotion": 0.037824
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 54,
+      "length": 24,
+      "entry": 0.102873,
+      "exit": 0.077921,
+      "entryMotion": 0.010277,
+      "exitMotion": 0.028674
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 60,
+      "length": 24,
+      "entry": 0.109338,
+      "exit": 0.06518,
+      "entryMotion": 0.010329,
+      "exitMotion": 0.034802
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 66,
+      "length": 24,
+      "entry": 0.11332,
+      "exit": 0.083625,
+      "entryMotion": 0.009521,
+      "exitMotion": 0.017914
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 72,
+      "length": 24,
+      "entry": 0.111084,
+      "exit": 0.077016,
+      "entryMotion": 0.036275,
+      "exitMotion": 0.020386
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 78,
+      "length": 24,
+      "entry": 0.082875,
+      "exit": 0.075048,
+      "entryMotion": 0.015939,
+      "exitMotion": 0.018097
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 84,
+      "length": 24,
+      "entry": 0.05754,
+      "exit": 0.055433,
+      "entryMotion": 0.016576,
+      "exitMotion": 0.018719
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 90,
+      "length": 24,
+      "entry": 0.049295,
+      "exit": 0.044693,
+      "entryMotion": 0.018639,
+      "exitMotion": 0.017342
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 96,
+      "length": 24,
+      "entry": 0.066596,
+      "exit": 0.058028,
+      "entryMotion": 0.011359,
+      "exitMotion": 0.017377
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 102,
+      "length": 24,
+      "entry": 0.060576,
+      "exit": 0.060661,
+      "entryMotion": 0.013727,
+      "exitMotion": 0.017272
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 108,
+      "length": 24,
+      "entry": 0.061997,
+      "exit": 0.060281,
+      "entryMotion": 0.015451,
+      "exitMotion": 0.016972
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 114,
+      "length": 24,
+      "entry": 0.087356,
+      "exit": 0.05606,
+      "entryMotion": 0.01246,
+      "exitMotion": 0.017218
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 120,
+      "length": 24,
+      "entry": 0.096995,
+      "exit": 0.068842,
+      "entryMotion": 0.009947,
+      "exitMotion": 0.052123
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 126,
+      "length": 24,
+      "entry": 0.097597,
+      "exit": 0.067082,
+      "entryMotion": 0.009555,
+      "exitMotion": 0.033896
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 132,
+      "length": 24,
+      "entry": 0.096868,
+      "exit": 0.09237,
+      "entryMotion": 0.009908,
+      "exitMotion": 0.027154
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 138,
+      "length": 24,
+      "entry": 0.093738,
+      "exit": 0.091977,
+      "entryMotion": 0.011545,
+      "exitMotion": 0.020522
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 144,
+      "length": 24,
+      "entry": 0.087527,
+      "exit": 0.097522,
+      "entryMotion": 0.018124,
+      "exitMotion": 0.031683
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 150,
+      "length": 24,
+      "entry": 0.052589,
+      "exit": 0.091934,
+      "entryMotion": 0.026495,
+      "exitMotion": 0.023192
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 0,
+      "length": 24,
+      "entry": 0.048089,
+      "exit": 0.06644,
+      "entryMotion": 0.043367,
+      "exitMotion": 0.035565
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 6,
+      "length": 24,
+      "entry": 0.072004,
+      "exit": 0.068538,
+      "entryMotion": 0.027165,
+      "exitMotion": 0.03376
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 12,
+      "length": 24,
+      "entry": 0.050837,
+      "exit": 0.071324,
+      "entryMotion": 0.024952,
+      "exitMotion": 0.033863
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 18,
+      "length": 24,
+      "entry": 0.062785,
+      "exit": 0.068628,
+      "entryMotion": 0.031194,
+      "exitMotion": 0.03336
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 24,
+      "length": 24,
+      "entry": 0.075749,
+      "exit": 0.065071,
+      "entryMotion": 0.019091,
+      "exitMotion": 0.03342
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 30,
+      "length": 24,
+      "entry": 0.074014,
+      "exit": 0.063222,
+      "entryMotion": 0.017496,
+      "exitMotion": 0.03302
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 36,
+      "length": 24,
+      "entry": 0.077837,
+      "exit": 0.064234,
+      "entryMotion": 0.017666,
+      "exitMotion": 0.033202
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 42,
+      "length": 24,
+      "entry": 0.081972,
+      "exit": 0.066664,
+      "entryMotion": 0.017626,
+      "exitMotion": 0.032827
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 48,
+      "length": 24,
+      "entry": 0.089017,
+      "exit": 0.053,
+      "entryMotion": 0.018025,
+      "exitMotion": 0.020536
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 54,
+      "length": 24,
+      "entry": 0.096839,
+      "exit": 0.07953,
+      "entryMotion": 0.018373,
+      "exitMotion": 0.038982
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 60,
+      "length": 24,
+      "entry": 0.103771,
+      "exit": 0.087454,
+      "entryMotion": 0.018246,
+      "exitMotion": 0.041949
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 66,
+      "length": 24,
+      "entry": 0.108033,
+      "exit": 0.100858,
+      "entryMotion": 0.018004,
+      "exitMotion": 0.033953
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 72,
+      "length": 24,
+      "entry": 0.106368,
+      "exit": 0.095597,
+      "entryMotion": 0.037236,
+      "exitMotion": 0.034194
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 78,
+      "length": 24,
+      "entry": 0.078169,
+      "exit": 0.09495,
+      "entryMotion": 0.021885,
+      "exitMotion": 0.033484
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 84,
+      "length": 24,
+      "entry": 0.053483,
+      "exit": 0.085061,
+      "entryMotion": 0.025292,
+      "exitMotion": 0.035864
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 90,
+      "length": 24,
+      "entry": 0.050746,
+      "exit": 0.065112,
+      "entryMotion": 0.02573,
+      "exitMotion": 0.034829
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 96,
+      "length": 24,
+      "entry": 0.065508,
+      "exit": 0.059465,
+      "entryMotion": 0.018419,
+      "exitMotion": 0.033111
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 102,
+      "length": 24,
+      "entry": 0.059044,
+      "exit": 0.059844,
+      "entryMotion": 0.01967,
+      "exitMotion": 0.033207
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 108,
+      "length": 24,
+      "entry": 0.055582,
+      "exit": 0.059448,
+      "entryMotion": 0.01969,
+      "exitMotion": 0.033053
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 114,
+      "length": 24,
+      "entry": 0.079912,
+      "exit": 0.059745,
+      "entryMotion": 0.019194,
+      "exitMotion": 0.033119
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 120,
+      "length": 24,
+      "entry": 0.090215,
+      "exit": 0.063887,
+      "entryMotion": 0.017825,
+      "exitMotion": 0.05381
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 126,
+      "length": 24,
+      "entry": 0.090857,
+      "exit": 0.08538,
+      "entryMotion": 0.01768,
+      "exitMotion": 0.044189
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 132,
+      "length": 24,
+      "entry": 0.090045,
+      "exit": 0.107774,
+      "entryMotion": 0.018094,
+      "exitMotion": 0.039119
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 138,
+      "length": 24,
+      "entry": 0.086559,
+      "exit": 0.106385,
+      "entryMotion": 0.019625,
+      "exitMotion": 0.035637
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 144,
+      "length": 24,
+      "entry": 0.084303,
+      "exit": 0.110015,
+      "entryMotion": 0.025304,
+      "exitMotion": 0.040347
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 150,
+      "length": 24,
+      "entry": 0.048981,
+      "exit": 0.106106,
+      "entryMotion": 0.034623,
+      "exitMotion": 0.038005
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 0,
+      "length": 24,
+      "entry": 0.070683,
+      "exit": 0.071629,
+      "entryMotion": 0.041629,
+      "exitMotion": 0.018796
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 6,
+      "length": 24,
+      "entry": 0.0741,
+      "exit": 0.070219,
+      "entryMotion": 0.025887,
+      "exitMotion": 0.011901
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 12,
+      "length": 24,
+      "entry": 0.063874,
+      "exit": 0.068985,
+      "entryMotion": 0.023017,
+      "exitMotion": 0.0095
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 18,
+      "length": 24,
+      "entry": 0.072664,
+      "exit": 0.062522,
+      "entryMotion": 0.027772,
+      "exitMotion": 0.008999
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 24,
+      "length": 24,
+      "entry": 0.031222,
+      "exit": 0.051964,
+      "entryMotion": 0.014766,
+      "exitMotion": 0.008867
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 30,
+      "length": 24,
+      "entry": 0.025761,
+      "exit": 0.043045,
+      "entryMotion": 0.01268,
+      "exitMotion": 0.008724
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 36,
+      "length": 24,
+      "entry": 0.038044,
+      "exit": 0.040811,
+      "entryMotion": 0.012936,
+      "exitMotion": 0.008648
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 42,
+      "length": 24,
+      "entry": 0.046205,
+      "exit": 0.042987,
+      "entryMotion": 0.012374,
+      "exitMotion": 0.008389
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 48,
+      "length": 24,
+      "entry": 0.056456,
+      "exit": 0.07006,
+      "entryMotion": 0.012512,
+      "exitMotion": 0.033722
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 54,
+      "length": 24,
+      "entry": 0.067433,
+      "exit": 0.060454,
+      "entryMotion": 0.012375,
+      "exitMotion": 0.023044
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 60,
+      "length": 24,
+      "entry": 0.076516,
+      "exit": 0.089208,
+      "entryMotion": 0.012554,
+      "exitMotion": 0.027803
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 66,
+      "length": 24,
+      "entry": 0.08201,
+      "exit": 0.104801,
+      "entryMotion": 0.01239,
+      "exitMotion": 0.010798
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 72,
+      "length": 24,
+      "entry": 0.083236,
+      "exit": 0.10347,
+      "entryMotion": 0.039278,
+      "exitMotion": 0.012225
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 78,
+      "length": 24,
+      "entry": 0.079219,
+      "exit": 0.101406,
+      "entryMotion": 0.01952,
+      "exitMotion": 0.009045
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 84,
+      "length": 24,
+      "entry": 0.064164,
+      "exit": 0.085856,
+      "entryMotion": 0.018091,
+      "exitMotion": 0.013664
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 90,
+      "length": 24,
+      "entry": 0.082366,
+      "exit": 0.051427,
+      "entryMotion": 0.018503,
+      "exitMotion": 0.013535
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 96,
+      "length": 24,
+      "entry": 0.074447,
+      "exit": 0.033473,
+      "entryMotion": 0.014845,
+      "exitMotion": 0.008204
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 102,
+      "length": 24,
+      "entry": 0.071766,
+      "exit": 0.02984,
+      "entryMotion": 0.013733,
+      "exitMotion": 0.007733
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 108,
+      "length": 24,
+      "entry": 0.049666,
+      "exit": 0.03017,
+      "entryMotion": 0.015024,
+      "exitMotion": 0.007514
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 114,
+      "length": 24,
+      "entry": 0.051529,
+      "exit": 0.03385,
+      "entryMotion": 0.012996,
+      "exitMotion": 0.007919
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 120,
+      "length": 24,
+      "entry": 0.062499,
+      "exit": 0.064023,
+      "entryMotion": 0.012448,
+      "exitMotion": 0.044339
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 126,
+      "length": 24,
+      "entry": 0.064144,
+      "exit": 0.08908,
+      "entryMotion": 0.011802,
+      "exitMotion": 0.029639
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 132,
+      "length": 24,
+      "entry": 0.063267,
+      "exit": 0.110152,
+      "entryMotion": 0.012572,
+      "exitMotion": 0.02366
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 138,
+      "length": 24,
+      "entry": 0.058787,
+      "exit": 0.112496,
+      "entryMotion": 0.014536,
+      "exitMotion": 0.015287
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 144,
+      "length": 24,
+      "entry": 0.080062,
+      "exit": 0.116685,
+      "entryMotion": 0.020231,
+      "exitMotion": 0.025609
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 150,
+      "length": 24,
+      "entry": 0.066441,
+      "exit": 0.113704,
+      "entryMotion": 0.026318,
+      "exitMotion": 0.018643
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 0,
+      "length": 24,
+      "entry": 0.072962,
+      "exit": 0.06876,
+      "entryMotion": 0.04623,
+      "exitMotion": 0.024841
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 6,
+      "length": 24,
+      "entry": 0.072321,
+      "exit": 0.068848,
+      "entryMotion": 0.038743,
+      "exitMotion": 0.017099
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 12,
+      "length": 24,
+      "entry": 0.06796,
+      "exit": 0.068698,
+      "entryMotion": 0.039552,
+      "exitMotion": 0.014627
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 18,
+      "length": 24,
+      "entry": 0.072516,
+      "exit": 0.063442,
+      "entryMotion": 0.034982,
+      "exitMotion": 0.015094
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 24,
+      "length": 24,
+      "entry": 0.06434,
+      "exit": 0.056296,
+      "entryMotion": 0.029991,
+      "exitMotion": 0.015486
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 30,
+      "length": 24,
+      "entry": 0.062788,
+      "exit": 0.05275,
+      "entryMotion": 0.029811,
+      "exitMotion": 0.015053
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 36,
+      "length": 24,
+      "entry": 0.063163,
+      "exit": 0.054848,
+      "entryMotion": 0.029471,
+      "exitMotion": 0.014793
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 42,
+      "length": 24,
+      "entry": 0.056524,
+      "exit": 0.058913,
+      "entryMotion": 0.029549,
+      "exitMotion": 0.014479
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 48,
+      "length": 24,
+      "entry": 0.049869,
+      "exit": 0.078267,
+      "entryMotion": 0.029551,
+      "exitMotion": 0.035764
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 54,
+      "length": 24,
+      "entry": 0.047629,
+      "exit": 0.053324,
+      "entryMotion": 0.029151,
+      "exitMotion": 0.024149
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 60,
+      "length": 24,
+      "entry": 0.050743,
+      "exit": 0.079343,
+      "entryMotion": 0.02862,
+      "exitMotion": 0.032658
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 66,
+      "length": 24,
+      "entry": 0.054465,
+      "exit": 0.095856,
+      "entryMotion": 0.028637,
+      "exitMotion": 0.014995
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 72,
+      "length": 24,
+      "entry": 0.0646,
+      "exit": 0.097331,
+      "entryMotion": 0.04608,
+      "exitMotion": 0.017521
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 78,
+      "length": 24,
+      "entry": 0.069233,
+      "exit": 0.094531,
+      "entryMotion": 0.031004,
+      "exitMotion": 0.015494
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 84,
+      "length": 24,
+      "entry": 0.084553,
+      "exit": 0.079764,
+      "entryMotion": 0.030528,
+      "exitMotion": 0.019099
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 90,
+      "length": 24,
+      "entry": 0.098115,
+      "exit": 0.050193,
+      "entryMotion": 0.030834,
+      "exitMotion": 0.019534
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 96,
+      "length": 24,
+      "entry": 0.096928,
+      "exit": 0.041811,
+      "entryMotion": 0.029636,
+      "exitMotion": 0.014646
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 102,
+      "length": 24,
+      "entry": 0.094716,
+      "exit": 0.039747,
+      "entryMotion": 0.029981,
+      "exitMotion": 0.014418
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 108,
+      "length": 24,
+      "entry": 0.076899,
+      "exit": 0.039544,
+      "entryMotion": 0.030703,
+      "exitMotion": 0.014158
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 114,
+      "length": 24,
+      "entry": 0.046861,
+      "exit": 0.040105,
+      "entryMotion": 0.029833,
+      "exitMotion": 0.014392
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 120,
+      "length": 24,
+      "entry": 0.040942,
+      "exit": 0.056598,
+      "entryMotion": 0.029274,
+      "exitMotion": 0.045983
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 126,
+      "length": 24,
+      "entry": 0.040417,
+      "exit": 0.079478,
+      "entryMotion": 0.028458,
+      "exitMotion": 0.031665
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 132,
+      "length": 24,
+      "entry": 0.040425,
+      "exit": 0.101631,
+      "entryMotion": 0.02851,
+      "exitMotion": 0.025447
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 138,
+      "length": 24,
+      "entry": 0.040464,
+      "exit": 0.105263,
+      "entryMotion": 0.029273,
+      "exitMotion": 0.018331
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 144,
+      "length": 24,
+      "entry": 0.070152,
+      "exit": 0.109874,
+      "entryMotion": 0.032223,
+      "exitMotion": 0.030569
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 150,
+      "length": 24,
+      "entry": 0.084268,
+      "exit": 0.108109,
+      "entryMotion": 0.036525,
+      "exitMotion": 0.021671
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 0,
+      "length": 24,
+      "entry": 0.082729,
+      "exit": 0.060856,
+      "entryMotion": 0.042742,
+      "exitMotion": 0.020187
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 6,
+      "length": 24,
+      "entry": 0.082353,
+      "exit": 0.061104,
+      "entryMotion": 0.023389,
+      "exitMotion": 0.017227
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 12,
+      "length": 24,
+      "entry": 0.07343,
+      "exit": 0.062984,
+      "entryMotion": 0.021382,
+      "exitMotion": 0.016783
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 18,
+      "length": 24,
+      "entry": 0.072799,
+      "exit": 0.062797,
+      "entryMotion": 0.025649,
+      "exitMotion": 0.016427
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 24,
+      "length": 24,
+      "entry": 0.073695,
+      "exit": 0.065077,
+      "entryMotion": 0.010124,
+      "exitMotion": 0.016132
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 30,
+      "length": 24,
+      "entry": 0.069853,
+      "exit": 0.071818,
+      "entryMotion": 0.009947,
+      "exitMotion": 0.015739
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 36,
+      "length": 24,
+      "entry": 0.068902,
+      "exit": 0.079741,
+      "entryMotion": 0.008599,
+      "exitMotion": 0.015583
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 42,
+      "length": 24,
+      "entry": 0.060831,
+      "exit": 0.085925,
+      "entryMotion": 0.00846,
+      "exitMotion": 0.014948
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 48,
+      "length": 24,
+      "entry": 0.04991,
+      "exit": 0.093651,
+      "entryMotion": 0.008216,
+      "exitMotion": 0.036205
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 54,
+      "length": 24,
+      "entry": 0.041918,
+      "exit": 0.06056,
+      "entryMotion": 0.008148,
+      "exitMotion": 0.027631
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 60,
+      "length": 24,
+      "entry": 0.040417,
+      "exit": 0.048706,
+      "entryMotion": 0.008166,
+      "exitMotion": 0.02444
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 66,
+      "length": 24,
+      "entry": 0.042985,
+      "exit": 0.069326,
+      "entryMotion": 0.007368,
+      "exitMotion": 0.01743
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 72,
+      "length": 24,
+      "entry": 0.066948,
+      "exit": 0.077477,
+      "entryMotion": 0.035614,
+      "exitMotion": 0.017614
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 78,
+      "length": 24,
+      "entry": 0.065989,
+      "exit": 0.072015,
+      "entryMotion": 0.015229,
+      "exitMotion": 0.015085
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 84,
+      "length": 24,
+      "entry": 0.091913,
+      "exit": 0.055994,
+      "entryMotion": 0.014946,
+      "exitMotion": 0.019462
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 90,
+      "length": 24,
+      "entry": 0.104793,
+      "exit": 0.049426,
+      "entryMotion": 0.016058,
+      "exitMotion": 0.020842
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 96,
+      "length": 24,
+      "entry": 0.103075,
+      "exit": 0.063156,
+      "entryMotion": 0.009612,
+      "exitMotion": 0.015126
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 102,
+      "length": 24,
+      "entry": 0.100736,
+      "exit": 0.064454,
+      "entryMotion": 0.01177,
+      "exitMotion": 0.014855
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 108,
+      "length": 24,
+      "entry": 0.081525,
+      "exit": 0.063783,
+      "entryMotion": 0.013563,
+      "exitMotion": 0.014578
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 114,
+      "length": 24,
+      "entry": 0.045642,
+      "exit": 0.059968,
+      "entryMotion": 0.010881,
+      "exitMotion": 0.014663
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 120,
+      "length": 24,
+      "entry": 0.032048,
+      "exit": 0.058489,
+      "entryMotion": 0.007795,
+      "exitMotion": 0.043397
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 126,
+      "length": 24,
+      "entry": 0.029533,
+      "exit": 0.05049,
+      "entryMotion": 0.007074,
+      "exitMotion": 0.029167
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 132,
+      "length": 24,
+      "entry": 0.030183,
+      "exit": 0.077048,
+      "entryMotion": 0.007529,
+      "exitMotion": 0.028566
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 138,
+      "length": 24,
+      "entry": 0.033288,
+      "exit": 0.083716,
+      "entryMotion": 0.008956,
+      "exitMotion": 0.021335
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 144,
+      "length": 24,
+      "entry": 0.079193,
+      "exit": 0.089728,
+      "entryMotion": 0.016509,
+      "exitMotion": 0.025561
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 150,
+      "length": 24,
+      "entry": 0.093121,
+      "exit": 0.090721,
+      "entryMotion": 0.024639,
+      "exitMotion": 0.022492
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 0,
+      "length": 24,
+      "entry": 0.073457,
+      "exit": 0.081491,
+      "entryMotion": 0.043888,
+      "exitMotion": 0.019954
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 6,
+      "length": 24,
+      "entry": 0.07646,
+      "exit": 0.08079,
+      "entryMotion": 0.023705,
+      "exitMotion": 0.013142
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 12,
+      "length": 24,
+      "entry": 0.063567,
+      "exit": 0.080594,
+      "entryMotion": 0.022877,
+      "exitMotion": 0.012511
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 18,
+      "length": 24,
+      "entry": 0.06342,
+      "exit": 0.082383,
+      "entryMotion": 0.026174,
+      "exitMotion": 0.012164
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 24,
+      "length": 24,
+      "entry": 0.069788,
+      "exit": 0.086285,
+      "entryMotion": 0.012185,
+      "exitMotion": 0.012398
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 30,
+      "length": 24,
+      "entry": 0.066402,
+      "exit": 0.092679,
+      "entryMotion": 0.012652,
+      "exitMotion": 0.012085
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 36,
+      "length": 24,
+      "entry": 0.066272,
+      "exit": 0.099235,
+      "entryMotion": 0.011071,
+      "exitMotion": 0.012031
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 42,
+      "length": 24,
+      "entry": 0.059197,
+      "exit": 0.1042,
+      "entryMotion": 0.011481,
+      "exitMotion": 0.011967
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 48,
+      "length": 24,
+      "entry": 0.051212,
+      "exit": 0.108599,
+      "entryMotion": 0.011532,
+      "exitMotion": 0.035022
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 54,
+      "length": 24,
+      "entry": 0.047937,
+      "exit": 0.070602,
+      "entryMotion": 0.011223,
+      "exitMotion": 0.023086
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 60,
+      "length": 24,
+      "entry": 0.050699,
+      "exit": 0.049551,
+      "entryMotion": 0.010963,
+      "exitMotion": 0.032421
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 66,
+      "length": 24,
+      "entry": 0.054868,
+      "exit": 0.055998,
+      "entryMotion": 0.01033,
+      "exitMotion": 0.011822
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 72,
+      "length": 24,
+      "entry": 0.071581,
+      "exit": 0.076877,
+      "entryMotion": 0.034501,
+      "exitMotion": 0.015269
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 78,
+      "length": 24,
+      "entry": 0.059665,
+      "exit": 0.07,
+      "entryMotion": 0.015918,
+      "exitMotion": 0.012552
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 84,
+      "length": 24,
+      "entry": 0.084881,
+      "exit": 0.062463,
+      "entryMotion": 0.016843,
+      "exitMotion": 0.01651
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 90,
+      "length": 24,
+      "entry": 0.097869,
+      "exit": 0.073898,
+      "entryMotion": 0.017719,
+      "exitMotion": 0.015389
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 96,
+      "length": 24,
+      "entry": 0.097468,
+      "exit": 0.086539,
+      "entryMotion": 0.01119,
+      "exitMotion": 0.011577
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 102,
+      "length": 24,
+      "entry": 0.094725,
+      "exit": 0.087707,
+      "entryMotion": 0.01474,
+      "exitMotion": 0.011774
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 108,
+      "length": 24,
+      "entry": 0.075113,
+      "exit": 0.087263,
+      "entryMotion": 0.016304,
+      "exitMotion": 0.011878
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 114,
+      "length": 24,
+      "entry": 0.042624,
+      "exit": 0.084169,
+      "entryMotion": 0.014435,
+      "exitMotion": 0.012004
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 120,
+      "length": 24,
+      "entry": 0.03575,
+      "exit": 0.069215,
+      "entryMotion": 0.010342,
+      "exitMotion": 0.04306
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 126,
+      "length": 24,
+      "entry": 0.033899,
+      "exit": 0.045967,
+      "entryMotion": 0.009922,
+      "exitMotion": 0.034395
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 132,
+      "length": 24,
+      "entry": 0.033778,
+      "exit": 0.055332,
+      "entryMotion": 0.010266,
+      "exitMotion": 0.020733
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 138,
+      "length": 24,
+      "entry": 0.033729,
+      "exit": 0.073565,
+      "entryMotion": 0.010744,
+      "exitMotion": 0.016166
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 144,
+      "length": 24,
+      "entry": 0.075631,
+      "exit": 0.078674,
+      "entryMotion": 0.018224,
+      "exitMotion": 0.029263
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 150,
+      "length": 24,
+      "entry": 0.085751,
+      "exit": 0.085349,
+      "entryMotion": 0.026771,
+      "exitMotion": 0.020965
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 0,
+      "length": 24,
+      "entry": 0.043935,
+      "exit": 0.083094,
+      "entryMotion": 0.04804,
+      "exitMotion": 0.023089
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 6,
+      "length": 24,
+      "entry": 0.06288,
+      "exit": 0.083402,
+      "entryMotion": 0.026101,
+      "exitMotion": 0.023705
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 12,
+      "length": 24,
+      "entry": 0.033942,
+      "exit": 0.087207,
+      "entryMotion": 0.031243,
+      "exitMotion": 0.023261
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 18,
+      "length": 24,
+      "entry": 0.04224,
+      "exit": 0.092026,
+      "entryMotion": 0.022376,
+      "exitMotion": 0.022379
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 24,
+      "length": 24,
+      "entry": 0.069958,
+      "exit": 0.097905,
+      "entryMotion": 0.016525,
+      "exitMotion": 0.021952
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 30,
+      "length": 24,
+      "entry": 0.066524,
+      "exit": 0.104814,
+      "entryMotion": 0.017921,
+      "exitMotion": 0.021466
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 36,
+      "length": 24,
+      "entry": 0.066797,
+      "exit": 0.110632,
+      "entryMotion": 0.016207,
+      "exitMotion": 0.021871
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 42,
+      "length": 24,
+      "entry": 0.064783,
+      "exit": 0.114674,
+      "entryMotion": 0.01657,
+      "exitMotion": 0.021815
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 48,
+      "length": 24,
+      "entry": 0.066449,
+      "exit": 0.113903,
+      "entryMotion": 0.01683,
+      "exitMotion": 0.038055
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 54,
+      "length": 24,
+      "entry": 0.072506,
+      "exit": 0.091109,
+      "entryMotion": 0.016266,
+      "exitMotion": 0.032383
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 60,
+      "length": 24,
+      "entry": 0.080196,
+      "exit": 0.043774,
+      "entryMotion": 0.015984,
+      "exitMotion": 0.024079
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 66,
+      "length": 24,
+      "entry": 0.085541,
+      "exit": 0.029848,
+      "entryMotion": 0.015299,
+      "exitMotion": 0.025588
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 72,
+      "length": 24,
+      "entry": 0.090186,
+      "exit": 0.057701,
+      "entryMotion": 0.038186,
+      "exitMotion": 0.023418
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 78,
+      "length": 24,
+      "entry": 0.052657,
+      "exit": 0.047003,
+      "entryMotion": 0.018639,
+      "exitMotion": 0.021976
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 84,
+      "length": 24,
+      "entry": 0.062316,
+      "exit": 0.057216,
+      "entryMotion": 0.01946,
+      "exitMotion": 0.027755
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 90,
+      "length": 24,
+      "entry": 0.07174,
+      "exit": 0.086966,
+      "entryMotion": 0.019309,
+      "exitMotion": 0.024239
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 96,
+      "length": 24,
+      "entry": 0.080759,
+      "exit": 0.09948,
+      "entryMotion": 0.016645,
+      "exitMotion": 0.021481
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 102,
+      "length": 24,
+      "entry": 0.075749,
+      "exit": 0.100659,
+      "entryMotion": 0.01809,
+      "exitMotion": 0.02152
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 108,
+      "length": 24,
+      "entry": 0.057394,
+      "exit": 0.100287,
+      "entryMotion": 0.019441,
+      "exitMotion": 0.021524
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 114,
+      "length": 24,
+      "entry": 0.054192,
+      "exit": 0.097498,
+      "entryMotion": 0.019068,
+      "exitMotion": 0.021636
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 120,
+      "length": 24,
+      "entry": 0.063546,
+      "exit": 0.085914,
+      "entryMotion": 0.015828,
+      "exitMotion": 0.047287
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 126,
+      "length": 24,
+      "entry": 0.063789,
+      "exit": 0.052976,
+      "entryMotion": 0.015059,
+      "exitMotion": 0.034849
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 132,
+      "length": 24,
+      "entry": 0.0628,
+      "exit": 0.038783,
+      "entryMotion": 0.015288,
+      "exitMotion": 0.036798
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 138,
+      "length": 24,
+      "entry": 0.059018,
+      "exit": 0.046159,
+      "entryMotion": 0.014827,
+      "exitMotion": 0.028419
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 144,
+      "length": 24,
+      "entry": 0.06995,
+      "exit": 0.051273,
+      "entryMotion": 0.019684,
+      "exitMotion": 0.020511
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 150,
+      "length": 24,
+      "entry": 0.05922,
+      "exit": 0.065446,
+      "entryMotion": 0.02561,
+      "exitMotion": 0.026973
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 0,
+      "length": 24,
+      "entry": 0.03993,
+      "exit": 0.089583,
+      "entryMotion": 0.041184,
+      "exitMotion": 0.024278
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 6,
+      "length": 24,
+      "entry": 0.064652,
+      "exit": 0.090594,
+      "entryMotion": 0.026229,
+      "exitMotion": 0.017433
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 12,
+      "length": 24,
+      "entry": 0.045698,
+      "exit": 0.096418,
+      "entryMotion": 0.019555,
+      "exitMotion": 0.016455
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 18,
+      "length": 24,
+      "entry": 0.052374,
+      "exit": 0.102109,
+      "entryMotion": 0.030501,
+      "exitMotion": 0.016111
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 24,
+      "length": 24,
+      "entry": 0.080656,
+      "exit": 0.107517,
+      "entryMotion": 0.013758,
+      "exitMotion": 0.016221
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 30,
+      "length": 24,
+      "entry": 0.077714,
+      "exit": 0.113224,
+      "entryMotion": 0.012551,
+      "exitMotion": 0.016006
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 36,
+      "length": 24,
+      "entry": 0.079,
+      "exit": 0.11778,
+      "entryMotion": 0.012697,
+      "exitMotion": 0.015879
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 42,
+      "length": 24,
+      "entry": 0.080536,
+      "exit": 0.121026,
+      "entryMotion": 0.012653,
+      "exitMotion": 0.01594
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 48,
+      "length": 24,
+      "entry": 0.085419,
+      "exit": 0.116974,
+      "entryMotion": 0.012537,
+      "exitMotion": 0.036337
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 54,
+      "length": 24,
+      "entry": 0.092309,
+      "exit": 0.104845,
+      "entryMotion": 0.01266,
+      "exitMotion": 0.025468
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 60,
+      "length": 24,
+      "entry": 0.099313,
+      "exit": 0.066757,
+      "entryMotion": 0.012568,
+      "exitMotion": 0.03095
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 66,
+      "length": 24,
+      "entry": 0.10379,
+      "exit": 0.04952,
+      "entryMotion": 0.012083,
+      "exitMotion": 0.016392
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 72,
+      "length": 24,
+      "entry": 0.104469,
+      "exit": 0.048139,
+      "entryMotion": 0.037392,
+      "exitMotion": 0.019105
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 78,
+      "length": 24,
+      "entry": 0.065363,
+      "exit": 0.042937,
+      "entryMotion": 0.01677,
+      "exitMotion": 0.016117
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 84,
+      "length": 24,
+      "entry": 0.056714,
+      "exit": 0.068878,
+      "entryMotion": 0.018282,
+      "exitMotion": 0.019907
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 90,
+      "length": 24,
+      "entry": 0.053959,
+      "exit": 0.098898,
+      "entryMotion": 0.021455,
+      "exitMotion": 0.019793
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 96,
+      "length": 24,
+      "entry": 0.07321,
+      "exit": 0.108598,
+      "entryMotion": 0.013576,
+      "exitMotion": 0.015788
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 102,
+      "length": 24,
+      "entry": 0.06671,
+      "exit": 0.109717,
+      "entryMotion": 0.015149,
+      "exitMotion": 0.015571
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 108,
+      "length": 24,
+      "entry": 0.058232,
+      "exit": 0.109468,
+      "entryMotion": 0.01692,
+      "exitMotion": 0.015509
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 114,
+      "length": 24,
+      "entry": 0.075466,
+      "exit": 0.107199,
+      "entryMotion": 0.014274,
+      "exitMotion": 0.015642
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 120,
+      "length": 24,
+      "entry": 0.085488,
+      "exit": 0.093765,
+      "entryMotion": 0.012181,
+      "exitMotion": 0.049474
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 126,
+      "length": 24,
+      "entry": 0.08598,
+      "exit": 0.06701,
+      "entryMotion": 0.01203,
+      "exitMotion": 0.029436
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 132,
+      "length": 24,
+      "entry": 0.085185,
+      "exit": 0.057214,
+      "entryMotion": 0.0122,
+      "exitMotion": 0.027157
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 138,
+      "length": 24,
+      "entry": 0.081735,
+      "exit": 0.041007,
+      "entryMotion": 0.014333,
+      "exitMotion": 0.019169
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 144,
+      "length": 24,
+      "entry": 0.077648,
+      "exit": 0.040242,
+      "entryMotion": 0.019397,
+      "exitMotion": 0.030115
+    },
+    {
+      "take": 3,
+      "target": 108,
+      "start": 150,
+      "length": 24,
+      "entry": 0.05065,
+      "exit": 0.048,
+      "entryMotion": 0.02823,
+      "exitMotion": 0.019846
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 0,
+      "length": 36,
+      "entry": 0.048861,
+      "exit": 0.034861,
+      "entryMotion": 0.048588,
+      "exitMotion": 0.016844
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 6,
+      "length": 36,
+      "entry": 0.057838,
+      "exit": 0.042856,
+      "entryMotion": 0.02093,
+      "exitMotion": 0.016282
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 12,
+      "length": 36,
+      "entry": 0.0452,
+      "exit": 0.05152,
+      "entryMotion": 0.035204,
+      "exitMotion": 0.016786
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 18,
+      "length": 36,
+      "entry": 0.041229,
+      "exit": 0.062879,
+      "entryMotion": 0.018609,
+      "exitMotion": 0.017365
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 24,
+      "length": 36,
+      "entry": 0.086174,
+      "exit": 0.07243,
+      "entryMotion": 0.020488,
+      "exitMotion": 0.017439
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 30,
+      "length": 36,
+      "entry": 0.081837,
+      "exit": 0.078807,
+      "entryMotion": 0.020558,
+      "exitMotion": 0.017689
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 36,
+      "length": 36,
+      "entry": 0.081437,
+      "exit": 0.083655,
+      "entryMotion": 0.019663,
+      "exitMotion": 0.037824
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 42,
+      "length": 36,
+      "entry": 0.082445,
+      "exit": 0.077921,
+      "entryMotion": 0.020086,
+      "exitMotion": 0.028674
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 48,
+      "length": 36,
+      "entry": 0.086538,
+      "exit": 0.06518,
+      "entryMotion": 0.020496,
+      "exitMotion": 0.034802
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 54,
+      "length": 36,
+      "entry": 0.092902,
+      "exit": 0.083625,
+      "entryMotion": 0.019919,
+      "exitMotion": 0.017914
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 60,
+      "length": 36,
+      "entry": 0.09991,
+      "exit": 0.077016,
+      "entryMotion": 0.019562,
+      "exitMotion": 0.020386
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 66,
+      "length": 36,
+      "entry": 0.104343,
+      "exit": 0.075048,
+      "entryMotion": 0.019297,
+      "exitMotion": 0.018097
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 72,
+      "length": 36,
+      "entry": 0.107828,
+      "exit": 0.055433,
+      "entryMotion": 0.037156,
+      "exitMotion": 0.018719
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 78,
+      "length": 36,
+      "entry": 0.061209,
+      "exit": 0.044693,
+      "entryMotion": 0.022246,
+      "exitMotion": 0.017342
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 84,
+      "length": 36,
+      "entry": 0.070503,
+      "exit": 0.058028,
+      "entryMotion": 0.023515,
+      "exitMotion": 0.017377
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 90,
+      "length": 36,
+      "entry": 0.067805,
+      "exit": 0.060661,
+      "entryMotion": 0.02342,
+      "exitMotion": 0.017272
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 96,
+      "length": 36,
+      "entry": 0.082439,
+      "exit": 0.060281,
+      "entryMotion": 0.0199,
+      "exitMotion": 0.016972
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 102,
+      "length": 36,
+      "entry": 0.076806,
+      "exit": 0.05606,
+      "entryMotion": 0.021897,
+      "exitMotion": 0.017218
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 108,
+      "length": 36,
+      "entry": 0.066861,
+      "exit": 0.068842,
+      "entryMotion": 0.022701,
+      "exitMotion": 0.052123
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 114,
+      "length": 36,
+      "entry": 0.077533,
+      "exit": 0.067082,
+      "entryMotion": 0.022062,
+      "exitMotion": 0.033896
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 120,
+      "length": 36,
+      "entry": 0.086348,
+      "exit": 0.09237,
+      "entryMotion": 0.019564,
+      "exitMotion": 0.027154
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 126,
+      "length": 36,
+      "entry": 0.086808,
+      "exit": 0.091977,
+      "entryMotion": 0.01887,
+      "exitMotion": 0.020522
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 132,
+      "length": 36,
+      "entry": 0.086155,
+      "exit": 0.097522,
+      "entryMotion": 0.019239,
+      "exitMotion": 0.031683
+    },
+    {
+      "take": 3,
+      "target": 12,
+      "start": 138,
+      "length": 36,
+      "entry": 0.083226,
+      "exit": 0.091934,
+      "entryMotion": 0.019145,
+      "exitMotion": 0.023192
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 0,
+      "length": 36,
+      "entry": 0.05374,
+      "exit": 0.071324,
+      "entryMotion": 0.041875,
+      "exitMotion": 0.033863
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 6,
+      "length": 36,
+      "entry": 0.074967,
+      "exit": 0.068628,
+      "entryMotion": 0.024309,
+      "exitMotion": 0.03336
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 12,
+      "length": 36,
+      "entry": 0.057136,
+      "exit": 0.065071,
+      "entryMotion": 0.021057,
+      "exitMotion": 0.03342
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 18,
+      "length": 36,
+      "entry": 0.067464,
+      "exit": 0.063222,
+      "entryMotion": 0.027467,
+      "exitMotion": 0.03302
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 24,
+      "length": 36,
+      "entry": 0.081992,
+      "exit": 0.064234,
+      "entryMotion": 0.012049,
+      "exitMotion": 0.033202
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 30,
+      "length": 36,
+      "entry": 0.080548,
+      "exit": 0.066664,
+      "entryMotion": 0.011046,
+      "exitMotion": 0.032827
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 36,
+      "length": 36,
+      "entry": 0.083897,
+      "exit": 0.053,
+      "entryMotion": 0.010506,
+      "exitMotion": 0.020536
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 42,
+      "length": 36,
+      "entry": 0.088324,
+      "exit": 0.07953,
+      "entryMotion": 0.010405,
+      "exitMotion": 0.038982
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 48,
+      "length": 36,
+      "entry": 0.095418,
+      "exit": 0.087454,
+      "entryMotion": 0.010497,
+      "exitMotion": 0.041949
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 54,
+      "length": 36,
+      "entry": 0.102873,
+      "exit": 0.100858,
+      "entryMotion": 0.010277,
+      "exitMotion": 0.033953
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 60,
+      "length": 36,
+      "entry": 0.109338,
+      "exit": 0.095597,
+      "entryMotion": 0.010329,
+      "exitMotion": 0.034194
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 66,
+      "length": 36,
+      "entry": 0.11332,
+      "exit": 0.09495,
+      "entryMotion": 0.009521,
+      "exitMotion": 0.033484
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 72,
+      "length": 36,
+      "entry": 0.111084,
+      "exit": 0.085061,
+      "entryMotion": 0.036275,
+      "exitMotion": 0.035864
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 78,
+      "length": 36,
+      "entry": 0.082875,
+      "exit": 0.065112,
+      "entryMotion": 0.015939,
+      "exitMotion": 0.034829
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 84,
+      "length": 36,
+      "entry": 0.05754,
+      "exit": 0.059465,
+      "entryMotion": 0.016576,
+      "exitMotion": 0.033111
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 90,
+      "length": 36,
+      "entry": 0.049295,
+      "exit": 0.059844,
+      "entryMotion": 0.018639,
+      "exitMotion": 0.033207
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 96,
+      "length": 36,
+      "entry": 0.066596,
+      "exit": 0.059448,
+      "entryMotion": 0.011359,
+      "exitMotion": 0.033053
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 102,
+      "length": 36,
+      "entry": 0.060576,
+      "exit": 0.059745,
+      "entryMotion": 0.013727,
+      "exitMotion": 0.033119
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 108,
+      "length": 36,
+      "entry": 0.061997,
+      "exit": 0.063887,
+      "entryMotion": 0.015451,
+      "exitMotion": 0.05381
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 114,
+      "length": 36,
+      "entry": 0.087356,
+      "exit": 0.08538,
+      "entryMotion": 0.01246,
+      "exitMotion": 0.044189
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 120,
+      "length": 36,
+      "entry": 0.096995,
+      "exit": 0.107774,
+      "entryMotion": 0.009947,
+      "exitMotion": 0.039119
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 126,
+      "length": 36,
+      "entry": 0.097597,
+      "exit": 0.106385,
+      "entryMotion": 0.009555,
+      "exitMotion": 0.035637
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 132,
+      "length": 36,
+      "entry": 0.096868,
+      "exit": 0.110015,
+      "entryMotion": 0.009908,
+      "exitMotion": 0.040347
+    },
+    {
+      "take": 3,
+      "target": 24,
+      "start": 138,
+      "length": 36,
+      "entry": 0.093738,
+      "exit": 0.106106,
+      "entryMotion": 0.011545,
+      "exitMotion": 0.038005
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 0,
+      "length": 36,
+      "entry": 0.048089,
+      "exit": 0.068985,
+      "entryMotion": 0.043367,
+      "exitMotion": 0.0095
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 6,
+      "length": 36,
+      "entry": 0.072004,
+      "exit": 0.062522,
+      "entryMotion": 0.027165,
+      "exitMotion": 0.008999
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 12,
+      "length": 36,
+      "entry": 0.050837,
+      "exit": 0.051964,
+      "entryMotion": 0.024952,
+      "exitMotion": 0.008867
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 18,
+      "length": 36,
+      "entry": 0.062785,
+      "exit": 0.043045,
+      "entryMotion": 0.031194,
+      "exitMotion": 0.008724
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 24,
+      "length": 36,
+      "entry": 0.075749,
+      "exit": 0.040811,
+      "entryMotion": 0.019091,
+      "exitMotion": 0.008648
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 30,
+      "length": 36,
+      "entry": 0.074014,
+      "exit": 0.042987,
+      "entryMotion": 0.017496,
+      "exitMotion": 0.008389
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 36,
+      "length": 36,
+      "entry": 0.077837,
+      "exit": 0.07006,
+      "entryMotion": 0.017666,
+      "exitMotion": 0.033722
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 42,
+      "length": 36,
+      "entry": 0.081972,
+      "exit": 0.060454,
+      "entryMotion": 0.017626,
+      "exitMotion": 0.023044
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 48,
+      "length": 36,
+      "entry": 0.089017,
+      "exit": 0.089208,
+      "entryMotion": 0.018025,
+      "exitMotion": 0.027803
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 54,
+      "length": 36,
+      "entry": 0.096839,
+      "exit": 0.104801,
+      "entryMotion": 0.018373,
+      "exitMotion": 0.010798
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 60,
+      "length": 36,
+      "entry": 0.103771,
+      "exit": 0.10347,
+      "entryMotion": 0.018246,
+      "exitMotion": 0.012225
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 66,
+      "length": 36,
+      "entry": 0.108033,
+      "exit": 0.101406,
+      "entryMotion": 0.018004,
+      "exitMotion": 0.009045
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 72,
+      "length": 36,
+      "entry": 0.106368,
+      "exit": 0.085856,
+      "entryMotion": 0.037236,
+      "exitMotion": 0.013664
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 78,
+      "length": 36,
+      "entry": 0.078169,
+      "exit": 0.051427,
+      "entryMotion": 0.021885,
+      "exitMotion": 0.013535
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 84,
+      "length": 36,
+      "entry": 0.053483,
+      "exit": 0.033473,
+      "entryMotion": 0.025292,
+      "exitMotion": 0.008204
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 90,
+      "length": 36,
+      "entry": 0.050746,
+      "exit": 0.02984,
+      "entryMotion": 0.02573,
+      "exitMotion": 0.007733
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 96,
+      "length": 36,
+      "entry": 0.065508,
+      "exit": 0.03017,
+      "entryMotion": 0.018419,
+      "exitMotion": 0.007514
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 102,
+      "length": 36,
+      "entry": 0.059044,
+      "exit": 0.03385,
+      "entryMotion": 0.01967,
+      "exitMotion": 0.007919
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 108,
+      "length": 36,
+      "entry": 0.055582,
+      "exit": 0.064023,
+      "entryMotion": 0.01969,
+      "exitMotion": 0.044339
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 114,
+      "length": 36,
+      "entry": 0.079912,
+      "exit": 0.08908,
+      "entryMotion": 0.019194,
+      "exitMotion": 0.029639
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 120,
+      "length": 36,
+      "entry": 0.090215,
+      "exit": 0.110152,
+      "entryMotion": 0.017825,
+      "exitMotion": 0.02366
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 126,
+      "length": 36,
+      "entry": 0.090857,
+      "exit": 0.112496,
+      "entryMotion": 0.01768,
+      "exitMotion": 0.015287
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 132,
+      "length": 36,
+      "entry": 0.090045,
+      "exit": 0.116685,
+      "entryMotion": 0.018094,
+      "exitMotion": 0.025609
+    },
+    {
+      "take": 3,
+      "target": 36,
+      "start": 138,
+      "length": 36,
+      "entry": 0.086559,
+      "exit": 0.113704,
+      "entryMotion": 0.019625,
+      "exitMotion": 0.018643
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 0,
+      "length": 36,
+      "entry": 0.070683,
+      "exit": 0.068698,
+      "entryMotion": 0.041629,
+      "exitMotion": 0.014627
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 6,
+      "length": 36,
+      "entry": 0.0741,
+      "exit": 0.063442,
+      "entryMotion": 0.025887,
+      "exitMotion": 0.015094
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 12,
+      "length": 36,
+      "entry": 0.063874,
+      "exit": 0.056296,
+      "entryMotion": 0.023017,
+      "exitMotion": 0.015486
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 18,
+      "length": 36,
+      "entry": 0.072664,
+      "exit": 0.05275,
+      "entryMotion": 0.027772,
+      "exitMotion": 0.015053
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 24,
+      "length": 36,
+      "entry": 0.031222,
+      "exit": 0.054848,
+      "entryMotion": 0.014766,
+      "exitMotion": 0.014793
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 30,
+      "length": 36,
+      "entry": 0.025761,
+      "exit": 0.058913,
+      "entryMotion": 0.01268,
+      "exitMotion": 0.014479
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 36,
+      "length": 36,
+      "entry": 0.038044,
+      "exit": 0.078267,
+      "entryMotion": 0.012936,
+      "exitMotion": 0.035764
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 42,
+      "length": 36,
+      "entry": 0.046205,
+      "exit": 0.053324,
+      "entryMotion": 0.012374,
+      "exitMotion": 0.024149
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 48,
+      "length": 36,
+      "entry": 0.056456,
+      "exit": 0.079343,
+      "entryMotion": 0.012512,
+      "exitMotion": 0.032658
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 54,
+      "length": 36,
+      "entry": 0.067433,
+      "exit": 0.095856,
+      "entryMotion": 0.012375,
+      "exitMotion": 0.014995
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 60,
+      "length": 36,
+      "entry": 0.076516,
+      "exit": 0.097331,
+      "entryMotion": 0.012554,
+      "exitMotion": 0.017521
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 66,
+      "length": 36,
+      "entry": 0.08201,
+      "exit": 0.094531,
+      "entryMotion": 0.01239,
+      "exitMotion": 0.015494
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 72,
+      "length": 36,
+      "entry": 0.083236,
+      "exit": 0.079764,
+      "entryMotion": 0.039278,
+      "exitMotion": 0.019099
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 78,
+      "length": 36,
+      "entry": 0.079219,
+      "exit": 0.050193,
+      "entryMotion": 0.01952,
+      "exitMotion": 0.019534
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 84,
+      "length": 36,
+      "entry": 0.064164,
+      "exit": 0.041811,
+      "entryMotion": 0.018091,
+      "exitMotion": 0.014646
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 90,
+      "length": 36,
+      "entry": 0.082366,
+      "exit": 0.039747,
+      "entryMotion": 0.018503,
+      "exitMotion": 0.014418
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 96,
+      "length": 36,
+      "entry": 0.074447,
+      "exit": 0.039544,
+      "entryMotion": 0.014845,
+      "exitMotion": 0.014158
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 102,
+      "length": 36,
+      "entry": 0.071766,
+      "exit": 0.040105,
+      "entryMotion": 0.013733,
+      "exitMotion": 0.014392
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 108,
+      "length": 36,
+      "entry": 0.049666,
+      "exit": 0.056598,
+      "entryMotion": 0.015024,
+      "exitMotion": 0.045983
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 114,
+      "length": 36,
+      "entry": 0.051529,
+      "exit": 0.079478,
+      "entryMotion": 0.012996,
+      "exitMotion": 0.031665
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 120,
+      "length": 36,
+      "entry": 0.062499,
+      "exit": 0.101631,
+      "entryMotion": 0.012448,
+      "exitMotion": 0.025447
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 126,
+      "length": 36,
+      "entry": 0.064144,
+      "exit": 0.105263,
+      "entryMotion": 0.011802,
+      "exitMotion": 0.018331
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 132,
+      "length": 36,
+      "entry": 0.063267,
+      "exit": 0.109874,
+      "entryMotion": 0.012572,
+      "exitMotion": 0.030569
+    },
+    {
+      "take": 3,
+      "target": 48,
+      "start": 138,
+      "length": 36,
+      "entry": 0.058787,
+      "exit": 0.108109,
+      "entryMotion": 0.014536,
+      "exitMotion": 0.021671
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 0,
+      "length": 36,
+      "entry": 0.072962,
+      "exit": 0.062984,
+      "entryMotion": 0.04623,
+      "exitMotion": 0.016783
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 6,
+      "length": 36,
+      "entry": 0.072321,
+      "exit": 0.062797,
+      "entryMotion": 0.038743,
+      "exitMotion": 0.016427
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 12,
+      "length": 36,
+      "entry": 0.06796,
+      "exit": 0.065077,
+      "entryMotion": 0.039552,
+      "exitMotion": 0.016132
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 18,
+      "length": 36,
+      "entry": 0.072516,
+      "exit": 0.071818,
+      "entryMotion": 0.034982,
+      "exitMotion": 0.015739
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 24,
+      "length": 36,
+      "entry": 0.06434,
+      "exit": 0.079741,
+      "entryMotion": 0.029991,
+      "exitMotion": 0.015583
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 30,
+      "length": 36,
+      "entry": 0.062788,
+      "exit": 0.085925,
+      "entryMotion": 0.029811,
+      "exitMotion": 0.014948
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 36,
+      "length": 36,
+      "entry": 0.063163,
+      "exit": 0.093651,
+      "entryMotion": 0.029471,
+      "exitMotion": 0.036205
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 42,
+      "length": 36,
+      "entry": 0.056524,
+      "exit": 0.06056,
+      "entryMotion": 0.029549,
+      "exitMotion": 0.027631
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 48,
+      "length": 36,
+      "entry": 0.049869,
+      "exit": 0.048706,
+      "entryMotion": 0.029551,
+      "exitMotion": 0.02444
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 54,
+      "length": 36,
+      "entry": 0.047629,
+      "exit": 0.069326,
+      "entryMotion": 0.029151,
+      "exitMotion": 0.01743
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 60,
+      "length": 36,
+      "entry": 0.050743,
+      "exit": 0.077477,
+      "entryMotion": 0.02862,
+      "exitMotion": 0.017614
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 66,
+      "length": 36,
+      "entry": 0.054465,
+      "exit": 0.072015,
+      "entryMotion": 0.028637,
+      "exitMotion": 0.015085
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 72,
+      "length": 36,
+      "entry": 0.0646,
+      "exit": 0.055994,
+      "entryMotion": 0.04608,
+      "exitMotion": 0.019462
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 78,
+      "length": 36,
+      "entry": 0.069233,
+      "exit": 0.049426,
+      "entryMotion": 0.031004,
+      "exitMotion": 0.020842
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 84,
+      "length": 36,
+      "entry": 0.084553,
+      "exit": 0.063156,
+      "entryMotion": 0.030528,
+      "exitMotion": 0.015126
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 90,
+      "length": 36,
+      "entry": 0.098115,
+      "exit": 0.064454,
+      "entryMotion": 0.030834,
+      "exitMotion": 0.014855
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 96,
+      "length": 36,
+      "entry": 0.096928,
+      "exit": 0.063783,
+      "entryMotion": 0.029636,
+      "exitMotion": 0.014578
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 102,
+      "length": 36,
+      "entry": 0.094716,
+      "exit": 0.059968,
+      "entryMotion": 0.029981,
+      "exitMotion": 0.014663
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 108,
+      "length": 36,
+      "entry": 0.076899,
+      "exit": 0.058489,
+      "entryMotion": 0.030703,
+      "exitMotion": 0.043397
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 114,
+      "length": 36,
+      "entry": 0.046861,
+      "exit": 0.05049,
+      "entryMotion": 0.029833,
+      "exitMotion": 0.029167
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 120,
+      "length": 36,
+      "entry": 0.040942,
+      "exit": 0.077048,
+      "entryMotion": 0.029274,
+      "exitMotion": 0.028566
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 126,
+      "length": 36,
+      "entry": 0.040417,
+      "exit": 0.083716,
+      "entryMotion": 0.028458,
+      "exitMotion": 0.021335
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 132,
+      "length": 36,
+      "entry": 0.040425,
+      "exit": 0.089728,
+      "entryMotion": 0.02851,
+      "exitMotion": 0.025561
+    },
+    {
+      "take": 3,
+      "target": 60,
+      "start": 138,
+      "length": 36,
+      "entry": 0.040464,
+      "exit": 0.090721,
+      "entryMotion": 0.029273,
+      "exitMotion": 0.022492
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 0,
+      "length": 36,
+      "entry": 0.082729,
+      "exit": 0.080594,
+      "entryMotion": 0.042742,
+      "exitMotion": 0.012511
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 6,
+      "length": 36,
+      "entry": 0.082353,
+      "exit": 0.082383,
+      "entryMotion": 0.023389,
+      "exitMotion": 0.012164
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 12,
+      "length": 36,
+      "entry": 0.07343,
+      "exit": 0.086285,
+      "entryMotion": 0.021382,
+      "exitMotion": 0.012398
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 18,
+      "length": 36,
+      "entry": 0.072799,
+      "exit": 0.092679,
+      "entryMotion": 0.025649,
+      "exitMotion": 0.012085
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 24,
+      "length": 36,
+      "entry": 0.073695,
+      "exit": 0.099235,
+      "entryMotion": 0.010124,
+      "exitMotion": 0.012031
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 30,
+      "length": 36,
+      "entry": 0.069853,
+      "exit": 0.1042,
+      "entryMotion": 0.009947,
+      "exitMotion": 0.011967
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 36,
+      "length": 36,
+      "entry": 0.068902,
+      "exit": 0.108599,
+      "entryMotion": 0.008599,
+      "exitMotion": 0.035022
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 42,
+      "length": 36,
+      "entry": 0.060831,
+      "exit": 0.070602,
+      "entryMotion": 0.00846,
+      "exitMotion": 0.023086
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 48,
+      "length": 36,
+      "entry": 0.04991,
+      "exit": 0.049551,
+      "entryMotion": 0.008216,
+      "exitMotion": 0.032421
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 54,
+      "length": 36,
+      "entry": 0.041918,
+      "exit": 0.055998,
+      "entryMotion": 0.008148,
+      "exitMotion": 0.011822
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 60,
+      "length": 36,
+      "entry": 0.040417,
+      "exit": 0.076877,
+      "entryMotion": 0.008166,
+      "exitMotion": 0.015269
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 66,
+      "length": 36,
+      "entry": 0.042985,
+      "exit": 0.07,
+      "entryMotion": 0.007368,
+      "exitMotion": 0.012552
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 72,
+      "length": 36,
+      "entry": 0.066948,
+      "exit": 0.062463,
+      "entryMotion": 0.035614,
+      "exitMotion": 0.01651
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 78,
+      "length": 36,
+      "entry": 0.065989,
+      "exit": 0.073898,
+      "entryMotion": 0.015229,
+      "exitMotion": 0.015389
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 84,
+      "length": 36,
+      "entry": 0.091913,
+      "exit": 0.086539,
+      "entryMotion": 0.014946,
+      "exitMotion": 0.011577
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 90,
+      "length": 36,
+      "entry": 0.104793,
+      "exit": 0.087707,
+      "entryMotion": 0.016058,
+      "exitMotion": 0.011774
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 96,
+      "length": 36,
+      "entry": 0.103075,
+      "exit": 0.087263,
+      "entryMotion": 0.009612,
+      "exitMotion": 0.011878
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 102,
+      "length": 36,
+      "entry": 0.100736,
+      "exit": 0.084169,
+      "entryMotion": 0.01177,
+      "exitMotion": 0.012004
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 108,
+      "length": 36,
+      "entry": 0.081525,
+      "exit": 0.069215,
+      "entryMotion": 0.013563,
+      "exitMotion": 0.04306
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 114,
+      "length": 36,
+      "entry": 0.045642,
+      "exit": 0.045967,
+      "entryMotion": 0.010881,
+      "exitMotion": 0.034395
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 120,
+      "length": 36,
+      "entry": 0.032048,
+      "exit": 0.055332,
+      "entryMotion": 0.007795,
+      "exitMotion": 0.020733
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 126,
+      "length": 36,
+      "entry": 0.029533,
+      "exit": 0.073565,
+      "entryMotion": 0.007074,
+      "exitMotion": 0.016166
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 132,
+      "length": 36,
+      "entry": 0.030183,
+      "exit": 0.078674,
+      "entryMotion": 0.007529,
+      "exitMotion": 0.029263
+    },
+    {
+      "take": 3,
+      "target": 72,
+      "start": 138,
+      "length": 36,
+      "entry": 0.033288,
+      "exit": 0.085349,
+      "entryMotion": 0.008956,
+      "exitMotion": 0.020965
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 0,
+      "length": 36,
+      "entry": 0.073457,
+      "exit": 0.087207,
+      "entryMotion": 0.043888,
+      "exitMotion": 0.023261
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 6,
+      "length": 36,
+      "entry": 0.07646,
+      "exit": 0.092026,
+      "entryMotion": 0.023705,
+      "exitMotion": 0.022379
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 12,
+      "length": 36,
+      "entry": 0.063567,
+      "exit": 0.097905,
+      "entryMotion": 0.022877,
+      "exitMotion": 0.021952
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 18,
+      "length": 36,
+      "entry": 0.06342,
+      "exit": 0.104814,
+      "entryMotion": 0.026174,
+      "exitMotion": 0.021466
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 24,
+      "length": 36,
+      "entry": 0.069788,
+      "exit": 0.110632,
+      "entryMotion": 0.012185,
+      "exitMotion": 0.021871
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 30,
+      "length": 36,
+      "entry": 0.066402,
+      "exit": 0.114674,
+      "entryMotion": 0.012652,
+      "exitMotion": 0.021815
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 36,
+      "length": 36,
+      "entry": 0.066272,
+      "exit": 0.113903,
+      "entryMotion": 0.011071,
+      "exitMotion": 0.038055
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 42,
+      "length": 36,
+      "entry": 0.059197,
+      "exit": 0.091109,
+      "entryMotion": 0.011481,
+      "exitMotion": 0.032383
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 48,
+      "length": 36,
+      "entry": 0.051212,
+      "exit": 0.043774,
+      "entryMotion": 0.011532,
+      "exitMotion": 0.024079
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 54,
+      "length": 36,
+      "entry": 0.047937,
+      "exit": 0.029848,
+      "entryMotion": 0.011223,
+      "exitMotion": 0.025588
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 60,
+      "length": 36,
+      "entry": 0.050699,
+      "exit": 0.057701,
+      "entryMotion": 0.010963,
+      "exitMotion": 0.023418
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 66,
+      "length": 36,
+      "entry": 0.054868,
+      "exit": 0.047003,
+      "entryMotion": 0.01033,
+      "exitMotion": 0.021976
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 72,
+      "length": 36,
+      "entry": 0.071581,
+      "exit": 0.057216,
+      "entryMotion": 0.034501,
+      "exitMotion": 0.027755
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 78,
+      "length": 36,
+      "entry": 0.059665,
+      "exit": 0.086966,
+      "entryMotion": 0.015918,
+      "exitMotion": 0.024239
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 84,
+      "length": 36,
+      "entry": 0.084881,
+      "exit": 0.09948,
+      "entryMotion": 0.016843,
+      "exitMotion": 0.021481
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 90,
+      "length": 36,
+      "entry": 0.097869,
+      "exit": 0.100659,
+      "entryMotion": 0.017719,
+      "exitMotion": 0.02152
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 96,
+      "length": 36,
+      "entry": 0.097468,
+      "exit": 0.100287,
+      "entryMotion": 0.01119,
+      "exitMotion": 0.021524
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 102,
+      "length": 36,
+      "entry": 0.094725,
+      "exit": 0.097498,
+      "entryMotion": 0.01474,
+      "exitMotion": 0.021636
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 108,
+      "length": 36,
+      "entry": 0.075113,
+      "exit": 0.085914,
+      "entryMotion": 0.016304,
+      "exitMotion": 0.047287
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 114,
+      "length": 36,
+      "entry": 0.042624,
+      "exit": 0.052976,
+      "entryMotion": 0.014435,
+      "exitMotion": 0.034849
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 120,
+      "length": 36,
+      "entry": 0.03575,
+      "exit": 0.038783,
+      "entryMotion": 0.010342,
+      "exitMotion": 0.036798
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 126,
+      "length": 36,
+      "entry": 0.033899,
+      "exit": 0.046159,
+      "entryMotion": 0.009922,
+      "exitMotion": 0.028419
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 132,
+      "length": 36,
+      "entry": 0.033778,
+      "exit": 0.051273,
+      "entryMotion": 0.010266,
+      "exitMotion": 0.020511
+    },
+    {
+      "take": 3,
+      "target": 84,
+      "start": 138,
+      "length": 36,
+      "entry": 0.033729,
+      "exit": 0.065446,
+      "entryMotion": 0.010744,
+      "exitMotion": 0.026973
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 0,
+      "length": 36,
+      "entry": 0.043935,
+      "exit": 0.096418,
+      "entryMotion": 0.04804,
+      "exitMotion": 0.016455
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 6,
+      "length": 36,
+      "entry": 0.06288,
+      "exit": 0.102109,
+      "entryMotion": 0.026101,
+      "exitMotion": 0.016111
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 12,
+      "length": 36,
+      "entry": 0.033942,
+      "exit": 0.107517,
+      "entryMotion": 0.031243,
+      "exitMotion": 0.016221
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 18,
+      "length": 36,
+      "entry": 0.04224,
+      "exit": 0.113224,
+      "entryMotion": 0.022376,
+      "exitMotion": 0.016006
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 24,
+      "length": 36,
+      "entry": 0.069958,
+      "exit": 0.11778,
+      "entryMotion": 0.016525,
+      "exitMotion": 0.015879
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 30,
+      "length": 36,
+      "entry": 0.066524,
+      "exit": 0.121026,
+      "entryMotion": 0.017921,
+      "exitMotion": 0.01594
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 36,
+      "length": 36,
+      "entry": 0.066797,
+      "exit": 0.116974,
+      "entryMotion": 0.016207,
+      "exitMotion": 0.036337
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 42,
+      "length": 36,
+      "entry": 0.064783,
+      "exit": 0.104845,
+      "entryMotion": 0.01657,
+      "exitMotion": 0.025468
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 48,
+      "length": 36,
+      "entry": 0.066449,
+      "exit": 0.066757,
+      "entryMotion": 0.01683,
+      "exitMotion": 0.03095
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 54,
+      "length": 36,
+      "entry": 0.072506,
+      "exit": 0.04952,
+      "entryMotion": 0.016266,
+      "exitMotion": 0.016392
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 60,
+      "length": 36,
+      "entry": 0.080196,
+      "exit": 0.048139,
+      "entryMotion": 0.015984,
+      "exitMotion": 0.019105
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 66,
+      "length": 36,
+      "entry": 0.085541,
+      "exit": 0.042937,
+      "entryMotion": 0.015299,
+      "exitMotion": 0.016117
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 72,
+      "length": 36,
+      "entry": 0.090186,
+      "exit": 0.068878,
+      "entryMotion": 0.038186,
+      "exitMotion": 0.019907
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 78,
+      "length": 36,
+      "entry": 0.052657,
+      "exit": 0.098898,
+      "entryMotion": 0.018639,
+      "exitMotion": 0.019793
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 84,
+      "length": 36,
+      "entry": 0.062316,
+      "exit": 0.108598,
+      "entryMotion": 0.01946,
+      "exitMotion": 0.015788
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 90,
+      "length": 36,
+      "entry": 0.07174,
+      "exit": 0.109717,
+      "entryMotion": 0.019309,
+      "exitMotion": 0.015571
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 96,
+      "length": 36,
+      "entry": 0.080759,
+      "exit": 0.109468,
+      "entryMotion": 0.016645,
+      "exitMotion": 0.015509
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 102,
+      "length": 36,
+      "entry": 0.075749,
+      "exit": 0.107199,
+      "entryMotion": 0.01809,
+      "exitMotion": 0.015642
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 108,
+      "length": 36,
+      "entry": 0.057394,
+      "exit": 0.093765,
+      "entryMotion": 0.019441,
+      "exitMotion": 0.049474
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 114,
+      "length": 36,
+      "entry": 0.054192,
+      "exit": 0.06701,
+      "entryMotion": 0.019068,
+      "exitMotion": 0.029436
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 120,
+      "length": 36,
+      "entry": 0.063546,
+      "exit": 0.057214,
+      "entryMotion": 0.015828,
+      "exitMotion": 0.027157
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 126,
+      "length": 36,
+      "entry": 0.063789,
+      "exit": 0.041007,
+      "entryMotion": 0.015059,
+      "exitMotion": 0.019169
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 132,
+      "length": 36,
+      "entry": 0.0628,
+      "exit": 0.040242,
+      "entryMotion": 0.015288,
+      "exitMotion": 0.030115
+    },
+    {
+      "take": 3,
+      "target": 96,
+      "start": 138,
+      "length": 36,
+      "entry": 0.059018,
+      "exit": 0.048,
+      "entryMotion": 0.014827,
+      "exitMotion": 0.019846
+    }
+  ]
+}

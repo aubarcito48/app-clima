@@ -1,0 +1,24 @@
+{
+  "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+  "reviewed": false,
+  "voices": [
+    {
+      "id": "es",
+      "title": "Voz espa\u00f1ola leyendo ingl\u00e9s",
+      "model": "es_ES-sharvard-medium",
+      "speaker": 1,
+      "phonemizer": "es",
+      "duration": 3.5629931972789115,
+      "sha256": "685079aeef1933c656b1298d74eff995d7bf9bf7d2d8860ed8b3442ec736e916"
+    },
+    {
+      "id": "en",
+      "title": "Voz inglesa leyendo ingl\u00e9s",
+      "model": "en_US-lessac-medium",
+      "speaker": 0,
+      "phonemizer": "en-us",
+      "duration": 3.702312925170068,
+      "sha256": "d584a408ee28bcaf5571403024257e3c7bc1626d9bd6b9f3d8fcb991b38aa820"
+    }
+  ]
+}

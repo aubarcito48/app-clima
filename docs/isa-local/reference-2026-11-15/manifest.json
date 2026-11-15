@@ -1,0 +1,206 @@
+{
+  "captured": "2026-11-15",
+  "purpose": "Reproducible Isa experiment inputs and recorded checks; no production data",
+  "files": [
+    {
+      "path": "backend/tmp/isa-rhubarb/en_long.wav",
+      "bytes": 588440,
+      "sha256": "739b159f87f8e292c770a673d62eff587a3e2e43eb5a42eb9f53790bf8175584"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/es_long.wav",
+      "bytes": 615980,
+      "sha256": "e8174c7642eba331be7f8565dd9224942a191f4fa18ab2074b575f06b1673809"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/es_short.wav",
+      "bytes": 207560,
+      "sha256": "03d291e1b903546e618fd3270756fdefa16c13daa1f8bd17f03fd364364da8ae"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/probe.wav",
+      "bytes": 195482,
+      "sha256": "ca721b8e7f21b1f7141f5345e52ce5fdb7d3473093e0dfc8c96b72781210d7cb"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/short.wav",
+      "bytes": 207292,
+      "sha256": "69659b076853fbc8e9d5dcec12bd16c42c8c6af49d781c98c0757014c054598a"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/en_long.json",
+      "bytes": 5720,
+      "sha256": "8ac973ca706805c1f5af1a481e15a14f5c748fad78a7062d654ed996c0d454fe"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/es_long.json",
+      "bytes": 6414,
+      "sha256": "05039438f61f34f7da9020ec69344a099093ba521c562353fb0fc86d3b9aa771"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/es_short.json",
+      "bytes": 2609,
+      "sha256": "7e9c5b8433db3a660c53ce386d9f33d09234435e65bb431a10b412aeeecda89b"
+    },
+    {
+      "path": "backend/tmp/isa-rhubarb/short.json",
+      "bytes": 1925,
+      "sha256": "decc089f9e7e9b069572a54aad6c65f9a71c7924cf1f67a55bd7206b25257687"
+    },
+    {
+      "path": "backend/tmp/isa-directors-6/groq.wav",
+      "bytes": 308682,
+      "sha256": "dc6e0a6e36ea38bc409fe429c184e5a7467f053dcd2dd12414d5d5713a55d91c"
+    },
+    {
+      "path": "backend/tmp/isa-directors-6/local.wav",
+      "bytes": 289276,
+      "sha256": "8a1ffbc8b0ba98c0f2abfc6d4bf506806a718925fd7b752ad06f7eb128b7c116"
+    },
+    {
+      "path": "backend/tmp/isa-directors-6/plans.json",
+      "bytes": 3051,
+      "sha256": "2483908932cf22edc2311917f70b4b6ca60f483009a60ec8543ada89f9cbb5f9"
+    },
+    {
+      "path": "backend/tmp/isa-language-ab/english-with-lessac.wav",
+      "bytes": 163316,
+      "sha256": "d584a408ee28bcaf5571403024257e3c7bc1626d9bd6b9f3d8fcb991b38aa820"
+    },
+    {
+      "path": "backend/tmp/isa-language-ab/english-with-sharvard.wav",
+      "bytes": 157172,
+      "sha256": "685079aeef1933c656b1298d74eff995d7bf9bf7d2d8860ed8b3442ec736e916"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/amy-1-raw.wav",
+      "bytes": 227316,
+      "sha256": "9f74265b82ebfe19d26577bc051009857fe1605e2bcecff8e46d16ac178c5564"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/amy-1.wav",
+      "bytes": 228606,
+      "sha256": "82fc9da0098fdfe045b1751460b66d0174d4b21cf3a7bcf56965adcd79f2a071"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/amy-1_08-raw.wav",
+      "bytes": 245748,
+      "sha256": "079a69a5b0047af0b78d823f095235890fa1059a37cafdfe11b1fd7393fb9c83"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/amy-1_08.wav",
+      "bytes": 246998,
+      "sha256": "65bffb4a7fbfc05aa3d3ccac3f3596f79e2fddc1793cd6a4f749f1f1c70b7f37"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/cori-1-raw.wav",
+      "bytes": 174068,
+      "sha256": "85ed526b28743d4484faa3fab2ebc78f46b473955e40b8143fbb58673e4ebf5e"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/cori-1.wav",
+      "bytes": 175060,
+      "sha256": "472650a0b69bafbcb719a5bf7f69d8f37e21eebc1539d755a0620f5ee68d2cdd"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/cori-1_08-raw.wav",
+      "bytes": 184308,
+      "sha256": "dfea4da2276f61d52a6fe75fc138fdb69f4a34a979e7cf0bd933bf2655b563f0"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/cori-1_08.wav",
+      "bytes": 185300,
+      "sha256": "21a6c19ccf8d2b9ccf6ccd6ab857f007ebdfa0d05f096b426f205dd9b5dae02e"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/lessac-1-raw.wav",
+      "bytes": 148468,
+      "sha256": "e725f6487bc049f69f70f0cf2bb0d60a21b0f3d8b07a9e95f18f5911b657559c"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/lessac-1.wav",
+      "bytes": 149610,
+      "sha256": "078aa2423ab0cd53212fed4a2a85b056b969850a6528ae32b6f680fc9902916e"
+    },
+    {
+      "path": "backend/tmp/isa-english-candidates/report.json",
+      "bytes": 1949,
+      "sha256": "da35a17d2e5627ede137bd132f2df009b4671188ab72ea968aff499bdeb8cee1"
+    },
+    {
+      "path": "reports/english-rhythm-checks.json",
+      "bytes": 2234,
+      "sha256": "70312e8e35c12e9981b9784f69cc451df8b023acf380a1cdd4ab157dc06c57f1"
+    },
+    {
+      "path": "reports/english-voices-animated-checks.json",
+      "bytes": 1260,
+      "sha256": "2903b1cb6447c64b0dc192d2484b2b166d70274df1de28d9dcdec4df41db5eda"
+    },
+    {
+      "path": "reports/forward-phrases-checks.json",
+      "bytes": 1463,
+      "sha256": "c2a1a72c1da90f8649e0b15ea73b08764d11c1798d9849e86d955ecc9ea98c6a"
+    },
+    {
+      "path": "reports/micro-pause-checks.json",
+      "bytes": 684,
+      "sha256": "3a4a75c770fe49cfbbfba2aa1ab3e37443f81ff7473159e94ba25d05feb0d77d"
+    },
+    {
+      "path": "reports/pause-comparison-checks.json",
+      "bytes": 1535,
+      "sha256": "f467bcc061a935c887c17cb8bf0d12f766de581a2fe8bca5faa26178e52d1f02"
+    },
+    {
+      "path": "reports/combinations-inventory.json",
+      "bytes": 177804,
+      "sha256": "f0c0c4e8386e8eb464312a8279f6eee925e5f366f0159fdcf98c3be773943d4d"
+    },
+    {
+      "path": "reports/english-rhythm-inventory.json",
+      "bytes": 384,
+      "sha256": "590aef61afd95e3ac7a4c551ff575ca67d1f831b9009a424060517df1370a7c0"
+    },
+    {
+      "path": "reports/english-voices-animated-inventory.json",
+      "bytes": 2956,
+      "sha256": "6330c84ad9f3ce7b8c341173bcb9be7850d8e219d1ce3a202d636b2d61dfb893"
+    },
+    {
+      "path": "reports/forward-phrases-inventory.json",
+      "bytes": 2892,
+      "sha256": "2446e7639770ea38e8005ee5d8712b75d56f12c73ab3075ed814295afd5f064e"
+    },
+    {
+      "path": "reports/fusion-inventory.json",
+      "bytes": 3490,
+      "sha256": "a1ac631d244887508074389159f50918b0c9dbd8a7a2936d988c0d9c06f300d7"
+    },
+    {
+      "path": "reports/language-voices-inventory.json",
+      "bytes": 718,
+      "sha256": "2bf342465b1d574d231179c102faad7e44dd2d99d6941dd689fbdcb7588bb492"
+    },
+    {
+      "path": "reports/micro-pause-inventory.json",
+      "bytes": 3228,
+      "sha256": "94feeaf185193e2684a89013283b0630abca04fd5f69e9348ff9688f8a87e025"
+    },
+    {
+      "path": "reports/pause-comparison-inventory.json",
+      "bytes": 3502,
+      "sha256": "9dd7d451b6c6f1039922674b29dce6ea3f2d2ee261d979735cc1b7b82b3c6810"
+    },
+    {
+      "path": "reports/rhubarb-sequences-inventory.json",
+      "bytes": 41512,
+      "sha256": "2ac8a900990b03118cfdb716dcda011fa63a61ad27868ca32a8a150e28d9aeb1"
+    },
+    {
+      "path": "reports/stable-sequences-inventory.json",
+      "bytes": 41614,
+      "sha256": "e12d3d0e536791287f323335563b9abbfd58dd14e86591d9098f89c6d06e5c34"
+    }
+  ]
+}

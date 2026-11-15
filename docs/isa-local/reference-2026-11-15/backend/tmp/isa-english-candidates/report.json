@@ -1,0 +1,57 @@
+{
+  "revision": "e9ab671f2a0e50a701b34361136ba3e6a3a9eb0c",
+  "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+  "reviewed": false,
+  "cases": [
+    {
+      "id": "lessac-1",
+      "voice": "lessac",
+      "lengthScaleMultiplier": 1,
+      "duration": 3.36562358276644,
+      "file": "lessac-1.wav",
+      "sha256": "078aa2423ab0cd53212fed4a2a85b056b969850a6528ae32b6f680fc9902916e",
+      "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+      "reviewed": false
+    },
+    {
+      "id": "cori-1",
+      "voice": "cori",
+      "lengthScaleMultiplier": 1,
+      "duration": 3.9461224489795916,
+      "file": "cori-1.wav",
+      "sha256": "472650a0b69bafbcb719a5bf7f69d8f37e21eebc1539d755a0620f5ee68d2cdd",
+      "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+      "reviewed": false
+    },
+    {
+      "id": "cori-1_08",
+      "voice": "cori",
+      "lengthScaleMultiplier": 1.08,
+      "duration": 4.178321995464852,
+      "file": "cori-1_08.wav",
+      "sha256": "21a6c19ccf8d2b9ccf6ccd6ab857f007ebdfa0d05f096b426f205dd9b5dae02e",
+      "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+      "reviewed": false
+    },
+    {
+      "id": "amy-1",
+      "voice": "amy",
+      "lengthScaleMultiplier": 1,
+      "duration": 5.153560090702948,
+      "file": "amy-1.wav",
+      "sha256": "82fc9da0098fdfe045b1751460b66d0174d4b21cf3a7bcf56965adcd79f2a071",
+      "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+      "reviewed": false
+    },
+    {
+      "id": "amy-1_08",
+      "voice": "amy",
+      "lengthScaleMultiplier": 1.08,
+      "duration": 5.571519274376417,
+      "file": "amy-1_08.wav",
+      "sha256": "65bffb4a7fbfc05aa3d3ccac3f3596f79e2fddc1793cd6a4f749f1f1c70b7f37",
+      "text": "Wear a light jacket. It may rain later; bring an umbrella.",
+      "reviewed": false
+    }
+  ]
+}

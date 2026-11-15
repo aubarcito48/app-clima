@@ -1,0 +1,2 @@
+# Keep archived inputs byte-identical to their SHA-256 manifest on every OS.
+docs/isa-local/reference-2026-11-15/** -text

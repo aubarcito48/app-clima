@@ -1,0 +1,94 @@
+{
+  "experiment": "3C-frases",
+  "cases": [
+    {
+      "id": "control",
+      "title": "Control: los dos segundos aprobados",
+      "file": "index-3c-frases-control.html",
+      "duration": 2,
+      "audioStart": 3,
+      "baselineSource": 80,
+      "mouthCues": 15,
+      "restCues": 0,
+      "longestRestCue": 0,
+      "sourceSha256": null,
+      "reviewed": false,
+      "syntheticPause": null
+    },
+    {
+      "id": "es-corto",
+      "title": "Espa\u00f1ol: consejo corto completo",
+      "file": "index-3c-frases-es-corto.html",
+      "duration": 4.664671201814059,
+      "audioStart": 0,
+      "baselineSource": 24,
+      "mouthCues": 39,
+      "restCues": 1,
+      "longestRestCue": 0.009999999999999787,
+      "sourceSha256": "03d291e1b903546e618fd3270756fdefa16c13daa1f8bd17f03fd364364da8ae",
+      "reviewed": false,
+      "syntheticPause": null
+    },
+    {
+      "id": "es-pausa",
+      "title": "Espa\u00f1ol: pausa artificial de 0,8 s",
+      "file": "index-3c-frases-es-pausa.html",
+      "duration": 5.464671201814059,
+      "audioStart": 0,
+      "baselineSource": 24,
+      "mouthCues": 41,
+      "restCues": 2,
+      "longestRestCue": 0.7999999999999998,
+      "sourceSha256": "03d291e1b903546e618fd3270756fdefa16c13daa1f8bd17f03fd364364da8ae",
+      "reviewed": false,
+      "syntheticPause": {
+        "start": 2.3100226757369615,
+        "end": 3.1100226757369613,
+        "synthetic": true
+      }
+    },
+    {
+      "id": "es-largo-1",
+      "title": "Espa\u00f1ol: consejo largo, primera parte",
+      "file": "index-3c-frases-es-largo-1.html",
+      "duration": 6.94,
+      "audioStart": 0,
+      "baselineSource": 24,
+      "mouthCues": 47,
+      "restCues": 1,
+      "longestRestCue": 0.1299999999999999,
+      "sourceSha256": "e8174c7642eba331be7f8565dd9224942a191f4fa18ab2074b575f06b1673809",
+      "reviewed": false,
+      "syntheticPause": null
+    },
+    {
+      "id": "es-largo-2",
+      "title": "Espa\u00f1ol: consejo largo, segunda parte",
+      "file": "index-3c-frases-es-largo-2.html",
+      "duration": 6.934013605442176,
+      "audioStart": 6.94,
+      "baselineSource": 24,
+      "mouthCues": 48,
+      "restCues": 1,
+      "longestRestCue": 0.009999999999999787,
+      "sourceSha256": "e8174c7642eba331be7f8565dd9224942a191f4fa18ab2074b575f06b1673809",
+      "reviewed": false,
+      "syntheticPause": null
+    },
+    {
+      "id": "en",
+      "title": "Ingl\u00e9s: fragmento adicional",
+      "file": "index-3c-frases-en.html",
+      "duration": 6,
+      "audioStart": 0,
+      "baselineSource": 24,
+      "mouthCues": 37,
+      "restCues": 3,
+      "longestRestCue": 0.27,
+      "sourceSha256": "739b159f87f8e292c770a673d62eff587a3e2e43eb5a42eb9f53790bf8175584",
+      "reviewed": false,
+      "syntheticPause": null
+    }
+  ],
+  "reviewed": false
+}

@@ -1,0 +1,32 @@
+{
+  "reviewed": false,
+  "reports": [
+    {
+      "id": "es",
+      "invalid": 0,
+      "differences": 77,
+      "minRate": 0.04752591047135653,
+      "maxLag": 0.01899901409193039,
+      "gaps": 2,
+      "extraFinalLag": 0.007480056693747628
+    },
+    {
+      "id": "cori",
+      "invalid": 0,
+      "differences": 236,
+      "minRate": 0.0769954564499226,
+      "maxLag": 0.04287743339735095,
+      "gaps": 3,
+      "extraFinalLag": 0.003456031898430467
+    },
+    {
+      "id": "amy",
+      "invalid": 0,
+      "differences": 184,
+      "minRate": 0.10246278556076668,
+      "maxLag": 0.030803852540954857,
+      "gaps": 2,
+      "extraFinalLag": 0.0004673908468371124
+    }
+  ]
+}

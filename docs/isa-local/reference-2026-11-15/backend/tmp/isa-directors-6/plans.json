@@ -1,0 +1,109 @@
+{
+  "experiment": 6,
+  "reviewed": false,
+  "text": "Usá una campera liviana por el viento. Más tarde puede llover; evitá el calzado abierto y llevá un paraguas.",
+  "local": [
+    {
+      "text": "Usá una campera liviana por el viento.",
+      "gesture": "isa-awake",
+      "speed": 1.0,
+      "energy": 1.0,
+      "pause_ms": 160
+    },
+    {
+      "text": "Más tarde puede llover;",
+      "gesture": "isa-right",
+      "speed": 1.0,
+      "energy": 1.0,
+      "pause_ms": 180
+    },
+    {
+      "text": "evitá el calzado abierto y llevá un paraguas.",
+      "gesture": "isa-down",
+      "speed": 0.96,
+      "energy": 0.96,
+      "pause_ms": 0
+    }
+  ],
+  "groq": [
+    {
+      "text": "Usá una campera liviana por el viento.",
+      "gesture": "isa-awake",
+      "speed": 1,
+      "energy": 1,
+      "pause_ms": 200
+    },
+    {
+      "text": "Más tarde puede llover; evitá el calzado abierto y llevá un paraguas.",
+      "gesture": "isa-right",
+      "speed": 0.95,
+      "energy": 0.9,
+      "pause_ms": 400
+    }
+  ],
+  "model": "openai/gpt-oss-20b",
+  "usage": {
+    "completion_tokens": 220,
+    "prompt_tokens": 940,
+    "total_tokens": 1160,
+    "completion_time": 0.27458,
+    "completion_tokens_details": {
+      "reasoning_tokens": 95
+    },
+    "prompt_time": 0.054943374,
+    "prompt_tokens_details": null,
+    "queue_time": 0.241946933,
+    "total_time": 0.329523374
+  },
+  "groqRequestSeconds": 0.984,
+  "requestCount": 1,
+  "scope": "Fixed-text direction only, not the total production advice request.",
+  "audio": {
+    "local": {
+      "duration": 6.551337868480726,
+      "timeline": [
+        {
+          "from": 0.0,
+          "speech_end": 2.2407256235827666,
+          "until": 2.4007256235827663,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 2.4007256235827663,
+          "speech_end": 3.6778231292517005,
+          "until": 3.8578231292517007,
+          "gesture": "isa-right"
+        },
+        {
+          "from": 3.8578231292517007,
+          "speech_end": 6.551337868480726,
+          "until": 6.551337868480726,
+          "gesture": "isa-down"
+        }
+      ],
+      "sha256": "8a1ffbc8b0ba98c0f2abfc6d4bf506806a718925fd7b752ad06f7eb128b7c116",
+      "synthesisSeconds": 6.809
+    },
+    "groq": {
+      "duration": 6.993877551020408,
+      "timeline": [
+        {
+          "from": 0.0,
+          "speech_end": 2.1710657596371883,
+          "until": 2.371065759637188,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 2.371065759637188,
+          "speech_end": 6.593877551020408,
+          "until": 6.993877551020408,
+          "gesture": "isa-right"
+        }
+      ],
+      "sha256": "dc6e0a6e36ea38bc409fe429c184e5a7467f053dcd2dd12414d5d5713a55d91c",
+      "synthesisSeconds": 5.085
+    }
+  },
+  "voiceModel": "es_ES-sharvard-medium.onnx; female speaker 1",
+  "lipSync": "off in this experiment process only; no Rhubarb-dependent switches"
+}

@@ -1,0 +1,105 @@
+{
+  "reviewed": false,
+  "reports": [
+    {
+      "voice": "cori",
+      "strength": 0,
+      "invalid": 0,
+      "differences": 0,
+      "endPhase": 4.178321995464852,
+      "minActualRate": 1,
+      "maxActualRate": 1,
+      "cost": 23.5
+    },
+    {
+      "voice": "cori",
+      "strength": 0.25,
+      "invalid": 0,
+      "differences": 0,
+      "endPhase": 4.178321995464852,
+      "minActualRate": 1,
+      "maxActualRate": 1,
+      "cost": 23.5
+    },
+    {
+      "voice": "cori",
+      "strength": 0.5,
+      "invalid": 0,
+      "differences": 0,
+      "endPhase": 4.178321995464852,
+      "minActualRate": 1,
+      "maxActualRate": 1,
+      "cost": 23.5
+    },
+    {
+      "voice": "cori",
+      "strength": 0.75,
+      "invalid": 0,
+      "differences": 0,
+      "endPhase": 4.178321995464852,
+      "minActualRate": 1,
+      "maxActualRate": 1,
+      "cost": 23.5
+    },
+    {
+      "voice": "cori",
+      "strength": 1,
+      "invalid": 0,
+      "differences": 214,
+      "endPhase": 4.453321995464851,
+      "minActualRate": 0.9,
+      "maxActualRate": 1.2,
+      "cost": 23.06999999999999
+    },
+    {
+      "voice": "amy",
+      "strength": 0,
+      "invalid": 0,
+      "differences": 0,
+      "endPhase": 5.571519274376417,
+      "minActualRate": 1,
+      "maxActualRate": 1,
+      "cost": 36.75
+    },
+    {
+      "voice": "amy",
+      "strength": 0.25,
+      "invalid": 0,
+      "differences": 302,
+      "endPhase": 5.480894274376418,
+      "minActualRate": 0.95,
+      "maxActualRate": 1,
+      "cost": 34.455
+    },
+    {
+      "voice": "amy",
+      "strength": 0.5,
+      "invalid": 0,
+      "differences": 297,
+      "endPhase": 5.453220238095234,
+      "minActualRate": 0.95,
+      "maxActualRate": 1.05,
+      "cost": 33.45999999999998
+    },
+    {
+      "voice": "amy",
+      "strength": 0.75,
+      "invalid": 0,
+      "differences": 304,
+      "endPhase": 5.477769274376421,
+      "minActualRate": 0.925,
+      "maxActualRate": 1.075,
+      "cost": 33.36999999999997
+    },
+    {
+      "voice": "amy",
+      "strength": 1,
+      "invalid": 0,
+      "differences": 307,
+      "endPhase": 5.459921201814059,
+      "minActualRate": 0.9,
+      "maxActualRate": 1.1,
+      "cost": 33.059999999999995
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "reviewed": false,
+  "reports": [
+    {
+      "id": "control",
+      "count": 48,
+      "duration": 2,
+      "seams": 1,
+      "skipped": 2,
+      "cost": 70.42557,
+      "baselineCost": 74,
+      "invalid": 0,
+      "restTotal": 0,
+      "restClosed": 0
+    },
+    {
+      "id": "es-corto",
+      "count": 112,
+      "duration": 4.664671201814059,
+      "seams": 0,
+      "skipped": 0,
+      "cost": 172,
+      "baselineCost": 172,
+      "invalid": 0,
+      "restTotal": 0,
+      "restClosed": 0
+    },
+    {
+      "id": "es-pausa",
+      "count": 131,
+      "duration": 5.464671201814059,
+      "seams": 0,
+      "skipped": 0,
+      "cost": 178,
+      "baselineCost": 178,
+      "invalid": 0,
+      "restTotal": 20,
+      "restClosed": 8
+    },
+    {
+      "id": "es-largo-1",
+      "count": 167,
+      "duration": 6.94,
+      "seams": 1,
+      "skipped": 2,
+      "cost": 244.22313,
+      "baselineCost": 246,
+      "invalid": 0,
+      "restTotal": 4,
+      "restClosed": 3
+    },
+    {
+      "id": "es-largo-2",
+      "count": 166,
+      "duration": 6.934013605442176,
+      "seams": 0,
+      "skipped": 0,
+      "cost": 262,
+      "baselineCost": 262,
+      "invalid": 0,
+      "restTotal": 0,
+      "restClosed": 0
+    },
+    {
+      "id": "en",
+      "count": 144,
+      "duration": 6,
+      "seams": 3,
+      "skipped": 5,
+      "cost": 215.64426,
+      "baselineCost": 220,
+      "invalid": 0,
+      "restTotal": 12,
+      "restClosed": 4
+    }
+  ]
+}
