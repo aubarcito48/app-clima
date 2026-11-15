@@ -8,9 +8,6 @@ describe('Isa video speech lifecycle', () => {
   let controller: Awaited<ReturnType<typeof createIsaPortrait>> | undefined;
   let host: HTMLElement;
   let failSpeech: boolean;
-  let failMouth: boolean;
-  let delayMouth: boolean;
-  let releaseMouth: (() => void) | undefined;
   let delaySecondPage: boolean;
   let releaseSecondPage: (() => void) | undefined;
   const requests: string[] = [];
@@ -20,7 +17,7 @@ describe('Isa video speech lifecycle', () => {
       now += 1000 / 60;
       const batch = [...callbacks.values()];
       callbacks.clear();
-      batch.forEach((callback) => callback(now));
+      batch.forEach(callback => callback(now));
       await Promise.resolve();
     }
   }
@@ -30,45 +27,23 @@ describe('Isa video speech lifecycle', () => {
     serial = 0;
     callbacks = new Map();
     failSpeech = false;
-    failMouth = false;
-    delayMouth = false;
-    releaseMouth = undefined;
     delaySecondPage = false;
     releaseSecondPage = undefined;
     requests.length = 0;
     vi.spyOn(performance, 'now').mockImplementation(() => now);
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
-      clearRect: vi.fn(),
-      drawImage: vi.fn(),
-      globalAlpha: 1,
-      globalCompositeOperation: 'source-over',
+      clearRect: vi.fn(), drawImage: vi.fn(), globalAlpha: 1, globalCompositeOperation: 'source-over',
     } as unknown as CanvasRenderingContext2D);
-    vi.stubGlobal(
-      'Image',
-      class {
-        src = '';
-        naturalWidth = 144;
-        naturalHeight = 80;
-        decode() {
-          requests.push(this.src);
-          if (this.src.includes('isa-mouths-')) {
-            if (delayMouth)
-              return new Promise<void>((resolve) => {
-                releaseMouth = resolve;
-              });
-            if (failMouth) return Promise.reject(new Error('Offline'));
-          }
-          if (delaySecondPage && this.src.includes('isa-speech-v1-1.webp')) {
-            return new Promise<void>((resolve) => {
-              releaseSecondPage = resolve;
-            });
-          }
-          return failSpeech && this.src.includes('speech')
-            ? Promise.reject(new Error('Offline'))
-            : Promise.resolve();
+    vi.stubGlobal('Image', class {
+      src = '';
+      decode() {
+        requests.push(this.src);
+        if (delaySecondPage && this.src.includes('isa-speech-v1-1.webp')) {
+          return new Promise<void>(resolve => { releaseSecondPage = resolve; });
         }
-      },
-    );
+        return failSpeech && this.src.includes('speech') ? Promise.reject(new Error('Offline')) : Promise.resolve();
+      }
+    });
     vi.stubGlobal('IntersectionObserver', undefined);
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
       callbacks.set(++serial, callback);
@@ -85,71 +60,6 @@ describe('Isa video speech lifecycle', () => {
     host.remove();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
-  });
-
-  it('uses a fixed front with audio-driven lips and closes without a native rewind', async () => {
-    controller!.play('isa-awake');
-    controller!.prepareLipSync();
-    await advance(160);
-    controller!.setMouthShape('B');
-    controller!.setSpeaking(true);
-    await advance(60);
-    const canvas = host.querySelector('canvas')!;
-    expect(canvas.dataset['isaSpeechMode']).toBe('rhubarb');
-    expect(canvas.dataset['isaMouthShape']).toBe('B');
-    const speechFrame = canvas.dataset['isaSpeechFrame'];
-    controller!.setMouthShape('D');
-    controller!.setSpeechTime(4);
-    await advance(10);
-    expect(canvas.dataset['isaMouthShape']).toBe('D');
-    expect(canvas.dataset['isaSpeechFrame']).toBe(speechFrame);
-    controller!.setSpeaking(false);
-    expect(canvas.dataset['isaMouthShape']).toBe('X');
-    await advance(70);
-    expect(canvas.dataset['isaSpeechMode']).toBe('idle');
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
-    expect(callbacks.size).toBe(0);
-  });
-
-  it('keeps the original video for an utterance if lip assets arrive late', async () => {
-    delayMouth = true;
-    controller!.prepareLipSync();
-    controller!.setMouthShape('B');
-    controller!.setSpeaking(true);
-    await advance(60);
-    const canvas = host.querySelector('canvas')!;
-    expect(canvas.dataset['isaSpeechMode']).toBe('video');
-    releaseMouth!();
-    await advance(30);
-    controller!.setMouthShape('D');
-    expect(canvas.dataset['isaSpeechMode']).toBe('video');
-    controller!.setSpeaking(false);
-    await advance(70);
-    controller!.setSpeaking(true);
-    await advance(60);
-    expect(canvas.dataset['isaSpeechMode']).toBe('rhubarb');
-  });
-
-  it('retains voice-independent native speech if the mouth atlas fails', async () => {
-    failMouth = true;
-    controller!.prepareLipSync();
-    await advance(5);
-    controller!.setMouthShape('B');
-    controller!.setSpeaking(true);
-    await advance(60);
-    expect(host.querySelector('canvas')!.dataset['isaSpeechMode']).toBe('video');
-  });
-
-  it('does not animate the mouth with reduced motion even when cues and atlas exist', async () => {
-    await controller!.prepareLipSync();
-    controller!.setExpression('isa-awake');
-    controller!.setMouthShape('D');
-    controller!.setSpeaking(true);
-    await advance(30);
-    const canvas = host.querySelector('canvas')!;
-    expect(canvas.dataset['isaSpeechMode']).toBe('idle');
-    expect(canvas.dataset['isaMouthShape']).toBe('');
-    expect(callbacks.size).toBe(0);
   });
 
   it('keeps speech moving through quiet gaps and closes only when playback ends', async () => {
@@ -239,7 +149,7 @@ describe('Isa video speech lifecycle', () => {
   it('keeps speaking when a gesture or loading update arrives mid-narration', async () => {
     controller!.play('isa-awake');
     await advance(160);
-    controller!.setMouthOpening(0.7);
+    controller!.setMouthOpening(.7);
     controller!.setSpeaking(true);
     await advance(60);
     const canvas = host.querySelector('canvas')!;
@@ -248,10 +158,10 @@ describe('Isa video speech lifecycle', () => {
     controller!.setWorking(true);
     await advance(60);
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
     controller!.play('isa-awake');
     await advance(160);
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.9);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.9);
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(before);
     expect(canvas.dataset['isaSpeaking']).toBe('true');
   });
@@ -260,12 +170,12 @@ describe('Isa video speech lifecycle', () => {
     controller!.play('isa-right');
     controller!.setWorking(true);
     await advance(100);
-    expect(requests.some((request) => request.includes('isa-speech-v1-0'))).toBe(true);
+    expect(requests.some(request => request.includes('isa-speech-v1-0'))).toBe(true);
     controller!.setWorking(false);
     controller!.setSpeaking(true);
     await advance(15);
     const canvas = host.querySelector('canvas')!;
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.85);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.85);
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');
   });
 
@@ -280,7 +190,7 @@ describe('Isa video speech lifecycle', () => {
       expect(frame).toBeGreaterThanOrEqual(12);
       expect(frame).toBeLessThan(192);
       if (frame < previous) wraps++;
-      if (i > 40) expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+      if (i > 40) expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
       previous = frame;
     }
     expect(wraps).toBeGreaterThanOrEqual(3);
@@ -307,7 +217,7 @@ describe('Isa video speech lifecycle', () => {
     controller!.setSpeechTime(9);
     await advance(10);
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(48);
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
     controller!.setSpeechTime(NaN);
     controller!.setSpeechTime(-1);
     await advance(10);

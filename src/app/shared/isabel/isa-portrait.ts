@@ -1,7 +1,5 @@
 import atlas from './isa-portrait-manifest.json';
 import speechAtlas from './isa-speech-manifest.json';
-import mouthAtlas from './isa-mouth-manifest.json';
-import type { IsaMouthShape } from '../../models/isa-mouth';
 import { IsaMotion, type IsaPose } from './isa-motion';
 
 // Omit the source video's opening/closing idle poses in a long narration's loop.
@@ -10,8 +8,8 @@ const SPEECH_START = 12;
 const SPEECH_END = 192;
 const SPEECH_RELEASE_FRAMES = speechAtlas.fps * 0.25;
 
-/** Native pose tracks with optional audio-timed lips; original speech is a fallback. */
-export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: boolean } = {}) {
+/** Continuous pose tracks and supplied speech frames; no pasted facial parts. */
+export async function createIsaPortrait(host: HTMLElement) {
   const image = new Image();
   image.src = new URL(atlas.image, document.baseURI).href;
   await image.decode();
@@ -44,83 +42,38 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
   let destroyed = false;
   let visible = true;
   let lastTime = performance.now();
-  let mouthImage: HTMLImageElement | undefined;
-  let mouthLoading: Promise<void> | undefined;
-  let mouthFailed = false;
-  let mouthShape: IsaMouthShape = 'X';
-  let lipRequested = false;
-  let lipActive = false;
-
-  function prepareLipSync() {
-    if (mouthLoading) return mouthLoading;
-    if (options.lipSync === false || destroyed || mouthImage || mouthFailed)
-      return Promise.resolve();
-    const source = new Image();
-    source.src = new URL(mouthAtlas.image, document.baseURI).href;
-    mouthLoading = source
-      .decode()
-      .then(() => {
-        if (source.naturalWidth !== 144 || source.naturalHeight !== 80)
-          throw new Error('Invalid Isa mouth atlas');
-        if (!destroyed) mouthImage = source;
-      })
-      .catch(() => {
-        mouthFailed = true;
-      });
-    return mouthLoading;
-  }
 
   function drawTile(index: number, alpha: number) {
     ctx.globalAlpha = alpha;
-    ctx.drawImage(
-      image,
-      (index % atlas.columns) * atlas.width,
-      Math.floor(index / atlas.columns) * atlas.height,
-      atlas.width,
-      atlas.height,
-      0,
-      0,
-      atlas.width,
-      atlas.height,
-    );
+    ctx.drawImage(image, index % atlas.columns * atlas.width,
+      Math.floor(index / atlas.columns) * atlas.height, atlas.width, atlas.height,
+      0, 0, atlas.width, atlas.height);
   }
 
   function loadSpeechPage(index: number) {
-    if (destroyed || speechImages.has(index) || speechPending.has(index) || speechFailed.has(index))
-      return;
+    if (destroyed || speechImages.has(index) || speechPending.has(index) || speechFailed.has(index)) return;
     speechPending.add(index);
     const page = new Image();
     page.src = new URL(speechAtlas.pages[index].image, document.baseURI).href;
-    void page
-      .decode()
-      .then(() => {
-        if (destroyed) return;
-        // Retain only the current page and its successor, rather than decoding
-        // one giant atlas on mobile or loading speech before it is needed.
-        if (index === speechPage || index === nextSpeechPage()) {
-          speechImages.set(index, page);
-        }
-      })
-      .catch(() => {
-        speechFailed.add(index);
-      })
-      .finally(() => {
-        speechPending.delete(index);
-      });
+    void page.decode().then(() => {
+      if (destroyed) return;
+      // Retain only the current page and its successor, rather than decoding
+      // one giant atlas on mobile or loading speech before it is needed.
+      if (index === speechPage || index === nextSpeechPage()) {
+        speechImages.set(index, page);
+      }
+    }).catch(() => { speechFailed.add(index); }).finally(() => { speechPending.delete(index); });
   }
 
   function nextSpeechPage() {
     const page = speechAtlas.pages[speechPage];
     return speaking && page.first + page.count >= SPEECH_END
-      ? 0
-      : (speechPage + 1) % speechAtlas.pages.length;
+      ? 0 : (speechPage + 1) % speechAtlas.pages.length;
   }
 
   function speechTile() {
     const index = Math.floor(speechPosition) % speechAtlas.sourceFrames.length;
-    speechPage = speechAtlas.pages.findIndex(
-      (page) => index >= page.first && index < page.first + page.count,
-    );
+    speechPage = speechAtlas.pages.findIndex(page => index >= page.first && index < page.first + page.count);
     const nextPage = nextSpeechPage();
     for (const key of speechImages.keys()) {
       if (key !== speechPage && key !== nextPage) speechImages.delete(key);
@@ -137,29 +90,17 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
   function forwardRest() {
     // Never rewind or accelerate the head/body to find a closed mouth. If the
     // next rest is distant, finish the blend within a short forward-only tail.
-    const limit = Math.min(
-      speechPosition + SPEECH_RELEASE_FRAMES,
-      speechAtlas.sourceFrames.length - 1,
-    );
-    return speechAtlas.closed.reduce(
-      (target, frame) => (frame >= speechPosition && frame < target ? frame : target),
-      limit,
-    );
+    const limit = Math.min(speechPosition + SPEECH_RELEASE_FRAMES, speechAtlas.sourceFrames.length - 1);
+    return speechAtlas.closed.reduce((target, frame) =>
+      frame >= speechPosition && frame < target ? frame : target, limit);
   }
 
   function drawSpeechTile(source: HTMLImageElement, index: number, alpha: number) {
     ctx.globalAlpha = alpha;
-    ctx.drawImage(
-      source,
-      (index % speechAtlas.columns) * speechAtlas.width,
+    ctx.drawImage(source,
+      index % speechAtlas.columns * speechAtlas.width,
       Math.floor(index / speechAtlas.columns) * speechAtlas.height,
-      speechAtlas.width,
-      speechAtlas.height,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-    );
+      speechAtlas.width, speechAtlas.height, 0, 0, canvas.width, canvas.height);
   }
 
   function draw(now = performance.now()) {
@@ -177,8 +118,8 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     const fraction = value - index;
     const a = frames[index];
     const b = frames[Math.min(index + 1, frames.length - 1)];
-    const speech = !lipActive && speechAmount > 0.001 ? speechTile() : undefined;
-    const mix = lipActive || speech?.image ? speechAmount : 0;
+    const speech = speechAmount > 0.001 ? speechTile() : undefined;
+    const mix = speech?.image ? speechAmount : 0;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawTile(a, (1 - fraction) * (1 - mix));
     if (fraction > 0.001) {
@@ -186,35 +127,13 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
       drawTile(b, fraction * (1 - mix));
       ctx.globalCompositeOperation = 'source-over';
     }
-    if (lipActive && mix > 0) {
-      // Use precisely the native front tile, so the face/body cannot change
-      // between generated candidates or when the narration closes.
-      ctx.globalCompositeOperation = 'lighter';
-      drawTile(atlas.front, mix);
-      ctx.globalCompositeOperation = 'source-over';
-      if (mouthImage && mouthShape !== 'X') {
-        const index = mouthAtlas.frames[mouthShape];
-        ctx.globalAlpha = mix;
-        ctx.drawImage(
-          mouthImage,
-          (index % mouthAtlas.columns) * mouthAtlas.width,
-          Math.floor(index / mouthAtlas.columns) * mouthAtlas.height,
-          mouthAtlas.width,
-          mouthAtlas.height,
-          ...(mouthAtlas.destination as [number, number, number, number]),
-        );
-      }
-    } else if (speech?.image && mix > 0) {
+    if (speech?.image && mix > 0) {
       ctx.globalCompositeOperation = 'lighter';
       const fraction = speech.ready ? speechPosition % 1 : 0;
       const nextFrame = Math.floor(speechPosition) + 1;
-      const nextIndex =
-        speaking && nextFrame >= SPEECH_END
-          ? SPEECH_START
-          : nextFrame % speechAtlas.sourceFrames.length;
-      const nextPage = speechAtlas.pages.findIndex(
-        (page) => nextIndex >= page.first && nextIndex < page.first + page.count,
-      );
+      const nextIndex = speaking && nextFrame >= SPEECH_END
+        ? SPEECH_START : nextFrame % speechAtlas.sourceFrames.length;
+      const nextPage = speechAtlas.pages.findIndex(page => nextIndex >= page.first && nextIndex < page.first + page.count);
       const nextImage = speechImages.get(nextPage);
       // Blend neighboring native frames, including atlas page and loop boundaries.
       drawSpeechTile(speech.image, speech.index!, mix * (nextImage ? 1 - fraction : 1));
@@ -229,8 +148,6 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     canvas.dataset['isaTransition'] = motion.progress.toFixed(3);
     canvas.dataset['isaSpeechBlend'] = mix.toFixed(3);
     canvas.dataset['isaSpeechFrame'] = String(Math.floor(speechPosition));
-    canvas.dataset['isaSpeechMode'] = lipActive ? 'rhubarb' : mix > 0 ? 'video' : 'idle';
-    canvas.dataset['isaMouthShape'] = lipActive ? mouthShape : '';
   }
 
   function tick(now: number) {
@@ -241,16 +158,15 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     // Audio playback owns the portrait, including quiet gaps and the initial
     // turn: never expose a neutral pose between spoken fragments.
     const talking = speaking && !reduced;
-    const speech = !lipActive && (talking || speechStopping) ? speechTile() : undefined;
+    const speech = talking || speechStopping ? speechTile() : undefined;
     if (speechStopping && !speech?.ready) speechStopping = false;
     if (speech?.ready) {
       if (talking) {
         speechRestTarget = undefined;
-        const frames =
-          speechTime === undefined
-            ? speechPosition - SPEECH_START + seconds * speechAtlas.fps
-            : speechTime * speechAtlas.fps;
-        speechPosition = SPEECH_START + (frames % (SPEECH_END - SPEECH_START));
+        const frames = speechTime === undefined
+          ? speechPosition - SPEECH_START + seconds * speechAtlas.fps
+          : speechTime * speechAtlas.fps;
+        speechPosition = SPEECH_START + frames % (SPEECH_END - SPEECH_START);
       } else if (speechStopping) {
         if (speechRestTarget === undefined) {
           speechRestTarget = forwardRest();
@@ -261,20 +177,12 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     }
     // Fade as playback ends, rather than replaying a closing motion at full
     // opacity and only then blending to the differently posed idle portrait.
-    const target = !reduced && talking && (lipActive || speech?.image) ? 1 : 0;
+    const target = !reduced && talking && speech?.image ? 1 : 0;
     speechAmount += (target - speechAmount) * (1 - Math.exp(-seconds * (target ? 10 : 12)));
     if (speechAmount < 0.001 && target === 0) speechAmount = 0;
-    if (!speaking && speechAmount === 0) lipActive = false;
     lastTime = now;
     draw(now);
-    if (
-      motion.moving ||
-      blinkStarted !== undefined ||
-      speaking ||
-      speechStopping ||
-      speechAmount > 0
-    )
-      schedule();
+    if (motion.moving || blinkStarted !== undefined || speaking || speechStopping || speechAmount > 0) schedule();
   }
 
   function schedule() {
@@ -283,17 +191,8 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
   }
 
   function blink() {
-    if (
-      destroyed ||
-      reduced ||
-      working ||
-      speaking ||
-      !visible ||
-      document.hidden ||
-      motion.pose !== 'isa-awake' ||
-      motion.moving
-    )
-      return;
+    if (destroyed || reduced || working || speaking || !visible || document.hidden
+        || motion.pose !== 'isa-awake' || motion.moving) return;
     blinkStarted = performance.now();
     lastTime = blinkStarted;
     schedule();
@@ -301,23 +200,12 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
 
   function planIdleBlink() {
     clearTimeout(blinkTimer);
-    if (
-      destroyed ||
-      reduced ||
-      working ||
-      speaking ||
-      !visible ||
-      document.hidden ||
-      motion.pose !== 'isa-awake'
-    )
-      return;
-    blinkTimer = setTimeout(
-      () => {
-        blink();
-        planIdleBlink();
-      },
-      4500 + Math.random() * 2000,
-    );
+    if (destroyed || reduced || working || speaking || !visible || document.hidden
+        || motion.pose !== 'isa-awake') return;
+    blinkTimer = setTimeout(() => {
+      blink();
+      planIdleBlink();
+    }, 4500 + Math.random() * 2000);
   }
 
   function setPose(key: string, immediate: boolean) {
@@ -327,7 +215,6 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     if (immediate) {
       speechAmount = 0;
       speechStopping = false;
-      lipActive = false;
     }
     blinkStarted = undefined;
     // Do not copy the canvas or return to frame zero on an interrupted movement.
@@ -360,14 +247,12 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
     }
   }
   document.addEventListener('visibilitychange', visibilityChanged);
-  const observer =
-    typeof IntersectionObserver === 'undefined'
-      ? undefined
-      : new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting === visible) return;
-          visible = entry.isIntersecting;
-          visibilityChanged();
-        });
+  const observer = typeof IntersectionObserver === 'undefined' ? undefined
+    : new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting === visible) return;
+      visible = entry.isIntersecting;
+      visibilityChanged();
+    });
   observer?.observe(host);
   canvas.dataset['isaExpression'] = motion.pose;
   canvas.dataset['isaAnimation'] = motion.pose;
@@ -375,14 +260,6 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
   draw();
 
   return {
-    prepareLipSync,
-    setMouthShape(shape: IsaMouthShape | undefined) {
-      lipRequested = shape !== undefined && options.lipSync !== false;
-      const next = shape ?? 'X';
-      if (mouthShape === next) return;
-      mouthShape = next;
-      if (lipActive) draw();
-    },
     play: (key: string) => setPose(key, false),
     setExpression: (key: string) => setPose(key, true),
     setWorking(value: boolean) {
@@ -401,9 +278,6 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
       canvas.dataset['isaSpeaking'] = String(value);
       clearTimeout(blinkTimer);
       if (value) {
-        // Choose once per narration. Missing/late assets keep the original video
-        // for the entire utterance instead of switching faces mid-sentence.
-        lipActive = lipRequested && !!mouthImage && !reduced;
         motion.request('isa-awake', reduced);
         canvas.dataset['isaExpression'] = 'isa-awake';
         canvas.dataset['isaAnimation'] = reduced ? '' : 'isa-awake';
@@ -413,10 +287,9 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
         speechRestTarget = undefined;
         speechStopping = false;
         lastSpeechTile = undefined;
-        if (!reduced && !lipActive) speechTile();
+        if (!reduced) speechTile();
       } else {
-        mouthShape = 'X';
-        speechStopping = !lipActive && !reduced && speechAmount > 0.001;
+        speechStopping = !reduced && speechAmount > 0.001;
         speechRestTarget = undefined;
         blinkStarted = undefined;
         planIdleBlink();
@@ -439,7 +312,6 @@ export async function createIsaPortrait(host: HTMLElement, options: { lipSync?: 
       if (frameId !== undefined) cancelAnimationFrame(frameId);
       clearTimeout(blinkTimer);
       speechImages.clear();
-      mouthImage = undefined;
       lastSpeechTile = undefined;
       observer?.disconnect();
       document.removeEventListener('visibilitychange', visibilityChanged);

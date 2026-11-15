@@ -27,15 +27,3 @@ export function isaVoiceWav(cues: IsaCue[], duration = 6): ArrayBuffer {
   bytes.set(metadata, offset + 8);
   return buffer;
 }
-
-export function withIsaMouthCues(audio: ArrayBuffer, cues: unknown): ArrayBuffer {
-  const payload = new TextEncoder().encode(JSON.stringify(cues));
-  const result = new Uint8Array(audio.byteLength + 8 + payload.length + (payload.length % 2));
-  result.set(new Uint8Array(audio));
-  result.set(new TextEncoder().encode('isav'), audio.byteLength);
-  const view = new DataView(result.buffer);
-  view.setUint32(audio.byteLength + 4, payload.length, true);
-  result.set(payload, audio.byteLength + 8);
-  view.setUint32(4, result.byteLength - 8, true);
-  return result.buffer;
-}

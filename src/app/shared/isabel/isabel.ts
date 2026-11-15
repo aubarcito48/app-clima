@@ -129,10 +129,7 @@ export class Isabel {
     effect(() => {
       if (!this.ready()) return;
       const state = this.voice.state();
-      const mouthShape = this.voice.mouthShape();
-      if (state === 'loading') this.controller?.prepareLipSync();
       this.controller?.setWorking(this.busy() || state === 'loading');
-      this.controller?.setMouthShape(mouthShape);
       this.controller?.setSpeaking(state === 'speaking');
     });
     effect(() => {
@@ -150,9 +147,7 @@ export class Isabel {
     try {
       const { createIsaPortrait } = await import('./isa-portrait');
       if (this.destroyed) return;
-      const controller = await createIsaPortrait(this.host().nativeElement, {
-        lipSync: new URLSearchParams(window.location.search).get('isaLipSync') !== 'off',
-      });
+      const controller = await createIsaPortrait(this.host().nativeElement);
       if (this.destroyed) {
         controller.destroy();
         return;

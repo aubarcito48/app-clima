@@ -1,54 +1,5 @@
 # Isa: retrato animado
 
-## Boca guiada por Rhubarb
-
-Cuando el WAV de Piper incluye un chunk `isav` válido y el atlas de labios está
-listo, Isa usa el frontal nativo fijo y superpone únicamente el recorte de boca.
-Las miradas de espera, el despertar y el sueño conservan sus pistas originales.
-Los tiempos de `isav` se consultan con `audio.currentTime`, sin aplicarles
-`isaSpeechTimeAt`: Rhubarb ya analizó el audio final con sus velocidades y pausas.
-
-El atlas `isa-mouths-v1.webp` ocupa 5.490 bytes y mide 144 × 80. Contiene A–F;
-X conserva los labios del frontal nativo. G usa B y H usa C como alternativas
-aproximadas hasta validar los recursos extendidos. La colocación inicial del
-recorte necesita revisión visual dentro de la app, especialmente los bordes y
-las aperturas amplias; no se afirma precisión fonética ni se entrena un modelo.
-
-El frontend prepara el atlas mientras carga la voz y elige el modo una sola vez
-al empezar cada narración. Si falta `isav`, sus tiempos son inválidos o el atlas
-falla/llega tarde, esa narración completa conserva el video anterior. El audio
-no se bloquea por el atlas. Con movimiento reducido sigue sin animar la boca.
-Al terminar o silenciar, la boca pasa a X y se disuelve la capa de habla sin
-reproducir un cierre de mandíbula ni avanzar/retroceder el cuerpo.
-
-Para comparar temporalmente el modo anterior, abrir la app con
-`?isaLipSync=off` antes de generar el consejo. Quitar ese parámetro y recargar
-reactiva el modo con marcas. También se puede desactivar `ISA_LIP_SYNC` en el
-backend; sin marcas la app vuelve al video automáticamente.
-
-Los WebP candidatos no se publican: solo se incluye el pequeño atlas en
-`public/isa-bot/runtime/`. Para regenerarlo explícitamente, con Pillow:
-
-```powershell
-python scripts/prepare-isa-mouths.py
-```
-
-La comprobación del renderer real, sin iniciar Angular ni Django, usa una muestra
-local y cierra su servidor efímero y navegador al terminar:
-
-```powershell
-node scripts/check-isa-runtime.mjs
-```
-
-Guarda capturas en `tmp/isa-runtime-review/` y comprueba el límite del recorte,
-la reproducción con marcas, el cierre y los modos alternativos. Sus fuentes son
-el mismo `isa-portrait.ts` y el lector `isa-mouth.ts` usados por Angular.
-
-El script lee los WebP versionados de `rhubarb/con-fondo/`, conserva los originales,
-prepara máscaras y recortes, y escribe atlas/manifiesto. No es un hook de build.
-La [vista de revisión independiente](../../../../docs/isa-local/PREVIEW.md)
-permanece disponible y no modifica los ajustes de producción automáticamente.
-
 ## Dirección de Groq durante la narración
 
 El consejo puede incluir `segmentos` con texto, mirada, velocidad, energía y pausa.
@@ -58,7 +9,7 @@ los tiempos reales de cada fragmento dentro del chunk RIFF `isac` del WAV.
 La dirección se consulta con `audio.currentTime`, sin estimaciones por longitud
 del texto ni temporizadores acumulados. El audio sigue funcionando sin ese chunk.
 
-En el modo de video anterior, el avance también usa `audio.currentTime`, mediante `speechTime` y
+El avance del video también usa `audio.currentTime`, mediante `speechTime` y
 `setSpeechTime`, en lugar de acumular el tiempo de los cuadros de pantalla.
 `isaSpeechTimeAt` aplica a cada tramo hablado el mismo `speed` enviado a Piper;
 durante las pausas mantiene movimiento a ritmo normal. No reinicia el video al
@@ -67,19 +18,19 @@ una página del atlas tarda en decodificarse. Sin metadatos usa el reloj del aud
 a velocidad normal. El sintetizador ya recibe ritmo, energía y pausas de Groq;
 no se cambia la voz ni se fuerza una velocidad global distinta de su plan.
 
-Ese modo coordina el inicio y la cadencia general, no los fonemas: la boca pertenece
+Esto coordina el inicio y la cadencia general, no los fonemas: la boca pertenece
 a un video pregrabado y no reproduce las palabras exactas de Piper.
 
-En el modo de video, al terminar el audio el retrato empieza a fundirse al reposo inmediatamente.
+Al terminar el audio, el retrato empieza a fundirse al reposo inmediatamente.
 El habla solo puede avanzar hasta seis cuadros más (250 ms a 24 FPS), a su
 velocidad nativa, deteniéndose antes si encuentra una boca cerrada. No busca
 cuadros hacia atrás ni acelera el cuerpo para cerrar la boca; tampoco reinicia
 el bucle durante el cierre. Esta salida no utiliza las marcas de Rhubarb.
 
-El catálogo de poses es el del retrato: `isa-awake` (frente),
+El catálogo vigente es el del retrato: `isa-awake` (frente y video de habla),
 `isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Durante el
 audio, el habla tiene prioridad sobre las miradas elegidas por fragmento: Isa
-mantiene el frente hasta finalizar, con labios de Rhubarb o el video alternativo. El director sigue controlando ritmo,
+mantiene el video frontal completo hasta finalizar. Groq sigue controlando ritmo,
 energía y pausas de la voz, pero estas no detienen ni sustituyen la animación.
 Las miradas de espera permanecen antes de la narración. No se inventan
 expresiones ni boca lateral: solo hay video de habla frontal.
@@ -87,7 +38,7 @@ expresiones ni boca lateral: solo hay video de habla frontal.
 Silenciar, cancelar, cambiar idioma o destruir el componente descarta la dirección
 anterior junto con el audio. Con movimiento reducido se conserva el frente
 durante la voz sin animaciones. Sin plan válido se mantiene la narración habitual.
-Solo se descarga el atlas de labios preparado si el modo está habilitado.
+No se generan ni descargan recursos visuales nuevos.
 
 ## Actualización: habla y cuadros adicionales
 
