@@ -104,6 +104,48 @@ describe('Isa video speech lifecycle', () => {
     expect(Number(canvas.dataset['isaSpeechFrame']) - start).toBeLessThanOrEqual(25);
   });
 
+  it('fades immediately and closes forward at native speed without rewinding to a nearby rest', async () => {
+    controller!.play('isa-awake');
+    await advance(160);
+    controller!.setSpeaking(true);
+    // Frame 53 is closed, but going back to it from 54 caused the small rewind.
+    controller!.setSpeechTime((54 - 12) / 24);
+    await advance(60);
+    const canvas = host.querySelector('canvas')!;
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(54);
+    const initialBlend = Number(canvas.dataset['isaSpeechBlend']);
+    controller!.setSpeaking(false);
+    await advance(1);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeLessThan(initialBlend);
+    let previous = 54;
+    for (let i = 0; i < 70; i++) {
+      await advance(1);
+      const frame = Number(canvas.dataset['isaSpeechFrame']);
+      expect(frame).toBeGreaterThanOrEqual(previous);
+      expect(frame - previous).toBeLessThanOrEqual(1);
+      expect(frame).toBeLessThanOrEqual(60);
+      previous = frame;
+    }
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
+    expect(callbacks.size).toBe(0);
+  });
+
+  it('reaches a nearby forward rest without wrapping to the speech intro at the end', async () => {
+    controller!.setSpeaking(true);
+    controller!.setSpeechTime((191.5 - 12) / 24);
+    await advance(40);
+    const canvas = host.querySelector('canvas')!;
+    controller!.setSpeaking(false);
+    for (let i = 0; i < 70; i++) {
+      await advance(1);
+      const frame = Number(canvas.dataset['isaSpeechFrame']);
+      expect(frame).toBeGreaterThanOrEqual(191);
+      expect(frame).toBeLessThanOrEqual(192);
+    }
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(192);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
+  });
+
   it('keeps speaking when a gesture or loading update arrives mid-narration', async () => {
     controller!.play('isa-awake');
     await advance(160);

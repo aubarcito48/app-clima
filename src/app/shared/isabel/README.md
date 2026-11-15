@@ -21,6 +21,12 @@ no se cambia la voz ni se fuerza una velocidad global distinta de su plan.
 Esto coordina el inicio y la cadencia general, no los fonemas: la boca pertenece
 a un video pregrabado y no reproduce las palabras exactas de Piper.
 
+Al terminar el audio, el retrato empieza a fundirse al reposo inmediatamente.
+El habla solo puede avanzar hasta seis cuadros más (250 ms a 24 FPS), a su
+velocidad nativa, deteniéndose antes si encuentra una boca cerrada. No busca
+cuadros hacia atrás ni acelera el cuerpo para cerrar la boca; tampoco reinicia
+el bucle durante el cierre. Esta salida no utiliza las marcas de Rhubarb.
+
 El catálogo vigente es el del retrato: `isa-awake` (frente y video de habla),
 `isa-right` (mirada a la derecha) e `isa-down` (mirada hacia abajo). Durante el
 audio, el habla tiene prioridad sobre las miradas elegidas por fragmento: Isa

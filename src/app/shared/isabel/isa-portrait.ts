@@ -6,6 +6,7 @@ import { IsaMotion, type IsaPose } from './isa-motion';
 // Keep all frames available to close the mouth when the audio actually ends.
 const SPEECH_START = 12;
 const SPEECH_END = 192;
+const SPEECH_RELEASE_FRAMES = speechAtlas.fps * 0.25;
 
 /** Continuous pose tracks and supplied speech frames; no pasted facial parts. */
 export async function createIsaPortrait(host: HTMLElement) {
@@ -32,7 +33,6 @@ export async function createIsaPortrait(host: HTMLElement) {
   let speechTime: number | undefined;
   let speechAmount = 0;
   let speechRestTarget: number | undefined;
-  let speechRestSpeed = speechAtlas.fps;
   let speechStopping = false;
   let lastSpeechTile: { image: HTMLImageElement; index: number } | undefined;
   let blinkStarted: number | undefined;
@@ -87,14 +87,12 @@ export async function createIsaPortrait(host: HTMLElement) {
     return { ...lastSpeechTile, ready: !!image };
   }
 
-  function restDistance(target: number) {
-    const count = speechAtlas.sourceFrames.length;
-    return ((target - speechPosition + count * 1.5) % count) - count / 2;
-  }
-
-  function nearestRest() {
-    return speechAtlas.closed.reduce((best, value) =>
-      Math.abs(restDistance(value)) < Math.abs(restDistance(best)) ? value : best);
+  function forwardRest() {
+    // Never rewind or accelerate the head/body to find a closed mouth. If the
+    // next rest is distant, finish the blend within a short forward-only tail.
+    const limit = Math.min(speechPosition + SPEECH_RELEASE_FRAMES, speechAtlas.sourceFrames.length - 1);
+    return speechAtlas.closed.reduce((target, frame) =>
+      frame >= speechPosition && frame < target ? frame : target, limit);
   }
 
   function drawSpeechTile(source: HTMLImageElement, index: number, alpha: number) {
@@ -171,21 +169,15 @@ export async function createIsaPortrait(host: HTMLElement) {
         speechPosition = SPEECH_START + frames % (SPEECH_END - SPEECH_START);
       } else if (speechStopping) {
         if (speechRestTarget === undefined) {
-          speechRestTarget = nearestRest();
-          speechRestSpeed = Math.max(speechAtlas.fps, Math.abs(restDistance(speechRestTarget)) / 0.25);
+          speechRestTarget = forwardRest();
         }
-        const distance = restDistance(speechRestTarget);
-        const step = seconds * speechRestSpeed;
-        if (Math.abs(distance) <= step) {
-          speechPosition = speechRestTarget;
-          speechStopping = false;
-        } else {
-          speechPosition = (speechPosition + Math.sign(distance) * step + speechAtlas.sourceFrames.length)
-            % speechAtlas.sourceFrames.length;
-        }
+        speechPosition = Math.min(speechRestTarget, speechPosition + seconds * speechAtlas.fps);
+        if (speechPosition >= speechRestTarget) speechStopping = false;
       }
     }
-    const target = !reduced && (talking || speechStopping) && speech?.image ? 1 : 0;
+    // Fade as playback ends, rather than replaying a closing motion at full
+    // opacity and only then blending to the differently posed idle portrait.
+    const target = !reduced && talking && speech?.image ? 1 : 0;
     speechAmount += (target - speechAmount) * (1 - Math.exp(-seconds * (target ? 10 : 12)));
     if (speechAmount < 0.001 && target === 0) speechAmount = 0;
     lastTime = now;
