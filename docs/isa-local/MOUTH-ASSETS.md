@@ -3,6 +3,8 @@
 Revisión visual y organización del 15 de noviembre de 2026. Son candidatas
 para una prueba de sincronización; todavía no están integradas en el renderizador.
 
+La primera vista aislada está disponible mediante [PREVIEW.md](PREVIEW.md).
+
 Ubicación: `public/isa-bot/rhubarb/original/`.
 
 Los JFIF maestros y `isa-originales-backup/` quedan solo en el equipo y están

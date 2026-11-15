@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Isa · ensayo de bocas</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 "Segoe UI", sans-serif; color: #173c50; background: #edf8fc; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 1200px; margin: auto; padding: 28px clamp(16px, 4vw, 48px); }
+    h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.035em; }
+    h2 { font-size: 20px; margin: 0 0 12px; }
+    p { max-width: 72ch; margin: 8px 0 18px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 28px; align-items: start; }
+    .stage { background: #d9eff6; border: 1px solid #9ebfce; border-radius: 20px; overflow: hidden; position: relative; }
+    .stage.dark { background: #173444; }
+    .stage.white { background: white; }
+    canvas { display: block; width: 100%; height: auto; }
+    .readout { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #fff; border-top: 1px solid #b1cedb; font-variant-numeric: tabular-nums; }
+    audio { width: 100%; margin: 16px 0 8px; }
+    button, select, input { font: inherit; }
+    button, select { border: 1px solid #63899d; border-radius: 8px; background: white; color: #173c50; padding: 9px 12px; }
+    button { cursor: pointer; min-height: 44px; }
+    button:hover { background: #d9eff6; }
+    button[aria-pressed="true"], .primary { background: #216c8a; color: #fff; border-color: #216c8a; }
+    button:disabled { opacity: .5; cursor: wait; }
+    :focus-visible { outline: 3px solid #c25b1b; outline-offset: 3px; }
+    fieldset { border: 0; padding: 0; margin: 20px 0; min-width: 0; }
+    legend { font-weight: 650; margin-bottom: 8px; }
+    .shapes { display: flex; flex-wrap: wrap; gap: 8px; }
+    .shapes button { min-width: 46px; font-weight: 650; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    label.check { display: block; margin: 12px 0; }
+    input[type="checkbox"] { accent-color: #216c8a; width: 18px; height: 18px; vertical-align: middle; margin-right: 8px; }
+    .control { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 14px 0; }
+    .control input { grid-column: 1 / -1; width: 100%; accent-color: #216c8a; }
+    output { font-variant-numeric: tabular-nums; }
+    .note { color: #456274; font-size: 14px; }
+    details { border-top: 1px solid #aac8d6; padding-top: 15px; margin-top: 20px; }
+    summary { cursor: pointer; font-weight: 650; }
+    #timeline { display: flex; height: 44px; overflow: hidden; border: 1px solid #63899d; border-radius: 8px; }
+    #timeline button { flex-shrink: 1; min-width: 0; padding: 0; border: 0; border-radius: 0; border-right: 1px solid white; background: #d2e8f0; font-size: 11px; color: #173c50; }
+    #timeline button.active { background: #216c8a; color: white; }
+    #status { padding: 12px 0; }
+    @media(max-width: 760px) { .layout { grid-template-columns: 1fr; gap: 20px; } main { padding-top: 20px; } }
+  </style>
+</head>
+<body><main>
+  <h1>Isa, una boca a la vez</h1>
+  <p>Ensayo local con audio de Piper. El rostro y el cuerpo permanecen fijos; las marcas de Rhubarb cambian solo el recorte de boca.</p>
+  <p id="status" role="status" aria-label="Preparación de la vista">Preparando las imágenes…</p>
+  <div class="layout">
+    <section aria-label="Vista del personaje">
+      <div class="stage" id="stage">
+        <canvas id="portrait" width="1120" height="960" role="img" aria-label="Isa con el recorte de boca seleccionado"></canvas>
+        <div class="readout"><strong id="shape">Reposo X</strong><span id="time">0,00 s</span></div>
+      </div>
+      <audio id="audio" controls preload="metadata" aria-label="Audio de prueba de Piper"></audio>
+      <div class="actions"><button id="automatic" class="primary" disabled>Seguir el audio</button><button id="restart" disabled>Volver al inicio</button></div>
+      <p class="note">Al pausar se conserva la boca del instante; al terminar vuelve a X. Podés mover la posición del audio y cambiar su velocidad con los controles del reproductor.</p>
+      <div id="timeline" role="group" aria-label="Marcas de boca; elegir un instante del audio"></div>
+    </section>
+    <section aria-label="Revisión y ajustes">
+      <h2>Revisar las formas</h2>
+      <fieldset><legend>Boca manual</legend><div id="shapes" class="shapes"></div></fieldset>
+      <p id="description">Reposo: labios cerrados y relajados.</p>
+      <label class="check"><input id="baseOnly" type="checkbox">Comparar con la base sin recorte</label>
+      <label class="check"><input id="experimental" type="checkbox">Usar G y H en la reproducción</label>
+      <p class="note">G y H siguen en revisión. Desactivadas: G usa B y H usa C. La selección manual permite inspeccionar ambas.</p>
+      <label for="background">Fondo de revisión</label>
+      <select id="background"><option value="">Celeste</option><option value="dark">Oscuro</option><option value="white">Blanco</option></select>
+      <details open><summary>Ajustar el recorte seleccionado</summary>
+        <p class="note">Ajustes iniciales para revisar, no calibración aprobada. Elegí una boca manual antes de moverla. Los originales no se modifican.</p>
+        <label class="control">Horizontal <output id="dxValue">0 px</output><input id="dx" aria-label="Desplazamiento horizontal" type="range" min="-60" max="60" value="0" step="1"></label>
+        <label class="control">Vertical <output id="dyValue">0 px</output><input id="dy" aria-label="Desplazamiento vertical" type="range" min="-60" max="60" value="0" step="1"></label>
+        <label class="control">Escala <output id="scaleValue">100 %</output><input id="scale" aria-label="Escala del recorte" type="range" min="80" max="120" value="100" step="1"></label>
+        <label class="control">Borde suave <output id="featherValue">20 %</output><input id="feather" aria-label="Suavidad del borde" type="range" min="0" max="45" value="20" step="1"></label>
+        <label class="check"><input id="outline" type="checkbox">Mostrar límite del recorte</label>
+        <div class="actions"><button id="reset" disabled>Restablecer esta boca</button><button id="export" disabled>Guardar ajustes</button></div>
+      </details>
+      <p class="note">Las formas son candidatas visuales, no fonemas exactos ni una medición de precisión. Esta página no cambia la app publicada.</p>
+    </section>
+  </div>
+</main>
+<script>
+'use strict';
+const data = /*__ISA_DATA__*/null;
+const descriptions = {A:'Labios juntos: cierre para m/p/b.',B:'Apertura pequeña, dientes cercanos.',C:'Apertura media.',D:'Apertura amplia.',E:'Labios algo redondeados.',F:'Labios fruncidos y abertura pequeña.',G:'Experimental: revisar el contacto del diente con el labio.',H:'Experimental: revisar la posición de la lengua.',X:'Reposo: labios cerrados y relajados.'};
+const get = id => document.getElementById(id);
+const audio = get('audio'), canvas = get('portrait'), ctx = canvas.getContext('2d');
+const patch = document.createElement('canvas'); patch.width = 290; patch.height = 200;
+const patchCtx = patch.getContext('2d');
+const images = {}, settings = {};
+const defaults = () => ({dx:0,dy:0,scale:100,feather:20});
+let manual = 'X', drawn = null, previousCue = -1, frame = null, ready = false;
+for (const shape of Object.keys(descriptions)) settings[shape] = defaults();
+function activeCue(t) {
+  let lo=0, hi=data.cues.length-1;
+  while(lo<=hi) { const mid=(lo+hi)>>1, c=data.cues[mid]; if(t<c.start) hi=mid-1; else if(t>=c.end) lo=mid+1; else return mid; }
+  return -1;
+}
+function current() {
+  const index = activeCue(audio.currentTime);
+  const raw = manual ?? (audio.ended || index < 0 ? 'X' : data.cues[index].value);
+  const shape = manual === null && !get('experimental').checked ? ({G:'B',H:'C'}[raw] ?? raw) : raw;
+  return {shape,raw,index};
+}
+function makePatch(shape) {
+  const s=settings[shape];
+  patchCtx.clearRect(0,0,290,200);
+  patchCtx.globalCompositeOperation='source-over';
+  patchCtx.drawImage(images[shape],1000,730,290,200,0,0,290,200);
+  patchCtx.globalCompositeOperation='destination-in';
+  patchCtx.save(); patchCtx.translate(145,100); patchCtx.scale(145,100);
+  const gradient=patchCtx.createRadialGradient(0,0,1-s.feather/100,0,0,1);
+  gradient.addColorStop(0,'rgba(0,0,0,1)'); gradient.addColorStop(1,'rgba(0,0,0,0)');
+  patchCtx.fillStyle=gradient; patchCtx.beginPath();patchCtx.arc(0,0,1,0,Math.PI*2);patchCtx.fill();patchCtx.restore();
+  patchCtx.globalCompositeOperation='source-over';
+}
+function render(force=false) {
+  if(!ready) return;
+  const {shape,raw,index}=current();
+  if(force || drawn!==shape) {
+    ctx.clearRect(0,0,1120,960);
+    ctx.save();ctx.scale(.5,.5);
+    // Center X by adding 3px top/bottom. No stretching to the 1920px working canvas.
+    ctx.drawImage(images.X,0,3,2240,1914);
+    if(shape!=='X' && !get('baseOnly').checked) {
+      makePatch(shape);const s=settings[shape], w=290*s.scale/100,h=200*s.scale/100;
+      const x=1145-w/2+s.dx,y=833-h/2+s.dy;
+      ctx.drawImage(patch,x,y,w,h);
+      if(get('outline').checked) {ctx.strokeStyle='#007cbd';ctx.lineWidth=3;ctx.strokeRect(x,y,w,h);}
+    }
+    ctx.restore();drawn=shape;
+  }
+  get('shape').textContent=raw===shape?`Boca ${shape}`:`Boca ${shape} · marca ${raw}`;
+  get('time').textContent=audio.currentTime.toFixed(2).replace('.',',')+' s';
+  get('description').textContent=descriptions[shape];
+  for(const button of get('shapes').children) button.setAttribute('aria-pressed',String(manual===button.dataset.shape));
+  if(previousCue!==index) {get('timeline').children[previousCue]?.classList.remove('active');get('timeline').children[index]?.classList.add('active');previousCue=index;}
+  get('automatic').setAttribute('aria-pressed',String(manual===null));
+  for(const key of ['dx','dy','scale','feather']) {
+    get(key).disabled=manual===null || shape==='X';get(key).value=settings[shape][key];
+    get(key+'Value').value=settings[shape][key]+(key==='dx'||key==='dy'?' px':' %');
+  }
+  get('reset').disabled=manual===null || shape==='X';
+}
+function stopFrame(){if(frame!==null)cancelAnimationFrame(frame);frame=null;}
+function tick(){render();if(!audio.paused&&!audio.ended)frame=requestAnimationFrame(tick);else frame=null;}
+function follow(){manual=null;render(true);}
+for(const [shape,description] of Object.entries(descriptions)) {
+  const button=document.createElement('button');button.textContent=shape;button.dataset.shape=shape;
+  button.title=description;button.setAttribute('aria-label',`Boca ${shape}`);button.setAttribute('aria-pressed','false');button.disabled=true;
+  button.onclick=()=>{audio.pause();manual=shape;render(true);};get('shapes').append(button);
+}
+async function initialize() {
+  try {
+    if(!data)throw new Error('Generá esta vista con preview-isa-mouths.py.');
+    for(const [shape,src] of Object.entries(data.images)) {
+      const img=new Image();img.src=src;await img.decode();images[shape]=img;
+    }
+    audio.src=data.audio;
+    data.cues.forEach(cue=>{
+      const button=document.createElement('button');button.style.flexGrow=String(cue.end-cue.start);button.style.flexBasis='0';
+      button.textContent=cue.end-cue.start>.16?cue.value:'';
+      button.setAttribute('aria-label',`${cue.value}: ${cue.start.toFixed(2)} a ${cue.end.toFixed(2)} segundos`);
+      button.onclick=()=>{audio.currentTime=cue.start;follow();};get('timeline').append(button);
+    });
+    ready=true;get('status').textContent=`Listo: ${data.cues.length} marcas en ${data.duration.toFixed(2).replace('.',',')} segundos. Seleccioná una boca o reproducí el audio.`;
+    for(const button of document.querySelectorAll('button'))button.disabled=false;
+    render(true);
+  } catch(error) {get('status').textContent=error.message;get('status').setAttribute('role','alert');}
+}
+get('automatic').onclick=follow;
+get('restart').onclick=()=>{audio.pause();audio.currentTime=0;manual='X';render(true);};
+audio.addEventListener('play',()=>{stopFrame();follow();tick();});
+audio.addEventListener('pause',()=>{stopFrame();render();});
+audio.addEventListener('ended',()=>{stopFrame();manual=null;render(true);});
+audio.addEventListener('seeked',()=>render(true));
+audio.addEventListener('error',()=>{get('status').textContent='No se pudo reproducir el WAV en este navegador.';});
+for(const id of ['baseOnly','experimental','outline'])get(id).onchange=()=>render(true);
+get('background').onchange=()=>{get('stage').className='stage '+get('background').value;};
+for(const key of ['dx','dy','scale','feather'])get(key).oninput=()=>{if(manual!==null){settings[manual][key]=Number(get(key).value);render(true);}};
+get('reset').onclick=()=>{if(manual!==null){settings[manual]=defaults();render(true);}};
+get('export').onclick=()=>{
+  const result={version:1,canvas:[2240,1920],baseOffset:[0,3],sourceRect:[1000,730,290,200],destinationCenter:[1145,833],settings,experimentalGH:get('experimental').checked,reviewed:false};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}));
+  const link=document.createElement('a');link.href=url;link.download='isa-mouth-adjustments.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+initialize();
+</script></body></html>
