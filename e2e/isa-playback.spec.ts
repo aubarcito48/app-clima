@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
-import { test, expect, search, chooseLanguage } from './fixtures';
+import { test, expect, search, chooseLanguage, changeTheme } from './fixtures';
 
 for (const language of ['es', 'en'] as const) {
   test(`Isa conserva el ciclo y termina una lectura real en ${language}`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.addInitScript(() => {
+      localStorage.setItem('stitchweather.theme', 'dark');
       const NativeAudio = window.Audio;
       window.Audio = class extends NativeAudio {
         constructor(src?: string) {
@@ -30,6 +31,7 @@ for (const language of ['es', 'en'] as const) {
     const canvas = page.locator('app-isabel canvas');
     await expect(canvas).toHaveAttribute('data-isa-speaking', 'true', { timeout: 15000 });
     await expect(canvas).toHaveAttribute('data-isa-speech-language', language);
+    await expect(page.locator('app-isabel .isa-avatar')).toHaveCSS('filter', /isa-dark-edge/);
     await page.evaluate(() => {
       (window as unknown as { isaTestAudio: HTMLAudioElement }).isaTestAudio.currentTime = 8;
     });
@@ -41,5 +43,7 @@ for (const language of ['es', 'en'] as const) {
     });
     await expect(canvas).toHaveAttribute('data-isa-speaking', 'false');
     await expect.poll(() => canvas.getAttribute('data-isa-speech-blend')).toBe('0.000');
+    await changeTheme(page);
+    await expect(page.locator('app-isabel .isa-avatar')).toHaveCSS('filter', 'none');
   });
 }

@@ -39,6 +39,16 @@
   width: 100%;
   height: 100%;
 }
+.isa-edge-filter {
+  position: absolute;
+  pointer-events: none;
+}
+/* Trim the white matte by one displayed pixel, without recoloring gray hair.
+   One shared filter covers poses, both speech takes and the loading fallback. */
+:host-context(html[data-theme='dark']) .isa-avatar,
+:host-context(html[data-theme='dark']) .isa-fallback {
+  filter: url('#isa-dark-edge');
+}
 .isa-fallback {
   position: absolute;
   inset: 0;

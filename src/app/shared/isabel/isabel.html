@@ -1,4 +1,12 @@
 <section class="isa-card rounded-2xl border border-line bg-surface p-4 text-ink" aria-label="Isa">
+  <svg class="isa-edge-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="isa-dark-edge" color-interpolation-filters="sRGB">
+        <feMorphology in="SourceAlpha" operator="erode" radius="1" result="cleanEdge" />
+        <feComposite in="SourceGraphic" in2="cleanEdge" operator="in" />
+      </filter>
+    </defs>
+  </svg>
   <button
     type="button"
     class="isa-stage"
