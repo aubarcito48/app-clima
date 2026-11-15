@@ -39,6 +39,7 @@ yarn-error.log
 /connect.lock
 /coverage
 /libpeerconnection.log
+/debug.log
 testem.log
 /typings
 __screenshots__/
@@ -56,3 +57,6 @@ Thumbs.db
 /public/isa-bot/isa-originales-backup/
 /public/isa-bot/rhubarb/original/*
 !/public/isa-bot/rhubarb/original/.gitkeep
+
+# Local screen recordings of the Isa experiments (keep files on disk)
+/public/isa-bot/unknown_*.mp4

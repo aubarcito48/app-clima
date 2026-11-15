@@ -1,0 +1,63 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Isa · prueba 3 · cuadros completos</title><style>
+*{box-sizing:border-box}body{margin:0;background:#edf8fc;color:#173c50;font:16px/1.5 'Segoe UI',sans-serif}main{max-width:1100px;margin:auto;padding:24px}h1{font-size:clamp(26px,4vw,38px);line-height:1.15}a{color:#175c79}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}section{background:white;border:1px solid #9ebfce;border-radius:14px;overflow:hidden}h2{font-size:18px;padding:12px;margin:0}canvas{display:block;width:100%;height:auto;background:#d9eff6}.info{padding:12px;min-height:50px}audio,input[type=range]{width:100%}audio{margin:20px 0}button,select{font:inherit;color:inherit;background:white;border:1px solid #63899d;border-radius:8px;padding:9px;min-height:44px}button{cursor:pointer}button.primary{background:#216c8a;color:white}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}label.control{display:block;margin:18px 0}summary{cursor:pointer;font-weight:650;margin:20px 0}.note{color:#456274;font-size:14px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px}.candidate{border:1px solid #aac8d6;padding:6px;border-radius:8px}.candidate canvas{aspect-ratio:1}.candidate select{width:100%}:focus-visible{outline:3px solid #c25b1b;outline-offset:3px}@media(max-width:640px){.comparison{grid-template-columns:1fr}main{padding:16px}}
+</style></head><body><main>
+<h1>Isa: probar cuadros completos</h1>
+<p>Prueba 3. A la izquierda sigue el video original. A la derecha elegimos cuadros completos según las marcas de Rhubarb y la continuidad de la pose. No pegamos bocas ni mezclamos imágenes.</p>
+<p><a href="index.html">Prueba 1</a> · <a href="index-2.html">Prueba 2</a></p>
+<p id="status" role="status">Preparando…</p>
+<div class="comparison"><section><h2>Video original</h2><canvas id="original" width="320" height="320" role="img" aria-label="Video original de Isa"></canvas><div class="info" id="originalInfo"></div></section><section><h2>Selección de cuadros completos</h2><canvas id="selected" width="320" height="320" role="img" aria-label="Cuadro completo seleccionado de Isa"></canvas><div class="info" id="selectedInfo"></div></section></div>
+<audio id="audio" controls aria-label="Fragmento de Piper"></audio>
+<div class="actions"><button class="primary" id="play" disabled>Reproducir los 2 segundos</button><button id="export" disabled>Guardar selección para revisar</button></div>
+<label class="control">Priorizar continuidad de la pose <output id="weightValue">1</output><input id="weight" aria-label="Prioridad de continuidad" type="range" min="0" max="4" step=".25" value="1"></label>
+<label class="control">Revisar instante <output id="timeValue">0 s</output><input id="time" aria-label="Instante del audio" type="range" min="0" max="1.999" step=".041666667" value="0"></label>
+<p class="note">Las etiquetas son una primera selección visual, editable; no son un clasificador entrenado ni una medición fonética. No tenemos ejemplos confirmados de A, G y H: por ahora usamos X, B y C, respectivamente. Elegir cuadros completos puede producir saltos o pausas en la actuación. El control de continuidad permite comparar ese compromiso; no garantiza resolverlo.</p>
+<details><summary>Revisar las 51 formas de boca propuestas</summary><p>Corregí las etiquetas según lo que veas. La secuencia se recalcula al cambiar una. «Excluir» retira ese cuadro del ensayo.</p><div class="gallery" id="gallery"></div></details>
+<p class="note">Este ensayo no cambia la app ni publica recursos. Las pruebas 1 y 2 se conservan. Revisamos el resultado juntos antes de integrar o pushear.</p>
+</main><script>
+'use strict';
+const data=/*__WHOLE_FRAMES__*/null;
+const $=id=>document.getElementById(id),audio=$('audio'),pages={};
+let ready=false,plan=[],raf=null;
+const labels=[...data.labels],count=Math.round(data.duration*data.fps);
+const cueAt=t=>data.cues.find(c=>t>=c.start&&t<c.end)?.value??'X';
+const mapped=s=>({A:'X',G:'B',H:'C'}[s]??s);
+function draw(canvas,index){const f=data.frames[index],ctx=canvas.getContext('2d');ctx.clearRect(0,0,320,320);ctx.drawImage(pages[f.page],f.local%8*320,Math.floor(f.local/8)*320,320,320,0,0,320,320)}
+function rebuild(){
+ const n=data.candidates.length,weight=+$('weight').value;
+ let costs=new Array(n).fill(0);const back=[];
+ for(let t=0;t<count;t++){
+  const target=mapped(cueAt((t+.5)/data.fps)),row=new Array(n).fill(Infinity),prev=new Array(n).fill(-1);
+  for(let j=0;j<n;j++){
+   if(!labels[j])continue;
+   const index=data.candidates[j],baseline=data.baselineFirst+t;
+   const emission=(labels[j]===target?0:2)+weight*data.distances[baseline][j]*8;
+   if(t===0){row[j]=emission;continue}
+   for(let k=0;k<n;k++){
+    if(!Number.isFinite(costs[k]))continue;
+    const gap=Math.abs(index-data.candidates[k]);
+    const transition=weight*(data.distances[data.candidates[k]][j]*16+Math.min(gap,48)*.006)+(j===k?.015:0);
+    const cost=costs[k]+emission+transition;
+    if(cost<row[j]){row[j]=cost;prev[j]=k}
+   }
+  }
+  back.push(prev);costs=row;
+ }
+ let best=costs.indexOf(Math.min(...costs));
+ if(!Number.isFinite(costs[best])){plan=[];$('status').textContent='Elegí al menos un cuadro en la galería.';return}
+ plan=new Array(count);for(let t=count-1;t>=0;t--){plan[t]=best;best=back[t][best]}
+ $('weightValue').value=weight;$('status').textContent='Listo: 51 candidatos visuales; comparación de 2 segundos. Resultado pendiente de revisión.';render();
+}
+function render(){if(!ready||!plan.length)return;const t=Math.min(count-1,Math.floor(audio.currentTime*data.fps+1e-4)),candidate=plan[t],index=data.candidates[candidate],raw=cueAt((t+.5)/data.fps),target=mapped(raw);draw($('original'),data.baselineFirst+t);draw($('selected'),index);$('originalInfo').textContent=`Cuadro ${data.frames[data.baselineFirst+t].source}`;$('selectedInfo').textContent=`Cuadro ${data.frames[index].source} · boca propuesta ${labels[candidate]} · marca ${raw}${raw!==target?' → '+target+' aproximada':''}${labels[candidate]!==target?' · se priorizó continuidad':''}`;$('time').value=audio.currentTime;$('timeValue').value=audio.currentTime.toFixed(2)+' s'}
+function tick(){render();if(!audio.paused&&!audio.ended)raf=requestAnimationFrame(tick)}
+function stop(){if(raf!==null)cancelAnimationFrame(raf);raf=null}
+async function init(){try{for(const[key,src]of Object.entries(data.pages)){const img=new Image();img.src=src;await img.decode();pages[key]=img}
+ for(let j=0;j<data.candidates.length;j++){const item=document.createElement('div');item.className='candidate';const canvas=document.createElement('canvas');canvas.width=canvas.height=320;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Cuadro '+data.frames[data.candidates[j]].source);draw(canvas,data.candidates[j]);item.append(canvas);const label=document.createElement('label');label.textContent='Cuadro '+data.frames[data.candidates[j]].source;const select=document.createElement('select');select.setAttribute('aria-label','Boca del cuadro '+data.frames[data.candidates[j]].source);for(const s of ['','X','A','B','C','D','E','F','G','H']){const o=document.createElement('option');o.value=s;o.textContent=s||'Excluir';select.append(o)}select.value=labels[j];select.addEventListener('change',()=>{labels[j]=select.value;rebuild()});label.append(select);item.append(label);$('gallery').append(item)}
+ const metadata=new Promise((resolve,reject)=>{audio.addEventListener('loadedmetadata',resolve,{once:true});audio.addEventListener('error',()=>reject(new Error('No se pudo leer el audio.')),{once:true})});audio.src=data.audio;await metadata;ready=true;rebuild();$('play').disabled=$('export').disabled=false;
+}catch(error){$('status').textContent='No se pudo preparar la prueba: '+error.message}}
+audio.addEventListener('play',()=>{stop();tick()});audio.addEventListener('pause',()=>{stop();render()});audio.addEventListener('seeked',render);audio.addEventListener('ended',()=>{stop();render()});
+$('play').addEventListener('click',async()=>{audio.currentTime=0;try{await audio.play()}catch(error){$('status').textContent=error.message}});
+$('weight').addEventListener('input',rebuild);$('time').addEventListener('input',()=>{audio.pause();audio.currentTime=+$('time').value;render()});
+$('export').addEventListener('click',()=>{const report={experiment:3,reviewed:false,continuityWeight:+$('weight').value,labels:data.candidates.map((i,j)=>({sourceFrame:data.frames[i].source,shape:labels[j]})),sequence:plan.map((j,t)=>({time:t/data.fps,sourceFrame:data.frames[data.candidates[j]].source,cue:cueAt((t+.5)/data.fps),shape:labels[j]}))};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='isa-whole-frame-review.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+init();
+</script></body></html>

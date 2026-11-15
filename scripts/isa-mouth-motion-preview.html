@@ -1,0 +1,96 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Isa · prueba 2 · conservar el movimiento</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf8fc;color:#173c50;font:16px/1.5 'Segoe UI',sans-serif}
+main{max-width:1100px;margin:auto;padding:28px clamp(16px,4vw,44px)}h1{font-size:clamp(26px,4vw,40px);line-height:1.15;letter-spacing:-.03em;margin:0 0 12px}h2{font-size:19px;margin:0;padding:12px 16px;background:white}
+p{max-width:80ch}a{color:#175c79}button,select,input{font:inherit}button,select{border:1px solid #63899d;border-radius:8px;padding:9px 12px;background:white;color:inherit;min-height:44px}button{cursor:pointer}button.primary{background:#216c8a;color:white}button:hover{filter:brightness(.96)}:focus-visible{outline:3px solid #c25b1b;outline-offset:3px}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{border:1px solid #9ebfce;border-radius:16px;overflow:hidden;background:#d9eff6}.dark .panel{background:#173444}.white .panel{background:white}canvas{display:block;width:100%;height:auto}.readout{background:white;padding:10px 16px;min-height:48px;font-variant-numeric:tabular-nums}
+audio{width:100%;margin:16px 0}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.controls{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin:20px 0}.control{display:grid;grid-template-columns:1fr auto;gap:6px 10px;margin:12px 0}.control input{grid-column:1/-1;width:100%;accent-color:#216c8a}input[type=checkbox]{accent-color:#216c8a;width:18px;height:18px;vertical-align:middle}label.check{display:block;margin:12px 0}.note{color:#456274;font-size:14px}details{border-top:1px solid #aac8d6;margin-top:20px;padding-top:14px}summary{cursor:pointer;font-weight:650}#status{min-height:24px}.warning{color:#855015}
+@media(max-width:640px){.comparison,.controls{grid-template-columns:1fr}.actions>*{max-width:100%}}
+</style></head><body><main>
+<h1>Isa: conservar la actuación</h1>
+<p>Prueba 2. Los mismos cuadros del video siguen moviendo la cabeza, los ojos y el cuerpo en ambas vistas. A la derecha ensayamos cambiar únicamente los labios, acompañando la posición de la cara.</p>
+<p><a href="index.html">Volver a la prueba 1 de rostro fijo</a></p>
+<p id="status" role="status" aria-label="Preparación de la prueba 2">Preparando el fragmento…</p>
+<div class="comparison" id="comparison">
+<section class="panel" aria-label="Video original"><h2>Movimiento original</h2><canvas id="original" width="320" height="320" role="img" aria-label="Cuadro original de Isa"></canvas><div class="readout" id="frameInfo">Cuadro —</div></section>
+<section class="panel" aria-label="Movimiento con boca ajustada"><h2>Mismo movimiento + boca</h2><canvas id="adjusted" width="320" height="320" role="img" aria-label="Mismo cuadro con ajuste local de boca"></canvas><div class="readout" id="shapeInfo">Boca —</div></section>
+</div>
+<audio id="audio" controls preload="metadata" aria-label="Fragmento de dos segundos de Piper"></audio>
+<div class="actions"><button id="replay" class="primary" disabled>Reproducir los 2 segundos</button><label for="manual">Boca</label><select id="manual"><option value="">Seguir Rhubarb</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>X</option></select><label for="background">Fondo</label><select id="background"><option value="">Celeste</option><option value="dark">Oscuro</option><option value="white">Blanco</option></select></div>
+<label class="control">Revisar un cuadro <output id="frameValue">0</output><input id="frame" aria-label="Cuadro del fragmento" type="range" min="0" max="47" step="1" value="0"></label>
+<label class="check"><input id="enabled" type="checkbox" checked>Aplicar el recorte cuando el seguimiento sea estable</label>
+<label class="check"><input id="markers" type="checkbox">Mostrar los tres puntos y el límite del recorte</label>
+<p id="trackingInfo" class="note"></p>
+<details><summary>Ajustar este ensayo</summary><div class="controls">
+<label class="control">Horizontal <output id="dxValue">0 px</output><input id="dx" aria-label="Ajuste horizontal" type="range" min="-12" max="12" step=".25" value="0"></label>
+<label class="control">Vertical <output id="dyValue">0 px</output><input id="dy" aria-label="Ajuste vertical" type="range" min="-12" max="12" step=".25" value="0"></label>
+<label class="control">Ancho <output id="widthValue">42 px</output><input id="width" aria-label="Ancho de la boca" type="range" min="30" max="60" step=".5" value="42"></label>
+<label class="control">Alto <output id="heightValue">29 px</output><input id="height" aria-label="Alto de la boca" type="range" min="20" max="42" step=".5" value="29"></label>
+</div><button id="export" disabled>Guardar ajustes de la prueba 2</button></details>
+<p class="note">El seguimiento compara pequeños sectores de ojos y nariz; no es un modelo facial ni estima toda la perspectiva 3D. Si un cuadro no supera los límites del ensayo, se muestra el original. G/H usan B/C como alternativas aproximadas. El audio es un fragmento de una muestra ya generada de Piper; las bocas usan sus tiempos de Rhubarb.</p>
+<p class="note">Este ensayo no modifica la app ni los archivos originales. Los bordes, el color de piel y la continuidad de la mandíbula siguen en revisión. Todavía no tomamos una decisión de integración.</p>
+</main><script>
+'use strict';
+const data=/*__ISA_MOTION_DATA__*/null;
+const get=id=>document.getElementById(id),audio=get('audio');
+const contexts={original:get('original').getContext('2d'),adjusted:get('adjusted').getContext('2d')};
+const pages={},mouths={},patches={};
+let ready=false,raf=null,lastKey='';
+const options={dx:0,dy:0,width:42,height:29};
+function cueAt(t){return data.cues.find(c=>t>=c.start&&t<c.end)?.value??'X'}
+function render(force=false){
+if(!ready)return;
+const index=Math.min(data.frames.length-1,Math.max(0,Math.floor(audio.currentTime*data.fps+1e-4)));
+const frame=data.frames[index],tracking=data.tracking[index];
+const raw=get('manual').value||(audio.ended?'X':cueAt(audio.currentTime));
+const shape=({G:'B',H:'C'}[raw]??raw);
+const key=[index,shape,get('enabled').checked,get('markers').checked,...Object.values(options)].join(':');
+if(!force&&key===lastKey)return;lastKey=key;
+for(const ctx of Object.values(contexts)){
+ctx.clearRect(0,0,320,320);ctx.drawImage(pages[frame.page],frame.local%data.columns*320,Math.floor(frame.local/data.columns)*320,320,320,0,0,320,320);
+}
+const apply=get('enabled').checked&&tracking.stable;
+if(apply){
+const ctx=contexts.adjusted,[a,b,tx,ty]=tracking.transform;
+ctx.save();ctx.transform(a,b,-b,a,tx,ty);
+ctx.drawImage(patches[shape],152-options.width/2+options.dx,140-options.height/2+options.dy,options.width,options.height);
+if(get('markers').checked){ctx.strokeStyle='#007cbd';ctx.lineWidth=.7;ctx.strokeRect(152-options.width/2+options.dx,140-options.height/2+options.dy,options.width,options.height)}
+ctx.restore();
+}
+if(get('markers').checked)for(const ctx of Object.values(contexts))for(const [x,y]of tracking.points){ctx.fillStyle='#f5751d';ctx.beginPath();ctx.arc(x,y,1.5,0,2*Math.PI);ctx.fill()}
+get('frameInfo').textContent=`Cuadro ${frame.source} · ${(index/data.fps).toFixed(2).replace('.',',')} s`;
+get('shapeInfo').textContent=apply?`Boca ${shape}${raw!==shape?' · marca '+raw:''}`:'Cuadro original, sin recorte';
+get('trackingInfo').textContent=`Similitud mínima de los puntos: ${tracking.score.toFixed(2)}. Error del ajuste: ${tracking.error.toFixed(2)} px. ${tracking.stable?'El cuadro supera los límites del ensayo.':'Seguimiento inestable: se conserva el original.'}`;
+get('trackingInfo').className='note'+(tracking.stable?'':' warning');
+get('frame').value=index;get('frameValue').value=`${index+1} / ${data.frames.length}`;
+}
+function tick(){render();if(!audio.paused&&!audio.ended)raf=requestAnimationFrame(tick);else raf=null}
+function stop(){if(raf!==null)cancelAnimationFrame(raf);raf=null}
+async function decode(src){const image=new Image();image.src=src;await image.decode();return image}
+function makePatch(shape,image){
+const canvas=document.createElement('canvas');canvas.width=290;canvas.height=200;
+const ctx=canvas.getContext('2d');
+ctx.drawImage(image,1000,shape==='X'?727:730,290,200,0,0,290,200);
+ctx.globalCompositeOperation='destination-in';ctx.save();ctx.translate(145,100);ctx.scale(145,100);
+const gradient=ctx.createRadialGradient(0,0,.8,0,0,1);gradient.addColorStop(0,'black');gradient.addColorStop(1,'transparent');ctx.fillStyle=gradient;ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.fill();ctx.restore();return canvas;
+}
+async function initialize(){try{
+if(!data)throw new Error('Generá esta vista con preview-isa-mouth-motion.py.');
+for(const [key,value]of Object.entries(data.pages))pages[key]=await decode(value.image);
+for(const [shape,value]of Object.entries(data.mouths)){mouths[shape]=await decode(value);patches[shape]=makePatch(shape,mouths[shape])}
+const metadata=new Promise((resolve,reject)=>{audio.addEventListener('loadedmetadata',resolve,{once:true});audio.addEventListener('error',()=>reject(new Error('No se pudo cargar el audio de la prueba.')),{once:true})});
+audio.src=data.audio;await metadata;ready=true;render(true);
+get('status').textContent=`Listo: ${data.frames.length} cuadros a ${data.fps} FPS. ${data.tracking.filter(t=>t.stable).length} cuadros superan los límites del seguimiento; esto no mide precisión fonética.`;
+get('replay').disabled=false;get('export').disabled=false;
+}catch(error){get('status').textContent=error.message;get('status').setAttribute('role','alert')}}
+audio.addEventListener('play',()=>{stop();tick()});audio.addEventListener('pause',()=>{stop();render(true)});audio.addEventListener('ended',()=>{stop();render(true)});audio.addEventListener('seeked',()=>render(true));
+get('replay').onclick=()=>{audio.currentTime=0;audio.play().catch(()=>{get('status').textContent='El navegador no pudo reproducir el audio. Usá los controles del reproductor.'})};
+get('frame').oninput=()=>{audio.pause();audio.currentTime=Number(get('frame').value)/data.fps;render(true)};
+for(const id of ['manual','enabled','markers'])get(id).onchange=()=>render(true);
+get('background').onchange=()=>{get('comparison').className='comparison '+get('background').value};
+for(const key of Object.keys(options))get(key).oninput=()=>{options[key]=Number(get(key).value);get(key+'Value').value=options[key]+' px';render(true)};
+get('export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify({experiment:2,reviewed:false,options,sourceFrames:data.frames.map(f=>f.source)},null,2)],{type:'application/json'}));const link=document.createElement('a');link.href=url;link.download='isa-mouth-motion-adjustments.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+initialize();
+</script></body></html>
