@@ -4,6 +4,12 @@ import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { voiceEnvelope, VOICE_FRAME_SECONDS } from './voice-envelope';
 import {
+  isaMouthAt,
+  readIsaMouthTimeline,
+  type IsaMouthCue,
+  type IsaMouthShape,
+} from '../models/isa-mouth';
+import {
   IsaCue,
   IsaGesture,
   IsaSegment,
@@ -22,6 +28,8 @@ export class IsabelVoice {
   readonly progress = signal(0);
   readonly mouthOpening = signal(0);
   readonly speechTime = signal(0);
+  // undefined means use the previous video renderer (no valid isav timeline).
+  readonly mouthShape = signal<IsaMouthShape | undefined>(undefined);
   readonly gesture = signal<IsaGesture>('isa-awake');
   readonly state = signal<'idle' | 'loading' | 'speaking' | 'blocked' | 'error'>('idle');
   private request?: Subscription;
@@ -31,6 +39,7 @@ export class IsabelVoice {
   private envelope: Float32Array = new Float32Array();
   private mouthFrame?: number;
   private cues: IsaCue[] = [];
+  private mouthCues: IsaMouthCue[] = [];
 
   setEnabled(value: boolean): void {
     this.enabled.set(value);
@@ -87,12 +96,16 @@ export class IsabelVoice {
           }
           this.url = URL.createObjectURL(blob);
           const audio = (this.audio = new Audio(this.url));
-          void blob
+          const metadata = blob
             .arrayBuffer()
             .then((buffer) => {
               if (generation === this.generation) {
                 this.envelope = voiceEnvelope(buffer);
                 this.cues = plan ? readIsaTimeline(buffer) : [];
+                this.mouthCues = readIsaMouthTimeline(buffer);
+                this.mouthShape.set(
+                  this.mouthCues.length ? isaMouthAt(this.mouthCues, 0) : undefined,
+                );
               }
             })
             .catch(() => {
@@ -115,6 +128,10 @@ export class IsabelVoice {
               const frame = Math.floor(audio.currentTime / VOICE_FRAME_SECONDS);
               const level = audio.paused ? 0 : (this.envelope[frame] ?? 0);
               this.mouthOpening.set(Math.round(level * 20) / 20);
+              // isav already describes the final Piper waveform, including pace/pauses.
+              this.mouthShape.set(
+                this.mouthCues.length ? isaMouthAt(this.mouthCues, audio.currentTime) : undefined,
+              );
               this.speechTime.set(
                 isaSpeechTimeAt(this.cues, performance.segmentos ?? [], audio.currentTime),
               );
@@ -131,15 +148,22 @@ export class IsabelVoice {
             this.stop();
             this.state.set('error');
           };
-          void audio.play().catch((error: unknown) => {
-            if (generation !== this.generation) return;
-            if (error instanceof DOMException && error.name === 'NotAllowedError') {
-              this.state.set('blocked');
-            } else {
-              this.stop();
-              this.state.set('error');
-            }
-          });
+          // Finish optional parsing before playback so one utterance never switches
+          // from the video to visemes after it has already started speaking.
+          void metadata
+            .then(() => {
+              if (generation === this.generation) return audio.play();
+              return undefined;
+            })
+            .catch((error: unknown) => {
+              if (generation !== this.generation) return;
+              if (error instanceof DOMException && error.name === 'NotAllowedError') {
+                this.state.set('blocked');
+              } else {
+                this.stop();
+                this.state.set('error');
+              }
+            });
         },
         error: () => {
           if (generation === this.generation) this.state.set('error');
@@ -154,6 +178,8 @@ export class IsabelVoice {
     this.envelope = new Float32Array();
     this.mouthOpening.set(0);
     this.speechTime.set(0);
+    this.mouthShape.set(undefined);
+    this.mouthCues = [];
     this.gesture.set('isa-awake');
     this.cues = [];
     this.request?.unsubscribe();

@@ -64,3 +64,13 @@ capturas en el mismo directorio local para inspección visual.
 
 Estas comprobaciones verifican el funcionamiento del ensayo; la naturalidad,
 calidad de los bordes y correspondencia acústica siguen necesitando revisión humana.
+
+## Integración en la app
+
+La integración usa el frontal del atlas nativo, para conservar la continuidad de
+las miradas y el sueño. El ensayo de esta página sigue usando el original X de
+mayor resolución, por lo que no reemplaza la revisión dentro de la app.
+Los recortes se preparan con `scripts/prepare-isa-mouths.py` en un atlas pequeño;
+el renderer selecciona sus formas a partir de `isav`. Para comparar con el modo
+anterior, recargar la app con `?isaLipSync=off`. Más detalles en
+[el README del retrato](../../src/app/shared/isabel/README.md).

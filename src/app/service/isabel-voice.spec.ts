@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { IsabelVoice } from './isabel-voice';
-import { isaVoiceWav } from '../testing/isa-voice-fixture';
+import { isaVoiceWav, withIsaMouthCues } from '../testing/isa-voice-fixture';
 import type { IsaSegment } from '../models/isa-performance';
 
 class FakeAudio {
@@ -142,7 +142,7 @@ describe('Isa voice playback lifecycle', () => {
     FakeAudio.blocked = true;
     voice.speak('Hola');
     http.expectOne(() => true).flush(wav());
-    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(voice.state()).toBe('blocked');
     expect(URL.revokeObjectURL).not.toHaveBeenCalled();
     http.expectNone(() => true);
@@ -160,5 +160,58 @@ describe('Isa voice playback lifecycle', () => {
     http.expectOne(() => true).flush(new Blob(['not wav'], { type: 'text/plain' }));
     expect(voice.state()).toBe('error');
     expect(FakeAudio.instances).toHaveLength(0);
+  });
+
+  it('uses final audio time for lips, freezes on pause and clears the timeline on stop', async () => {
+    let frame: FrameRequestCallback | undefined;
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frame = callback;
+      return 1;
+    });
+    vi.stubGlobal('cancelAnimationFrame', vi.fn());
+    voice.speak('Abrigo.');
+    const buffer = withIsaMouthCues(isaVoiceWav([]), [
+      { start: 0, end: 1, value: 'A' },
+      { start: 1, end: 5, value: 'D' },
+      { start: 5, end: 6, value: 'X' },
+    ]);
+    http.expectOne(() => true).flush(new Blob([buffer], { type: 'audio/wav' }));
+    const audio = FakeAudio.instances[0];
+    expect(audio.play).not.toHaveBeenCalled();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(audio.play).toHaveBeenCalledTimes(1);
+    audio.currentTime = 0.3;
+    audio.onplaying?.();
+    expect(voice.mouthShape()).toBe('A');
+    audio.currentTime = 1.5;
+    frame?.(0);
+    expect(voice.mouthShape()).toBe('D');
+    frame?.(0);
+    expect(voice.mouthShape()).toBe('D');
+    voice.stop();
+    expect(voice.mouthShape()).toBeUndefined();
+    frame?.(0);
+    expect(voice.mouthShape()).toBeUndefined();
+  });
+
+  it('does not revive an obsolete mouth timeline or play after cancellation during parsing', async () => {
+    voice.speak('Anterior.');
+    const buffer = withIsaMouthCues(isaVoiceWav([]), [{ start: 0, end: 6, value: 'D' }]);
+    const blob = new Blob([buffer], { type: 'audio/wav' });
+    let finish!: (buffer: ArrayBuffer) => void;
+    vi.spyOn(blob, 'arrayBuffer').mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    );
+    http.expectOne(() => true).flush(blob);
+    const audio = FakeAudio.instances[0];
+    voice.stop();
+    finish(buffer);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(audio.play).not.toHaveBeenCalled();
+    expect(voice.mouthShape()).toBeUndefined();
+    expect(voice.state()).toBe('idle');
   });
 });
