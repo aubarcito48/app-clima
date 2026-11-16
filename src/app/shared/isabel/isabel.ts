@@ -28,6 +28,7 @@ import type { IsaSegment } from '../../models/isa-performance';
 })
 export class Isabel {
   readonly sidebar = input(false);
+  readonly presenceOnly = input(false);
   readonly busy = input(false);
   readonly text = input<string | null>(null);
   readonly segments = input<IsaSegment[] | undefined>();
@@ -54,6 +55,7 @@ export class Isabel {
 
   constructor() {
     afterNextRender(() => {
+      if (this.presenceOnly()) return;
       this.motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
       this.reducedMotion.set(this.motionQuery?.matches ?? false);
       this.motionQuery?.addEventListener('change', this.motionChanged);
@@ -66,6 +68,7 @@ export class Isabel {
     let previousSegments: IsaSegment[] | undefined;
     let attempted = false;
     effect((onCleanup) => {
+      if (this.presenceOnly()) return;
       const text = this.text();
       const segments = this.segments();
       const enabled = this.voice.enabled();

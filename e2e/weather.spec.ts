@@ -40,7 +40,8 @@ test('accesibilidad nocturna: contraste hover, foco, sugerencias, menú y ancho 
   await expect
     .poll(() =>
       locationButton.evaluate(async (e) => {
-        getComputedStyle(e).backgroundColor;
+        // Flush pending styles so getAnimations() includes the hover transition.
+        void getComputedStyle(e).backgroundColor;
         await Promise.all(
           e.getAnimations().map((animation) => animation.finished.catch(() => undefined)),
         );
@@ -236,6 +237,7 @@ async function closeNavigation(page: Page) {
 test('navegación adaptable: hamburguesa, Escape, fondo y barra lateral fija', async ({
   page,
 }, info) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   if (page.viewportSize()!.width < 1024) {
     const trigger = page.getByRole('button', { name: 'Abrir menú', exact: true });
@@ -252,7 +254,11 @@ test('navegación adaptable: hamburguesa, Escape, fondo y barra lateral fija', a
     await page.keyboard.press('Tab');
     await expect(dialog.locator('app-theme-toggle button')).toBeFocused();
     await page.keyboard.press('Tab');
+    await expect(dialog.getByRole('link', { name: 'Sobre nosotros', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
     await expect(dialog.getByRole('link', { name: 'Pronóstico', exact: true })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialog.getByRole('link', { name: 'Sobre nosotros', exact: true })).toBeFocused();
     await page.keyboard.press('Shift+Tab');
     await expect(dialog.locator('app-theme-toggle button')).toBeFocused();
     await page.keyboard.press('Shift+Tab');

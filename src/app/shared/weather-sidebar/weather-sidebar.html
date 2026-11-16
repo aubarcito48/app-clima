@@ -1,8 +1,8 @@
 <ng-template #brand>
   <a
-    href="./"
+    routerLink="/"
     [attr.aria-label]="'StitchWeather, inicio' | translate"
-    class="relative flex items-center gap-3 rounded-xl"
+    class="relative flex items-center gap-3 rounded-app"
   >
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span class="brand-copy"
@@ -38,10 +38,22 @@
   </div>
   <nav [attr.aria-label]="'Navegación principal' | translate" class="relative mt-4 grid gap-2">
     <a
-      href="#pronostico"
+      routerLink="/sobre-nosotros"
+      routerLinkActive="bg-surface"
+      #aboutLink="routerLinkActive"
+      ariaCurrentWhenActive="page"
       class="sidebar-link"
-      [class.bg-surface]="!placesOpen()"
-      [attr.aria-current]="!placesOpen() ? 'location' : null"
+      (click)="aboutSelected()"
+    >
+      <app-weather-icon name="sparkles" [size]="20" />
+      <span>{{ 'Sobre nosotros' | translate }}</span>
+    </a>
+    <a
+      routerLink="/"
+      fragment="pronostico"
+      class="sidebar-link"
+      [class.bg-surface]="!placesOpen() && !aboutLink.isActive"
+      [attr.aria-current]="!placesOpen() && !aboutLink.isActive ? 'location' : null"
       (click)="forecastSelected()"
       ><app-weather-icon name="cloud-sun" [size]="20" /><span>{{
         'Pronóstico' | translate
@@ -56,11 +68,9 @@
       aria-controls="favorite-places"
       (click)="togglePlaces()"
     >
-      <app-weather-icon name="heart" [size]="20" /><span>{{
-        'Mis lugares' | translate
-      }}</span
+      <app-weather-icon name="heart" [size]="20" /><span>{{ 'Mis lugares' | translate }}</span
       ><span
-        class="favorite-count ml-auto rounded-full bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
+        class="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
         >{{ favorites.places().length }}</span
       >
     </button>
@@ -85,10 +95,10 @@
     @if (favorites.places().length) {
       <ul class="mt-2 grid gap-2">
         @for (place of favorites.places(); track place.id) {
-          <li class="flex min-w-0 items-center gap-1 rounded-2xl bg-surface p-2">
+          <li class="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2">
             <button
               type="button"
-              class="min-h-11 min-w-0 flex-1 rounded-lg px-1 text-left"
+              class="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left"
               (click)="selectPlace(place)"
             >
               <span class="block break-words text-sm font-semibold text-ink">{{ place.name }}</span
@@ -98,7 +108,7 @@
             </button>
             <button
               type="button"
-              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-blue hover:bg-sky"
+              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky"
               [attr.aria-label]="
                 'Eliminar {place} de Mis lugares'
                   | translate: { place: place.name + ', ' + place.country }
@@ -160,6 +170,7 @@
     class="mobile-menu"
     [attr.aria-label]="'Navegación principal' | translate"
     (cancel)="cancelMenu($event)"
+    (keydown.escape)="cancelMenu($event)"
     (close)="dialogClosed()"
     (click)="backdropClick($event)"
   >

@@ -26,8 +26,10 @@ describe('Favorite places stored in this browser', () => {
     store.toggle(location);
     expect(store.contains(location)).toBe(true);
     const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY)!);
-    expect(Object.keys(stored[0]).sort()).toEqual(
-      ['id', 'name', 'country', 'region', 'latitude', 'longitude'].sort(),
+    expect(Object.keys(stored[0]).sort((a, b) => a.localeCompare(b))).toEqual(
+      ['id', 'name', 'country', 'region', 'latitude', 'longitude'].sort((a, b) =>
+        a.localeCompare(b),
+      ),
     );
     TestBed.resetTestingModule();
     const restored = TestBed.inject(FavoritePlaces);

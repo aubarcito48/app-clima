@@ -29,7 +29,7 @@
   width: 2.5rem;
   height: 2.5rem;
   flex-shrink: 0;
-  border-radius: 1rem;
+  border-radius: var(--radius-app);
   background: #246b91;
   color: white;
   font: bold 1.3rem var(--font-display);
@@ -42,8 +42,8 @@
 }
 .sidebar-preferences {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 0.5rem;
   margin-top: 1.75rem;
@@ -52,10 +52,11 @@
   display: flex;
   width: 100%;
   min-height: 2.75rem;
+  height: 2.75rem;
   align-items: center;
   gap: 0.75rem;
-  border-radius: 1.2rem;
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-control);
+  padding: 0.5rem 1rem;
   text-align: left;
   font-size: 0.875rem;
   font-weight: 600;
@@ -95,7 +96,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-control-line);
-  border-radius: 0.9rem;
+  border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-blue);
 }
@@ -139,7 +140,7 @@
   .mobile-header .stitch-logo {
     width: 2.25rem;
     height: 2.25rem;
-    border-radius: 0.8rem;
+    border-radius: var(--radius-app);
     font-size: 1.15rem;
   }
 }
@@ -183,6 +184,7 @@
   .mobile-menu[open] {
     transform: translateX(0);
     opacity: 1;
+    animation: menu-enter 240ms ease;
   }
   .mobile-menu::backdrop {
     background: #12395200;
@@ -193,14 +195,24 @@
   }
   .mobile-menu[open]::backdrop {
     background: #12395266;
+    animation: menu-backdrop-enter 240ms ease;
   }
-  @starting-style {
-    .mobile-menu[open] {
+  @keyframes menu-enter {
+    from {
       transform: translateX(-100%);
       opacity: 0;
     }
-    .mobile-menu[open]::backdrop {
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes menu-backdrop-enter {
+    from {
       background: #12395200;
+    }
+    to {
+      background: #12395266;
     }
   }
 }

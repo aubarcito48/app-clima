@@ -1,3 +1,4 @@
+import { provideRouter } from '@angular/router';
 import { EMPTY } from 'rxjs';
 import { WeatherAlertsApi } from '../../service/weather-alerts-api';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
@@ -16,6 +17,7 @@ describe('Recovery and accessible interactions (TK08)', () => {
     TestBed.configureTestingModule({
       imports: [Weather],
       providers: [
+        provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: WeatherAlertsApi, useValue: { search: () => EMPTY } },

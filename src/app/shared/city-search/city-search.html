@@ -55,7 +55,7 @@
       />
       @if (popupVisible) {
         <div
-          class="mt-2 overflow-hidden rounded-2xl border border-control-line bg-surface shadow-sm"
+          class="mt-2 overflow-hidden rounded-app border border-control-line bg-surface shadow-sm"
           animate.enter="suggestions-enter"
         >
           <ul
@@ -71,6 +71,8 @@
                 [attr.aria-selected]="activeIndex() === index"
                 (pointerdown)="$event.preventDefault()"
                 (click)="chooseSuggestion(place)"
+                (keydown.enter)="$event.preventDefault(); chooseSuggestion(place)"
+                (keydown.space)="$event.preventDefault(); chooseSuggestion(place)"
                 (pointermove)="activeIndex.set(index)"
                 class="min-h-14 cursor-pointer px-4 py-3 text-sm text-ink hover:bg-sky"
                 [class.bg-sky]="activeIndex() === index"
@@ -114,10 +116,7 @@
   @if (suggestions().length) {
     <p class="mt-2 text-xs text-muted">
       {{ 'Lugares:' | translate }}
-      <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="underline"
-        >Open-Meteo</a
-      >
-      /
+      {{ 'Catálogo local · datos de' | translate }}
       <a
         href="https://www.geonames.org/"
         target="_blank"
@@ -141,7 +140,7 @@
       tabindex="-1"
       role="group"
       aria-labelledby="search-feedback"
-      class="mt-4 rounded-xl border border-blue/20 bg-sky p-4"
+      class="mt-4 rounded-app border border-blue/20 bg-sky p-4"
     >
       <p id="search-feedback" role="alert" class="text-sm leading-6 text-ink">
         {{ issue.message | translate }}

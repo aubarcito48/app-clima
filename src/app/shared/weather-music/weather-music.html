@@ -1,7 +1,7 @@
 @if (playlist(); as selection) {
   <section id="musica" [attr.aria-label]="'Música para tu clima' | translate" class="min-w-0">
     <iframe
-      class="block w-full rounded-xl border-0"
+      class="block w-full rounded-app border-0"
       [src]="embedUrl()"
       [title]="'Spotify: ' + selection.name"
       width="100%"

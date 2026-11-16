@@ -1,0 +1,18 @@
+<nav [attr.aria-label]="language.text('Navegación por secciones')">
+  <ol>
+    @for (section of sections(); track section.id; let index = $index) {
+      <li>
+        <a
+          [href]="'#' + section.id"
+          (click)="goTo($event, section.id)"
+          [class.is-active]="activeIndex() === index"
+          [attr.aria-current]="activeIndex() === index ? 'location' : null"
+          [attr.aria-label]="language.text(section.label)"
+        >
+          <span class="section-label" aria-hidden="true">{{ language.text(section.label) }}</span>
+          <span class="section-dot" aria-hidden="true"></span>
+        </a>
+      </li>
+    }
+  </ol>
+</nav>

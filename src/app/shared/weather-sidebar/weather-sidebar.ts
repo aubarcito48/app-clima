@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { FavoritePlaces } from '../../service/favorite-places';
 import { SavedPlace } from '../../models/saved-place';
@@ -18,7 +19,15 @@ import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-weather-sidebar',
-  imports: [Translate, WeatherIcon, NgTemplateOutlet, LanguageToggle, ThemeToggle],
+  imports: [
+    Translate,
+    WeatherIcon,
+    NgTemplateOutlet,
+    LanguageToggle,
+    ThemeToggle,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './weather-sidebar.html',
   styleUrl: './weather-sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -96,6 +105,10 @@ export class WeatherSidebar {
     this.placesOpen.set(false);
     this.closeMenu(false);
     this.document.getElementById('city')?.focus({ preventScroll: true });
+  }
+  aboutSelected() {
+    this.placesOpen.set(false);
+    this.closeMenu(false);
   }
   selectPlace(place: SavedPlace) {
     this.placesOpen.set(false);

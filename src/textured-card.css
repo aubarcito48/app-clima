@@ -8,7 +8,7 @@
   isolation: isolate;
   min-width: 0;
   border: 1px solid #70b5d6;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-app);
   background-color: var(--color-contact-surface);
   background-image: url('/emergency-card-texture.svg'), linear-gradient(#ffffff11, #00000022);
   box-shadow:

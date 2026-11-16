@@ -2,9 +2,7 @@
 <div
   class="weather-layout mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]"
 >
-  <app-weather-sidebar
-    (placeSelected)="citySearch.chooseSuggestion($event)"
-  >
+  <app-weather-sidebar (placeSelected)="citySearch.chooseSuggestion($event)">
     <app-isabel
       [text]="weather()?.advice?.text ?? null"
       [segments]="weather()?.advice?.segments"
@@ -14,7 +12,12 @@
   </app-weather-sidebar>
   <div class="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:pb-10 lg:pt-8">
     <main id="main-content" tabindex="-1" class="pb-10">
-      <header class="mb-7 grid grid-cols-1 items-start gap-5">
+      <header
+        id="inicio-clima"
+        tabindex="-1"
+        appScrollReveal
+        class="mb-7 grid grid-cols-1 items-start gap-5"
+      >
         <div class="min-w-0">
           <h1 class="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
             {{ 'Hola, explorador' | translate }}
@@ -27,7 +30,9 @@
       </header>
       <section
         id="pronostico"
-        class="search-panel scroll-mt-6 rounded-[1.5rem] border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3"
+        tabindex="-1"
+        appScrollReveal
+        class="search-panel scroll-mt-6 rounded-app border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3"
         [attr.aria-label]="'Consulta de ciudad' | translate"
       >
         <app-city-search
@@ -63,8 +68,7 @@
                 ><app-weather-icon name="pin" [size]="16" /><span
                   >{{ 'Explorando' | translate }}
                   <strong class="font-semibold text-ink">{{ weather()?.city }}</strong>
-                  <span class="text-muted">· OpenWeather</span></span
-                ></span
+                </span></span
               >
               <span class="sr-only"
                 >{{ weather()?.forecast?.length ? '' : ('Pronóstico no disponible.' | translate) }}
@@ -86,7 +90,7 @@
           <button
             type="button"
             (click)="citySearch.cancelAutoSearch(); reset(); citySearch.focusCity()"
-            class="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-secondary underline decoration-line underline-offset-4 hover:text-ink"
+            class="inline-flex min-h-11 items-center gap-1.5 rounded-control px-2 text-xs font-medium text-secondary underline decoration-line underline-offset-4 hover:text-ink"
           >
             <app-weather-icon name="close" [size]="14" />
             {{
@@ -97,12 +101,13 @@
           </button>
         }
       </div>
-      <div class="mt-2" [attr.aria-busy]="state() === 'loading'">
+      <div id="clima-contenido" tabindex="-1" class="mt-2" [attr.aria-busy]="state() === 'loading'">
         @if (state() === 'loading') {
           <app-weather-loading />
         } @else {
           <div class="grid items-stretch gap-6">
             <app-current-weather
+              appScrollReveal
               [weather]="weather()"
               [unit]="temperatureUnit()"
               [favorite]="favorites.contains(response()?.ubicacion ?? null)"
@@ -114,6 +119,8 @@
               }
             </app-current-weather>
             <app-forecast
+              appScrollReveal
+              [revealDelay]="100"
               [weather]="weather()"
               [unit]="temperatureUnit()"
               (unitChange)="temperatureUnit.set($event)"
@@ -121,6 +128,24 @@
           </div>
         }
       </div>
+      @if (state() === 'ready') {
+        <a
+          href="https://openweathermap.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-2 inline-flex flex-wrap items-center gap-2 rounded-app text-xs text-secondary underline decoration-line underline-offset-4"
+        >
+          <span class="rounded-app bg-white px-2 py-1"
+            ><img
+              src="openweather-logo.png"
+              alt="OpenWeather"
+              width="90"
+              height="40"
+              class="h-auto w-20"
+          /></span>
+          {{ 'Datos meteorológicos proporcionados por OpenWeather' | translate }}
+        </a>
+      }
       <aside
         class="mt-6 flex items-start gap-2.5 px-1 text-xs leading-6 text-muted"
         [attr.aria-label]="'Información del servicio' | translate"
@@ -134,16 +159,15 @@
         </p>
       </aside>
       <app-emergency-contacts
+        id="contactos-utiles"
+        tabindex="-1"
+        appScrollReveal
         class="mt-8 block"
         [selectedCountry]="response()?.ubicacion?.pais ?? null"
       />
     </main>
-    <footer
-      class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line py-6 text-xs leading-6 text-muted"
-    >
-      <p>{{ 'Hecho para entender el cielo y disfrutar el día.' | translate }}</p>
-      <p>StitchWeather <span aria-hidden="true">·</span> {{ 'Tu clima, más azul' | translate }}</p>
-    </footer>
+    <app-site-footer />
   </div>
 </div>
 <app-back-to-top />
+<app-section-navigation [sections]="sections" />

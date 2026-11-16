@@ -1,7 +1,30 @@
 @import 'tailwindcss';
 @import './motion.css';
 @import './textured-card.css';
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+}
 @theme static {
+  --radius-app: 1rem;
+  --radius-control: 0.5rem;
   --color-ink: #123952;
   --color-secondary: #365d75;
   --color-muted: #4b687c;
@@ -39,8 +62,9 @@
   --color-contact-surface: #205b7d;
   --color-contact-priority: #16445e;
   --color-contact-focus: #246b91;
-  --font-display: 'Trebuchet MS', 'Segoe UI', sans-serif;
-  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Geist', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 html[data-theme='dark'] {
   color-scheme: dark;
@@ -78,6 +102,11 @@ html[data-theme='dark'] {
   --color-contact-focus: #8bd5fa;
 }
 @layer base {
+  button,
+  select,
+  summary {
+    border-radius: var(--radius-control);
+  }
   html {
     color-scheme: light;
     background: var(--color-canvas);
@@ -88,6 +117,12 @@ html[data-theme='dark'] {
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     background: var(--color-canvas);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
   }
   button,
   input {
@@ -119,7 +154,7 @@ html[data-theme='dark'] {
     gap: 0.75rem;
     min-height: 4.75rem;
     border: 1px solid transparent;
-    border-radius: 1.1rem;
+    border-radius: var(--radius-control);
     background: var(--color-surface);
     padding: 1rem;
     text-align: left;
@@ -137,7 +172,7 @@ html[data-theme='dark'] {
   .field {
     height: 3.25rem;
     border: 1px solid var(--color-control-line);
-    border-radius: 0.85rem;
+    border-radius: var(--radius-control);
     background: var(--color-hover);
     color: var(--color-ink);
     font-size: 0.875rem;
@@ -150,7 +185,7 @@ html[data-theme='dark'] {
     border-color: var(--color-blue);
   }
   .primary-button {
-    border-radius: 0.85rem;
+    border-radius: var(--radius-control);
     background: var(--color-primary);
     color: white;
     font-size: 0.875rem;
@@ -164,7 +199,7 @@ html[data-theme='dark'] {
     min-height: 2.75rem;
     padding: 0.3rem 0.8rem;
     border: 1px solid var(--color-line);
-    border-radius: 2rem;
+    border-radius: var(--radius-control);
     background: var(--color-surface);
     color: var(--color-secondary);
   }
@@ -179,7 +214,7 @@ html[data-theme='dark'] {
     left: 1rem;
     z-index: 50;
     transform: translateY(-200%);
-    border-radius: 0.5rem;
+    border-radius: var(--radius-control);
     background: var(--color-ink);
     padding: 0.75rem 1rem;
     color: var(--color-canvas);
@@ -188,7 +223,7 @@ html[data-theme='dark'] {
     transform: translateY(0);
   }
   .skeleton {
-    border-radius: 0.6rem;
+    border-radius: var(--radius-app);
     background: var(--color-skeleton);
     animation: skeleton-pulse 1.4s ease-in-out infinite;
   }

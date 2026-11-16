@@ -1,3 +1,4 @@
+import { provideRouter } from '@angular/router';
 import { EMPTY } from 'rxjs';
 import { WeatherAlertsApi } from '../../service/weather-alerts-api';
 import { provideHttpClient } from '@angular/common/http';
@@ -17,6 +18,7 @@ describe('Location and automatic search cannot overwrite one another', () => {
     TestBed.configureTestingModule({
       imports: [Weather],
       providers: [
+        provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: WeatherAlertsApi, useValue: { search: () => EMPTY } },

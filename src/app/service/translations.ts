@@ -1,5 +1,17 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Isa te acompaña, también por acá.': 'Isa is here to keep you company, too.',
+  'Navegación por secciones': 'Section navigation',
+  'Nuestra historia': 'Our story',
+  Tecnologías: 'Technology',
+  'Preguntas frecuentes': 'Frequently asked questions',
+  Inicio: 'Home',
+  'Buscar ciudad': 'Find a city',
+  'Clima y pronóstico': 'Weather and forecast',
+  'Contactos útiles': 'Useful contacts',
+  'Sobre nosotros': 'About us',
+  'Todos los derechos reservados.': 'All rights reserved.',
+  'Datos meteorológicos proporcionados por OpenWeather': 'Weather data provided by OpenWeather',
   'Tu compañera del clima. Te leo el consejo para tu día.':
     'Your weather companion. I read your daily advice aloud.',
   Silenciar: 'Mute',
@@ -55,6 +67,7 @@ export const ENGLISH: Readonly<Record<string, string>> = {
   'Escribí al menos tres letras y elegí un lugar de la lista. También podés buscar lo escrito con Enter.':
     'Type at least three letters and choose a place from the list. You can also search by pressing Enter.',
   'Lugares:': 'Places:',
+  'Catálogo local · datos de': 'Local catalog · data from',
   'Escribí un lugar válido. Cada nombre admite hasta 100 caracteres; no dejes una coma sin completar.':
     'Enter a valid place. Each name can contain up to 100 characters; complete every part after a comma.',
   'Reintentar consulta': 'Try again',

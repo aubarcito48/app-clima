@@ -1,47 +1,77 @@
-<section class="isa-card rounded-2xl border border-line bg-surface p-4 text-ink" aria-label="Isa">
-  <svg class="isa-edge-filter" width="0" height="0" aria-hidden="true" focusable="false">
-    <defs>
-      <filter id="isa-dark-edge" color-interpolation-filters="sRGB">
-        <feMorphology in="SourceAlpha" operator="erode" radius="1" result="cleanEdge" />
-        <feComposite in="SourceGraphic" in2="cleanEdge" operator="in" />
-      </filter>
-    </defs>
-  </svg>
-  <button
-    type="button"
-    class="isa-stage"
-    [class.is-speaking]="voice.state() === 'speaking' && !reducedMotion()"
-    aria-label="Isa"
-    [attr.aria-pressed]="voice.enabled()"
-    [attr.aria-description]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
-    [attr.title]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
-    (click)="toggleVoice()"
-  >
-    <span #avatar class="isa-avatar" aria-hidden="true"></span>
-    @if (!portraitReady() || avatarFailed()) {
-      <img class="isa-fallback" src="isa-bot/runtime/isa-sleep-v3.webp"
-        width="320" height="320" alt="" aria-hidden="true" />
-    }
-  </button>
-  <div class="isa-copy min-w-0 flex-1">
-    <p class="mt-1 text-sm leading-6 text-secondary">
-      {{ 'Tu compañera del clima. Te leo el consejo para tu día.' | translate }}
-    </p>
-    <p class="isa-status mt-2 text-xs leading-5 text-secondary" role="status" aria-live="polite">
-      @switch (voice.state()) {
-        @case ('loading') {
-          {{ 'Isa está preparando tu audio…' | translate }}
-        }
-        @case ('speaking') {
-          {{ 'Isa está hablando…' | translate }}
-        }
-        @case ('blocked') {
-          {{ 'El navegador bloqueó el audio. El consejo sigue disponible como texto.' | translate }}
-        }
-        @case ('error') {
-          {{ 'No pudimos reproducir la voz. El consejo sigue disponible como texto.' | translate }}
-        }
+@if (presenceOnly()) {
+  <section class="isa-card rounded-app border border-line bg-surface p-4 text-ink" aria-label="Isa">
+    <div class="isa-stage is-presence">
+      <img
+        src="isa-bot/runtime/isa-sleep-v3.webp"
+        width="320"
+        height="320"
+        alt="Isa"
+        class="isa-fallback"
+      />
+    </div>
+    <div class="isa-copy min-w-0 flex-1">
+      <p class="mt-1 text-sm leading-6 text-secondary">
+        {{ 'Tu compañera del clima. Te leo el consejo para tu día.' | translate }}
+      </p>
+      <p class="isa-status mt-2" aria-hidden="true"></p>
+    </div>
+  </section>
+} @else {
+  <section class="isa-card rounded-app border border-line bg-surface p-4 text-ink" aria-label="Isa">
+    <svg class="isa-edge-filter" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="isa-dark-edge" color-interpolation-filters="sRGB">
+          <feMorphology in="SourceAlpha" operator="erode" radius="1" result="cleanEdge" />
+          <feComposite in="SourceGraphic" in2="cleanEdge" operator="in" />
+        </filter>
+      </defs>
+    </svg>
+    <button
+      type="button"
+      class="isa-stage"
+      [class.is-speaking]="voice.state() === 'speaking' && !reducedMotion()"
+      aria-label="Isa"
+      [attr.aria-pressed]="voice.enabled()"
+      [attr.aria-description]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
+      [attr.title]="(voice.enabled() ? 'Silenciar' : 'Activar voz') | translate"
+      (click)="toggleVoice()"
+    >
+      <span #avatar class="isa-avatar" aria-hidden="true"></span>
+      @if (!portraitReady() || avatarFailed()) {
+        <img
+          class="isa-fallback"
+          src="isa-bot/runtime/isa-sleep-v3.webp"
+          width="320"
+          height="320"
+          alt=""
+          aria-hidden="true"
+        />
       }
-    </p>
-  </div>
-</section>
+    </button>
+    <div class="isa-copy min-w-0 flex-1">
+      <p class="mt-1 text-sm leading-6 text-secondary">
+        {{ 'Tu compañera del clima. Te leo el consejo para tu día.' | translate }}
+      </p>
+      <p class="isa-status mt-2 text-xs leading-5 text-secondary" role="status" aria-live="polite">
+        @switch (voice.state()) {
+          @case ('loading') {
+            {{ 'Isa está preparando tu audio…' | translate }}
+          }
+          @case ('speaking') {
+            {{ 'Isa está hablando…' | translate }}
+          }
+          @case ('blocked') {
+            {{
+              'El navegador bloqueó el audio. El consejo sigue disponible como texto.' | translate
+            }}
+          }
+          @case ('error') {
+            {{
+              'No pudimos reproducir la voz. El consejo sigue disponible como texto.' | translate
+            }}
+          }
+        }
+      </p>
+    </div>
+  </section>
+}

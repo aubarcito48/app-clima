@@ -1,4 +1,8 @@
 import { Translate } from '../../shared/translate';
+import { Router } from '@angular/router';
+import { ScrollReveal } from '../../shared/scroll-reveal';
+import { SectionNavigation } from '../../shared/section-navigation/section-navigation';
+import { SiteFooter } from '../../shared/site-footer/site-footer';
 import { Isabel } from '../../shared/isabel/isabel';
 import {
   ChangeDetectionStrategy,
@@ -33,6 +37,9 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
 @Component({
   selector: 'app-weather',
   imports: [
+    ScrollReveal,
+    SectionNavigation,
+    SiteFooter,
     Isabel,
     Translate,
     BackToTop,
@@ -51,6 +58,12 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
   host: { class: 'block min-w-0' },
 })
 export class Weather {
+  readonly sections = [
+    { id: 'inicio-clima', label: 'Inicio' },
+    { id: 'pronostico', label: 'Buscar ciudad' },
+    { id: 'clima-contenido', label: 'Clima y pronóstico' },
+    { id: 'contactos-utiles', label: 'Contactos útiles' },
+  ];
   readonly language = inject(Language);
   readonly favorites = inject(FavoritePlaces);
   toggleFavorite(): void {
@@ -74,6 +87,9 @@ export class Weather {
   private activeKey = '';
   private lastQuery: WeatherQuery | 'current-location' | null = null;
   constructor() {
+    const place = inject(Router, { optional: true })?.currentNavigation()?.extras.state?.[
+      'weatherPlace'
+    ];
     let previousLanguage = this.language.code();
     effect(() => {
       const code = this.language.code();
@@ -128,6 +144,15 @@ export class Weather {
         this.feedback.set(result.feedback);
         this.state.set(result.data ? 'ready' : 'initial');
       });
+    if (
+      place &&
+      Number.isFinite(place.latitude) &&
+      Number.isFinite(place.longitude) &&
+      Math.abs(place.latitude) <= 90 &&
+      Math.abs(place.longitude) <= 180
+    ) {
+      this.search({ latitude: place.latitude, longitude: place.longitude });
+    }
   }
   search(query: WeatherQuery): void {
     const normalized = 'city' in query ? normalizeCityQuery(query) : query;

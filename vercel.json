@@ -1,4 +1,5 @@
 {
+  "rewrites": [{ "source": "/sobre-nosotros", "destination": "/index.html" }],
   "headers": [
     {
       "source": "/(.*)",
