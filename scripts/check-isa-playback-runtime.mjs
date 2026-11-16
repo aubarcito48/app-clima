@@ -3,20 +3,14 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import ts from 'typescript';
+import { loadIsaPlayback } from './load-isa-playback.mjs';
 import {selectForwardSequence} from './isa-forward-sequence-selector.mjs';
 import {pauseTimeline} from './isa-audio-pauses.mjs';
 import {microPauseTimeline} from './isa-micro-pauses.mjs';
 import {englishPhaseAt,englishSourceAt} from './isa-english-rhythm.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),folder=path.join(root,'tmp/isa-mouth-preview');
-let source=await readFile(path.join(root,'src/app/shared/isabel/isa-playback.ts'),'utf8');
-for(const match of [...source.matchAll(/^import (\w+) from '(.*\.json)';$/gm)]){
- const value=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel',match[2]),'utf8'));
- source=source.replace(match[0],`const ${match[1]}=${JSON.stringify(value)};`);
-}
-const code=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
-const runtime=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const runtime=await loadIsaPlayback();
 const toBuffer=bytes=>Uint8Array.from(bytes).buffer;
 const reports=[];
 for(const key of ['es','cori','amy']){

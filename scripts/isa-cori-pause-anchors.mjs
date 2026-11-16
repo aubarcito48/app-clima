@@ -32,3 +32,15 @@ export function sourceAtPhase(analysis, phase) {
   const source=plan[Math.min(i,plan.length-1)]+fraction;
   return (cycle*cycleFrames+Math.min(end-first-1e-6,source-first))/fps;
 }
+
+// Optional measured Piper boundaries are combined with acoustic gaps. Overlaps
+// are merged rather than applying a second slowdown to the same silence.
+export function createDirectedPauseAnchors(analysis, timeline = []) {
+  const directed=timeline.filter(s=>s.until>s.speech_end).map(s=>({start:s.speech_end,end:s.until}));
+  for(const p of directed)if(!Number.isFinite(p.start)||!Number.isFinite(p.end)||p.start<0||p.end>analysis.duration+.001)throw new Error('Invalid measured director timing');
+  const intervals=[...analysis.pauses,...directed.map(p=>({...p,end:Math.min(p.end,analysis.duration)}))].sort((a,b)=>a.start-b.start);
+  const merged=[];
+  for(const p of intervals){const previous=merged.at(-1);if(previous&&p.start<=previous.end)previous.end=Math.max(previous.end,p.end);else merged.push({...p})}
+  const micro=analysis.micro.filter(p=>!merged.some(g=>p.start<g.end&&p.end>g.start));
+  return {...createPauseAnchors(analysis.duration,merged,micro),directed,merged,micro};
+}

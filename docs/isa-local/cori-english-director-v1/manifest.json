@@ -1,0 +1,112 @@
+{
+  "title": "Isa: director ingl\u00e9s y tiempos reales de Piper",
+  "text": "Wear a light sweater or tee and a short\u2011sleeve shirt; the day feels warm at 25\u00b0C with mild wind. Bring an umbrella when it starts to rain around midday.",
+  "cases": [
+    {
+      "id": "baseline",
+      "label": "Director ingl\u00e9s actual",
+      "profile": "baseline",
+      "scale": 1.08,
+      "file": "cori-warm-rain.wav",
+      "duration": 10.049160997732427,
+      "sha256": "e27508820d2a33834234e8f43eae02eddc20f9fad0c3157e0697763b64017089",
+      "plan": [
+        {
+          "text": "Wear a light sweater or tee and a short\u2011sleeve shirt;",
+          "gesture": "isa-awake",
+          "speed": 1.0,
+          "energy": 1.0,
+          "pause_ms": 160
+        },
+        {
+          "text": "the day feels warm at 25\u00b0C with mild wind.",
+          "gesture": "isa-awake",
+          "speed": 1.0,
+          "energy": 1.0,
+          "pause_ms": 160
+        },
+        {
+          "text": "Bring an umbrella when it starts to rain around midday.",
+          "gesture": "isa-awake",
+          "speed": 1.0,
+          "energy": 1.0,
+          "pause_ms": 0
+        }
+      ],
+      "timeline": [
+        {
+          "from": 0.0,
+          "speech_end": 3.0650340136054424,
+          "until": 3.225034013605442,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 3.225034013605442,
+          "speech_end": 6.870566893424036,
+          "until": 7.030566893424036,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 7.030566893424036,
+          "speech_end": 10.049160997732427,
+          "until": 10.049160997732427,
+          "gesture": "isa-awake"
+        }
+      ]
+    },
+    {
+      "id": "paced-v1",
+      "label": "Director ingl\u00e9s pausado v1",
+      "profile": "paced-v1",
+      "scale": 1.08,
+      "file": "cori-english-director-v1/cori-paced-v1.wav",
+      "duration": 10.496417233560091,
+      "sha256": "9ffe8aca2fdb872c16018e28655ef7a747e03cbffb346b20112bfca7129d7e00",
+      "plan": [
+        {
+          "text": "Wear a light sweater or tee and a short\u2011sleeve shirt;",
+          "gesture": "isa-awake",
+          "speed": 0.92,
+          "energy": 1.0,
+          "pause_ms": 90
+        },
+        {
+          "text": "the day feels warm at 25\u00b0C with mild wind.",
+          "gesture": "isa-awake",
+          "speed": 0.92,
+          "energy": 1.0,
+          "pause_ms": 120
+        },
+        {
+          "text": "Bring an umbrella when it starts to rain around midday.",
+          "gesture": "isa-awake",
+          "speed": 0.92,
+          "energy": 1.0,
+          "pause_ms": 0
+        }
+      ],
+      "timeline": [
+        {
+          "from": 0.0,
+          "speech_end": 3.2624036281179136,
+          "until": 3.3523809523809525,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 3.3523809523809525,
+          "speech_end": 7.230113378684807,
+          "until": 7.350113378684807,
+          "gesture": "isa-awake"
+        },
+        {
+          "from": 7.350113378684807,
+          "speech_end": 10.496417233560091,
+          "until": 10.496417233560091,
+          "gesture": "isa-awake"
+        }
+      ]
+    }
+  ],
+  "reviewed": false,
+  "productionChanged": false
+}
