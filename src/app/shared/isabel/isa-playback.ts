@@ -1,5 +1,5 @@
 import { selectSpanishSpeechFrames } from './isa-frame-selector-es';
-import { selectEnglishSpeechFrames } from './isa-frame-selector-en';
+import { createEnglishPlayback, selectEnglishSpeechFrames } from './isa-frame-selector-en';
 import type { MouthCue } from './isa-mouth-cue';
 import ranges from './isa-speech-ranges.json';
 
@@ -280,6 +280,10 @@ export function createIsaPlayback(buffer: ArrayBuffer, language: 'es' | 'en' = '
   const pcm = readPcm(buffer);
   if (!pcm) return undefined;
   const { pauses, micro } = acousticPauses(pcm.samples, pcm.rate);
+  if (language === 'en') {
+    const english = createEnglishPlayback(pcm.cues, pcm.duration);
+    return { duration: pcm.duration, pauses, micro, ...english };
+  }
   const rows = playbackClock(pcm.duration, pauses, micro),
     cycles: number[][] = [];
   for (let start = 0; start < pcm.duration; start += CYCLE / FPS)

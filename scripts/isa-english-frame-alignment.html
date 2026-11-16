@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Isa · Cori · selección inglesa v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf8fc;color:#173c50;font:17px/1.6 'Segoe UI',sans-serif}main{max-width:1100px;margin:auto;padding:24px}h1{line-height:1.2}blockquote{border-left:4px solid #6994a7;padding-left:16px}.box{background:white;border:1px solid #aac8d6;border-radius:14px;padding:18px;margin:18px 0}button,select{font:inherit;padding:9px;color:inherit;border:1px solid #6994a7;border-radius:8px;background:transparent;margin:5px 8px 5px 0;cursor:pointer}label{display:block;margin:8px 0}audio,input[type=range]{width:100%}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.avatar{width:320px;height:320px;max-width:100%;margin:auto}.panel{background:#d7edf3;border-radius:14px;text-align:center;overflow:hidden}.panel h2{font-size:18px}a{color:inherit}:focus-visible{outline:3px solid #c15a18}summary{cursor:pointer}html[data-theme=dark] body{background:#0c1b2b;color:#d9eef7}html[data-theme=dark] .box{background:#152d3f}html[data-theme=dark] .panel{background:#112d3d}html[data-theme=dark] .avatar{filter:url(#isa-dark-edge)}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:14px}}
+</style></head>
+<body><main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><!--FILTER--></defs></svg>
+<h1>Cori · seguir las marcas de boca</h1>
+<blockquote id="text"></blockquote>
+<p>Ambos retratos comparten exactamente el mismo audio. La izquierda conserva la selección anterior como referencia; la derecha muestra el seguimiento inglés v2 aprobado, también durante el ciclo completo.</p>
+<div class="box">
+<label>Grabación de Cori <select id="voice"><option value="baseline">Director inglés actual</option><option value="paced-v1" selected>Director inglés pausado v1</option></select></label>
+<audio id="audio" controls preload="metadata"></audio>
+<button id="play" disabled>Reproducir desde el inicio</button><button id="theme">Cambiar tema</button><button id="export" disabled>Guardar comparación</button>
+<label><input type="checkbox" id="enabled" checked> Activar selección inglesa nueva en el retrato derecho</label>
+<p id="status" role="status">Preparando…</p><p id="duration"></p>
+<label>Recorrer la grabación <input id="seek" type="range" min="0" max="1" step="0.001" value="0"></label><p id="position"></p><p id="cue"></p>
+</div>
+<div class="grid"><section class="panel"><h2>Selección anterior · referencia</h2><div id="before" class="avatar"></div><p id="beforeInfo"></p></section><section class="panel"><h2>Seguimiento inglés de Rhubarb · v2</h2><div id="after" class="avatar"></div><p id="afterInfo"></p></section></div>
+<p>Probá primero la misma voz en ambos retratos. Desactivá el seguimiento nuevo para comprobar el control. Después compará las dos grabaciones.</p>
+<details class="box"><summary>Qué cambia y qué falta revisar</summary>
+<p>El ensayo permite retener o saltar un cuadro con límites de continuidad. Conserva los cuadros completos y vuelve al final original de cada ciclo; el audio mantiene velocidad 1×.</p>
+<p>El lado derecho sigue el tiempo directo del WAV: no suma encima el ajuste de silencios de la prueba anterior. La v2 afina las etiquetas de varios cierres de boca revisados cuadro por cuadro.</p>
+<p id="metrics"></p><p id="events"></p><p id="coverage"></p>
+<p>Las etiquetas del video siguen siendo aproximaciones visuales. Las formas A, G y H se agrupan con las disponibles. La boca todavía puede quedar abierta durante un silencio: este ensayo no garantiza coincidencia exacta entre fonemas y labios. Revisá también si los pequeños cambios de ritmo resultan naturales.</p>
+</details>
+<p><a href="index-3c-cori-director-ingles-v1.html">Volver a la prueba anterior</a> · Comparación conservada. Español mantiene su selección aprobada.</p>
+</main><script>/*BUNDLE*/</script></body></html>

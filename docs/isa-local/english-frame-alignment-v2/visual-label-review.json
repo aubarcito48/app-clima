@@ -1,0 +1,17 @@
+{
+  "source": "isa-video-ingles.mp4",
+  "sourceSha256": "7d9d1736596da0c34fc3a161fb0a460adbe20bdaeaad0c1866f40249f2030fe5",
+  "indexSpace": "English atlas index; source frame = atlas index + 12",
+  "method": "Visual review of mouth crops for atlas indices 12 through 179; selected closure intervals refined. Other labels keep the original nearest-candidate approximation.",
+  "reviewedByUser": false,
+  "overrides": [
+    { "first": 44, "last": 47, "shape": "X", "reason": "Relaxed closed lips." },
+    { "first": 70, "last": 74, "shape": "B", "reason": "Lips are parted; the original X candidate at 72 is not a relaxed closure." },
+    { "first": 82, "last": 83, "shape": "X", "reason": "Closed lips between the rounded and open shapes." },
+    { "first": 86, "last": 87, "shape": "X", "reason": "Visible closure between two spoken shapes." },
+    { "first": 109, "last": 110, "shape": "X", "reason": "Visible closure after the rounded sequence." },
+    { "first": 139, "last": 149, "shape": "X", "reason": "Sustained closed smile; original B candidates at 144 and 148 miss this closure." },
+    { "first": 155, "last": 155, "shape": "X", "reason": "Brief closure before the rounded sequence." }
+  ],
+  "limits": "Visual shape estimates, not phoneme recognition; uncertain non-closure labels and A/G/H mappings remain provisional. These refinements are applied to the English catalog in the approved v2 integration; source images are preserved."
+}

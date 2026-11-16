@@ -45,3 +45,16 @@ El español conserva su configuración aprobada. La selección del idioma afecta
 tanto el análisis 3C como el atlas del retrato. El ciclo inglés dura siete segundos
 y conserva todos sus cuadros en vueltas completas; el cierre usa sus propias
 referencias. Detalles y validación en [CORI-ENGLISH-VIDEO.md](CORI-ENGLISH-VIDEO.md).
+
+## Seguimiento inglés v2
+
+Nahuel aprobó publicar la [selección inglesa v2](ENGLISH-FRAME-ALIGNMENT-V2.md)
+el 16/11/2026. Solo inglés sigue ahora las marcas Rhubarb también en los ciclos
+completos, con retenciones/saltos de un cuadro, desvío máximo de ocho cuadros y
+extremos de ciclo conservados. Su reloj usa el tiempo directo del WAV para no
+sumar un segundo ajuste acústico a la selección alineada. El catálogo inglés
+refina varios cierres revisados visualmente. Español conserva el comportamiento
+descrito inicialmente. Se mantienen voz Cori, director y backend actuales.
+
+El código activo coincide con los planes y tiempos de la comparación aprobada;
+esto mejora el seguimiento, sin prometer coincidencia fonética perfecta.

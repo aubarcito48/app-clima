@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import { loadIsaPlayback } from './load-isa-playback.mjs';
+import * as englishV1Reference from './reference/isa-playback-before-english-v2.mjs';
 import {selectForwardSequence} from './isa-forward-sequence-selector.mjs';
 import {pauseTimeline} from './isa-audio-pauses.mjs';
 import {microPauseTimeline} from './isa-micro-pauses.mjs';
@@ -44,10 +45,11 @@ for(const name of ['es_long','en_long']){
  assert.ok(wraps>=1);reports.push({key:name,duration:actual.duration,cycles:actual.cycles.length,wraps});
 }
 assert.equal(runtime.createIsaPlayback(new ArrayBuffer(0)),undefined);
-// English integration must reproduce panel 3, with that take's own catalog.
+// Preserve the old panel 3 reference; production English v2 is verified against
+// the approved frame-alignment trial by check-isa-english-frame-alignment.mjs.
 const englishData=JSON.parse((await readFile(path.join(folder,'index-3c-cori-video-ingles.html'),'utf8')).split('const data=')[1].split(/;\r?\nconst \$=/)[0]);
 for(const sample of englishData.cases){
- const actual=runtime.createIsaPlayback(toBuffer(Buffer.from(sample.audio.split(',')[1],'base64')),'en');
+ const actual=englishV1Reference.createIsaPlayback(toBuffer(Buffer.from(sample.audio.split(',')[1],'base64')),'en');
  const selection=selectForwardSequence({...englishData.new,...sample},englishData.new.labels);
  assert.deepEqual(actual.cycles[0],selection.plan);
  assert.deepEqual(actual.pauses,sample.acoustics.pauses);assert.deepEqual(actual.micro,sample.micro.gaps);
@@ -59,11 +61,13 @@ for(const sample of englishData.cases){
  reports.push({key:sample.id,englishPanel3:true,frameDifferences:0});
 }
 const englishLong=runtime.createIsaPlayback(toBuffer(await readFile(path.join(root,'docs/isa-local/reference-2026-11-15/backend/tmp/isa-rhubarb/en_long.wav'))),'en');
-assert.deepEqual(englishLong.cycles[0],Array.from({length:168},(_,i)=>12+i));
+assert.equal(englishLong.cycles[0].length,168);
+assert.equal(englishLong.cycles[0][0],12);
+assert.equal(englishLong.cycles[0].at(-1),179);
 let lastEnglish=-1;
 for(let n=0;n<=englishLong.duration*120;n++){
  const seconds=englishLong.sourceSecondsAt(n/120);assert.ok(seconds>=lastEnglish);lastEnglish=seconds;
  const frame=12+(seconds*24)%168;assert.ok(frame>=12&&frame<180);
 }
-console.log('OK: production PCM detection/clock/3C matches all approved samples, no per-frame differences; real long audio loops remain bounded and native; missing or malformed Rhubarb falls back.');
+console.log('OK: Spanish references unchanged; archived English panel 3 preserved; production English loops bounded and monotonic; malformed Rhubarb falls back.');
 console.log(JSON.stringify(reports,null,2));
