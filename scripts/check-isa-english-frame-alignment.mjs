@@ -63,6 +63,8 @@ for (const sample of [...report.cases, {
     const t = Math.min(analysis.duration, n/240), source = plan.sourceSecondsAt(t);
     assert.ok(Number.isFinite(source) && source >= previous - 1e-9);
     assert.equal(source, alignedSourceAt(plan.cycles, analysis.duration, t));
+    assert.ok(Math.abs(active.sourceSecondsAt(t) - source) < 1e-12);
+    assert.equal(newSpanish.sourceSecondsAt(t), oldSpanish.sourceSecondsAt(t));
     assert.equal(active.sourceSecondsAt(t), source);
     assert.equal(newSpanish.sourceSecondsAt(t), oldSpanish.sourceSecondsAt(t));
     if (n) assert.ok(source - previous <= 2/240 + 1e-9);
