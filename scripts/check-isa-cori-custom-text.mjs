@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { fileURLToPath,pathToFileURL } from 'node:url';
+import { chromium,expect } from '@playwright/test';
+
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const folder=path.join(root,'tmp/isa-mouth-preview');
+const text=(await readFile(path.join(root,'docs/isa-local/cori-warm-rain.txt'),'utf8')).trim();
+const metadata=JSON.parse(await readFile(path.join(folder,'index-3c-cori-texto-calido-lluvia.json'),'utf8'));
+assert.equal(metadata.text,text);
+assert.equal(createHash('sha256').update(await readFile(path.join(root,'docs/isa-local/cori-warm-rain.wav'))).digest('hex'),metadata.audioSha256);
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1000,height:1000}}),errors=[],network=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))network.push(r.url())});
+ await page.goto(pathToFileURL(path.join(folder,'index-3c-cori-texto-calido-lluvia.html')).href);
+ const play=page.getByRole('button',{name:'Reproducir desde el inicio'}),canvas=page.locator('#avatar canvas');
+ await expect(play).toBeEnabled({timeout:20000});await expect(page.locator('#text')).toHaveText(text);
+ await expect(canvas).toHaveAttribute('data-isa-speech-language','en');
+ const summary=await page.locator('#summary').textContent();
+ await play.click();await expect(canvas).toHaveAttribute('data-isa-speaking','true');
+ await expect.poll(()=>page.locator('#audio').evaluate(a=>a.currentTime)).toBeGreaterThan(1);
+ await expect(page.locator('#status')).toHaveText('Lectura terminada.',{timeout:30000});
+ await expect(canvas).toHaveAttribute('data-isa-speaking','false');
+ await expect.poll(()=>canvas.getAttribute('data-isa-speech-blend')).toBe('0.000');
+ await page.getByRole('button',{name:'Ver en oscuro'}).click();
+ await expect(canvas).toHaveCSS('filter',/isa-dark-edge/);
+ await page.screenshot({path:path.join(folder,'cori-warm-rain-desktop.png'),fullPage:true});
+ await page.setViewportSize({width:390,height:844});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ await page.getByText('Ver pausas y microsilencios del WAV').click();
+ await expect(page.locator('#gaps tr').first()).toBeVisible();
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'Guardar tiempos'}).click();
+ assert.equal((await download).suggestedFilename(),'isa-cori-warm-rain-timing.json');
+ assert.deepEqual(errors,[]);assert.deepEqual(network,[]);
+ const report={passed:true,text,summary,audioSha256:metadata.audioSha256,reviewed:false};
+ await writeFile(path.join(folder,'cori-warm-rain-checks.json'),JSON.stringify(report,null,2));
+ console.log(JSON.stringify(report,null,2));
+}finally{await browser.close()}
