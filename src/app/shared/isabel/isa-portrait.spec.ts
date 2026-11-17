@@ -17,7 +17,7 @@ describe('Isa video speech lifecycle', () => {
       now += 1000 / 60;
       const batch = [...callbacks.values()];
       callbacks.clear();
-      batch.forEach(callback => callback(now));
+      batch.forEach((callback) => callback(now));
       await Promise.resolve();
     }
   }
@@ -32,18 +32,28 @@ describe('Isa video speech lifecycle', () => {
     requests.length = 0;
     vi.spyOn(performance, 'now').mockImplementation(() => now);
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
-      clearRect: vi.fn(), drawImage: vi.fn(), globalAlpha: 1, globalCompositeOperation: 'source-over',
+      clearRect: vi.fn(),
+      drawImage: vi.fn(),
+      globalAlpha: 1,
+      globalCompositeOperation: 'source-over',
     } as unknown as CanvasRenderingContext2D);
-    vi.stubGlobal('Image', class {
-      src = '';
-      decode() {
-        requests.push(this.src);
-        if (delaySecondPage && this.src.includes('isa-speech-v1-1.webp')) {
-          return new Promise<void>(resolve => { releaseSecondPage = resolve; });
+    vi.stubGlobal(
+      'Image',
+      class {
+        src = '';
+        decode() {
+          requests.push(this.src);
+          if (delaySecondPage && this.src.includes('isa-speech-v1-1.webp')) {
+            return new Promise<void>((resolve) => {
+              releaseSecondPage = resolve;
+            });
+          }
+          return failSpeech && this.src.includes('speech')
+            ? Promise.reject(new Error('Offline'))
+            : Promise.resolve();
         }
-        return failSpeech && this.src.includes('speech') ? Promise.reject(new Error('Offline')) : Promise.resolve();
-      }
-    });
+      },
+    );
     vi.stubGlobal('IntersectionObserver', undefined);
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
       callbacks.set(++serial, callback);
@@ -70,13 +80,13 @@ describe('Isa video speech lifecycle', () => {
     const canvas = host.querySelector('canvas')!;
     expect(canvas.dataset['isaSpeechLanguage']).toBe('en');
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeLessThan(180);
-    expect(requests.some(src => src.includes('isa-speech-en-v1-'))).toBe(true);
+    expect(requests.some((src) => src.includes('isa-speech-en-v1-'))).toBe(true);
     controller!.setSpeaking(false);
     controller!.setSpeechLanguage('es');
     controller!.setSpeaking(true);
     await advance(20);
     expect(canvas.dataset['isaSpeechLanguage']).toBe('es');
-    expect(requests.some(src => src.includes('isa-speech-v1-'))).toBe(true);
+    expect(requests.some((src) => src.includes('isa-speech-v1-'))).toBe(true);
   });
 
   it('keeps speech moving through quiet gaps and closes only when playback ends', async () => {
@@ -166,7 +176,7 @@ describe('Isa video speech lifecycle', () => {
   it('keeps speaking when a gesture or loading update arrives mid-narration', async () => {
     controller!.play('isa-awake');
     await advance(160);
-    controller!.setMouthOpening(.7);
+    controller!.setMouthOpening(0.7);
     controller!.setSpeaking(true);
     await advance(60);
     const canvas = host.querySelector('canvas')!;
@@ -175,10 +185,10 @@ describe('Isa video speech lifecycle', () => {
     controller!.setWorking(true);
     await advance(60);
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
     controller!.play('isa-awake');
     await advance(160);
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.9);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.9);
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBeGreaterThan(before);
     expect(canvas.dataset['isaSpeaking']).toBe('true');
   });
@@ -187,12 +197,12 @@ describe('Isa video speech lifecycle', () => {
     controller!.play('isa-right');
     controller!.setWorking(true);
     await advance(100);
-    expect(requests.some(request => request.includes('isa-speech-v1-0'))).toBe(true);
+    expect(requests.some((request) => request.includes('isa-speech-v1-0'))).toBe(true);
     controller!.setWorking(false);
     controller!.setSpeaking(true);
     await advance(15);
     const canvas = host.querySelector('canvas')!;
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.85);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.85);
     expect(canvas.dataset['isaExpression']).toBe('isa-awake');
   });
 
@@ -207,7 +217,7 @@ describe('Isa video speech lifecycle', () => {
       expect(frame).toBeGreaterThanOrEqual(12);
       expect(frame).toBeLessThan(192);
       if (frame < previous) wraps++;
-      if (i > 40) expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
+      if (i > 40) expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
       previous = frame;
     }
     expect(wraps).toBeGreaterThanOrEqual(3);
@@ -234,7 +244,7 @@ describe('Isa video speech lifecycle', () => {
     controller!.setSpeechTime(9);
     await advance(10);
     expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(48);
-    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(.99);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
     controller!.setSpeechTime(NaN);
     controller!.setSpeechTime(-1);
     await advance(10);
@@ -272,6 +282,35 @@ describe('Isa video speech lifecycle', () => {
     expect(callbacks.size).toBe(0);
     expect(host.querySelector('canvas')).toBeNull();
     controller = undefined;
+  });
+
+  it('retries failed pages on a new narration, without a retry loop during playback', async () => {
+    failSpeech = true;
+    controller!.setSpeaking(true);
+    await advance(40);
+    const failedRequests = requests.length;
+    await advance(120);
+    expect(requests).toHaveLength(failedRequests);
+    failSpeech = false;
+    controller!.setSpeaking(false);
+    controller!.setSpeaking(true);
+    controller!.setSpeechTime(1);
+    await advance(60);
+    expect(requests.length).toBeGreaterThan(failedRequests);
+    expect(Number(host.querySelector('canvas')!.dataset['isaSpeechBlend'])).toBeGreaterThan(0.99);
+  });
+
+  it('does not treat open or uncertain Spanish release frames as closed anchors', async () => {
+    controller!.setSpeaking(true);
+    controller!.setSpeechTime(4.5); // Atlas frame 120.
+    await advance(60);
+    controller!.setSpeaking(false);
+    await advance(60);
+    const canvas = host.querySelector('canvas')!;
+    // No verified closure in the next six frames: retain the bounded forward
+    // fade rather than stopping at the former, incorrectly labelled frame 123.
+    expect(Number(canvas.dataset['isaSpeechFrame'])).toBe(126);
+    expect(Number(canvas.dataset['isaSpeechBlend'])).toBe(0);
   });
 
   it('suspends animation when the page is hidden and resumes when visible', async () => {

@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Isabel } from './isabel';
 import { Language } from '../../service/language';
 
@@ -88,5 +88,32 @@ describe('Isa follows the current weather advice', () => {
     await fixture.whenStable();
     expect(fixture.componentInstance.voice.enabled()).toBe(false);
     http.expectNone(() => true);
+  });
+
+  it('offers a user gesture to resume cached audio and retry only the current advice', async () => {
+    const fixture = TestBed.createComponent(Isabel);
+    fixture.componentRef.setInput('text', 'Lleva paraguas.');
+    await fixture.whenStable();
+    http.expectOne(() => true).flush(new Blob(), { status: 503, statusText: 'Unavailable' });
+    const voice = fixture.componentInstance.voice;
+    const resume = vi.spyOn(voice, 'resume');
+    voice.state.set('blocked');
+    await fixture.whenStable();
+    const buttons = () =>
+      [...fixture.nativeElement.querySelectorAll('button')] as HTMLButtonElement[];
+    buttons()
+      .find((b) => b.textContent?.includes('Reproducir audio'))!
+      .click();
+    expect(resume).toHaveBeenCalledOnce();
+    http.expectNone(() => true);
+    voice.state.set('busy');
+    await fixture.whenStable();
+    buttons()
+      .find((b) => b.textContent?.includes('Reintentar voz'))!
+      .click();
+    const retry = http.expectOne(() => true);
+    expect(retry.request.body.texto).toContain('Lleva paraguas.');
+    fixture.destroy();
+    expect(retry.cancelled).toBe(true);
   });
 });

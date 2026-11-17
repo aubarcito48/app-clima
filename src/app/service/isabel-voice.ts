@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, retry, tap, throwError, timer } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { voiceEnvelope, VOICE_FRAME_SECONDS } from './voice-envelope';
 import { createIsaPlayback } from '../shared/isabel/isa-playback';
@@ -24,7 +24,8 @@ export class IsabelVoice {
   readonly mouthOpening = signal(0);
   readonly speechTime = signal(0);
   readonly gesture = signal<IsaGesture>('isa-awake');
-  readonly state = signal<'idle' | 'loading' | 'speaking' | 'blocked' | 'error'>('idle');
+  readonly state = signal<'idle' | 'loading' | 'speaking' | 'blocked' | 'busy' | 'error'>('idle');
+  readonly waitingForVoice = signal(false);
   private request?: Subscription;
   private audio?: HTMLAudioElement;
   private url?: string;
@@ -80,6 +81,28 @@ export class IsabelVoice {
           timeout: 120000,
         },
       )
+      .pipe(
+        retry({
+          count: 1,
+          delay: (error: unknown) => {
+            if (!(error instanceof HttpErrorResponse) || error.status !== 429)
+              return throwError(() => error);
+            const header = error.headers.get('Retry-After');
+            const seconds =
+              header === null
+                ? 5
+                : /^\d+$/.test(header.trim())
+                  ? Number(header)
+                  : (Date.parse(header) - Date.now()) / 1000;
+            // Respect a long Retry-After without keeping an invisible retry alive.
+            if (!Number.isFinite(seconds) || seconds > 30) return throwError(() => error);
+            this.waitingForVoice.set(true);
+            return timer(Math.max(1, seconds) * 1000).pipe(
+              tap(() => this.waitingForVoice.set(false)),
+            );
+          },
+        }),
+      )
       .subscribe({
         next: (blob) => {
           if (generation !== this.generation) return;
@@ -95,7 +118,7 @@ export class IsabelVoice {
               if (generation === this.generation) {
                 this.envelope = voiceEnvelope(buffer);
                 this.cues = plan ? readIsaTimeline(buffer) : [];
-                  this.playback = createIsaPlayback(buffer, language);
+                this.playback = createIsaPlayback(buffer, language);
               }
             })
             .catch(() => {
@@ -135,25 +158,37 @@ export class IsabelVoice {
             this.stop();
             this.state.set('error');
           };
-          void prepared
-            .then(() => {
-              if (generation !== this.generation || audio !== this.audio) return;
-              return audio.play();
-            })
-            .catch((error: unknown) => {
-              if (generation !== this.generation) return;
-              if (error instanceof DOMException && error.name === 'NotAllowedError') {
-                this.state.set('blocked');
-              } else {
-                this.stop();
-                this.state.set('error');
-              }
-            });
+          void prepared.then(() => {
+            if (generation !== this.generation || audio !== this.audio) return;
+            this.playAudio(audio, generation);
+          });
         },
-        error: () => {
-          if (generation === this.generation) this.state.set('error');
+        error: (error: unknown) => {
+          if (generation !== this.generation) return;
+          this.waitingForVoice.set(false);
+          this.state.set(
+            error instanceof HttpErrorResponse && error.status === 429 ? 'busy' : 'error',
+          );
         },
       });
+  }
+
+  resume(): void {
+    if (this.enabled() && this.state() === 'blocked' && this.audio)
+      this.playAudio(this.audio, this.generation);
+  }
+
+  private playAudio(audio: HTMLAudioElement, generation: number): void {
+    // Called directly by the resume button to retain the browser's user gesture.
+    void audio.play().catch((error: unknown) => {
+      if (generation !== this.generation || audio !== this.audio) return;
+      if (error instanceof DOMException && error.name === 'NotAllowedError') {
+        this.state.set('blocked');
+      } else {
+        this.stop();
+        this.state.set('error');
+      }
+    });
   }
 
   stop(): void {
@@ -166,6 +201,7 @@ export class IsabelVoice {
     this.gesture.set('isa-awake');
     this.cues = [];
     this.playback = undefined;
+    this.waitingForVoice.set(false);
     this.request?.unsubscribe();
     this.request = undefined;
     if (this.audio) {

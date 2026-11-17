@@ -17,6 +17,10 @@ export const ENGLISH: Readonly<Record<string, string>> = {
   Silenciar: 'Mute',
   'Activar voz': 'Enable voice',
   Detener: 'Stop',
+  'Reproducir audio': 'Play audio',
+  'Reintentar voz': 'Retry voice',
+  'La voz está ocupada. Reintentando…': 'The voice is busy. Retrying…',
+  'La voz sigue ocupada. Podés volver a intentarlo.': 'The voice is still busy. You can try again.',
   'Isa está preparando tu audio…': 'Isa is preparing your audio…',
   'Isa está hablando…': 'Isa is speaking…',
   'El navegador bloqueó el audio. El consejo sigue disponible como texto.':

@@ -2,6 +2,7 @@ import { selectSpanishSpeechFrames } from './isa-frame-selector-es';
 import { createEnglishPlayback, selectEnglishSpeechFrames } from './isa-frame-selector-en';
 import type { MouthCue } from './isa-mouth-cue';
 import ranges from './isa-speech-ranges.json';
+import { createOwnPlayback } from './isa-own-playback';
 
 export interface AudioPause {
   start: number;
@@ -13,6 +14,7 @@ interface ClockRow {
   rate: number;
 }
 interface PcmVoice {
+  ownEngine: boolean;
   samples: Float64Array;
   rate: number;
   duration: number;
@@ -30,6 +32,7 @@ function readPcm(buffer: ArrayBuffer): PcmVoice | undefined {
     const tag = (at: number) => String.fromCharCode(...new Uint8Array(buffer, at, 4));
     if (tag(0) !== 'RIFF' || tag(8) !== 'WAVE' || view.getUint32(4, true) + 8 !== buffer.byteLength)
       return;
+    let ownEngine = false;
     let rate = 0,
       offset = 0,
       bytes = 0,
@@ -52,6 +55,9 @@ function readPcm(buffer: ArrayBuffer): PcmVoice | undefined {
         if (offset) return;
         offset = at + 8;
         bytes = size;
+      } else if (tag(at) === 'isam') {
+        if (size > 128) return;
+        ownEngine = JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, at + 8, size)))?.engine === 'isa-rf-v2';
       } else if (tag(at) === 'isav') {
         if (raw !== undefined || size > 65536) return;
         raw = JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, at + 8, size)));
@@ -94,7 +100,7 @@ function readPcm(buffer: ArrayBuffer): PcmVoice | undefined {
       { length: bytes / 2 },
       (_, i) => view.getInt16(offset + i * 2, true) / 32768,
     );
-    return { samples, rate, duration, cues };
+    return { samples, rate, duration, cues, ownEngine };
   } catch {
     return;
   }
@@ -273,12 +279,16 @@ export function speechCycle(
     : selectSpanishSpeechFrames(cues, start, duration);
 }
 
-/** Optional local playback analysis. Missing/invalid Rhubarb data keeps legacy playback. */
+/** Own RF uses the reviewed planner; historical WAVs retain legacy playback. */
 export function createIsaPlayback(buffer: ArrayBuffer, language: 'es' | 'en' = 'es') {
   const { first: FIRST, end: END } = ranges[language],
     CYCLE = END - FIRST;
   const pcm = readPcm(buffer);
   if (!pcm) return undefined;
+  if (pcm.ownEngine) {
+    try { return createOwnPlayback(buffer, pcm.samples, pcm.rate, pcm.cues, language); }
+    catch { return undefined; }
+  }
   const { pauses, micro } = acousticPauses(pcm.samples, pcm.rate);
   if (language === 'en') {
     const english = createEnglishPlayback(pcm.cues, pcm.duration);

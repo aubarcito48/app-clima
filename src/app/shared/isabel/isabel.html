@@ -55,7 +55,12 @@
       <p class="isa-status mt-2 text-xs leading-5 text-secondary" role="status" aria-live="polite">
         @switch (voice.state()) {
           @case ('loading') {
-            {{ 'Isa está preparando tu audio…' | translate }}
+            {{
+              (voice.waitingForVoice()
+                ? 'La voz está ocupada. Reintentando…'
+                : 'Isa está preparando tu audio…'
+              ) | translate
+            }}
           }
           @case ('speaking') {
             {{ 'Isa está hablando…' | translate }}
@@ -70,8 +75,29 @@
               'No pudimos reproducir la voz. El consejo sigue disponible como texto.' | translate
             }}
           }
+          @case ('busy') {
+            {{ 'La voz sigue ocupada. Podés volver a intentarlo.' | translate }}
+          }
         }
       </p>
+      @if (voice.enabled() && voice.state() === 'blocked') {
+        <button
+          type="button"
+          class="mt-2 rounded-app border border-line px-3 py-2 text-sm"
+          (click)="voice.resume()"
+        >
+          {{ 'Reproducir audio' | translate }}
+        </button>
+      }
+      @if (voice.enabled() && text() && (voice.state() === 'busy' || voice.state() === 'error')) {
+        <button
+          type="button"
+          class="mt-2 rounded-app border border-line px-3 py-2 text-sm"
+          (click)="retryVoice()"
+        >
+          {{ 'Reintentar voz' | translate }}
+        </button>
+      }
     </div>
   </section>
 }

@@ -47,6 +47,7 @@ describe('Isa voice playback lifecycle', () => {
     http.verify();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   it('starts enabled, stays silent without advice and adds a greeting and farewell to the audio', () => {
@@ -146,8 +147,87 @@ describe('Isa voice playback lifecycle', () => {
     expect(URL.revokeObjectURL).not.toHaveBeenCalled();
     http.expectNone(() => true);
     expect(FakeAudio.instances[0].play).toHaveBeenCalledTimes(1);
+    voice.resume();
+    expect(FakeAudio.instances[0].play).toHaveBeenCalledTimes(2);
+    expect(FakeAudio.instances).toHaveLength(1);
+    http.expectNone(() => true);
+    FakeAudio.instances[0].onplaying?.();
+    expect(voice.state()).toBe('speaking');
     voice.setEnabled(false);
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:isa-test');
+  });
+
+  it('retries busy synthesis once after Retry-After and exposes persistent busy', async () => {
+    vi.useFakeTimers();
+    voice.speak('Actual');
+    const first = http.expectOne(() => true);
+    first.flush(new Blob(), { status: 429, statusText: 'Busy', headers: { 'Retry-After': '5' } });
+    expect(voice.waitingForVoice()).toBe(true);
+    await vi.advanceTimersByTimeAsync(4999);
+    http.expectNone(() => true);
+    await vi.advanceTimersByTimeAsync(1);
+    const retry = http.expectOne(() => true);
+    expect(retry.request.body).toEqual(first.request.body);
+    expect(voice.waitingForVoice()).toBe(false);
+    retry.flush(new Blob(), { status: 429, statusText: 'Busy' });
+    expect(voice.state()).toBe('busy');
+    await vi.advanceTimersByTimeAsync(30000);
+    http.expectNone(() => true);
+  });
+
+  it('cancels a queued busy retry on mute or replacement advice', async () => {
+    vi.useFakeTimers();
+    voice.speak('Anterior');
+    http.expectOne(() => true).flush(new Blob(), { status: 429, statusText: 'Busy' });
+    voice.speak('Nuevo');
+    const next = http.expectOne(() => true);
+    expect(next.request.body.texto).toContain('Nuevo');
+    next.flush(new Blob(), { status: 429, statusText: 'Busy' });
+    voice.setEnabled(false);
+    await vi.advanceTimersByTimeAsync(30000);
+    http.expectNone(() => true);
+    expect(voice.state()).toBe('idle');
+    expect(voice.waitingForVoice()).toBe(false);
+  });
+
+  it('does not retry other errors or shorten a long Retry-After', async () => {
+    vi.useFakeTimers();
+    for (const [status, wait] of [
+      [503, '5'],
+      [429, '120'],
+      [429, 'invalid'],
+    ]) {
+      voice.speak('Consejo');
+      http
+        .expectOne(() => true)
+        .flush(new Blob(), {
+          status: Number(status),
+          statusText: 'Unavailable',
+          headers: { 'Retry-After': String(wait) },
+        });
+      expect(voice.state()).toBe(status === 429 ? 'busy' : 'error');
+      await vi.advanceTimersByTimeAsync(30000);
+      http.expectNone(() => true);
+    }
+  });
+
+  it('cannot resume discarded audio or accept an old play rejection', async () => {
+    let reject!: (reason: unknown) => void;
+    voice.speak('Anterior');
+    http.expectOne(() => true).flush(wav());
+    const audio = FakeAudio.instances[0];
+    audio.play.mockReturnValue(
+      new Promise<void>((_, fail) => {
+        reject = fail;
+      }),
+    );
+    await vi.waitFor(() => expect(audio.play).toHaveBeenCalled());
+    voice.stop();
+    reject(new DOMException('blocked', 'NotAllowedError'));
+    await Promise.resolve();
+    voice.resume();
+    expect(voice.state()).toBe('idle');
+    expect(audio.play).toHaveBeenCalledTimes(1);
   });
 
   it('exposes a recoverable state when the server is unavailable or sends invalid audio', () => {

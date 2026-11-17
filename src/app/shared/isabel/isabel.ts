@@ -147,6 +147,12 @@ export class Isabel {
     this.voice.setEnabled(!this.voice.enabled());
   }
 
+  retryVoice(): void {
+    const text = this.text();
+    if (text && this.voice.enabled() && ['busy', 'error'].includes(this.voice.state()))
+      this.voice.speak(text, this.language.code(), this.segments());
+  }
+
   private async loadAvatar(): Promise<void> {
     try {
       const { createIsaPortrait } = await import('./isa-portrait');

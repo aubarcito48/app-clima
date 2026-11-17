@@ -371,6 +371,9 @@ export async function createIsaPortrait(host: HTMLElement) {
       canvas.dataset['isaSpeaking'] = String(value);
       clearTimeout(blinkTimer);
       if (value) {
+        // A failed page is suppressed for this narration, not for the lifetime
+        // of the language. Retry once on the next playback; never on every RAF.
+        speechFailed.clear();
         motion.request('isa-awake', reduced);
         canvas.dataset['isaExpression'] = 'isa-awake';
         canvas.dataset['isaAnimation'] = reduced ? '' : 'isa-awake';
