@@ -11,6 +11,14 @@ test('cambiar de país selecciona la fuente oficial y conserva el idioma del avi
   await page.goto('/');
   const panel = page.locator('app-weather-alerts');
   for (const [country, city, event, url] of [
+    ['AR', 'Córdoba', 'Tormentas en Córdoba de prueba', ALERTS_FIXTURE.alertas[0].url],
+    [
+      'CL',
+      'Santiago',
+      'Tormentas en Chile de prueba',
+      'https://archivos.meteochile.gob.cl/portaldmc/rss/meteochile_A1_2026_cap.xml',
+    ],
+    ['AR', 'Córdoba', 'Tormentas en Córdoba de prueba', ALERTS_FIXTURE.alertas[0].url],
     ['BR', 'São Paulo', 'Tempestade de teste', 'https://apiprevmet3.inmet.gov.br/avisos/rss/123'],
     [
       'UY',
@@ -40,10 +48,17 @@ test('cambiar de país selecciona la fuente oficial y conserva el idioma del avi
       provider.language,
     );
     await expect(panel).toContainText(provider.name);
+    await expect(panel.locator('.alert-notice')).toHaveCount(1);
+    if (country === 'AR') {
+      await expect(panel).not.toContainText('Tormentas en Chile de prueba');
+      await expect(panel).not.toContainText(ALERT_SOURCES['CL'].name);
+    }
     await expect(
       panel.getByRole('link', { name: `Consultar ${provider.short}`, exact: false }),
     ).toHaveAttribute('href', provider.url);
-    await expect(panel.getByRole('link', { name: /Consultar SMN/ })).toHaveCount(0);
+    await expect(panel.getByRole('link', { name: /Consultar SMN/ })).toHaveCount(
+      country === 'AR' ? 1 : 0,
+    );
   }
   await chooseLanguage(page, 'en');
   await expect(panel.getByRole('heading', { name: 'Weather alerts', exact: true })).toBeVisible();
