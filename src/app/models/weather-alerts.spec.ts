@@ -1,9 +1,45 @@
 import { describe, expect, it } from 'vitest';
-import { readWeatherAlerts } from './weather-alerts';
+import { ALERT_SOURCES, readWeatherAlerts } from './weather-alerts';
 import { ALERTS_FIXTURE } from '../testing/alerts-fixture';
 import { CLIMATE_FIXTURE } from '../testing/climate-fixture';
 
 describe('Official weather alerts contract', () => {
+  it.each([
+    ['BR', 'https://apiprevmet3.inmet.gov.br/avisos/rss/123'],
+    ['CL', 'https://archivos.meteochile.gob.cl/portaldmc/rss/meteochile_A1_2026_cap.xml'],
+    ['UY', 'https://www.inumet.gub.uy/reportes/riesgo/cap_2026_10_25.xml'],
+  ])('accepts only the matching official source and CAP links for %s', (country, url) => {
+    const data = structuredClone(ALERTS_FIXTURE);
+    data.ubicacion.pais = country;
+    data.fuente.nombre = ALERT_SOURCES[country].name;
+    data.fuente.url = ALERT_SOURCES[country].url;
+    data.alertas[0].url = url;
+    const place = { ...CLIMATE_FIXTURE.ubicacion, pais: country };
+    expect(readWeatherAlerts(data, place).alertas).toHaveLength(1);
+    for (const link of [
+      ALERTS_FIXTURE.alertas[0].url,
+      url + '?redirect=1',
+      url.replace('https://', 'https://evil.test/'),
+    ]) {
+      data.alertas[0].url = link;
+      expect(() => readWeatherAlerts(data, place)).toThrow();
+    }
+    data.alertas[0].url = url;
+    data.fuente = { ...ALERTS_FIXTURE.fuente };
+    expect(() => readWeatherAlerts(data, place)).toThrow();
+  });
+  it('does not accept an all-clear for a country without an integrated source', () => {
+    const data = {
+      ...ALERTS_FIXTURE,
+      ubicacion: { ...ALERTS_FIXTURE.ubicacion, pais: 'PE' },
+      alertas: [],
+    };
+    const place = { ...CLIMATE_FIXTURE.ubicacion, pais: 'PE' };
+    expect(() => readWeatherAlerts(data, place)).toThrow();
+    expect(readWeatherAlerts({ ...data, estado: 'fuera_cobertura' }, place).estado).toBe(
+      'fuera_cobertura',
+    );
+  });
   it('recognizes SMN rate limiting without treating it as an all-clear', () => {
     const data = {
       ...ALERTS_FIXTURE,

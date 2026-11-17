@@ -1,6 +1,58 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search, changeTheme } from './fixtures';
 import { ALERTS_FIXTURE } from '../src/app/testing/alerts-fixture';
+import { ALERT_SOURCES } from '../src/app/models/weather-alerts';
+import { chooseLanguage } from './fixtures';
+
+test('cambiar de país selecciona la fuente oficial y conserva el idioma del aviso', async ({
+  page,
+  api,
+}) => {
+  await page.goto('/');
+  const panel = page.locator('app-weather-alerts');
+  for (const [country, city, event, url] of [
+    ['BR', 'São Paulo', 'Tempestade de teste', 'https://apiprevmet3.inmet.gov.br/avisos/rss/123'],
+    [
+      'UY',
+      'Montevideo',
+      'Tormentas de prueba',
+      'https://www.inumet.gub.uy/reportes/riesgo/cap_2026_10_25.xml',
+    ],
+    [
+      'CL',
+      'Santiago',
+      'Tormentas de prueba',
+      'https://archivos.meteochile.gob.cl/portaldmc/rss/meteochile_A1_2026_cap.xml',
+    ],
+  ]) {
+    const provider = ALERT_SOURCES[country];
+    api.body = climate(city);
+    (api.body as ReturnType<typeof climate>).ubicacion.pais = country;
+    api.alertsBody = {
+      ...ALERTS_FIXTURE,
+      ubicacion: { ...ALERTS_FIXTURE.ubicacion, pais: country },
+      fuente: { ...ALERTS_FIXTURE.fuente, nombre: provider.name, url: provider.url },
+      alertas: [{ ...ALERTS_FIXTURE.alertas[0], fenomeno: event, url }],
+    };
+    await search(page, city, country);
+    await expect(panel.getByRole('heading', { name: event })).toHaveAttribute(
+      'lang',
+      provider.language,
+    );
+    await expect(panel).toContainText(provider.name);
+    await expect(
+      panel.getByRole('link', { name: `Consultar ${provider.short}`, exact: false }),
+    ).toHaveAttribute('href', provider.url);
+    await expect(panel.getByRole('link', { name: /Consultar SMN/ })).toHaveCount(0);
+  }
+  await chooseLanguage(page, 'en');
+  await expect(panel.getByRole('heading', { name: 'Weather alerts', exact: true })).toBeVisible();
+  await expect(panel).toContainText('Official notices are shown in their original language.');
+  await expect(panel.getByRole('heading', { name: 'Tormentas de prueba' })).toHaveAttribute(
+    'lang',
+    'es',
+  );
+});
 
 test('un 429 del SMN explica la espera y no declara ausencia de alertas', async ({ page, api }) => {
   api.alertsBody = {
@@ -15,7 +67,9 @@ test('un 429 del SMN explica la espera y no declara ausencia de alertas', async 
   await page.goto('/');
   await search(page, 'Córdoba');
   const panel = page.locator('app-weather-alerts');
-  await expect(panel.getByRole('status')).toContainText('El SMN está limitando temporalmente');
+  await expect(panel.getByRole('status')).toContainText(
+    'La fuente oficial está limitando temporalmente',
+  );
   await expect(panel).not.toContainText('Sin alertas reportadas');
 });
 
@@ -99,15 +153,15 @@ test('avisos SMN: vacíos, parciales, caída de fuente y países fuera de cobert
   await expect(panel).toContainText('No pudimos verificar');
   await expect(page.locator('.temperature')).toBeVisible();
   api.alertsStatus = 200;
-  api.body = climate('Montevideo');
-  (api.body as ReturnType<typeof climate>).ubicacion.pais = 'UY';
+  api.body = climate('Lima');
+  (api.body as ReturnType<typeof climate>).ubicacion.pais = 'PE';
   api.alertsBody = {
     ...structuredClone(ALERTS_FIXTURE),
-    ubicacion: { ...ALERTS_FIXTURE.ubicacion, pais: 'UY' },
+    ubicacion: { ...ALERTS_FIXTURE.ubicacion, pais: 'PE' },
     estado: 'fuera_cobertura',
     alertas: [],
   };
-  await search(page, 'Montevideo', 'UY');
+  await search(page, 'Lima', 'PE');
   await expect(panel).toContainText('No tenemos alertas verificadas para este país');
   await expect(panel.getByRole('button', { name: 'Actualizar avisos' })).toHaveCount(0);
 });

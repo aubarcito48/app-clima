@@ -55,7 +55,8 @@
     <p class="mt-2 text-xs leading-5 text-secondary" role="status">
       @if (failed()) {
         {{
-          'No se pudo cargar todo el mapa. Esperá un minuto y volvé a consultar la ciudad.' | translate
+          'No se pudo cargar todo el mapa. Esperá un minuto y volvé a consultar la ciudad.'
+            | translate
         }}
       } @else if (loading()) {
         {{ 'Cargando mapa…' | translate }}
@@ -64,7 +65,9 @@
       }
     </p>
     <p class="mt-2 text-xs leading-5 text-muted">
-      {{ 'Vista regional orientativa; no reemplaza los avisos oficiales del SMN.' | translate }}
+      {{
+        'Vista regional orientativa; no reemplaza los avisos meteorológicos oficiales.' | translate
+      }}
     </p>
     <a
       class="mt-2 inline-block min-h-11 content-center rounded-control text-xs text-blue underline"

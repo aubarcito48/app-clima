@@ -1,5 +1,17 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Vista regional orientativa; no reemplaza los avisos meteorológicos oficiales.':
+    'Regional overview; it does not replace official weather notices.',
+  'Avisos oficiales para': 'Official notices for',
+  Consultar: 'Visit',
+  'La fuente oficial está limitando temporalmente las consultas. Reintentaremos automáticamente; consultala mientras tanto.':
+    'The official source is temporarily limiting requests. We will retry automatically; please check it in the meantime.',
+  'No tenemos alertas verificadas para este país. La cobertura actual incluye Argentina, Brasil, Chile y Uruguay.':
+    'We have no verified alerts for this country. Current coverage includes Argentina, Brazil, Chile and Uruguay.',
+  'Consulta incompleta: no se pudieron verificar todos los avisos. Consultá la fuente oficial para ampliar la información.':
+    'Incomplete search: not all notices could be verified. Check the official source for more information.',
+  'Los avisos oficiales se muestran en su idioma original.':
+    'Official notices are shown in their original language.',
   'El SMN está limitando temporalmente las consultas. Reintentaremos automáticamente; consultá la fuente oficial mientras tanto.':
     'SMN is temporarily limiting requests. We will retry automatically; please check the official source in the meantime.',
   'Mapa del clima': 'Weather map',

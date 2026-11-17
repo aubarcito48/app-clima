@@ -1,5 +1,47 @@
 import { ClimateLocation } from './climate-response';
 
+export const ALERT_SOURCES: Record<
+  string,
+  {
+    name: string;
+    url: string;
+    short: string;
+    language: string;
+    document: RegExp;
+  }
+> = {
+  AR: {
+    name: 'Servicio Meteorológico Nacional',
+    url: 'https://www.smn.gob.ar/alertas',
+    short: 'SMN',
+    language: 'es',
+    document:
+      /^https:\/\/ssl\.smn\.gob\.ar\/feeds\/CAP\/(xml_generados|cap_salida|avisocortoplazo)\/[A-Za-z0-9_.-]+\.xml$/u,
+  },
+  CL: {
+    name: 'Dirección Meteorológica de Chile',
+    url: 'https://www.meteochile.gob.cl/PortalDMC-web/index.xhtml',
+    short: 'DMC',
+    language: 'es',
+    document:
+      /^https:\/\/archivos\.meteochile\.gob\.cl\/portaldmc\/rss\/meteochile_[A-Za-z0-9_-]+_cap\.xml$/u,
+  },
+  UY: {
+    name: 'Instituto Uruguayo de Meteorología',
+    url: 'https://www.inumet.gub.uy/alerta',
+    short: 'INUMET',
+    language: 'es',
+    document: /^https:\/\/www\.inumet\.gub\.uy\/reportes\/riesgo\/cap_[0-9_]+\.xml$/u,
+  },
+  BR: {
+    name: 'Instituto Nacional de Meteorologia',
+    url: 'https://avisos.inmet.gov.br/',
+    short: 'INMET',
+    language: 'pt',
+    document: /^https:\/\/apiprevmet3\.inmet\.gov\.br\/avisos\/rss\/[0-9]+$/u,
+  },
+};
+
 export type AlertSeverity = 'Extreme' | 'Severe' | 'Moderate' | 'Minor' | 'Unknown';
 export interface WeatherAlert {
   identificador: string;
@@ -58,6 +100,9 @@ export function readWeatherAlerts(
   )
     throw new Error('Alerts for another location');
   const state = data['estado'];
+  const provider = Object.hasOwn(ALERT_SOURCES, expected.pais)
+    ? ALERT_SOURCES[expected.pais]
+    : null;
   if (
     !['disponible', 'parcial', 'no_disponible', 'fuera_cobertura'].includes(String(state)) ||
     !Array.isArray(data['alertas']) ||
@@ -65,8 +110,9 @@ export function readWeatherAlerts(
   )
     throw new Error('Invalid alerts state');
   if (
-    source['nombre'] !== 'Servicio Meteorológico Nacional' ||
-    source['url'] !== 'https://www.smn.gob.ar/alertas'
+    (!provider && state !== 'fuera_cobertura') ||
+    source['nombre'] !== (provider ?? ALERT_SOURCES['AR']).name ||
+    source['url'] !== (provider ?? ALERT_SOURCES['AR']).url
   )
     throw new Error('Invalid alerts source');
   const alerts = data['alertas'].map((row: unknown): WeatherAlert => {
@@ -75,12 +121,7 @@ export function readWeatherAlerts(
     if (!['Extreme', 'Severe', 'Moderate', 'Minor', 'Unknown'].includes(String(severity)))
       throw new Error('Invalid severity');
     const url = text(alert['url'], 2048);
-    if (
-      !/^https:\/\/ssl\.smn\.gob\.ar\/feeds\/CAP\/(xml_generados|cap_salida|avisocortoplazo)\/[A-Za-z0-9_.-]+\.xml$/u.test(
-        url,
-      )
-    )
-      throw new Error('Invalid source link');
+    if (!provider?.document.test(url)) throw new Error('Invalid source link');
     const start = date(alert['inicio_utc']),
       end = date(alert['fin_utc']);
     if (Date.parse(end) <= Date.parse(start)) throw new Error('Invalid validity period');

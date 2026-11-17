@@ -1,9 +1,9 @@
 import { Translate } from '../translate';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, merge, of, startWith, Subject, switchMap, timer } from 'rxjs';
 import { ClimateResponse } from '../../models/climate-response';
-import { AlertSeverity, WeatherAlertsResponse } from '../../models/weather-alerts';
+import { ALERT_SOURCES, AlertSeverity, WeatherAlertsResponse } from '../../models/weather-alerts';
 import { WeatherAlertsApi } from '../../service/weather-alerts-api';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { Language } from '../../service/language';
@@ -23,6 +23,10 @@ type AlertsState = {
 export class WeatherAlerts {
   readonly language = inject(Language);
   readonly location = input<ClimateResponse['ubicacion'] | null>(null);
+  readonly source = computed(() => {
+    const country = this.location()?.pais ?? '';
+    return Object.hasOwn(ALERT_SOURCES, country) ? ALERT_SOURCES[country] : null;
+  });
   private readonly api = inject(WeatherAlertsApi);
   private readonly refresh = new Subject<void>();
   readonly result = toSignal(

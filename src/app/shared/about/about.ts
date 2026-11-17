@@ -98,7 +98,7 @@ export class About {
           ],
           [
             'Does the app replace official alerts?',
-            'No. The alerts section currently shows information for Argentina from the SMN when available. An empty or unavailable section does not guarantee there is no risk. Follow official instructions for your area.',
+            'No. Depending on the searched location, we check official notices from SMN (Argentina), INMET (Brazil), DMC (Chile) or INUMET (Uruguay). Other countries are not covered yet. An empty or unavailable section does not guarantee there is no risk. Follow official instructions for your area.',
           ],
         ]
       : [
@@ -128,7 +128,7 @@ export class About {
           ],
           [
             '¿La app reemplaza las alertas oficiales?',
-            'No. La sección de alertas muestra actualmente información para Argentina del SMN cuando está disponible. Que no aparezca una alerta o falle la consulta no garantiza que no exista riesgo. Seguí las indicaciones oficiales de tu zona.',
+            'No. Según la ubicación consultada, verificamos avisos oficiales del SMN (Argentina), INMET (Brasil), DMC (Chile) o INUMET (Uruguay). Los demás países todavía no tienen cobertura. Que no aparezca una alerta o falle la consulta no garantiza que no exista riesgo. Seguí las indicaciones oficiales de tu zona.',
           ],
         ],
   );
