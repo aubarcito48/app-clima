@@ -109,14 +109,18 @@
             <app-current-weather
               appScrollReveal
               [weather]="weather()"
+              [showDetails]="!weather()"
               [unit]="temperatureUnit()"
               [favorite]="favorites.contains(response()?.ubicacion ?? null)"
               (favoriteToggled)="toggleFavorite()"
               (searchRequested)="citySearch.focusCity()"
             />
             @if (response(); as data) {
-              <div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-                <app-weather-alerts [location]="data.ubicacion" />
+              <div class="weather-context-grid">
+                <div class="weather-context-stack">
+                  <app-weather-alerts [location]="data.ubicacion" />
+                  <app-weather-details [weather]="weather()" />
+                </div>
                 <app-weather-map [location]="data.ubicacion" />
               </div>
             }

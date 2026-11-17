@@ -38,16 +38,16 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
   await expect(metrics).toHaveCSS('background-image', /emergency-card-texture\.svg/);
   const metricsBox = (await metrics.boundingBox())!,
     alertsBox = (await panel.boundingBox())!;
-  expect(metricsBox.y + metricsBox.height).toBeLessThan(alertsBox.y);
+  expect(metricsBox.y).toBeGreaterThan(alertsBox.y + alertsBox.height);
   if (page.viewportSize()!.width >= 1280) {
     const currentBox = (await page.locator('.weather-panel').boundingBox())!;
-    expect(metricsBox.x).toBeGreaterThan(currentBox.x + currentBox.width);
-    expect(metricsBox.y).toBeCloseTo(currentBox.y, 0);
-    expect(metricsBox.height).toBeCloseTo(currentBox.height, 0);
+    expect(metricsBox.x).toBeCloseTo(currentBox.x, 0);
+    expect(alertsBox.y).toBeGreaterThan(currentBox.y + currentBox.height);
     expect(alertsBox.x).toBeCloseTo(currentBox.x, 0);
     const mapBox = (await page.locator('app-weather-map').boundingBox())!;
     expect(mapBox.x).toBeGreaterThan(alertsBox.x + alertsBox.width);
-    expect(mapBox.x + mapBox.width).toBeCloseTo(metricsBox.x + metricsBox.width, 0);
+    expect(mapBox.x + mapBox.width).toBeCloseTo(currentBox.x + currentBox.width, 0);
+    expect(mapBox.y + mapBox.height).toBeCloseTo(metricsBox.y + metricsBox.height, 0);
   } else {
     expect(metricsBox.x).toBeCloseTo(alertsBox.x, 0);
   }

@@ -33,6 +33,7 @@ export class WeatherMap {
   private overlay: TileLayer | null = null;
   private library: typeof import('leaflet') | null = null;
   private generation = 0;
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     afterRenderEffect(() => {
@@ -83,6 +84,10 @@ export class WeatherMap {
         })
         .addTo(this.map);
       this.updateLayer();
+      if (typeof ResizeObserver !== 'undefined') {
+        this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize({ pan: false }));
+        this.resizeObserver.observe(this.container().nativeElement);
+      }
       requestAnimationFrame(() => this.map?.invalidateSize());
     } catch {
       if (generation === this.generation) {
@@ -120,6 +125,8 @@ export class WeatherMap {
 
   close(): void {
     this.generation++;
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
     this.map?.remove();
     this.map = null;
     this.overlay = null;

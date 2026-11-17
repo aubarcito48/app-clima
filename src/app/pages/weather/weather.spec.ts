@@ -153,8 +153,8 @@ describe('Weather Django integration', () => {
     expect(fixture.componentInstance.state()).toBe('ready');
     expect(view.querySelector('.temperature')?.textContent).toContain('0');
     expect(view.querySelector('app-current-weather')?.textContent).toContain('-2 °C');
-    expect(view.querySelector('app-current-weather')?.textContent).toContain('0 %');
-    expect(view.querySelector('app-current-weather')?.textContent).toContain('No disponible');
+    expect(view.querySelector('app-weather-details')?.textContent).toContain('0 %');
+    expect(view.querySelector('app-weather-details')?.textContent).toContain('No disponible');
     expect(view.querySelector('app-forecast')?.textContent).toContain('Pronóstico no disponible');
     expect(view.querySelector('app-recommendation')).toBeNull();
     expect(view.textContent).not.toMatch(/undefined|NaN/);

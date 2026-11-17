@@ -8,7 +8,7 @@ test('mapa automático: capas sin clave pública, junto a alertas y sin desborde
   api,
 }, info) => {
   const tiles: URL[] = [];
-  api.alertsBody = structuredClone(ALERTS_FIXTURE);
+  api.alertsBody = { ...structuredClone(ALERTS_FIXTURE), alertas: [] };
   await page.route('**/api/v1/mapa/**', async (route) => {
     tiles.push(new URL(route.request().url()));
     await route.fulfill({ contentType: 'image/png', body: PNG });
@@ -28,11 +28,19 @@ test('mapa automático: capas sin clave pública, junto a alertas y sin desborde
   if (info.project.name === 'desktop-1440') {
     expect(Math.abs(alertsBox!.y - mapBox!.y)).toBeLessThan(2);
     expect(mapBox!.x).toBeGreaterThan(alertsBox!.x);
+    const details = await page.locator('app-weather-details').boundingBox();
+    expect(mapBox!.y + mapBox!.height).toBeCloseTo(details!.y + details!.height, 0);
   } else {
     expect(mapBox!.y).toBeGreaterThan(alertsBox!.y);
   }
   await expect.poll(() => tiles.length).toBeGreaterThan(0);
   await expect(map.locator('.leaflet-container')).toBeVisible();
+  await page
+    .locator('.weather-context-grid')
+    .screenshot({ path: info.outputPath('aligned-weather.png') });
+  await page
+    .locator('app-current-weather')
+    .screenshot({ path: info.outputPath('current-weather-wide.png') });
   expect(tiles.every((url) => !url.searchParams.has('appid'))).toBe(true);
   await map.getByRole('combobox', { name: 'Mostrar' }).selectOption('wind');
   await expect.poll(() => tiles.some((url) => url.searchParams.get('layer') === 'wind')).toBe(true);

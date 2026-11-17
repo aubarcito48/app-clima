@@ -61,93 +61,12 @@
   gap: 1rem;
   align-items: start;
 }
-.weather-side {
-  display: grid;
-  min-width: 0;
-  gap: 1.5rem;
-}
-.metrics-panel {
-  padding: 1rem;
-}
-.metrics-panel > div {
-  grid-template-columns: repeat(2, minmax(0, 9rem));
-  justify-content: center;
-  align-content: center;
-  gap: 1rem 1.5rem;
-}
-.overview-alerts {
-  min-width: 0;
-}
-.overview-alerts:empty {
-  display: none;
-}
-.metric-card {
-  min-width: 0;
-  padding: 0.25rem 0;
-}
-.metric-card dt {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--color-secondary);
-}
-.metric-card dt app-weather-icon {
-  display: flex;
-  width: fit-content;
-  margin-bottom: 0;
-  color: var(--color-blue);
-}
-.metric-card dt span {
-  display: block;
-}
-.metric-card dd {
-  margin-top: 0.25rem;
-  color: var(--color-ink);
-  font-weight: 700;
-  font-size: 0.95rem;
-  overflow-wrap: anywhere;
-}
-.metric-card p {
-  margin-top: 0.4rem;
-  color: var(--color-muted);
-  font-size: 0.65rem;
-  line-height: 1.7;
-}
-@media (min-width: 1024px) {
-  .metrics-panel {
-    min-height: 18rem;
-    padding: 1.5rem;
-  }
-  .metrics-panel > h2 {
-    font-size: 1rem;
-  }
-  .metrics-panel > div {
-    grid-template-columns: repeat(2, minmax(0, 11rem));
-    justify-content: center;
-    gap: 1.5rem 1rem;
-  }
-  .metric-card dt {
-    font-size: 0.875rem;
-  }
-  .metric-card dd {
-    margin-top: 0.5rem;
-    font-size: clamp(1.2rem, 1.7vw, 1.5rem);
-  }
-  .metric-card p {
-    font-size: 0.75rem;
-  }
-}
 @media (min-width: 1280px) {
   .current-overview {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     row-gap: 1.5rem;
   }
-  .weather-side {
-    display: contents;
-  }
-  .weather-panel,
-  .metrics-panel {
+  .weather-panel {
     align-self: stretch;
   }
   .weather-panel {
@@ -166,16 +85,6 @@
   }
   #advice-text {
     line-height: 1.35rem;
-  }
-  .metrics-panel {
-    display: flex;
-    flex-direction: column;
-  }
-  .metrics-panel > div {
-    flex: 1;
-  }
-  .overview-alerts {
-    grid-column: 1 / -1;
   }
 }
 .temperature-unit {
@@ -256,4 +165,26 @@
 }
 .temperature-with-icon .temperature {
   flex-shrink: 0;
+}
+.current-overview.single-overview {
+  display: block;
+}
+@media (min-width: 1280px) {
+  .single-overview .weather-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+  .single-overview .weather-panel > :first-child,
+  .single-overview .weather-panel > :last-child {
+    grid-column: 1 / -1;
+  }
+  .single-overview .current-details {
+    grid-column: 1;
+  }
+  .single-overview #consejo-ia {
+    grid-column: 2;
+    margin: 0;
+  }
 }

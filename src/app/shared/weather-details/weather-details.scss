@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  min-width: 0;
+  height: 100%;
+}
+.metrics-panel {
+  padding: 1.25rem;
+  height: 100%;
+}
+.metrics-panel > div {
+  align-items: start;
+  gap: 1.25rem 1rem;
+}
+.metric-card {
+  min-width: 0;
+  padding: 0.25rem 0;
+}
+.metric-card dt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+}
+.metric-card dt app-weather-icon {
+  display: flex;
+  color: var(--color-blue);
+}
+.metric-card dd {
+  margin-top: 0.5rem;
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  overflow-wrap: anywhere;
+}
+.metric-card p {
+  margin-top: 0.4rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
