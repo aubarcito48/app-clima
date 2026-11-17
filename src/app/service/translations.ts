@@ -14,8 +14,8 @@ export const ENGLISH: Readonly<Record<string, string>> = {
   'El mapa se carga solo cuando lo abrís.': 'The map loads only when you open it.',
   Mostrar: 'Show',
   'Mapa meteorológico interactivo': 'Interactive weather map',
-  'No se pudo cargar todo el mapa. Esperá un minuto antes de volver a abrirlo.':
-    'Some map tiles could not be loaded. Wait a minute before reopening it.',
+  'No se pudo cargar todo el mapa. Esperá un minuto y volvé a consultar la ciudad.':
+    'Some map tiles could not be loaded. Wait a minute and search for the city again.',
   'Cargando mapa…': 'Loading map…',
   'Arrastrá para explorar y usá + o − para acercar o alejar.':
     'Drag to explore and use + or − to zoom in or out.',

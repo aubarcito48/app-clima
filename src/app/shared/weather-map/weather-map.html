@@ -11,15 +11,6 @@
         {{ location().nombre }} · {{ 'Temperatura, lluvia y viento' | translate }}
       </p>
     </div>
-    @if (opened()) {
-      <button
-        type="button"
-        class="min-h-11 rounded-control border border-control-line px-3 text-xs text-blue hover:bg-sky"
-        (click)="close()"
-      >
-        {{ 'Cerrar mapa' | translate }}
-      </button>
-    }
   </div>
   @if (!opened()) {
     <div class="map-preview mt-4 rounded-app">
@@ -64,7 +55,7 @@
     <p class="mt-2 text-xs leading-5 text-secondary" role="status">
       @if (failed()) {
         {{
-          'No se pudo cargar todo el mapa. Esperá un minuto antes de volver a abrirlo.' | translate
+          'No se pudo cargar todo el mapa. Esperá un minuto y volvé a consultar la ciudad.' | translate
         }}
       } @else if (loading()) {
         {{ 'Cargando mapa…' | translate }}

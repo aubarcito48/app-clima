@@ -50,10 +50,10 @@ test('mapa automático: capas sin clave pública, junto a alertas y sin desborde
   await changeTheme(page);
   await map.scrollIntoViewIfNeeded();
   await map.screenshot({ path: info.outputPath('map-dark.png') });
-  await map.getByRole('button', { name: 'Cerrar mapa' }).click();
-  await expect(map.getByRole('button', { name: 'Abrir mapa' })).toBeVisible();
+  await expect(map.getByRole('button', { name: 'Cerrar mapa' })).toHaveCount(0);
   await chooseLanguage(page, 'en');
-  await expect(map.getByRole('button', { name: 'Close map', exact: true })).toBeVisible();
+  await expect(map.getByRole('button', { name: 'Close map', exact: true })).toHaveCount(0);
+  await expect(map.locator('.leaflet-container')).toBeVisible();
 });
 
 test('un fallo del mapa conserva el clima y las alertas', async ({ page, api }) => {
