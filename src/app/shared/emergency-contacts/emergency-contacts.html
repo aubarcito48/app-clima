@@ -1,108 +1,125 @@
-<section aria-labelledby="emergency-heading" [attr.aria-roledescription]="'carrusel' | translate">
-  <div class="flex items-start justify-between gap-2 px-1">
+<section
+  aria-labelledby="emergency-heading"
+  [attr.aria-roledescription]="directory() ? ('carrusel' | translate) : null"
+>
+  <div class="contacts-header flex items-start justify-between gap-2 px-1">
     <div class="min-w-0 flex-1">
       <h2 id="emergency-heading" class="font-display text-sm font-bold text-ink">
-        {{ 'Teléfonos útiles · Argentina' | translate }}
+        {{ 'Teléfonos útiles' | translate }}
+        @if (directory(); as book) {
+          · {{ book.name | translate }}
+        }
       </h2>
       <p id="contacts-help" class="mt-1 text-xs text-muted">
-        {{ 'Deslizá o usá las flechas para ver los contactos.' | translate }}
+        @if (directory()) {
+          {{ 'Deslizá o usá las flechas para ver los contactos.' | translate }}
+        } @else if (selectedCountry()) {
+          {{ 'Todavía no tenemos teléfonos nacionales verificados para este país.' | translate }}
+        } @else {
+          {{ 'Buscá una ciudad para ver los teléfonos de su país.' | translate }}
+        }
       </p>
     </div>
-    <div
-      class="flex gap-2"
-      role="group"
-      [attr.aria-label]="'Controles de teléfonos útiles' | translate"
-    >
-      <button
-        type="button"
-        class="carousel-control"
-        [attr.aria-label]="'Ver teléfonos anteriores' | translate"
-        aria-controls="emergency-viewport"
-        [disabled]="!canPrevious()"
-        (click)="move(-1)"
+    @if (directory()) {
+      <div
+        class="flex gap-2"
+        role="group"
+        [attr.aria-label]="'Controles de teléfonos útiles' | translate"
       >
-        <app-weather-icon name="arrow" class="rotate-180" [size]="18" />
-      </button>
-      <button
-        type="button"
-        class="carousel-control"
-        [attr.aria-label]="'Ver más teléfonos' | translate"
-        aria-controls="emergency-viewport"
-        [disabled]="!canNext()"
-        (click)="move(1)"
-      >
-        <app-weather-icon name="arrow" [size]="18" />
-      </button>
-    </div>
+        <button
+          type="button"
+          class="carousel-control"
+          [attr.aria-label]="'Ver teléfonos anteriores' | translate"
+          aria-controls="emergency-viewport"
+          [disabled]="!canPrevious()"
+          (click)="move(-1)"
+        >
+          <app-weather-icon name="arrow" class="rotate-180" [size]="18" />
+        </button>
+        <button
+          type="button"
+          class="carousel-control"
+          [attr.aria-label]="'Ver más teléfonos' | translate"
+          aria-controls="emergency-viewport"
+          [disabled]="!canNext()"
+          (click)="move(1)"
+        >
+          <app-weather-icon name="arrow" [size]="18" />
+        </button>
+      </div>
+    }
   </div>
-  @if (selectedCountry() && selectedCountry() !== 'AR') {
-    <p class="mt-2 px-1 text-xs font-semibold leading-5 text-secondary">
+  @if (directory(); as book) {
+    <div
+      #contactsViewport
+      id="emergency-viewport"
+      class="contacts-viewport mt-2"
+      tabindex="0"
+      role="region"
+      [attr.aria-label]="
+        'Teléfonos útiles de {country}, desplazables horizontalmente'
+          | translate: { country: (book.name | translate) }
+      "
+      aria-describedby="contacts-help"
+      (scroll)="updateControls()"
+      (keydown)="onKeydown($event)"
+    >
+      <ul class="contacts-track">
+        @for (contact of book.contacts; track contact.number) {
+          <li
+            class="contact-card textured-card"
+            [class.priority-contact]="contact.number === book.contacts[0].number"
+          >
+            <a
+              #contactLink
+              class="contact-link"
+              [href]="'tel:' + contact.number"
+              [attr.aria-label]="
+                'Llamar al {number}, {name}. Cobertura: {coverage}'
+                  | translate
+                    : {
+                        number: contact.number,
+                        name: (contact.name | translate),
+                        coverage: (book.name | translate),
+                      }
+              "
+              (focus)="contactLink.scrollIntoView({ block: 'nearest', inline: 'nearest' })"
+            >
+              <span class="flex items-center justify-between gap-3"
+                ><span class="font-display text-2xl font-bold tracking-tight text-ink">{{
+                  contact.number
+                }}</span
+                ><span class="flex items-center gap-1 text-xs font-semibold text-blue"
+                  ><app-weather-icon name="phone" [size]="16" />{{ 'Llamar' | translate }}</span
+                ></span
+              >
+              <span class="mt-1 block text-sm font-semibold leading-5 text-ink">{{
+                contact.name | translate
+              }}</span>
+              <span class="mt-1 block text-xs leading-5 text-secondary">{{
+                contact.detail | translate
+              }}</span>
+              <span class="mt-auto block pt-2 text-[11px] leading-4 text-muted">{{
+                book.name | translate
+              }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+    <p class="mt-1 px-1 text-[11px] leading-5 text-muted">
       {{
-        'Consultaste una ubicación fuera de Argentina. Estos teléfonos corresponden a Argentina.'
+        'Números para usar dentro del país consultado. La disponibilidad de cada servicio depende de la zona.'
           | translate
       }}
+      <a
+        [href]="book.source"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex min-h-6 items-center rounded-app text-blue underline"
+        >{{ 'Fuente oficial' | translate
+        }}<span class="sr-only"> {{ '(se abre en otra pestaña)' | translate }}</span></a
+      >.
     </p>
   }
-  <div
-    #contactsViewport
-    id="emergency-viewport"
-    class="contacts-viewport mt-2"
-    tabindex="0"
-    role="region"
-    [attr.aria-label]="'Teléfonos útiles de Argentina, desplazables horizontalmente' | translate"
-    aria-describedby="contacts-help"
-    (scroll)="updateControls()"
-    (keydown)="onKeydown($event)"
-  >
-    <ul class="contacts-track">
-      @for (contact of contacts; track contact.number) {
-        <li class="contact-card textured-card" [class.priority-contact]="contact.number === '911'">
-          <a
-            #contactLink
-            class="contact-link"
-            [href]="'tel:' + contact.number"
-            [attr.aria-label]="
-              'Llamar al {number}, {name}. Cobertura: {coverage}'
-                | translate
-                  : {
-                      number: contact.number,
-                      name: (contact.name | translate),
-                      coverage: (contact.coverage | translate),
-                    }
-            "
-            (focus)="contactLink.scrollIntoView({ block: 'nearest', inline: 'nearest' })"
-          >
-            <span class="flex items-center justify-between gap-3"
-              ><span class="font-display text-2xl font-bold tracking-tight text-ink">{{
-                contact.number
-              }}</span
-              ><span class="flex items-center gap-1 text-xs font-semibold text-blue"
-                ><app-weather-icon name="phone" [size]="16" />{{ 'Llamar' | translate }}</span
-              ></span
-            >
-            <span class="mt-1 block text-sm font-semibold leading-5 text-ink">{{
-              contact.name | translate
-            }}</span>
-            <span class="mt-1 block text-xs leading-5 text-secondary">{{
-              contact.detail | translate
-            }}</span>
-            <span class="mt-auto block pt-2 text-[11px] leading-4 text-muted">{{
-              contact.coverage | translate
-            }}</span>
-          </a>
-        </li>
-      }
-    </ul>
-  </div>
-  <p class="mt-1 px-1 text-[11px] leading-5 text-muted">
-    {{ 'Contactos de Argentina. La cobertura médica depende de la localidad.' | translate }}
-    <a
-      href="https://www.argentina.gob.ar/tema/emergencias"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex min-h-6 items-center rounded-app text-blue underline"
-      >{{ 'Fuente oficial' | translate
-      }}<span class="sr-only"> {{ '(se abre en otra pestaña)' | translate }}</span></a
-    >.
-  </p>
 </section>

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, climate, search, changeTheme } from './fixtures';
+import { test, expect, climate, search, changeTheme, chooseLanguage } from './fixtures';
 
 test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en ambos temas', async ({
   page,
@@ -7,6 +7,9 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
 }, info) => {
   await page.goto('/');
   const carousel = page.locator('app-emergency-contacts');
+  await expect(carousel).toContainText('Buscá una ciudad');
+  await expect(carousel.locator('a[href^="tel:"]')).toHaveCount(0);
+  await search(page, 'Córdoba');
   const viewport = page.locator('#emergency-viewport');
   await expect(
     carousel.getByRole('heading', { name: 'Teléfonos útiles · Argentina' }),
@@ -19,14 +22,12 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
   const footerBox = (await page.locator('footer').boundingBox())!;
   expect(carouselBox.y + carouselBox.height).toBeLessThan(footerBox.y);
   const links = carousel.locator('a[href^="tel:"]');
-  await expect(links).toHaveCount(6);
+  await expect(links).toHaveCount(5);
   expect(
     await links.evaluateAll((elements) => elements.map((e) => e.getAttribute('href'))),
-  ).toEqual(['tel:911', 'tel:100', 'tel:103', 'tel:105', 'tel:106', 'tel:107']);
-  await expect(carousel.locator('a[href="tel:107"]')).toContainText(
-    'CABA y localidades de la provincia de Buenos Aires',
-  );
-  await expect(carousel.locator('a[href="tel:107"]')).toHaveAccessibleName(/Cobertura: CABA/);
+  ).toEqual(['tel:911', 'tel:100', 'tel:103', 'tel:105', 'tel:106']);
+  await expect(carousel.locator('a[href="tel:107"]')).toHaveCount(0);
+  await expect(carousel.locator('a[href="tel:911"]')).toHaveAccessibleName(/Cobertura: Argentina/);
   const previous = carousel.getByRole('button', { name: 'Ver teléfonos anteriores', exact: true });
   const next = carousel.getByRole('button', { name: 'Ver más teléfonos', exact: true });
   await expect(previous).toBeDisabled();
@@ -60,12 +61,59 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
       contentType: 'image/png',
     });
   }
-  expect(api.requests).toHaveLength(0);
-  expect(api.alertsRequests).toHaveLength(0);
+  expect(api.requests).toHaveLength(1);
+  expect(api.alertsRequests).toHaveLength(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   const data = climate('Montevideo');
   data.ubicacion.pais = 'UY';
   api.body = data;
   await search(page, 'Montevideo', 'UY');
-  await expect(carousel).toContainText('Consultaste una ubicación fuera de Argentina');
+  await expect(carousel.getByRole('heading')).toHaveText('Teléfonos útiles · Uruguay');
+  await expect(carousel.locator('a[href^="tel:"]')).toHaveCount(3);
+  await expect(carousel.locator('a[href="tel:105"]')).toContainText('SAME');
+});
+
+test('los teléfonos nacionales y su fuente cambian con el país, sin reutilizar otro catálogo', async ({
+  page,
+  api,
+}) => {
+  await page.goto('/');
+  const panel = page.locator('app-emergency-contacts');
+  for (const [country, city, countryName, numbers, sourceHost] of [
+    ['AR', 'Córdoba', 'Argentina', ['911', '100', '103', '105', '106'], 'www.argentina.gob.ar'],
+    ['CL', 'Santiago', 'Chile', ['133', '131', '132'], 'www.chile.gob.cl'],
+    ['BR', 'São Paulo', 'Brasil', ['190', '192', '193', '199', '191'], 'www.gov.br'],
+    ['UY', 'Montevideo', 'Uruguay', ['911', '104', '105'], 'www.gub.uy'],
+    ['AR', 'Córdoba', 'Argentina', ['911', '100', '103', '105', '106'], 'www.argentina.gob.ar'],
+  ] as const) {
+    const data = climate(city);
+    data.ubicacion.pais = country;
+    api.body = data;
+    await search(page, city, country);
+    await expect(panel.getByRole('heading')).toHaveText(`Teléfonos útiles · ${countryName}`);
+    const links = panel.locator('a[href^="tel:"]');
+    await expect(links).toHaveCount(numbers.length);
+    expect(
+      await links.evaluateAll((elements) => elements.map((e) => e.getAttribute('href'))),
+    ).toEqual(numbers.map((n) => `tel:${n}`));
+    await expect(links.first()).toHaveAccessibleName(new RegExp(`Cobertura: ${countryName}`));
+    expect(
+      new URL((await panel.getByRole('link', { name: /Fuente oficial/ }).getAttribute('href'))!)
+        .hostname,
+    ).toBe(sourceHost);
+    await expect(
+      panel.getByRole('button', { name: 'Ver teléfonos anteriores', exact: true }),
+    ).toBeDisabled();
+  }
+  const data = climate('Lima');
+  data.ubicacion.pais = 'PE';
+  api.body = data;
+  await search(page, 'Lima', 'PE');
+  await expect(panel).toContainText('Todavía no tenemos teléfonos nacionales verificados');
+  await expect(panel.locator('a[href^="tel:"]')).toHaveCount(0);
+  await expect(panel.getByRole('link', { name: /Fuente oficial/ })).toHaveCount(0);
+  await chooseLanguage(page, 'en');
+  await expect(panel.getByRole('heading')).toHaveText('Useful numbers');
+  await expect(panel).toContainText('We do not yet have verified national numbers');
+  await expect(panel.locator('a[href^="tel:"]')).toHaveCount(0);
 });

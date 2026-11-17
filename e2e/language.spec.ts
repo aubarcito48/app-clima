@@ -15,7 +15,7 @@ test('ES / EN translates the interface and persists after reloading', async ({ p
     'placeholder',
     'Start typing a place',
   );
-  await expect(page.getByRole('heading', { name: 'Useful numbers · Argentina' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Useful numbers', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Hello, explorer' })).toBeVisible();

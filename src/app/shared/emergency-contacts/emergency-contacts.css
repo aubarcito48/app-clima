@@ -2,6 +2,12 @@
   display: block;
   min-width: 0;
 }
+@media (min-width: 1280px) {
+  .contacts-header {
+    /* Leave the fixed section dots and back-to-top button their own click area. */
+    padding-inline-end: 5rem;
+  }
+}
 .carousel-control {
   display: flex;
   width: 2.75rem;

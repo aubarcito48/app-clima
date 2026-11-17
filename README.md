@@ -6,6 +6,28 @@ Consume la API de [app-clima-backend](https://github.com/aubarcito48/app-clima-b
 
 **Publicado en Vercel:** [https://app-clima-ecru.vercel.app/](https://app-clima-ecru.vercel.app/)
 
+## Teléfonos nacionales por país
+
+El carrusel selecciona los números del país devuelto por la consulta meteorológica.
+Sin una ubicación consultada, invita a buscar una ciudad; para países pendientes
+informa que no hay contactos verificados. Los números cortos son para marcar
+dentro del país indicado, con disponibilidad de servicio según la zona.
+
+Catálogo local en [emergency-directory.ts](src/app/shared/emergency-contacts/emergency-directory.ts),
+verificado el 17/11/2026 con fuentes oficiales:
+
+- [Argentina](https://www.argentina.gob.ar/tema/emergencias).
+- [Brasil](https://www.gov.br/mcom/pt-br/noticias/2026/setembro/emergencia-voce-sabe-para-quem-ligar-quando-precisa-de-ajuda/).
+- [Chile](https://www.chile.gob.cl/chile/sobre-chile/informacion-turistica/condiciones-de-seguridad/condiciones-de-seguridad).
+- [Uruguay](https://www.gub.uy/ministerio-interior/sites/ministerio-interior/files/documentos/publicaciones/GUIA%20DE%20RESPUESTA%20EN%20CASO%20DE%20EMERGENCIA%202016.pdf),
+  junto con la [integración actual de SAME 105 al 911](https://www.gub.uy/ministerio-salud-publica/comunicacion/noticias/same-105-se-integro-centro-comando-unificado-para-fortalecer-atencion).
+
+El 107 SAME argentino tiene cobertura local según la fuente nacional; por eso
+queda fuera de este catálogo nacional. La sección conserva fuentes visibles,
+enlaces `tel:`, accesibilidad de teclado y traducciones ES/EN. Cambiar el país
+reinicia el carrusel en el primer contacto. No usa GPS ni llamadas a Groq para
+elegir números: reutiliza el país de la ciudad consultada.
+
 ## Cambio de tema con revelado circular
 
 El botón de tema revela la nueva paleta con un círculo que se expande desde el

@@ -1,5 +1,28 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Teléfonos útiles': 'Useful numbers',
+  'Buscá una ciudad para ver los teléfonos de su país.':
+    'Search for a city to see its country’s numbers.',
+  'Todavía no tenemos teléfonos nacionales verificados para este país.':
+    'We do not yet have verified national numbers for this country.',
+  'Teléfonos útiles de {country}, desplazables horizontalmente':
+    'Useful numbers in {country}, scroll horizontally',
+  'Números para usar dentro del país consultado. La disponibilidad de cada servicio depende de la zona.':
+    'Numbers for use within the searched country. Service availability depends on the area.',
+  Brasil: 'Brazil',
+  'Polícia Militar': 'Military police',
+  'SAMU · Emergencias médicas': 'SAMU · Medical emergencies',
+  'Corpo de Bombeiros': 'Fire service',
+  'Defesa Civil': 'Civil protection',
+  'Polícia Rodoviária Federal': 'Federal highway police',
+  Carabineros: 'Carabineros · Police',
+  'Central de emergencias': 'Emergency coordination centre',
+  'Emergencias policiales y seguridad pública.': 'Police emergencies and public safety.',
+  'Atención médica de urgencia.': 'Urgent medical assistance.',
+  'Incendios, rescates y salvamentos.': 'Fires and rescue operations.',
+  'Emergencias en rutas federales.': 'Emergencies on federal highways.',
+  'Coordinación de policía, bomberos y asistencia médica.':
+    'Coordination of police, fire and medical assistance.',
   'Vista regional orientativa; no reemplaza los avisos meteorológicos oficiales.':
     'Regional overview; it does not replace official weather notices.',
   'Avisos oficiales para': 'Official notices for',

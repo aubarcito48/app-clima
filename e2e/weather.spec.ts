@@ -462,16 +462,6 @@ test('validación y parámetros: teclado, país ASCII y caracteres reservados', 
     ).toBeFocused();
     await page.keyboard.press('Tab');
   }
-  await expect(page.getByRole('button', { name: 'Ver más teléfonos', exact: true })).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(page.locator('#emergency-viewport')).toBeFocused();
-  for (const contact of ['911', '100', '103', '105', '106', '107']) {
-    await page.keyboard.press('Tab');
-    await expect(page.locator(`app-emergency-contacts a[href="tel:${contact}"]`)).toBeFocused();
-  }
-  await page.keyboard.press('Tab');
-  await expect(page.locator('app-emergency-contacts a[target="_blank"]')).toBeFocused();
-  await page.keyboard.press('Tab');
   await expect(page.locator('#city')).toBeFocused();
   await page.locator('#city').press('Enter');
   await expect(page.locator('#city-error')).toBeVisible();

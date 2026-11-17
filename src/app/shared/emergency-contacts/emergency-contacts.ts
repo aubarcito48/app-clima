@@ -3,12 +3,14 @@ import {
   afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   input,
   signal,
   viewChild,
 } from '@angular/core';
 import { WeatherIcon } from '../weather-icon/weather-icon';
+import { emergencyDirectory } from './emergency-directory';
 
 @Component({
   selector: 'app-emergency-contacts',
@@ -19,53 +21,17 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
 })
 export class EmergencyContacts {
   readonly selectedCountry = input<string | null>(null);
+  readonly directory = computed(() => emergencyDirectory(this.selectedCountry()));
   readonly viewport = viewChild<ElementRef<HTMLElement>>('contactsViewport');
   readonly canPrevious = signal(false);
   readonly canNext = signal(false);
-  // https://www.argentina.gob.ar/tema/emergencias (verified 2026-10-25).
-  readonly contacts = [
-    {
-      number: '911',
-      name: 'Policía y emergencias',
-      detail: 'Ayuda policial y coordinación de emergencias.',
-      coverage: 'Argentina',
-    },
-    {
-      number: '100',
-      name: 'Bomberos',
-      detail: 'Incendios en viviendas, comercios e industrias.',
-      coverage: 'Argentina',
-    },
-    {
-      number: '103',
-      name: 'Defensa Civil',
-      detail: 'Asistencia ante inundaciones y otros desastres.',
-      coverage: 'Argentina',
-    },
-    {
-      number: '105',
-      name: 'Emergencia ambiental',
-      detail: 'Avisos sobre posibles catástrofes ambientales.',
-      coverage: 'Argentina',
-    },
-    {
-      number: '106',
-      name: 'Prefectura Naval',
-      detail: 'Emergencias en ríos, lagos y costas.',
-      coverage: 'Ámbito de Prefectura · Argentina',
-    },
-    {
-      number: '107',
-      name: 'SAME · Emergencias médicas',
-      detail: 'Solicitud de ambulancia.',
-      coverage: 'CABA y localidades de la provincia de Buenos Aires',
-    },
-  ] as const;
 
   constructor() {
     afterRenderEffect((onCleanup) => {
+      this.directory();
       const viewport = this.viewport()?.nativeElement;
       if (!viewport) return;
+      viewport.scrollLeft = 0;
       this.updateControls();
       if (typeof ResizeObserver !== 'undefined') {
         const observer = new ResizeObserver(() => this.updateControls());
