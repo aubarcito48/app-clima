@@ -24,6 +24,7 @@ export interface WeatherAlertsResponse {
     url: string;
     consultado_en_utc: string;
     publicado_en_utc: string | null;
+    consultas_limitadas?: boolean;
   };
 }
 export function readWeatherAlerts(
@@ -75,7 +76,7 @@ export function readWeatherAlerts(
       throw new Error('Invalid severity');
     const url = text(alert['url'], 2048);
     if (
-      !/^https:\/\/ssl\.smn\.gob\.ar\/feeds\/CAP\/(xml_generados|cap_salida)\/[A-Za-z0-9_.-]+\.xml$/u.test(
+      !/^https:\/\/ssl\.smn\.gob\.ar\/feeds\/CAP\/(xml_generados|cap_salida|avisocortoplazo)\/[A-Za-z0-9_.-]+\.xml$/u.test(
         url,
       )
     )
@@ -106,6 +107,18 @@ export function readWeatherAlerts(
     alertas: alerts,
     fuente: {
       nombre: source['nombre'] as string,
+      consultas_limitadas: (() => {
+        const verification = source['verificacion'];
+        if (!verification || typeof verification !== 'object') return false;
+        const failures = (verification as Record<string, unknown>)['fallos'];
+        return (
+          !!failures &&
+          typeof failures === 'object' &&
+          ['indice_http_429', 'documento_http_429'].some(
+            (key) => Number((failures as Record<string, unknown>)[key]) > 0,
+          )
+        );
+      })(),
       url: source['url'] as string,
       consultado_en_utc: date(source['consultado_en_utc']),
       publicado_en_utc:

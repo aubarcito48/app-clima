@@ -3,6 +3,12 @@ import { CLIMATE_FIXTURE } from '../src/app/testing/climate-fixture';
 import type { ClimateResponse } from '../src/app/models/climate-response';
 import { environment } from '../src/environments/environment';
 
+// Transparent tile: UI tests never download maps from external services.
+export const MAP_PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABQABpfZFQAAAAABJRU5ErkJggg==',
+  'base64',
+);
+
 export function climate(city = 'Córdoba'): ClimateResponse {
   const data = structuredClone(CLIMATE_FIXTURE);
   data.ubicacion.nombre = city;
@@ -110,6 +116,11 @@ export const test = base.extend<{ api: ApiMock }>({
               },
               api.alertsStatus,
             );
+        } else if (
+          (url.origin === apiURL.origin && url.pathname === '/api/v1/mapa/') ||
+          url.origin === 'https://tile.openstreetmap.org'
+        ) {
+          await route.fulfill({ contentType: 'image/png', body: MAP_PNG });
         } else if (url.origin === placesURL.origin && url.pathname === placesURL.pathname) {
           expect(route.request().method()).toBe('GET');
           api.placesRequests.push(url);

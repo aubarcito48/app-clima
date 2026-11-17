@@ -1,5 +1,7 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'El SMN está limitando temporalmente las consultas. Reintentaremos automáticamente; consultá la fuente oficial mientras tanto.':
+    'SMN is temporarily limiting requests. We will retry automatically; please check the official source in the meantime.',
   'Mapa del clima': 'Weather map',
   'Ver escala de colores': 'View color scale',
   Lluvia: 'Rain',

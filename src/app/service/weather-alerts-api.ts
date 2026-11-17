@@ -14,7 +14,7 @@ export class WeatherAlertsApi {
     return this.http
       .get<unknown>(`${environment.apiBaseUrl}/api/v1/alertas/`, {
         params: { latitud: location.latitud, longitud: location.longitud, pais: location.pais },
-        timeout: 20000,
+        timeout: 35000,
       })
       .pipe(map((value) => readWeatherAlerts(value, location)));
   }

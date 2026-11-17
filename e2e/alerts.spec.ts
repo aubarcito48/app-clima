@@ -2,6 +2,23 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search, changeTheme } from './fixtures';
 import { ALERTS_FIXTURE } from '../src/app/testing/alerts-fixture';
 
+test('un 429 del SMN explica la espera y no declara ausencia de alertas', async ({ page, api }) => {
+  api.alertsBody = {
+    ...ALERTS_FIXTURE,
+    estado: 'parcial',
+    alertas: [],
+    fuente: {
+      ...ALERTS_FIXTURE.fuente,
+      verificacion: { fallos: { documento_http_429: 1 } },
+    },
+  };
+  await page.goto('/');
+  await search(page, 'Córdoba');
+  const panel = page.locator('app-weather-alerts');
+  await expect(panel.getByRole('status')).toContainText('El SMN está limitando temporalmente');
+  await expect(panel).not.toContainText('Sin alertas reportadas');
+});
+
 test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambos temas', async ({
   page,
   api,

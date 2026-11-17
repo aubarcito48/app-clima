@@ -35,6 +35,11 @@
     >
       @if (result().status === 'loading') {
         {{ 'Consultando avisos oficiales…' | translate }}
+      } @else if (result().data?.fuente?.consultas_limitadas) {
+        {{
+          'El SMN está limitando temporalmente las consultas. Reintentaremos automáticamente; consultá la fuente oficial mientras tanto.'
+            | translate
+        }}
       } @else if (result().status === 'unavailable' || result().data?.estado === 'no_disponible') {
         {{
           'No pudimos verificar las alertas en este momento. Consultá la fuente oficial.'

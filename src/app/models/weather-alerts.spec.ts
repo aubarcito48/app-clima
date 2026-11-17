@@ -4,6 +4,25 @@ import { ALERTS_FIXTURE } from '../testing/alerts-fixture';
 import { CLIMATE_FIXTURE } from '../testing/climate-fixture';
 
 describe('Official weather alerts contract', () => {
+  it('recognizes SMN rate limiting without treating it as an all-clear', () => {
+    const data = {
+      ...ALERTS_FIXTURE,
+      estado: 'parcial',
+      fuente: {
+        ...ALERTS_FIXTURE.fuente,
+        verificacion: { fallos: { documento_http_429: 2 } },
+      },
+    };
+    const result = readWeatherAlerts(data, CLIMATE_FIXTURE.ubicacion);
+    expect(result.fuente.consultas_limitadas).toBe(true);
+    expect(result.estado).toBe('parcial');
+    expect(result.alertas).toHaveLength(1);
+  });
+  it('accepts short-term notices from the official SMN directory', () => {
+    const data = structuredClone(ALERTS_FIXTURE);
+    data.alertas[0].url = 'https://ssl.smn.gob.ar/feeds/CAP/avisocortoplazo/test_cap_es.xml';
+    expect(readWeatherAlerts(data, CLIMATE_FIXTURE.ubicacion).alertas).toHaveLength(1);
+  });
   it('preserves official severity and text, including literal markup', () => {
     const data = structuredClone(ALERTS_FIXTURE);
     data.alertas[0].descripcion = '<img src=x onerror=alert(1)>';

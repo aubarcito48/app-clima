@@ -3,7 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  effect,
+  afterRenderEffect,
   inject,
   input,
   signal,
@@ -35,9 +35,12 @@ export class WeatherMap {
   private generation = 0;
 
   constructor() {
-    effect(() => {
+    afterRenderEffect(() => {
       this.location();
-      untracked(() => this.close());
+      untracked(() => {
+        this.close();
+        void this.open();
+      });
     });
     inject(DestroyRef).onDestroy(() => this.close());
   }
