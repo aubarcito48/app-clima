@@ -31,6 +31,7 @@ import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
 import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
 import { FavoritePlaces } from '../../service/favorite-places';
 import { WeatherAlerts } from '../../shared/weather-alerts/weather-alerts';
+import { WeatherMap } from '../../shared/weather-map/weather-map';
 import { EmergencyContacts } from '../../shared/emergency-contacts/emergency-contacts';
 import { ClimateAwareness } from '../../shared/climate-awareness/climate-awareness';
 import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
@@ -50,6 +51,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-sea
     WeatherLoading,
     WeatherSidebar,
     WeatherAlerts,
+    WeatherMap,
     EmergencyContacts,
     ClimateAwareness,
   ],

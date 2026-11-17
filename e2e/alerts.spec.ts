@@ -15,7 +15,7 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
   await expect(page.locator('.temperature')).toBeVisible();
   const panel = page.locator('app-weather-alerts');
   await expect(panel).toContainText('Tormentas de prueba');
-  await expect(page.locator('app-current-weather app-weather-alerts')).toHaveCount(1);
+  await expect(page.locator('app-weather-alerts')).toHaveCount(1);
   const metrics = page.getByRole('region', { name: 'Detalles del clima', exact: true });
   await expect(metrics.locator('.metric-card')).toHaveCount(4);
   await expect(metrics).toHaveCSS('background-image', /emergency-card-texture\.svg/);
@@ -28,7 +28,9 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
     expect(metricsBox.y).toBeCloseTo(currentBox.y, 0);
     expect(metricsBox.height).toBeCloseTo(currentBox.height, 0);
     expect(alertsBox.x).toBeCloseTo(currentBox.x, 0);
-    expect(alertsBox.width).toBeCloseTo(metricsBox.x + metricsBox.width - currentBox.x, 0);
+    const mapBox = (await page.locator('app-weather-map').boundingBox())!;
+    expect(mapBox.x).toBeGreaterThan(alertsBox.x + alertsBox.width);
+    expect(mapBox.x + mapBox.width).toBeCloseTo(metricsBox.x + metricsBox.width, 0);
   } else {
     expect(metricsBox.x).toBeCloseTo(alertsBox.x, 0);
   }

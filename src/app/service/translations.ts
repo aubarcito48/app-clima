@@ -1,5 +1,24 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Mapa del clima': 'Weather map',
+  'Ver escala de colores': 'View color scale',
+  Lluvia: 'Rain',
+  'Temperatura, lluvia y viento': 'Temperature, rain and wind',
+  'Cerrar mapa': 'Close map',
+  'El clima alrededor tuyo': 'Weather around you',
+  'Explorá cómo cambian las condiciones en la región.':
+    'Explore how conditions change across the region.',
+  'Abrir mapa': 'Open map',
+  'El mapa se carga solo cuando lo abrís.': 'The map loads only when you open it.',
+  Mostrar: 'Show',
+  'Mapa meteorológico interactivo': 'Interactive weather map',
+  'No se pudo cargar todo el mapa. Esperá un minuto antes de volver a abrirlo.':
+    'Some map tiles could not be loaded. Wait a minute before reopening it.',
+  'Cargando mapa…': 'Loading map…',
+  'Arrastrá para explorar y usá + o − para acercar o alejar.':
+    'Drag to explore and use + or − to zoom in or out.',
+  'Vista regional orientativa; no reemplaza los avisos oficiales del SMN.':
+    'Regional overview; it does not replace official SMN notices.',
   'Isa te acompaña, también por acá.': 'Isa is here to keep you company, too.',
   'Navegación por secciones': 'Section navigation',
   'Nuestra historia': 'Our story',
