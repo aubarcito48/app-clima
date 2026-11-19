@@ -15,7 +15,7 @@ for (const language of ['es', 'en'] as const) {
       };
     });
     const audio = readFileSync(
-      `docs/isa-local/reference-2026-11-15/backend/tmp/isa-rhubarb/${language}_long.wav`,
+      `e2e/data/isa/${language}_long.wav`,
     );
     await page.route('**/api/v1/voz/', (route) =>
       route.fulfill({

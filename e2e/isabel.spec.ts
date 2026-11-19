@@ -14,7 +14,7 @@ test('Isa permanece visible en el navbar y fuera del menú al cambiar de resoluc
 }) => {
   await page.goto('/');
   const isa = page.locator('app-isabel');
-  const avatar = isa.getByRole('button', { name: 'Isa', exact: true });
+  const avatar = isa.getByRole('button', { name: /^Isa:/u });
   await expect(avatar).toBeVisible();
   await avatar.click();
   await expect(avatar).toHaveAttribute('aria-pressed', 'false');
@@ -121,7 +121,7 @@ test('Isa reads English advice after changing language and keeps mute available'
     { texto: `¡Buenas, explorador!\n${climate().recomendacion.texto}\n¡Hasta luego, explorador!` },
     { texto: `Hello, explorer!\n${english}\nSee you later, explorer!`, idioma: 'en' },
   ]);
-  const avatar = isa.getByRole('button', { name: 'Isa', exact: true });
+  const avatar = isa.getByRole('button', { name: /^Isa:/u });
   await expect(avatar).toBeEnabled();
   await expect(avatar).toHaveAttribute('aria-description', 'Mute');
   await avatar.click();
@@ -180,14 +180,14 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
     return rgba.some((value, index) => index % 4 === 3 && value > 0);
   })).toBe(true);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  const avatarButton = isa.getByRole('button', { name: 'Isa', exact: true });
+  const avatarButton = isa.getByRole('button', { name: /^Isa:/u });
   await expect(isa.getByRole('button')).toHaveCount(1);
   await avatarButton.focus();
   await page.keyboard.press('Enter');
-  await expect(isa.getByRole('button', { name: 'Isa', exact: true })).toBeVisible();
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toBeVisible();
   await expect(avatarButton).toHaveAttribute('aria-pressed', 'false');
   await page.keyboard.press('Space');
-  await expect(isa.getByRole('button', { name: 'Isa', exact: true })).toBeVisible();
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toBeVisible();
   await expect(avatarButton).toHaveAttribute('aria-pressed', 'true');
   await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute('data-isa-expression', 'isa-sleep');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -215,7 +215,7 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
   });
   await page.goto('/');
   const isa = page.locator('app-isabel');
-  await expect(isa.getByRole('button', { name: 'Isa', exact: true })).toHaveAttribute(
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -234,10 +234,10 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
   ]);
   await expect(page.locator('#advice-text')).toHaveText(climate().recomendacion.texto!);
   await expect(isa.getByRole('button', { name: 'Detener', exact: true })).toHaveCount(0);
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
   await expect(isa.locator('[data-isa-mouth]')).toHaveAttribute('data-opening', '0.00');
   await expect(isa.getByRole('button', { name: 'Escuchar consejo' })).toHaveCount(0);
-  await expect(isa.getByRole('button', { name: 'Isa', exact: true })).toHaveAttribute(
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
     'aria-pressed',
     'false',
   );
@@ -246,18 +246,18 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
   await search(page, 'Mendoza');
   await expect(page.locator('#advice-text')).toContainText('Mendoza');
   expect(texts).toHaveLength(1);
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   expect(texts.at(-1)).toBe(
     `¡Buenas, explorador!\n${climate('Mendoza').recomendacion.texto}\n¡Hasta luego, explorador!`,
   );
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
   await expect(isa.getByRole('button', { name: 'Detener', exact: true })).toHaveCount(0);
   expect(texts).toHaveLength(2);
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
   await page.reload();
-  await expect(isa.getByRole('button', { name: 'Isa', exact: true })).toHaveAttribute(
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -345,7 +345,7 @@ test('movimiento reducido conserva la voz y las poses sin animar la boca', async
   await expect(canvas).toHaveAttribute('data-isa-animation', '');
   await expect(canvas).toHaveAttribute('data-opening', '0.00');
   await expect(isa.locator('.isa-avatar')).toHaveCSS('animation-name', 'none');
-  await isa.getByRole('button', { name: 'Isa', exact: true }).click();
+  await isa.getByRole('button', { name: /^Isa:/u }).click();
   await expect(canvas).toHaveAttribute('data-opening', '0.00');
   await expect(isa.getByRole('status')).toHaveText('');
 });

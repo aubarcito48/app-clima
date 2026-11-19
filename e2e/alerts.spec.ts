@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search, changeTheme } from './fixtures';
-import { ALERTS_FIXTURE } from '../src/app/testing/alerts/alerts-fixture';
+import { ALERTS_FIXTURE } from './data/alerts-fixture';
 import { ALERT_SOURCES } from '../src/app/models/alerts/weather-alerts';
 import { chooseLanguage } from './fixtures';
 

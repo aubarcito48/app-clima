@@ -3,7 +3,10 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "schematicCollections": ["@schematics/angular", "playwright-ng-schematics"]
+    "schematicCollections": [
+      "@schematics/angular",
+      "playwright-ng-schematics"
+    ]
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -27,17 +30,13 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public",
-                "ignore": [
-                  "isa-bot/original/**",
-                  "isa-bot/sin-fondo/**",
-                  "isa-bot/*.mp4",
-                  "isa-bot/isa-originales-backup/**",
-                  "isa-bot/rhubarb/**"
-                ]
+                "input": "public"
               }
             ],
-            "styles": ["src/tailwind.css", "src/styles.scss"]
+            "styles": [
+              "src/tailwind.css",
+              "src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,9 +84,6 @@
             }
           },
           "defaultConfiguration": "development"
-        },
-        "test": {
-          "builder": "@angular/build:unit-test"
         },
         "e2e": {
           "builder": "playwright-ng-schematics:playwright",
