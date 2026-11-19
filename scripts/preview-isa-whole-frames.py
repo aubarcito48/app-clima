@@ -24,7 +24,7 @@ def build(wav, sequences=False):
     folder = ROOT / 'tmp/isa-mouth-preview'
     preserved = {p: hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in (folder/'index.html', folder/'index-2.html', *([folder/'index-3.html'] if sequences else [])) if p.exists()}
-    manifest = json.loads((ROOT/'src/app/shared/isabel/isa-speech-manifest.json').read_text())
+    manifest = json.loads((ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json').read_text())
     frames, pages, features = [], {}, []
     for page_index, page in enumerate(manifest['pages']):
         path = ROOT/'public'/page['image']

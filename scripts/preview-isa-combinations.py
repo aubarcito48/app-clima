@@ -21,7 +21,7 @@ def build(wav,ffmpeg):
     folder=ROOT/'tmp/isa-mouth-preview';output=folder/'index-5c.html'
     protected=list(folder.glob('index*.html'))+list((ROOT/'public/isa-bot/runtime').glob('*'))
     protected+=list((ROOT/'public/isa-bot').glob('isa-hablando*-video.mp4'))
-    protected+=[ROOT/'src/app/shared/isabel/isa-speech-manifest.json']
+    protected+=[ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json']
     before={p:fusion.digest(p) for p in protected if p.is_file() and p!=output}
     data=rhythm.prepare_data(wav)
     _,cues,_=first.read_audio(wav)

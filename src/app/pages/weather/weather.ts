@@ -1,9 +1,9 @@
-import { Translate } from '../../shared/translate';
+import { Translate } from '../../shared/preferences/translate';
 import { Router } from '@angular/router';
-import { ScrollReveal } from '../../shared/scroll-reveal';
-import { SectionNavigation } from '../../shared/section-navigation/section-navigation';
-import { SiteFooter } from '../../shared/site-footer/site-footer';
-import { Isabel } from '../../shared/isabel/isabel';
+import { ScrollReveal } from '../../shared/site/scroll-reveal';
+import { SectionNavigation } from '../../shared/site/section-navigation/section-navigation';
+import { SiteFooter } from '../../shared/site/site-footer/site-footer';
+import { Isabel } from '../../shared/assistant/isabel/isabel';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,29 +13,29 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { Language } from '../../service/language';
-import { BackToTop } from '../../shared/back-to-top/back-to-top';
+import { Language } from '../../service/preferences/language';
+import { BackToTop } from '../../shared/site/back-to-top/back-to-top';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, EMPTY, map, of, Subject, switchMap, tap } from 'rxjs';
-import { CurrentLocation, LocationFailure } from '../../service/current-location';
-import { ClimateApi } from '../../service/climate-api';
-import { climateFeedback, climatePresentation } from '../../service/climate-presentation';
-import { ClimateResponse } from '../../models/climate-response';
-import { WeatherQuery, CitySearchFeedback } from '../../models/city-query';
-import { WeatherPreview } from '../../models/weather-preview';
-import { CitySearch } from '../../shared/city-search/city-search';
-import { CurrentWeather } from '../../shared/current-weather/current-weather';
-import { Forecast } from '../../shared/forecast/forecast';
-import { WeatherIcon } from '../../shared/weather-icon/weather-icon';
-import { WeatherLoading } from '../../shared/weather-loading/weather-loading';
-import { WeatherSidebar } from '../../shared/weather-sidebar/weather-sidebar';
-import { FavoritePlaces } from '../../service/favorite-places';
-import { WeatherAlerts } from '../../shared/weather-alerts/weather-alerts';
-import { WeatherMap } from '../../shared/weather-map/weather-map';
-import { WeatherDetails } from '../../shared/weather-details/weather-details';
-import { EmergencyContacts } from '../../shared/emergency-contacts/emergency-contacts';
-import { ClimateAwareness } from '../../shared/climate-awareness/climate-awareness';
-import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/city-search/city-query';
+import { CurrentLocation, LocationFailure } from '../../service/places/current-location';
+import { ClimateApi } from '../../service/weather/climate-api';
+import { climateFeedback, climatePresentation } from '../../service/weather/climate-presentation';
+import { ClimateResponse } from '../../models/weather/climate-response';
+import { WeatherQuery, CitySearchFeedback } from '../../models/places/city-query';
+import { WeatherPreview } from '../../models/weather/weather-preview';
+import { CitySearch } from '../../shared/places/city-search/city-search';
+import { CurrentWeather } from '../../shared/weather/current-weather/current-weather';
+import { Forecast } from '../../shared/weather/forecast/forecast';
+import { WeatherIcon } from '../../shared/weather/weather-icon/weather-icon';
+import { WeatherLoading } from '../../shared/weather/weather-loading/weather-loading';
+import { WeatherSidebar } from '../../shared/weather/weather-sidebar/weather-sidebar';
+import { FavoritePlaces } from '../../service/places/favorite-places';
+import { WeatherAlerts } from '../../shared/alerts/weather-alerts/weather-alerts';
+import { WeatherMap } from '../../shared/weather/weather-map/weather-map';
+import { WeatherDetails } from '../../shared/weather/weather-details/weather-details';
+import { EmergencyContacts } from '../../shared/alerts/emergency-contacts/emergency-contacts';
+import { ClimateAwareness } from '../../shared/weather/climate-awareness/climate-awareness';
+import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/places/city-search/city-query';
 @Component({
   selector: 'app-weather',
   imports: [

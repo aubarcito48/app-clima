@@ -11,7 +11,7 @@ const folder = path.join(root, 'tmp/isa-mouth-preview');
 const output = path.join(folder, 'index-3c-cori-seleccion-ingles-v2.html');
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const manifest = JSON.parse(await readFile(path.join(root, 'docs/isa-local/cori-english-director-v1/manifest.json'), 'utf8'));
-const catalog = JSON.parse(await readFile(path.join(root, 'src/app/shared/isabel/isa-speech-selection-en.json'), 'utf8'));
+const catalog = JSON.parse(await readFile(path.join(root, 'src/app/shared/assistant/isabel/isa-speech-selection-en.json'), 'utf8'));
 const review = JSON.parse(await readFile(path.join(root,'docs/isa-local/english-frame-alignment-v2/visual-label-review.json'),'utf8'));
 if (sha256(await readFile(path.join(root,'public/isa-bot',review.source))) !== review.sourceSha256)
   throw new Error('The reviewed English source video has changed');
@@ -36,9 +36,9 @@ for (const sample of manifest.cases) {
 const data = { experiment: 'english-frame-alignment-v2', text: manifest.text, cases,
   policy: englishAlignmentPolicy, visualReview: review,
   reviewed: false, productionChanged: false };
-const filter = (await readFile(path.join(root, 'src/app/shared/isabel/isabel.html'), 'utf8')).match(/<filter id="isa-dark-edge"[\s\S]*?<\/filter>/)[0];
+const filter = (await readFile(path.join(root, 'src/app/shared/assistant/isabel/isabel.html'), 'utf8')).match(/<filter id="isa-dark-edge"[\s\S]*?<\/filter>/)[0];
 const entry = `
-import {createIsaPortrait} from './src/app/shared/isabel/isa-portrait.ts';
+import {createIsaPortrait} from './src/app/shared/assistant/isabel/isa-portrait.ts';
 import {createIsaPlayback} from './scripts/reference/isa-playback-before-english-v2.mjs';
 import {alignedSourceAt} from './scripts/isa-english-frame-alignment.mjs';
 const data=${JSON.stringify(data)};

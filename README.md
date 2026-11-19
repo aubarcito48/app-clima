@@ -1,10 +1,13 @@
-﻿# StitchWeather
+# StitchWeather
 
 Frontend de la app del clima, desarrollado con Angular 21 y Tailwind CSS. Permite buscar lugares o usar la ubicación actual, consultar el clima y pronóstico, y recibir recomendaciones de IA en español o inglés.
 
 Consume la API de [app-clima-backend](https://github.com/aubarcito48/app-clima-backend). Las claves de los proveedores se configuran únicamente en el backend.
 
 **Publicado en Vercel:** [https://app-clima-ecru.vercel.app/](https://app-clima-ecru.vercel.app/)
+
+La organización por funcionalidades y sus dependencias se describen en
+[ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Teléfonos nacionales por país
 
@@ -13,7 +16,7 @@ Sin una ubicación consultada, invita a buscar una ciudad; para países pendient
 informa que no hay contactos verificados. Los números cortos son para marcar
 dentro del país indicado, con disponibilidad de servicio según la zona.
 
-Catálogo local en [emergency-directory.ts](src/app/shared/emergency-contacts/emergency-directory.ts),
+Catálogo local en [emergency-directory.ts](src/app/shared/alerts/emergency-contacts/emergency-directory.ts),
 verificado el 17/11/2026 con fuentes oficiales:
 
 - [Argentina](https://www.argentina.gob.ar/tema/emergencias).
@@ -75,7 +78,7 @@ del nuevo video de habla, preparados en WebP. Conserva reposo, despertar, mirada
 mirada hacia abajo en móvil y regreso al frente al hablar. No sigue el cursor.
 Los originales permanecen en `public/isa-bot`, excluidos de los assets publicados;
 la app solo carga `public/isa-bot/runtime`. El detalle del proceso está en
-[`src/app/shared/isabel/README.md`](src/app/shared/isabel/README.md).
+[`src/app/shared/assistant/isabel/README.md`](src/app/shared/assistant/isabel/README.md).
 
 Isa arranca con la voz activada y permanece en silencio hasta recibir el consejo
 de Groq de una consulta en español o inglés una sola vez. Podés silenciarla

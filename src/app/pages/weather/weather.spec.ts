@@ -1,13 +1,13 @@
 import { provideRouter } from '@angular/router';
 import { EMPTY } from 'rxjs';
-import { WeatherAlertsApi } from '../../service/weather-alerts-api';
+import { WeatherAlertsApi } from '../../service/alerts/weather-alerts-api';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
+import { CLIMATE_FIXTURE } from '../../testing/weather/climate-fixture';
 import { Weather } from './weather';
-import { IsabelVoice } from '../../service/isabel-voice';
+import { IsabelVoice } from '../../service/assistant/voice/isabel-voice';
 
 describe('Weather Django integration', () => {
   it('shares Celsius/Fahrenheit across current weather and forecast without refetching, and keeps the preference', async () => {

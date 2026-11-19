@@ -17,17 +17,17 @@ const before=await hashes(),report=JSON.parse(await readFile(path.join(backend,'
 if(!report.audio?.local||!report.audio?.groq)throw new Error('Prepare both real voice samples first');
 for(const mode of ['local','groq'])if(report[mode].map(s=>s.text).join(' ')!==report.text)throw new Error('Advice differs between directors');
 const safeJson=value=>JSON.stringify(value).replaceAll('<','\\u003c');
-const atlas=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel/isa-portrait-manifest.json'),'utf8'));
-const speechAtlas=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel/isa-speech-manifest.json'),'utf8'));
+const atlas=JSON.parse(await readFile(path.join(root,'src/app/shared/assistant/isabel/isa-portrait-manifest.json'),'utf8'));
+const speechAtlas=JSON.parse(await readFile(path.join(root,'src/app/shared/assistant/isabel/isa-speech-manifest.json'),'utf8'));
 const asset=async name=>'data:image/webp;base64,'+(await readFile(path.join(root,'public',name))).toString('base64');
 atlas.image=await asset(atlas.image);
 for(const page of speechAtlas.pages)page.image=await asset(page.image);
 const transpile=source=>ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText.replace(/^export /gm,'');
-const motion=transpile(await readFile(path.join(root,'src/app/shared/isabel/isa-motion.ts'),'utf8'));
-let portraitSource=await readFile(path.join(root,'src/app/shared/isabel/isa-portrait.ts'),'utf8');
+const motion=transpile(await readFile(path.join(root,'src/app/shared/assistant/isabel/isa-motion.ts'),'utf8'));
+let portraitSource=await readFile(path.join(root,'src/app/shared/assistant/isabel/isa-portrait.ts'),'utf8');
 portraitSource=portraitSource.replace(/^import atlas.*$/m,`const atlas=${safeJson(atlas)};`).replace(/^import speechAtlas.*$/m,`const speechAtlas=${safeJson(speechAtlas)};`).replace(/^import .*isa-motion.*$/m,'');
 const portrait=transpile(portraitSource);
-const timing=transpile(await readFile(path.join(root,'src/app/models/isa-performance.ts'),'utf8'));
+const timing=transpile(await readFile(path.join(root,'src/app/models/assistant/isa-performance.ts'),'utf8'));
 const payload={report,audio:{}};
 for(const mode of ['local','groq']){
  const bytes=await readFile(path.join(backend,mode+'.wav'));

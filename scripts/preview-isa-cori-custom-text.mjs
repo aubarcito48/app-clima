@@ -12,12 +12,12 @@ const textFile=path.resolve(root,argument('--text-file','docs/isa-local/cori-war
 const output=path.resolve(root,argument('--output','tmp/isa-mouth-preview/index-3c-cori-texto-calido-lluvia.html'));
 const text=(await readFile(textFile,'utf8')).trim(),bytes=await readFile(wav);
 const audioUri='data:audio/wav;base64,'+bytes.toString('base64');
-const template=await readFile(path.join(root,'src/app/shared/isabel/isabel.html'),'utf8');
+const template=await readFile(path.join(root,'src/app/shared/assistant/isabel/isabel.html'),'utf8');
 const filter=template.match(/<filter id="isa-dark-edge"[\s\S]*?<\/filter>/)[0];
 const metadata={text,audioSha256:createHash('sha256').update(bytes).digest('hex'),voice:'en_GB-cori-medium',synthesisScale:1.08,language:'en',reviewed:false};
 const entry=`
-import {createIsaPlayback} from './src/app/shared/isabel/isa-playback.ts';
-import {createIsaPortrait} from './src/app/shared/isabel/isa-portrait.ts';
+import {createIsaPlayback} from './src/app/shared/assistant/isabel/isa-playback.ts';
+import {createIsaPortrait} from './src/app/shared/assistant/isabel/isa-portrait.ts';
 const metadata=${JSON.stringify(metadata)};
 const uri=${JSON.stringify(audioUri)};
 const $=id=>document.getElementById(id),audio=$('audio');

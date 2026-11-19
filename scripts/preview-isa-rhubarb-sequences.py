@@ -32,7 +32,7 @@ def build(wav,ffmpeg,stable=False):
     output=folder/('index-5b.html' if stable else 'index-5.html')
     protected=list(folder.glob('index*.html'))+list((ROOT/'public/isa-bot/runtime').glob('*'))
     protected+=list((ROOT/'public/isa-bot').glob('isa-hablando*-video.mp4'))
-    protected+=[ROOT/'src/app/shared/isabel/isa-speech-manifest.json']
+    protected+=[ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json']
     hashes={p:fusion.digest(p) for p in protected if p.is_file() and p!=output}
     data=rhythm.prepare_data(wav)
     _,cues,duration=first.read_audio(wav)

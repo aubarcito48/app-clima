@@ -8,7 +8,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),folde
 const hashes=async()=>{
  const files=(await readdir(folder)).filter(n=>/^index.*\.html$/.test(n)&&n!=='index-6.html').map(n=>path.join(folder,n));
  files.push(...(await readdir(path.join(root,'public/isa-bot/runtime'))).map(n=>path.join(root,'public/isa-bot/runtime',n)));
- files.push(...['isa-portrait.ts','isa-motion.ts','isa-speech-manifest.json'].map(n=>path.join(root,'src/app/shared/isabel',n)));
+ files.push(...['isa-portrait.ts','isa-motion.ts','isa-speech-manifest.json'].map(n=>path.join(root,'src/app/shared/assistant/isabel',n)));
  return Object.fromEntries(await Promise.all(files.map(async p=>[p,createHash('sha256').update(await readFile(p)).digest('hex')])));
 };
 const before=await hashes(),browser=await chromium.launch({headless:true});

@@ -3,7 +3,7 @@ import { build } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 
 export async function loadIsaPlayback() {
-  const entry = fileURLToPath(new URL('../src/app/shared/isabel/isa-playback.ts', import.meta.url));
+  const entry = fileURLToPath(new URL('../src/app/shared/assistant/isabel/isa-playback.ts', import.meta.url));
   const result = await build({
     entryPoints: [entry], bundle: true, write: false,
     platform: 'node', format: 'esm', target: 'es2022',

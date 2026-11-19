@@ -7,11 +7,11 @@ import { chromium } from '@playwright/test';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const output=path.join(root,'tmp/isa-edge-review');await mkdir(output,{recursive:true});
-const template=await readFile(path.join(root,'src/app/shared/isabel/isabel.html'),'utf8');
+const template=await readFile(path.join(root,'src/app/shared/assistant/isabel/isabel.html'),'utf8');
 const filter=template.match(/<filter id="isa-dark-edge"[\s\S]*?<\/filter>/)[0].replace(/ \/>/g,'/>');
 const groups=[];
 for(const [name,filename] of [['poses','isa-portrait-manifest.json'],['es','isa-speech-manifest.json'],['en','isa-speech-manifest-en.json']]){
- const manifest=JSON.parse(await readFile(path.join(root,'src/app/shared/isabel',filename),'utf8'));
+ const manifest=JSON.parse(await readFile(path.join(root,'src/app/shared/assistant/isabel',filename),'utf8'));
  const files=manifest.pages?.map(p=>p.image)??[manifest.image];
  const pages=await Promise.all(files.map(async image=>'data:image/webp;base64,'+(await readFile(path.join(root,'public',image))).toString('base64')));
  const frames=manifest.sourceFrames.map((source,index)=>{

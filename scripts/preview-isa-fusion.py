@@ -108,7 +108,7 @@ def build(wav,ffmpeg):
     output=folder/'index-4-fusion.html'
     protected=list(folder.glob('index*.html'))+list((ROOT/'public/isa-bot/runtime').glob('*'))
     protected += list((ROOT/'public/isa-bot').glob('isa-hablando*-video.mp4'))
-    protected += [ROOT/'src/app/shared/isabel/isa-speech-manifest.json']
+    protected += [ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json']
     before={p:digest(p) for p in protected if p.is_file() and p!=output}
     rhythm=module('rhythm','preview-isa-rhythm.py');data=rhythm.prepare_data(wav)
     for row in data['frames']: row['take']=1

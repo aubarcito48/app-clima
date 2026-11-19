@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-manifest = json.loads((ROOT / 'src/app/shared/isabel/isa-speech-manifest-en.json').read_text(encoding='utf8'))
+manifest = json.loads((ROOT / 'src/app/shared/assistant/isabel/isa-speech-manifest-en.json').read_text(encoding='utf8'))
 folder = ROOT / 'tmp/isa-mouth-preview'
 folder.mkdir(parents=True, exist_ok=True)
 canvas = Image.new('RGB', (12 * 124, 14 * 100), '#edf8fc')

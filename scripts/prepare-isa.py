@@ -92,7 +92,7 @@ def prepare(ffmpeg: str, config: dict, reuse_frames: bool = False) -> None:
                 "height": size[1], "columns": columns, "fps": fps, "front": lookup[config["front"]],
                 "sourceFrames": selected, "tracks": tracks,
                 "blink": [lookup[i] for i in config["blink"]]}
-    (ROOT / "src/app/shared/isabel/isa-portrait-manifest.json").write_text(
+    (ROOT / "src/app/shared/assistant/isabel/isa-portrait-manifest.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     # Small authoring contact sheet, no browser or automatic test run.
     sheet = Image.new("RGB", (6 * size[0], ((len(frames) + 5) // 6) * (size[1] + 24)), "#243448")

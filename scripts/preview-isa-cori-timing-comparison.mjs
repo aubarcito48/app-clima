@@ -11,11 +11,11 @@ const cases=await Promise.all(manifest.cases.map(async sample=>{
  if(createHash('sha256').update(raw).digest('hex')!==sample.sha256)throw new Error('Audio hash mismatch');
  return {...sample,audio:'data:audio/wav;base64,'+raw.toString('base64')};
 }));
-const template=await readFile(path.join(root,'src/app/shared/isabel/isabel.html'),'utf8');
+const template=await readFile(path.join(root,'src/app/shared/assistant/isabel/isabel.html'),'utf8');
 const filter=template.match(/<filter id="isa-dark-edge"[\s\S]*?<\/filter>/)[0];
 const entry=`
-import {createIsaPortrait} from './src/app/shared/isabel/isa-portrait.ts';
-import {createIsaPlayback} from './src/app/shared/isabel/isa-playback.ts';
+import {createIsaPortrait} from './src/app/shared/assistant/isabel/isa-portrait.ts';
+import {createIsaPlayback} from './src/app/shared/assistant/isabel/isa-playback.ts';
 import {createPauseAnchors,createDirectedPauseAnchors,sourceAtPhase} from './scripts/isa-cori-pause-anchors.mjs';
 const data=${JSON.stringify({text:manifest.text,cases})};
 const $=id=>document.getElementById(id),audio=$('audio');

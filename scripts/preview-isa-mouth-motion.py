@@ -106,7 +106,7 @@ def build(wav, output):
     if output == FIRST_PREVIEW.resolve() or not output.is_relative_to((ROOT / 'tmp').resolve()):
         raise ValueError('La prueba 2 debe guardarse en tmp y nunca sobrescribir index.html.')
     previous_hash = hashlib.sha256(FIRST_PREVIEW.read_bytes()).hexdigest() if FIRST_PREVIEW.exists() else None
-    manifest = json.loads((ROOT / 'src/app/shared/isabel/isa-speech-manifest.json').read_text(encoding='utf8'))
+    manifest = json.loads((ROOT / 'src/app/shared/assistant/isabel/isa-speech-manifest.json').read_text(encoding='utf8'))
     first_index = manifest['sourceFrames'].index(80)
     count, fps = 48, manifest['fps']
     frames, pages, indices, atlases = [], {}, [], {}

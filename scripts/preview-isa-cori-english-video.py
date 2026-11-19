@@ -33,8 +33,8 @@ def build(ffmpeg):
     protected = [p for p in folder.glob('index*.html') if p != output]
     protected += list((ROOT/'public/isa-bot/runtime').glob('*'))
     protected += list((ROOT/'public/isa-bot').glob('*.mp4'))
-    protected += list((ROOT/'src/app/shared/isabel').glob('*'))
-    protected += [ROOT/'src/app/service/isabel-voice.ts']
+    protected += list((ROOT/'src/app/shared/assistant/isabel').glob('*'))
+    protected += [ROOT/'src/app/service/assistant/voice/isabel-voice.ts']
     before = {p: digest(p) for p in protected if p.is_file()}
     base = json.loads((folder/'index-3c-micropausas-cori.html').read_text(encoding='utf8').split('const data=', 1)[1].split(';\nconst $=', 1)[0])
     subprocess.run([str(ffmpeg), '-hide_banner', '-loglevel', 'error', '-nostdin', '-y',

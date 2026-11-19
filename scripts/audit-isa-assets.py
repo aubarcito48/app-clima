@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def audit(output):
     output.mkdir(parents=True, exist_ok=True)
-    folder = ROOT / 'src/app/shared/isabel'
+    folder = ROOT / 'src/app/shared/assistant/isabel'
     portrait = json.loads((folder / 'isa-portrait-manifest.json').read_text(encoding='utf8'))
     speech = json.loads((folder / 'isa-speech-manifest.json').read_text(encoding='utf8'))
     renderer_path = folder / 'isa-portrait.ts'

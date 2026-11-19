@@ -1,6 +1,6 @@
 import { test as base, expect, type Page, type Route } from '@playwright/test';
-import { CLIMATE_FIXTURE } from '../src/app/testing/climate-fixture';
-import type { ClimateResponse } from '../src/app/models/climate-response';
+import { CLIMATE_FIXTURE } from '../src/app/testing/weather/climate-fixture';
+import type { ClimateResponse } from '../src/app/models/weather/climate-response';
 import { environment } from '../src/environments/environment';
 
 // Transparent tile: UI tests never download maps from external services.

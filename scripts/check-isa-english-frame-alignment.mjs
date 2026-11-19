@@ -14,7 +14,7 @@ const folder = path.join(root, 'tmp/isa-mouth-preview'), stem = 'index-3c-cori-s
 const hash = raw => createHash('sha256').update(raw).digest('hex');
 const read = file => readFile(path.join(root, file));
 const report = JSON.parse(await read('tmp/isa-mouth-preview/' + stem + '.json'));
-const catalog = JSON.parse(await read('src/app/shared/isabel/isa-speech-selection-en.json'));
+const catalog = JSON.parse(await read('src/app/shared/assistant/isabel/isa-speech-selection-en.json'));
 const catalogBefore = structuredClone(catalog), trialCatalog = withEnglishLabelReview(catalog,report.visualReview);
 assert.deepEqual(catalog, catalogBefore);
 assert.equal(catalog.labels[catalog.candidates.indexOf(140)], 'X');
@@ -24,7 +24,7 @@ assert.equal(trialCatalog.labels[86], 'X');
 assert.equal(trialCatalog.labels[144], 'X');
 const protectedFiles = [
   ...['isa-frame-selector-es.ts', 'isa-frame-selector-en.ts', 'isa-playback.ts', 'isa-portrait.ts',
-    'isa-speech-selection.json', 'isa-speech-selection-en.json'].map(n => 'src/app/shared/isabel/' + n),
+    'isa-speech-selection.json', 'isa-speech-selection-en.json'].map(n => 'src/app/shared/assistant/isabel/' + n),
   ...['index-3c-cori-director-ingles-v1.html', 'index-3c-cori-texto-calido-lluvia.html',
     'index-3c-cori-texto-calido-lluvia-ajuste.html'].map(n => 'tmp/isa-mouth-preview/' + n),
   ...(await readdir(path.join(root, 'public/isa-bot/runtime'))).map(n => 'public/isa-bot/runtime/' + n),

@@ -1,15 +1,15 @@
 import { provideRouter } from '@angular/router';
 import { EMPTY } from 'rxjs';
-import { WeatherAlertsApi } from '../../service/weather-alerts-api';
+import { WeatherAlertsApi } from '../../service/alerts/weather-alerts-api';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { of, throwError } from 'rxjs';
-import { ClimateApi } from '../../service/climate-api';
-import { CLIMATE_FIXTURE } from '../../testing/climate-fixture';
+import { ClimateApi } from '../../service/weather/climate-api';
+import { CLIMATE_FIXTURE } from '../../testing/weather/climate-fixture';
 import { Weather } from './weather';
-import { IsabelVoice } from '../../service/isabel-voice';
+import { IsabelVoice } from '../../service/assistant/voice/isabel-voice';
 
 describe('Recovery and accessible interactions (TK08)', () => {
   let http: HttpTestingController;

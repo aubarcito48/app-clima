@@ -21,7 +21,7 @@ sources = [f['source'] for f in take['frames']]
 manifest = {'width':320,'height':320,'columns':8,'fps':24,'source':source.name,
     'sourceFrames':sources,'pages':pages,
     'closed':[sources.index(i) for i in (12,16,20,56,152,196,200,204,208,212)]}
-target = ROOT/'src/app/shared/isabel'
+target = ROOT/'src/app/shared/assistant/isabel'
 (target/'isa-speech-manifest-en.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8')
 catalog = {k:take[k] for k in ('fps','candidates','labels','jumps','policy','labelNote')}
 catalog['sourceFrames'] = sources

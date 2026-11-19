@@ -31,7 +31,7 @@ def build(wav, ffmpeg):
     protected = list(output.parent.glob('index*.html'))
     protected += list((ROOT/'public/isa-bot/runtime').glob('*'))
     protected += [ROOT/'public/isa-bot/isa-hablando-video.mp4',source,
-                  ROOT/'src/app/shared/isabel/isa-speech-manifest.json']
+                  ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json']
     before = {p: digest(p) for p in protected if p.is_file() and p!=output}
     config = json.loads((ROOT/'scripts/isa-speech-assets.json').read_text())
     crop = config['videoCrop']

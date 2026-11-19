@@ -32,7 +32,7 @@ def prepare_data(wav):
     with wave.open(buffer, 'wb') as target:
         target.setnchannels(channels); target.setsampwidth(2); target.setframerate(rate)
         target.writeframes(pcm)
-    manifest = json.loads((ROOT/'src/app/shared/isabel/isa-speech-manifest.json').read_text())
+    manifest = json.loads((ROOT/'src/app/shared/assistant/isabel/isa-speech-manifest.json').read_text())
     first = manifest['sourceFrames'].index(24)
     frames, pages = [], {}
     for index in range(first, first+180):
