@@ -1,8 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
 import { Subscription, retry, tap, throwError, timer } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { voiceEnvelope, VOICE_FRAME_SECONDS } from './voice-envelope';
+import { requestVoice, VoiceClip } from './voice-stream';
 import { createIsaPlayback } from '../../../shared/assistant/isabel/isa-playback';
 import {
   IsaCue,
@@ -18,7 +19,6 @@ import {
   providedIn: 'root',
 })
 export class IsabelVoice {
-  private readonly http = inject(HttpClient);
   readonly enabled = signal(true);
   readonly progress = signal(0);
   readonly mouthOpening = signal(0);
@@ -30,6 +30,9 @@ export class IsabelVoice {
   private audio?: HTMLAudioElement;
   private url?: string;
   private generation = 0;
+  private clips: (VoiceClip & { language: 'es' | 'en' })[] = [];
+  private playingClip = false;
+  private streamComplete = false;
   private envelope: Float32Array = new Float32Array();
   private mouthFrame?: number;
   private cues: IsaCue[] = [];
@@ -71,16 +74,11 @@ export class IsabelVoice {
         }
       : {};
     this.state.set('loading');
-    this.request = this.http
-      .post(
-        `${environment.apiBaseUrl}/api/v1/voz/`,
-        { texto: narration, ...(language === 'en' ? { idioma: language } : {}), ...performance },
-        {
-          responseType: 'blob',
-          // Piper may take 45 s, then the optional Rhubarb probe up to 60 s.
-          timeout: 120000,
-        },
-      )
+    this.request = requestVoice(`${environment.apiBaseUrl}/api/v1/voz/`, {
+      texto: narration,
+      ...(language === 'en' ? { idioma: language as 'en' } : {}),
+      ...performance,
+    })
       .pipe(
         retry({
           count: 1,
@@ -104,73 +102,96 @@ export class IsabelVoice {
         }),
       )
       .subscribe({
-        next: (blob) => {
+        next: (clip) => {
           if (generation !== this.generation) return;
-          if (blob.type !== 'audio/wav' || blob.size < 44) {
-            this.state.set('error');
-            return;
-          }
-          this.url = URL.createObjectURL(blob);
-          const audio = (this.audio = new Audio(this.url));
-          const prepared = blob
-            .arrayBuffer()
-            .then((buffer) => {
-              if (generation === this.generation) {
-                this.envelope = voiceEnvelope(buffer);
-                this.cues = plan ? readIsaTimeline(buffer) : [];
-                this.playback = createIsaPlayback(buffer, language);
-              }
-            })
-            .catch(() => {
-              /* El audio sigue funcionando si no se puede analizar. */
-            });
-          audio.ontimeupdate = () => {
-            if (
-              generation === this.generation &&
-              Number.isFinite(audio.duration) &&
-              audio.duration > 0
-            )
-              this.progress.set(Math.min(1, audio.currentTime / audio.duration));
-          };
-          audio.onplaying = () => {
-            if (generation !== this.generation) return;
-            this.state.set('speaking');
-            if (this.mouthFrame !== undefined) cancelAnimationFrame(this.mouthFrame);
-            const animateMouth = () => {
-              if (generation !== this.generation) return;
-              const frame = Math.floor(audio.currentTime / VOICE_FRAME_SECONDS);
-              const level = audio.paused ? 0 : (this.envelope[frame] ?? 0);
-              this.mouthOpening.set(Math.round(level * 20) / 20);
-              this.speechTime.set(
-                this.playback?.sourceSecondsAt(audio.currentTime) ??
-                  isaSpeechTimeAt(this.cues, performance.segmentos ?? [], audio.currentTime),
-              );
-              this.gesture.set(
-                audio.paused ? 'isa-awake' : isaGestureAt(this.cues, audio.currentTime),
-              );
-              this.mouthFrame = requestAnimationFrame(animateMouth);
-            };
-            animateMouth();
-          };
-          audio.onended = () => this.stop();
-          audio.onerror = () => {
-            if (generation !== this.generation) return;
-            this.stop();
-            this.state.set('error');
-          };
-          void prepared.then(() => {
-            if (generation !== this.generation || audio !== this.audio) return;
-            this.playAudio(audio, generation);
-          });
+          this.clips.push({ ...clip, language });
+          if (!this.playingClip) this.playNext(generation);
+        },
+        complete: () => {
+          if (generation !== this.generation) return;
+          this.streamComplete = true;
+          if (!this.playingClip) this.playNext(generation);
         },
         error: (error: unknown) => {
           if (generation !== this.generation) return;
-          this.waitingForVoice.set(false);
+          this.stop();
           this.state.set(
             error instanceof HttpErrorResponse && error.status === 429 ? 'busy' : 'error',
           );
         },
       });
+  }
+
+  private playNext(generation: number): void {
+    if (generation !== this.generation) return;
+    const clip = this.clips.shift();
+    if (!clip) {
+      if (this.streamComplete) this.stop();
+      else this.state.set('loading');
+      return;
+    }
+    this.playingClip = true;
+    if (this.url) URL.revokeObjectURL(this.url);
+    this.url = URL.createObjectURL(clip.blob);
+    // Keep the same media element so Safari retains a user's playback permission.
+    const audio = this.audio ?? new Audio();
+    this.audio = audio;
+    audio.src = this.url;
+    this.envelope = new Float32Array();
+    this.cues = [];
+    this.playback = undefined;
+    const prepared = clip.blob
+      .arrayBuffer()
+      .then((buffer) => {
+        if (generation !== this.generation) return;
+        this.envelope = voiceEnvelope(buffer);
+        this.cues = readIsaTimeline(buffer);
+        this.playback = createIsaPlayback(buffer, clip.language);
+      })
+      .catch(() => {
+        /* Audio remains usable if optional animation metadata fails. */
+      });
+    audio.ontimeupdate = () => {
+      if (generation === this.generation && Number.isFinite(audio.duration) && audio.duration > 0)
+        this.progress.set(
+          Math.min(1, (clip.index + audio.currentTime / audio.duration) / clip.total),
+        );
+    };
+    audio.onplaying = () => {
+      if (generation !== this.generation) return;
+      this.state.set('speaking');
+      if (this.mouthFrame !== undefined) cancelAnimationFrame(this.mouthFrame);
+      const animateMouth = () => {
+        if (generation !== this.generation) return;
+        const frame = Math.floor(audio.currentTime / VOICE_FRAME_SECONDS);
+        const level = audio.paused ? 0 : (this.envelope[frame] ?? 0);
+        this.mouthOpening.set(Math.round(level * 20) / 20);
+        this.speechTime.set(
+          this.playback?.sourceSecondsAt(audio.currentTime) ??
+            isaSpeechTimeAt(this.cues, clip.segments, audio.currentTime),
+        );
+        this.gesture.set(audio.paused ? 'isa-awake' : isaGestureAt(this.cues, audio.currentTime));
+        this.mouthFrame = requestAnimationFrame(animateMouth);
+      };
+      animateMouth();
+    };
+    audio.onended = () => {
+      if (generation !== this.generation) return;
+      if (this.mouthFrame !== undefined) cancelAnimationFrame(this.mouthFrame);
+      this.mouthFrame = undefined;
+      this.playingClip = false;
+      this.mouthOpening.set(0);
+      this.gesture.set('isa-awake');
+      this.playNext(generation);
+    };
+    audio.onerror = () => {
+      if (generation !== this.generation) return;
+      this.stop();
+      this.state.set('error');
+    };
+    void prepared.then(() => {
+      if (generation === this.generation && audio === this.audio) this.playAudio(audio, generation);
+    });
   }
 
   resume(): void {
@@ -193,6 +214,9 @@ export class IsabelVoice {
 
   stop(): void {
     this.generation++;
+    this.clips = [];
+    this.playingClip = false;
+    this.streamComplete = false;
     if (this.mouthFrame !== undefined) cancelAnimationFrame(this.mouthFrame);
     this.mouthFrame = undefined;
     this.envelope = new Float32Array();

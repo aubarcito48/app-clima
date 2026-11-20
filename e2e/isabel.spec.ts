@@ -123,7 +123,7 @@ test('Isa reads English advice after changing language and keeps mute available'
   ]);
   const avatar = isa.getByRole('button', { name: /^Isa:/u });
   await expect(avatar).toBeEnabled();
-  await expect(avatar).toHaveAttribute('aria-description', 'Mute');
+  await expect(avatar).toHaveAttribute('aria-label', 'Isa: Mute');
   await avatar.click();
   await expect(avatar).toHaveAttribute('aria-pressed', 'false');
   await chooseLanguage(page, 'es');
@@ -168,17 +168,24 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   await expect(page.locator('app-weather-sidebar app-isabel')).toHaveCount(1);
   await expect(page.locator('main app-isabel')).toHaveCount(0);
   await expect(isa.locator('.isa-avatar canvas')).toBeVisible();
-  await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute('data-isa-animation', 'isa-sleep');
+  await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute(
+    'data-isa-animation',
+    'isa-sleep',
+  );
   await expect(isa.locator('.isa-fallback')).toHaveCount(0);
-  await expect(isa.locator('[data-isa-mouth]')).toHaveAttribute('data-opening', '0.00');
+  await expect(isa.locator('canvas')).toHaveAttribute('data-isa-speech-blend', '0.000');
   await expect(isa.getByRole('heading')).toHaveCount(0);
   await expect(isa.getByRole('button', { name: /Animar a Isa|Pausar a Isa/u })).toHaveCount(0);
   // The initial sleeping portrait is deliberately static: no perpetual rendering loop.
   const canvas = isa.locator('canvas');
-  await expect.poll(() => canvas.evaluate((node: HTMLCanvasElement) => {
-    const rgba = node.getContext('2d')!.getImageData(0, 0, node.width, node.height).data;
-    return rgba.some((value, index) => index % 4 === 3 && value > 0);
-  })).toBe(true);
+  await expect
+    .poll(() =>
+      canvas.evaluate((node: HTMLCanvasElement) => {
+        const rgba = node.getContext('2d')!.getImageData(0, 0, node.width, node.height).data;
+        return rgba.some((value, index) => index % 4 === 3 && value > 0);
+      }),
+    )
+    .toBe(true);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const avatarButton = isa.getByRole('button', { name: /^Isa:/u });
   await expect(isa.getByRole('button')).toHaveCount(1);
@@ -189,7 +196,10 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   await page.keyboard.press('Space');
   await expect(isa.getByRole('button', { name: /^Isa:/u })).toBeVisible();
   await expect(avatarButton).toHaveAttribute('aria-pressed', 'true');
-  await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute('data-isa-expression', 'isa-sleep');
+  await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute(
+    'data-isa-expression',
+    'isa-sleep',
+  );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('isa.png'), fullPage: true });
   const audit = await new AxeBuilder({ page }).include('app-isabel').analyze();
@@ -215,27 +225,27 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
   });
   await page.goto('/');
   const isa = page.locator('app-isabel');
-  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute('aria-pressed', 'true');
   expect(texts).toEqual([]);
   await closeNavigation(page);
   await search(page, 'Córdoba');
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
+  const portrait = isa.locator('canvas');
+  await expect(portrait).toHaveAttribute('data-isa-speaking', 'true');
   await expect
-    .poll(async () => Number(await isa.locator('[data-isa-mouth]').getAttribute('data-opening')))
+    .poll(async () => Number(await portrait.getAttribute('data-isa-speech-blend')))
     .toBeGreaterThan(0.05);
+  const speechFrame = Number(await portrait.getAttribute('data-isa-speech-frame'));
   await expect
-    .poll(async () => Number(await isa.locator('[data-isa-mouth]').getAttribute('data-opening')))
-    .toBe(0);
+    .poll(async () => Number(await portrait.getAttribute('data-isa-speech-frame')))
+    .toBeGreaterThan(speechFrame);
   expect(texts).toEqual([
     `¡Buenas, explorador!\n${climate().recomendacion.texto}\n¡Hasta luego, explorador!`,
   ]);
   await expect(page.locator('#advice-text')).toHaveText(climate().recomendacion.texto!);
   await expect(isa.getByRole('button', { name: 'Detener', exact: true })).toHaveCount(0);
   await isa.getByRole('button', { name: /^Isa:/u }).click();
-  await expect(isa.locator('[data-isa-mouth]')).toHaveAttribute('data-opening', '0.00');
+  await expect(isa.locator('canvas')).toHaveAttribute('data-isa-speech-blend', '0.000');
   await expect(isa.getByRole('button', { name: 'Escuchar consejo' })).toHaveCount(0);
   await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
     'aria-pressed',
@@ -257,10 +267,7 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
   expect(texts).toHaveLength(2);
   await isa.getByRole('button', { name: /^Isa:/u }).click();
   await page.reload();
-  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute('aria-pressed', 'true');
   expect(texts).toHaveLength(2);
 });
 
@@ -325,17 +332,20 @@ test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   await expect(isa.getByRole('status')).toHaveText('');
   await expect(canvas).toHaveAttribute('data-isa-animation', 'isa-awake');
-  await expect(isa.locator('[data-isa-mouth]')).toHaveAttribute('data-opening', '0.00');
+  await expect(isa.locator('canvas')).toHaveAttribute('data-isa-speech-blend', '0.000');
   await expect(canvas).toHaveAttribute('data-isa-animation', 'isa-sleep', { timeout: 7000 });
   await expect(canvas).toHaveAttribute('data-isa-transition', '1.000');
 });
 
 test('movimiento reducido conserva la voz y las poses sin animar la boca', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.route('**/api/v1/voz/', (route) => route.fulfill({
-    contentType: 'audio/wav', body: wav(6),
-    headers: { 'access-control-allow-origin': '*' },
-  }));
+  await page.route('**/api/v1/voz/', (route) =>
+    route.fulfill({
+      contentType: 'audio/wav',
+      body: wav(6),
+      headers: { 'access-control-allow-origin': '*' },
+    }),
+  );
   await page.goto('/');
   await search(page, 'Córdoba');
   const isa = page.locator('app-isabel');
@@ -343,10 +353,10 @@ test('movimiento reducido conserva la voz y las poses sin animar la boca', async
   const canvas = isa.locator('canvas');
   await expect(canvas).toHaveAttribute('data-isa-expression', 'isa-awake');
   await expect(canvas).toHaveAttribute('data-isa-animation', '');
-  await expect(canvas).toHaveAttribute('data-opening', '0.00');
+  await expect(canvas).toHaveAttribute('data-isa-speech-blend', '0.000');
   await expect(isa.locator('.isa-avatar')).toHaveCSS('animation-name', 'none');
   await isa.getByRole('button', { name: /^Isa:/u }).click();
-  await expect(canvas).toHaveAttribute('data-opening', '0.00');
+  await expect(canvas).toHaveAttribute('data-isa-speech-blend', '0.000');
   await expect(isa.getByRole('status')).toHaveText('');
 });
 
