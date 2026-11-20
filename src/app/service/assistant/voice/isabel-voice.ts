@@ -33,6 +33,9 @@ export class IsabelVoice {
   private clips: (VoiceClip & { language: 'es' | 'en' })[] = [];
   private playingClip = false;
   private streamComplete = false;
+  private presentationReady = true;
+  private startedNarration = false;
+  private startupTimer?: ReturnType<typeof setTimeout>;
   private envelope: Float32Array = new Float32Array();
   private mouthFrame?: number;
   private cues: IsaCue[] = [];
@@ -41,6 +44,11 @@ export class IsabelVoice {
   setEnabled(value: boolean): void {
     this.enabled.set(value);
     if (!value) this.stop();
+  }
+
+  setPresentationReady(value: boolean): void {
+    this.presentationReady = value;
+    if (value && !this.playingClip && this.clips.length) this.playNext(this.generation);
   }
 
   speak(text: string, language: 'es' | 'en' = 'es', segments?: IsaSegment[]): void {
@@ -123,13 +131,33 @@ export class IsabelVoice {
   }
 
   private playNext(generation: number): void {
-    if (generation !== this.generation) return;
+    if (generation !== this.generation || !this.presentationReady) return;
+    // Give multipart speech a bounded head start for the following phrase.
+    if (
+      !this.startedNarration &&
+      (this.clips[0]?.total ?? 0) > 1 &&
+      this.clips.length === 1 &&
+      !this.streamComplete
+    ) {
+      if (this.startupTimer === undefined) {
+        this.startupTimer = setTimeout(() => {
+          this.startupTimer = undefined;
+          if (generation !== this.generation) return;
+          this.startedNarration = true;
+          this.playNext(generation);
+        }, 750);
+      }
+      return;
+    }
+    if (this.startupTimer !== undefined) clearTimeout(this.startupTimer);
+    this.startupTimer = undefined;
     const clip = this.clips.shift();
     if (!clip) {
       if (this.streamComplete) this.stop();
       else this.state.set('loading');
       return;
     }
+    this.startedNarration = true;
     this.playingClip = true;
     if (this.url) URL.revokeObjectURL(this.url);
     this.url = URL.createObjectURL(clip.blob);
@@ -214,6 +242,9 @@ export class IsabelVoice {
 
   stop(): void {
     this.generation++;
+    if (this.startupTimer !== undefined) clearTimeout(this.startupTimer);
+    this.startupTimer = undefined;
+    this.startedNarration = false;
     this.clips = [];
     this.playingClip = false;
     this.streamComplete = false;

@@ -4,9 +4,10 @@
 >
   <app-weather-sidebar (placeSelected)="citySearch.chooseSuggestion($event)">
     <app-isabel
-      [text]="weather()?.advice?.text ?? null"
-      [segments]="weather()?.advice?.segments"
+      [text]="assistantAdvice()?.text ?? null"
+      [segments]="assistantAdvice()?.segments"
       [busy]="state() === 'loading'"
+      [presentationReady]="state() === 'ready'"
       [sidebar]="true"
     />
   </app-weather-sidebar>

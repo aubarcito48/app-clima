@@ -16,7 +16,7 @@ import {
 import { Language } from '../../service/preferences/language';
 import { BackToTop } from '../../shared/site/back-to-top/back-to-top';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY, map, of, Subject, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 import { CurrentLocation, LocationFailure } from '../../service/places/current-location';
 import { ClimateApi } from '../../service/weather/climate-api';
 import { climateFeedback, climatePresentation } from '../../service/weather/climate-presentation';
@@ -35,7 +35,10 @@ import { WeatherMap } from '../../shared/weather/weather-map/weather-map';
 import { WeatherDetails } from '../../shared/weather/weather-details/weather-details';
 import { EmergencyContacts } from '../../shared/alerts/emergency-contacts/emergency-contacts';
 import { ClimateAwareness } from '../../shared/weather/climate-awareness/climate-awareness';
-import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/places/city-search/city-query';
+import {
+  normalizeCityQuery,
+  serializeWeatherQuery,
+} from '../../shared/places/city-search/city-query';
 @Component({
   selector: 'app-weather',
   imports: [
@@ -84,6 +87,11 @@ export class Weather {
   readonly feedback = signal<CitySearchFeedback | null>(null);
   readonly requestedCity = signal('');
   readonly response = signal<ClimateResponse | null>(null);
+  private readonly preparedResponse = signal<ClimateResponse | null>(null);
+  readonly assistantAdvice = computed(() => {
+    const data = this.preparedResponse();
+    return data ? climatePresentation(data, this.language.locale()).advice : undefined;
+  });
   readonly cancelled = signal(false);
   readonly locating = signal(false);
   private readonly location = inject(CurrentLocation);
@@ -107,8 +115,8 @@ export class Weather {
     });
     this.searches
       .pipe(
-        switchMap((query) =>
-          query
+        switchMap((query) => {
+          return query
             ? (query === 'current-location'
                 ? this.location.get().pipe(
                     tap((coordinates) => {
@@ -119,7 +127,9 @@ export class Weather {
                   )
                 : this.api.search(query)
               ).pipe(
-                map((data) => ({ data, feedback: null })),
+                // Start Isa immediately; only the visible result waits for presentation.
+                tap((data) => this.preparedResponse.set(data)),
+                switchMap((data) => timer(5000).pipe(map(() => ({ data, feedback: null })))),
                 catchError((error) =>
                   of({
                     data: null,
@@ -138,8 +148,8 @@ export class Weather {
                   }),
                 ),
               )
-            : EMPTY,
-        ),
+            : EMPTY;
+        }),
         takeUntilDestroyed(),
       )
       .subscribe((result) => {
@@ -168,6 +178,7 @@ export class Weather {
     this.lastQuery = { ...normalized };
     this.cancelled.set(false);
     this.response.set(null);
+    this.preparedResponse.set(null);
     this.feedback.set(null);
     this.locating.set(false);
     this.requestedCity.set('city' in normalized ? normalized.city : 'tu ubicación actual');
@@ -181,6 +192,7 @@ export class Weather {
     this.activeKey = '';
     this.locating.set(false);
     this.response.set(null);
+    this.preparedResponse.set(null);
     this.feedback.set(null);
     this.state.set('initial');
   }
@@ -195,6 +207,7 @@ export class Weather {
     this.locating.set(false);
     this.cancelled.set(false);
     this.response.set(null);
+    this.preparedResponse.set(null);
     this.feedback.set(null);
     this.state.set('initial');
   }

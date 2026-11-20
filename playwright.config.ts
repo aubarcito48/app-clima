@@ -14,7 +14,8 @@ export default defineConfig({
   retries: 0,
   workers: process.env['CI'] ? 1 : 2,
   timeout: 30000,
-  expect: { timeout: 5000 },
+  // Five-second result presentation plus time for rendering the response.
+  expect: { timeout: 7000 },
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL,
