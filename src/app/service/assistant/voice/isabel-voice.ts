@@ -57,7 +57,7 @@ export class IsabelVoice {
       gesture: 'isa-awake',
       speed: 1,
       energy: 1,
-      pause_ms: 160,
+      pause_ms: 0,
     });
     const performance = plan
       ? {

@@ -9,7 +9,7 @@ export interface VoiceClip {
   segments: IsaSegment[];
 }
 
-/** Incremental fetch is intentional: the complete WAV remains the legacy fallback. */
+/** Request one complete narration so playback never waits between downloaded phrases. */
 export function requestVoice(
   url: string,
   payload: {
@@ -24,7 +24,7 @@ export function requestVoice(
     const run = async () => {
       const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/x-ndjson' },
+        headers: { 'Content-Type': 'application/json', Accept: 'audio/wav' },
         body: JSON.stringify(payload),
         credentials: 'omit',
         signal: controller.signal,
