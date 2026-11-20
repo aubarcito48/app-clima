@@ -31,7 +31,6 @@ export class Isabel {
   readonly sidebar = input(false);
   readonly presenceOnly = input(false);
   readonly busy = input(false);
-  readonly presentationReady = input(true);
   readonly text = input<string | null>(null);
   readonly segments = input<IsaSegment[] | undefined>();
   readonly voice = inject(IsabelVoice);
@@ -76,15 +75,6 @@ export class Isabel {
       this.layoutQuery?.addEventListener('change', this.layoutChanged);
       void this.loadAvatar();
     });
-    effect((onCleanup) => {
-      if (this.presenceOnly()) return;
-      const ready = this.presentationReady();
-      this.voice.setPresentationReady(false);
-      if (!ready) return;
-      // Let the newly visible text and Isa's glance render before playback.
-      const glance = setTimeout(() => this.voice.setPresentationReady(true), 350);
-      onCleanup(() => clearTimeout(glance));
-    });
     let previousText: string | null = null;
     let previousSegments: IsaSegment[] | undefined;
     let attempted = false;
@@ -111,8 +101,7 @@ export class Isabel {
     effect(() => {
       const busy = this.busy();
       const state = this.voice.state();
-      const visible = this.presentationReady();
-      untracked(() => this.lifecycle.update(busy, visible ? state : 'idle'));
+      untracked(() => this.lifecycle.update(busy, state));
     });
     effect(() => {
       const ready = this.ready();

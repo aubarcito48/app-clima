@@ -74,7 +74,6 @@ test('Isa adapta la mirada al girar la pantalla sin reiniciar la solicitud de vo
   const isa = page.locator('app-isabel');
   const canvas = isa.locator('.isa-avatar canvas');
   await expect(isa.getByRole('status')).toContainText('Isa está preparando');
-  await expect(page.locator('#advice-text')).toBeVisible();
   for (const width of [768, 1440, 360, 1024, 1023]) {
     await page.setViewportSize({ width, height: 1000 });
     await expect(canvas).toBeVisible();
@@ -322,9 +321,6 @@ test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y
   releaseWeather();
   await expect(isa.getByRole('status')).toContainText('Isa está preparando');
   await checkMobileStatus();
-  await expect(canvas).toHaveAttribute('data-isa-animation', 'isa-awake');
-  await expect(page.locator('#advice-text')).toHaveCount(0);
-  await expect(page.locator('#advice-text')).toBeVisible();
   await expect(canvas).toHaveAttribute(
     'data-isa-animation',
     page.viewportSize()!.width < 1024 ? 'isa-down' : 'isa-right',
