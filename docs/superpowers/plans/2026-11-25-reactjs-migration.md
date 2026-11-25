@@ -60,3 +60,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 5: API validada, hook de clima, cancelacion y busqueda. Doce pruebas de clima, datos invalidos y respuestas fuera de orden aprobadas. Build y tipos: correctos.
 
 - 6: Pronostico por dias e intervalos, unidades y grafico SVG con temperatura, lluvia y viento. Veintiuna pruebas aprobadas en tres tamanos. Build y tipos: correctos.
+
+- 7: Combobox accesible, debounce cancelable y geolocalizacion bajo permiso; dieciocho pruebas de sugerencias, teclado y permisos aprobadas. Build y tipos: correctos.
