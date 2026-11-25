@@ -9,7 +9,11 @@ if (!['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) || origin.pro
 
 export default defineConfig({
   testDir: './e2e',
-  webServer: { command: 'npm start -- --port 4300 --strictPort', url: baseURL, reuseExistingServer: !process.env['CI'] },
+  webServer: {
+    command: 'npm start -- --port 4300 --strictPort',
+    url: baseURL,
+    reuseExistingServer: false,
+  },
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,

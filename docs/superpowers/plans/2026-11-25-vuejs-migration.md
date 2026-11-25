@@ -153,18 +153,20 @@ componentes anteriores que consumen traducciones y `src/vue/api/climate.ts`.
 
 ## Ritmo de trabajo
 
-No ejecutar las etapas 2–10 en esta sesión. Al retomar, revisar el estado real,
+Autorización posterior del usuario: ejecutar las etapas restantes de forma continua,
+con commit y push después de validar cada una. Revisar el estado real,
 implementar la siguiente etapa y validar su entrega antes de confirmarla.
 Actualizar este plan en el commit de la etapa correspondiente. No crear commits
 adicionales solo para marcar casillas ni comprimir el historial con squash.
 
-## Registro de ejecuci?n
+## Registro de ejecución
 
-- 1: documentaci?n publicada como `1ff5c03`.
-- 2: entrada Vue, Vite, TypeScript y configuraci?n p?blica mediante allowlist. `npm run build` y `npm run typecheck`: correctos.
+- 1: documentación publicada como `1ff5c03`.
+- 2: entrada Vue, Vite, TypeScript y configuración pública mediante allowlist. `npm run build` y `npm run typecheck`: correctos.
 - 3: componentes SFC, estilos, rutas y shell adaptable. Build correcto; prueba Chromium de menu movil y navegacion a /sobre-nosotros sin errores de pagina.
 - 4: API fetch cancelable, contratos validados, composable de clima y busqueda. Build correcto; 12 pruebas Chromium correctas (4 casos en 3 tamanos).
 - 5: pronostico por dia, grafico SVG, metricas, unidades compartidas y fechas locales. Build correcto; 21 casos Chromium correctos, incluidos datos parciales y cambio de ano. Selectores de las suites adaptados a componentes Vue.
 - 6: sugerencias cancelables con teclado, geolocalizacion bajo demanda y favoritos persistentes compartidos entre rutas. Build/typecheck correctos; 21 pruebas de favoritos, sugerencias y ubicacion correctas, incluida auditoria axe del combobox.
 - 7: catalogo ES/EN, preferencias compartidas, tema del sistema, sincronizacion de almacenamiento y revelado circular. Build correcto; 24 pruebas de idiomas/temas correctas, con storage bloqueado y consultas pendientes.
 - 8: mapa Leaflet, capas, leyenda y consulta por punto portados desde el estado local actual de Angular; alertas oficiales, contactos y carrusel ambiental. 48 pruebas correctas en tres tamanos, incluidas consultas por punto y auditorias axe.
+- 9: voz, streaming, reproducción, sincronización y animación de Isa portados a Vue. Teleport conserva la instancia al cambiar de resolución. Compilación correcta y 39 pruebas de Isa aprobadas en móvil, tablet y escritorio. El servidor de pruebas se cierra automáticamente al terminar.

@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect, watchPostEffect, onMounted, onUnmounted, useTemplateRef } from 'vue';
+import {
+  ref,
+  nextTick,
+  computed,
+  watch,
+  watchEffect,
+  watchPostEffect,
+  onMounted,
+  onUnmounted,
+  useTemplateRef,
+} from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
 import LanguageToggle from '../../preferences/language-toggle/language-toggle.vue';
@@ -12,7 +22,7 @@ import { useLanguage } from '../../../service/preferences/language';
 const cleanup = useCleanup();
 const route = useRoute();
 const t = useLanguage().text;
-const emit = defineEmits<{(event: 'placeSelected', value?: any): void}>();
+const emit = defineEmits<{ (event: 'placeSelected', value?: any): void }>();
 const document = globalThis.document;
 const desktop = ref(true);
 const mobileOpen = ref(false);
@@ -23,243 +33,423 @@ const favorites = useFavoritePlaces();
 const placesOpen = ref(false);
 const placesButton = useTemplateRef<HTMLButtonElement>('placesButton');
 function openMenu() {
-    const dialog = mobileMenu.value;
-    if (!dialog || dialog.open)
-        return;
-    previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    dialog.showModal();
-    mobileOpen.value = true;
-    dialog.querySelector<HTMLButtonElement>('[data-close-menu]')?.focus();
+  const dialog = mobileMenu.value;
+  if (!dialog || dialog.open) return;
+  previousOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+  dialog.showModal();
+  mobileOpen.value = true;
+  dialog.querySelector<HTMLButtonElement>('[data-close-menu]')?.focus();
 }
 function closeMenu(restoreFocus = true) {
-    const dialog = mobileMenu.value;
-    if (dialog?.open)
-        dialog.close();
-    mobileOpen.value = false;
-    unlockScroll();
-    if (restoreFocus)
-        menuTrigger.value?.focus({ preventScroll: true });
+  const dialog = mobileMenu.value;
+  if (dialog?.open) dialog.close();
+  mobileOpen.value = false;
+  unlockScroll();
+  if (restoreFocus) menuTrigger.value?.focus({ preventScroll: true });
 }
 function dialogClosed() {
-    mobileOpen.value = false;
-    unlockScroll();
+  mobileOpen.value = false;
+  unlockScroll();
 }
 function cancelMenu(event: Event) {
-    event.preventDefault();
-    closeMenu();
+  event.preventDefault();
+  closeMenu();
 }
 function backdropClick(event: MouseEvent) {
-    const dialog = mobileMenu.value;
-    if (!dialog || event.target !== dialog)
-        return;
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom)
-        closeMenu();
+  const dialog = mobileMenu.value;
+  if (!dialog || event.target !== dialog) return;
+  const rect = dialog.getBoundingClientRect();
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  )
+    closeMenu();
 }
 function unlockScroll() {
-    if (previousOverflow !== null) {
-        document.body.style.overflow = previousOverflow;
-        previousOverflow = null;
-    }
+  if (previousOverflow !== null) {
+    document.body.style.overflow = previousOverflow;
+    previousOverflow = null;
+  }
 }
 function togglePlaces() {
-    placesOpen.value = ((value) => !value)(placesOpen.value);
+  placesOpen.value = ((value) => !value)(placesOpen.value);
 }
 function forecastSelected() {
-    placesOpen.value = false;
-    closeMenu(false);
-    document.getElementById('city')?.focus({ preventScroll: true });
+  placesOpen.value = false;
+  closeMenu(false);
+  document.getElementById('city')?.focus({ preventScroll: true });
 }
 function aboutSelected() {
-    placesOpen.value = false;
-    closeMenu(false);
+  placesOpen.value = false;
+  closeMenu(false);
 }
 function selectPlace(place: SavedPlace) {
-    placesOpen.value = false;
-    closeMenu(false);
-    emit('placeSelected', place);
+  placesOpen.value = false;
+  closeMenu(false);
+  emit('placeSelected', place);
 }
 function removePlace(id: string) {
-    favorites.remove(id);
-    placesButton.value?.focus();
+  favorites.remove(id);
+  placesButton.value?.focus();
 }
 const query = document.defaultView?.matchMedia?.('(min-width: 1024px)');
-if (query)
-    desktop.value = query.matches;
+if (query) desktop.value = query.matches;
 const resize = () => {
-    closeMenu(false);
-    desktop.value = query!.matches;
+  closeMenu(false);
+  desktop.value = query!.matches;
 };
 query?.addEventListener('change', resize);
 cleanup(() => {
-    query?.removeEventListener('change', resize);
-    unlockScroll();
+  query?.removeEventListener('change', resize);
+  unlockScroll();
 });
 
-defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, togglePlaces, forecastSelected, aboutSelected, selectPlace, removePlace });
+const assistantTarget = ref(desktop.value ? '#isa-desktop' : '#isa-mobile');
+watch(desktop, async (value) => {
+  await nextTick();
+  assistantTarget.value = value ? '#isa-desktop' : '#isa-mobile';
+});
+defineExpose({
+  openMenu,
+  closeMenu,
+  dialogClosed,
+  cancelMenu,
+  backdropClick,
+  togglePlaces,
+  forecastSelected,
+  aboutSelected,
+  selectPlace,
+  removePlace,
+});
 </script>
 
 <template>
-<div data-component="app-weather-sidebar">
+  <div data-component="app-weather-sidebar">
+    <template v-if="desktop">
+      <div class="desktop-shell">
+        <aside id="desktop-navigation" class="stitch-sidebar">
+          <div class="relative flex items-center justify-between gap-2">
+            <RouterLink
+              to="/"
+              class="relative flex items-center gap-3 rounded-app"
+              :aria-label="t('StitchWeather, inicio')"
+            >
+              <span class="stitch-logo" aria-hidden="true">S</span>
+              <span class="brand-copy"
+                ><span class="block font-display text-lg font-bold tracking-tight text-ink"
+                  >Stitch<span class="text-brand-accent">Weather</span></span
+                ><span
+                  class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
+                  >{{ t('TU CLIMA, M\u00C1S AZUL') }}</span
+                ></span
+              >
+            </RouterLink>
 
-
-
-<template v-if="desktop">
-  <div class="desktop-shell">
-    <aside id="desktop-navigation" class="stitch-sidebar">
-
-  <div class="relative flex items-center justify-between gap-2">
-
-  <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
-    <span class="stitch-logo" aria-hidden="true">S</span>
-    <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
-  </RouterLink>
-
-    <template v-if="!(desktop)">
-      <button data-close-menu="" type="button" class="menu-control shrink-0" :aria-label="t('Cerrar men\u00FA')" @click="closeMenu()">
-        <WeatherIcon name="close" :size="22" />
-      </button>
-    </template></div>
-  <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
-  <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
-    <RouterLink to="/sobre-nosotros" active-class="bg-surface" class="sidebar-link" @click="aboutSelected()" >
-      <WeatherIcon name="sparkles" :size="20" />
-      <span >{{ t('Sobre nosotros') }}</span>
-    </RouterLink>
-    <RouterLink to="/" fragment="pronostico" class="sidebar-link" :aria-current="((!(placesOpen) && !((route.path === '/sobre-nosotros'))) ? 'location' : undefined)" :class="{ 'bg-surface': (!(placesOpen) && !((route.path === '/sobre-nosotros'))) }" @click="forecastSelected()"><WeatherIcon name="cloud-sun" :size="20" /><span >{{ t('Pron\u00F3stico') }}</span></RouterLink>
-    <button type="button" class="sidebar-link" aria-controls="favorite-places" :aria-expanded="placesOpen" :class="{ 'bg-surface': placesOpen }" @click="togglePlaces()" ref="placesButton">
-      <WeatherIcon name="heart" :size="20" /><span >{{ t('Mis lugares') }}</span><span class="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink">{{ favorites.places.value.length }}</span>
-    </button>
-  </nav>
-  <p class="sr-only" aria-live="polite" aria-atomic="true">
-    {{ t(favorites.announcement.value) }}
-  </p>
-  <template v-if="favorites.storageWarning.value">
-    <p class="relative mt-3 text-xs leading-5 text-secondary">
-      {{ t(favorites.storageWarning.value) }}
-    </p>
-  </template><section id="favorite-places" aria-labelledby="favorite-heading" class="relative mt-4 min-w-0" :hidden="!(placesOpen)">
-    <h2 id="favorite-heading" class="text-sm font-bold text-ink">
-      {{ t('Tus lugares guardados') }}
-    </h2>
-    <template v-if="favorites.places.value.length">
-      <ul class="mt-2 grid gap-2">
-        <template v-for="(place, index) in favorites.places.value" :key="place.id">
-          <li class="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2">
-            <button type="button" class="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left" @click="selectPlace(place)">
-              <span class="block break-words text-sm font-semibold text-ink">{{ place.name }}</span><span class="mt-1 block break-words text-xs text-secondary">{{ (place.region ? (place.region + ', ') : '') }}{{ place.country }}</span>
+            <template v-if="!desktop">
+              <button
+                data-close-menu=""
+                type="button"
+                class="menu-control shrink-0"
+                :aria-label="t('Cerrar men\u00FA')"
+                @click="closeMenu()"
+              >
+                <WeatherIcon name="close" :size="22" />
+              </button>
+            </template>
+          </div>
+          <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
+          <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
+            <RouterLink
+              to="/sobre-nosotros"
+              active-class="bg-surface"
+              class="sidebar-link"
+              @click="aboutSelected()"
+            >
+              <WeatherIcon name="sparkles" :size="20" />
+              <span>{{ t('Sobre nosotros') }}</span>
+            </RouterLink>
+            <RouterLink
+              to="/"
+              fragment="pronostico"
+              class="sidebar-link"
+              :aria-current="
+                !placesOpen && !(route.path === '/sobre-nosotros') ? 'location' : undefined
+              "
+              :class="{ 'bg-surface': !placesOpen && !(route.path === '/sobre-nosotros') }"
+              @click="forecastSelected()"
+              ><WeatherIcon name="cloud-sun" :size="20" /><span>{{
+                t('Pron\u00F3stico')
+              }}</span></RouterLink
+            >
+            <button
+              type="button"
+              class="sidebar-link"
+              aria-controls="favorite-places"
+              :aria-expanded="placesOpen"
+              :class="{ 'bg-surface': placesOpen }"
+              @click="togglePlaces()"
+              ref="placesButton"
+            >
+              <WeatherIcon name="heart" :size="20" /><span>{{ t('Mis lugares') }}</span
+              ><span
+                class="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
+                >{{ favorites.places.value.length }}</span
+              >
             </button>
-            <button type="button" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky" :aria-label="t('Eliminar {place} de Mis lugares', { 'place': ((place.name + ', ') + place.country) })" @click="removePlace(place.id)">
-              <WeatherIcon name="close" :size="17" />
+          </nav>
+          <p class="sr-only" aria-live="polite" aria-atomic="true">
+            {{ t(favorites.announcement.value) }}
+          </p>
+          <template v-if="favorites.storageWarning.value">
+            <p class="relative mt-3 text-xs leading-5 text-secondary">
+              {{ t(favorites.storageWarning.value) }}
+            </p>
+          </template>
+          <section
+            id="favorite-places"
+            aria-labelledby="favorite-heading"
+            class="relative mt-4 min-w-0"
+            :hidden="!placesOpen"
+          >
+            <h2 id="favorite-heading" class="text-sm font-bold text-ink">
+              {{ t('Tus lugares guardados') }}
+            </h2>
+            <template v-if="favorites.places.value.length">
+              <ul class="mt-2 grid gap-2">
+                <template v-for="(place, index) in favorites.places.value" :key="place.id">
+                  <li class="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2">
+                    <button
+                      type="button"
+                      class="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left"
+                      @click="selectPlace(place)"
+                    >
+                      <span class="block break-words text-sm font-semibold text-ink">{{
+                        place.name
+                      }}</span
+                      ><span class="mt-1 block break-words text-xs text-secondary"
+                        >{{ place.region ? place.region + ', ' : '' }}{{ place.country }}</span
+                      >
+                    </button>
+                    <button
+                      type="button"
+                      class="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky"
+                      :aria-label="
+                        t('Eliminar {place} de Mis lugares', {
+                          place: place.name + ', ' + place.country,
+                        })
+                      "
+                      @click="removePlace(place.id)"
+                    >
+                      <WeatherIcon name="close" :size="17" />
+                    </button>
+                  </li>
+                </template>
+              </ul> </template
+            ><template v-else>
+              <p class="mt-2 text-xs leading-6 text-secondary">
+                {{
+                  t(
+                    'Todav\u00EDa no guardaste lugares. Consult\u00E1 una ciudad y toc\u00E1 el coraz\u00F3n para agregarla.',
+                  )
+                }}
+              </p>
+            </template>
+            <p class="mt-2 text-[11px] leading-5 text-muted">
+              {{ t('Guardados en este navegador.') }}
+            </p>
+          </section>
+          <template v-if="desktop">
+            <div class="sidebar-note" id="isa-desktop"></div>
+          </template>
+        </aside>
+      </div> </template
+    ><template v-else>
+      <header class="mobile-header">
+        <RouterLink
+          to="/"
+          class="relative flex items-center gap-3 rounded-app"
+          :aria-label="t('StitchWeather, inicio')"
+        >
+          <span class="stitch-logo" aria-hidden="true">S</span>
+          <span class="brand-copy"
+            ><span class="block font-display text-lg font-bold tracking-tight text-ink"
+              >Stitch<span class="text-brand-accent">Weather</span></span
+            ><span
+              class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
+              >{{ t('TU CLIMA, M\u00C1S AZUL') }}</span
+            ></span
+          >
+        </RouterLink>
+
+        <div class="header-assistant" id="isa-mobile"></div>
+        <button
+          type="button"
+          class="menu-control"
+          aria-haspopup="dialog"
+          aria-controls="mobile-navigation"
+          :aria-label="t('Abrir men\u00FA')"
+          :aria-expanded="mobileOpen"
+          @click="openMenu()"
+          ref="menuTrigger"
+        >
+          <WeatherIcon name="menu" :size="23" />
+        </button>
+      </header>
+      <dialog
+        id="mobile-navigation"
+        class="mobile-menu"
+        :aria-label="t('Navegaci\u00F3n principal')"
+        @cancel="cancelMenu($event)"
+        @keydown.escape="cancelMenu($event)"
+        @close="dialogClosed()"
+        @click="backdropClick($event)"
+        ref="mobileMenu"
+      >
+        <aside class="stitch-sidebar">
+          <div class="relative flex items-center justify-between gap-2">
+            <RouterLink
+              to="/"
+              class="relative flex items-center gap-3 rounded-app"
+              :aria-label="t('StitchWeather, inicio')"
+            >
+              <span class="stitch-logo" aria-hidden="true">S</span>
+              <span class="brand-copy"
+                ><span class="block font-display text-lg font-bold tracking-tight text-ink"
+                  >Stitch<span class="text-brand-accent">Weather</span></span
+                ><span
+                  class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary"
+                  >{{ t('TU CLIMA, M\u00C1S AZUL') }}</span
+                ></span
+              >
+            </RouterLink>
+
+            <template v-if="!desktop">
+              <button
+                data-close-menu=""
+                type="button"
+                class="menu-control shrink-0"
+                :aria-label="t('Cerrar men\u00FA')"
+                @click="closeMenu()"
+              >
+                <WeatherIcon name="close" :size="22" />
+              </button>
+            </template>
+          </div>
+          <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
+          <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
+            <RouterLink
+              to="/sobre-nosotros"
+              active-class="bg-surface"
+              class="sidebar-link"
+              @click="aboutSelected()"
+            >
+              <WeatherIcon name="sparkles" :size="20" />
+              <span>{{ t('Sobre nosotros') }}</span>
+            </RouterLink>
+            <RouterLink
+              to="/"
+              fragment="pronostico"
+              class="sidebar-link"
+              :aria-current="
+                !placesOpen && !(route.path === '/sobre-nosotros') ? 'location' : undefined
+              "
+              :class="{ 'bg-surface': !placesOpen && !(route.path === '/sobre-nosotros') }"
+              @click="forecastSelected()"
+              ><WeatherIcon name="cloud-sun" :size="20" /><span>{{
+                t('Pron\u00F3stico')
+              }}</span></RouterLink
+            >
+            <button
+              type="button"
+              class="sidebar-link"
+              aria-controls="favorite-places"
+              :aria-expanded="placesOpen"
+              :class="{ 'bg-surface': placesOpen }"
+              @click="togglePlaces()"
+              ref="placesButton"
+            >
+              <WeatherIcon name="heart" :size="20" /><span>{{ t('Mis lugares') }}</span
+              ><span
+                class="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink"
+                >{{ favorites.places.value.length }}</span
+              >
             </button>
-          </li>
-        </template></ul>
-    </template><template v-else>
-      <p class="mt-2 text-xs leading-6 text-secondary">
-        {{ t('Todav\u00EDa no guardaste lugares. Consult\u00E1 una ciudad y toc\u00E1 el coraz\u00F3n para agregarla.') }}
-      </p>
-    </template><p class="mt-2 text-[11px] leading-5 text-muted">
-      {{ t('Guardados en este navegador.') }}
-    </p>
-  </section>
-  <template v-if="desktop">
-    <div class="sidebar-note">
-
-  <slot />
-
-    </div>
-  </template></aside>
+          </nav>
+          <p class="sr-only" aria-live="polite" aria-atomic="true">
+            {{ t(favorites.announcement.value) }}
+          </p>
+          <template v-if="favorites.storageWarning.value">
+            <p class="relative mt-3 text-xs leading-5 text-secondary">
+              {{ t(favorites.storageWarning.value) }}
+            </p>
+          </template>
+          <section
+            id="favorite-places"
+            aria-labelledby="favorite-heading"
+            class="relative mt-4 min-w-0"
+            :hidden="!placesOpen"
+          >
+            <h2 id="favorite-heading" class="text-sm font-bold text-ink">
+              {{ t('Tus lugares guardados') }}
+            </h2>
+            <template v-if="favorites.places.value.length">
+              <ul class="mt-2 grid gap-2">
+                <template v-for="(place, index) in favorites.places.value" :key="place.id">
+                  <li class="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2">
+                    <button
+                      type="button"
+                      class="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left"
+                      @click="selectPlace(place)"
+                    >
+                      <span class="block break-words text-sm font-semibold text-ink">{{
+                        place.name
+                      }}</span
+                      ><span class="mt-1 block break-words text-xs text-secondary"
+                        >{{ place.region ? place.region + ', ' : '' }}{{ place.country }}</span
+                      >
+                    </button>
+                    <button
+                      type="button"
+                      class="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky"
+                      :aria-label="
+                        t('Eliminar {place} de Mis lugares', {
+                          place: place.name + ', ' + place.country,
+                        })
+                      "
+                      @click="removePlace(place.id)"
+                    >
+                      <WeatherIcon name="close" :size="17" />
+                    </button>
+                  </li>
+                </template>
+              </ul> </template
+            ><template v-else>
+              <p class="mt-2 text-xs leading-6 text-secondary">
+                {{
+                  t(
+                    'Todav\u00EDa no guardaste lugares. Consult\u00E1 una ciudad y toc\u00E1 el coraz\u00F3n para agregarla.',
+                  )
+                }}
+              </p>
+            </template>
+            <p class="mt-2 text-[11px] leading-5 text-muted">
+              {{ t('Guardados en este navegador.') }}
+            </p>
+          </section>
+          <template v-if="desktop">
+            <div class="sidebar-note" id="isa-desktop"></div>
+          </template>
+        </aside>
+      </dialog> </template
+    ><Teleport defer :to="assistantTarget"><slot /></Teleport>
   </div>
-</template><template v-else>
-  <header class="mobile-header">
-
-  <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
-    <span class="stitch-logo" aria-hidden="true">S</span>
-    <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
-  </RouterLink>
-
-    <div class="header-assistant">
-
-  <slot />
-
-    </div>
-    <button type="button" class="menu-control" aria-haspopup="dialog" aria-controls="mobile-navigation" :aria-label="t('Abrir men\u00FA')" :aria-expanded="mobileOpen" @click="openMenu()" ref="menuTrigger">
-      <WeatherIcon name="menu" :size="23" />
-    </button>
-  </header>
-  <dialog id="mobile-navigation" class="mobile-menu" :aria-label="t('Navegaci\u00F3n principal')" @cancel="cancelMenu($event)" @keydown.escape="cancelMenu($event)" @close="dialogClosed()" @click="backdropClick($event)" ref="mobileMenu">
-    <aside class="stitch-sidebar">
-  <div class="relative flex items-center justify-between gap-2">
-
-  <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
-    <span class="stitch-logo" aria-hidden="true">S</span>
-    <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
-  </RouterLink>
-
-    <template v-if="!(desktop)">
-      <button data-close-menu="" type="button" class="menu-control shrink-0" :aria-label="t('Cerrar men\u00FA')" @click="closeMenu()">
-        <WeatherIcon name="close" :size="22" />
-      </button>
-    </template></div>
-  <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
-  <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
-    <RouterLink to="/sobre-nosotros" active-class="bg-surface" class="sidebar-link" @click="aboutSelected()" >
-      <WeatherIcon name="sparkles" :size="20" />
-      <span >{{ t('Sobre nosotros') }}</span>
-    </RouterLink>
-    <RouterLink to="/" fragment="pronostico" class="sidebar-link" :aria-current="((!(placesOpen) && !((route.path === '/sobre-nosotros'))) ? 'location' : undefined)" :class="{ 'bg-surface': (!(placesOpen) && !((route.path === '/sobre-nosotros'))) }" @click="forecastSelected()"><WeatherIcon name="cloud-sun" :size="20" /><span >{{ t('Pron\u00F3stico') }}</span></RouterLink>
-    <button type="button" class="sidebar-link" aria-controls="favorite-places" :aria-expanded="placesOpen" :class="{ 'bg-surface': placesOpen }" @click="togglePlaces()" ref="placesButton">
-      <WeatherIcon name="heart" :size="20" /><span >{{ t('Mis lugares') }}</span><span class="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink">{{ favorites.places.value.length }}</span>
-    </button>
-  </nav>
-  <p class="sr-only" aria-live="polite" aria-atomic="true">
-    {{ t(favorites.announcement.value) }}
-  </p>
-  <template v-if="favorites.storageWarning.value">
-    <p class="relative mt-3 text-xs leading-5 text-secondary">
-      {{ t(favorites.storageWarning.value) }}
-    </p>
-  </template><section id="favorite-places" aria-labelledby="favorite-heading" class="relative mt-4 min-w-0" :hidden="!(placesOpen)">
-    <h2 id="favorite-heading" class="text-sm font-bold text-ink">
-      {{ t('Tus lugares guardados') }}
-    </h2>
-    <template v-if="favorites.places.value.length">
-      <ul class="mt-2 grid gap-2">
-        <template v-for="(place, index) in favorites.places.value" :key="place.id">
-          <li class="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2">
-            <button type="button" class="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left" @click="selectPlace(place)">
-              <span class="block break-words text-sm font-semibold text-ink">{{ place.name }}</span><span class="mt-1 block break-words text-xs text-secondary">{{ (place.region ? (place.region + ', ') : '') }}{{ place.country }}</span>
-            </button>
-            <button type="button" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky" :aria-label="t('Eliminar {place} de Mis lugares', { 'place': ((place.name + ', ') + place.country) })" @click="removePlace(place.id)">
-              <WeatherIcon name="close" :size="17" />
-            </button>
-          </li>
-        </template></ul>
-    </template><template v-else>
-      <p class="mt-2 text-xs leading-6 text-secondary">
-        {{ t('Todav\u00EDa no guardaste lugares. Consult\u00E1 una ciudad y toc\u00E1 el coraz\u00F3n para agregarla.') }}
-      </p>
-    </template><p class="mt-2 text-[11px] leading-5 text-muted">
-      {{ t('Guardados en este navegador.') }}
-    </p>
-  </section>
-  <template v-if="desktop">
-    <div class="sidebar-note">
-
-  <slot />
-
-    </div>
-  </template></aside>
-  </dialog>
-</template></div>
 </template>
 
 <style scoped>
-[data-component="app-weather-sidebar"] {
+[data-component='app-weather-sidebar'] {
   position: sticky;
   top: 0;
   z-index: 30;
@@ -327,7 +517,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
   background: var(--color-hover);
 }
 @media (min-width: 1024px) {
-  [data-component="app-weather-sidebar"] {
+  [data-component='app-weather-sidebar'] {
     height: 100dvh;
   }
 
@@ -378,11 +568,11 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
 .mobile-header > .menu-control {
   color: #ffffff;
 }
-:global(html[data-theme='light']) .mobile-header > .menu-control {
+html[data-theme='light'] .mobile-header > .menu-control {
   border-color: var(--color-primary);
   background: var(--color-primary);
 }
-:global(html[data-theme='light']) .mobile-header > .menu-control:hover {
+html[data-theme='light'] .mobile-header > .menu-control:hover {
   background: var(--color-primary-hover);
 }
 .header-assistant {
@@ -477,5 +667,4 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
     }
   }
 }
-
 </style>
