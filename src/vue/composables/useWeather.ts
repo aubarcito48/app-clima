@@ -1,4 +1,5 @@
 import { computed, ref, watch, onUnmounted } from 'vue';
+import { currentLocation, LocationFailure } from './useCurrentLocation';
 import { useLanguage } from '../service/preferences/language';
 import type { ClimateResponse } from '../models/weather/climate-response';
 import type { WeatherQuery, CitySearchFeedback } from '../models/places/city-query';
@@ -13,6 +14,7 @@ export function useWeather() {
   const feedback = ref<CitySearchFeedback | null>(null);
   const requestedCity = ref('');
   const cancelled = ref(false);
+  const locating = ref(false);
   const temperatureUnit = ref<'C' | 'F'>('C');
   const weather = computed(() => response.value ? climatePresentation(response.value, language.locale.value) : null);
   let controller: AbortController | null = null;
@@ -23,7 +25,7 @@ export function useWeather() {
   function editQuery() {
     generation++; controller?.abort(); controller = null; activeKey = '';
     lastQuery = null; response.value = null; feedback.value = null;
-    state.value = 'initial'; cancelled.value = false;
+    state.value = 'initial'; cancelled.value = false; locating.value = false;
   }
   function reset() { const loading = state.value === 'loading'; editQuery(); cancelled.value = loading; }
   async function search(query: WeatherQuery) {
@@ -35,7 +37,7 @@ export function useWeather() {
     const current = ++generation;
     const signal = controller.signal;
     lastQuery = { ...normalized }; activeKey = key;
-    cancelled.value = false; response.value = null; feedback.value = null;
+    locating.value = false; cancelled.value = false; response.value = null; feedback.value = null;
     requestedCity.value = 'city' in normalized ? normalized.city : 'tu ubicación actual';
     state.value = 'loading';
     try {
@@ -47,8 +49,26 @@ export function useWeather() {
       feedback.value = climateFeedback(error); state.value = 'initial';
     } finally { if (current === generation) activeKey = ''; }
   }
+  async function locate() {
+    editQuery(); const current = ++generation;
+    controller = new AbortController(); const signal = controller.signal;
+    locating.value = true; state.value = 'loading'; requestedCity.value = 'tu ubicación actual';
+    try {
+      const coordinates = await currentLocation(signal);
+      if (current !== generation || signal.aborted) return;
+      locating.value = false; await search(coordinates);
+    } catch (error) {
+      if (current !== generation || signal.aborted) return;
+      locating.value = false; state.value = 'initial';
+      feedback.value = { kind: 'location', message: error instanceof LocationFailure && error.reason === 'denied'
+        ? 'No diste permiso para usar tu ubicación. Podés habilitarlo en el navegador o escribir un lugar.'
+        : error instanceof LocationFailure && error.reason === 'timeout'
+          ? 'No pudimos obtener tu ubicación a tiempo. Volvé a intentarlo o escribí un lugar.'
+          : 'Tu navegador no pudo obtener la ubicación. Revisá sus permisos o escribí un lugar.' };
+    }
+  }
   function retry() { if (feedback.value?.retryable && lastQuery) void search(lastQuery); }
   watch(language.code, () => { if (lastQuery) void search(lastQuery); });
   onUnmounted(() => { generation++; controller?.abort(); });
-  return { response, state, feedback, requestedCity, cancelled, temperatureUnit, weather, search, reset, editQuery, retry };
+  return { locating, locate, response, state, feedback, requestedCity, cancelled, temperatureUnit, weather, search, reset, editQuery, retry };
 }

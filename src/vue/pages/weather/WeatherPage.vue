@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue';
+import { useTemplateRef, onMounted } from 'vue';
+import { useFavoritePlaces } from '../../service/places/favorite-places';
 import { useWeather } from '../../composables/useWeather';
 import { useLanguage } from '../../service/preferences/language';
 import CitySearch from '../../shared/places/city-search/city-search.vue';
@@ -13,10 +14,18 @@ import SiteFooter from '../../shared/site/site-footer/site-footer.vue';
 import BackToTop from '../../shared/site/back-to-top/back-to-top.vue';
 import SectionNavigation from '../../shared/site/section-navigation/section-navigation.vue';
 const t = useLanguage().text;
-const { response, state, weather, feedback, requestedCity, cancelled, temperatureUnit, search, reset, editQuery, retry } = useWeather();
+const { locate, locating, response, state, weather, feedback, requestedCity, cancelled, temperatureUnit, search, reset, editQuery, retry } = useWeather();
 const citySearch = useTemplateRef<InstanceType<typeof CitySearch>>('citySearch');
-const locating = false;
+const favorites = useFavoritePlaces();
+function toggleFavorite() { if (response.value) favorites.toggle(response.value.ubicacion); }
 const sections = [{ id: 'inicio-clima', label: 'Inicio' }, { id: 'pronostico', label: 'Buscar ciudad' }, { id: 'clima-contenido', label: 'Clima y pronóstico' }];
+onMounted(() => {
+  const place = history.state?.weatherPlace;
+  if (place && Number.isFinite(place.latitude) && Number.isFinite(place.longitude) && Math.abs(place.latitude) <= 90 && Math.abs(place.longitude) <= 180) {
+    void search({ latitude: place.latitude, longitude: place.longitude });
+    const { weatherPlace, ...rest } = history.state; history.replaceState(rest, '');
+  }
+});
 </script>
 <template>
 <div data-component="app-weather" class="block min-w-0"><a href="#main-content" class="skip-link">{{ t('Saltar al contenido') }}</a>
@@ -38,7 +47,7 @@ const sections = [{ id: 'inicio-clima', label: 'Inicio' }, { id: 'pronostico', l
         
       </header>
       <section id="pronostico" tabindex="-1"  class="search-panel scroll-mt-6 rounded-app border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3" :aria-label="(t('Consulta de ciudad'))">
-        <CitySearch :busy="(state === 'loading')" :locating="locating" :feedback="feedback" @queryEdited="editQuery()"  @querySubmitted="search($event)" @retryRequested="retry()" ref="citySearch" />
+        <CitySearch :busy="(state === 'loading')" :locating="locating" :feedback="feedback" @queryEdited="editQuery()"  @querySubmitted="search($event)" @locationRequested="locate" @retryRequested="retry()" ref="citySearch" />
       </section>
       <div class="mt-3 flex min-h-6 flex-wrap items-center justify-between gap-2">
         <p role="status" aria-atomic="true" class="text-sm text-secondary" :aria-label="(t('Estado de la consulta del clima'))">
@@ -75,7 +84,7 @@ citySearch?.focusCity()">
           <WeatherLoading  />
         </template><template v-else>
           <div class="grid items-stretch gap-6">
-            <CurrentWeather  :weather="weather" :showDetails="!weather" :unit="temperatureUnit"   @searchRequested="citySearch?.focusCity()" />
+            <CurrentWeather  :weather="weather" :showDetails="!weather" :favorite="favorites.contains(response?.ubicacion ?? null)" @favoriteToggled="toggleFavorite" :unit="temperatureUnit"   @searchRequested="citySearch?.focusCity()" />
             <template v-if="response"><template v-for="data in [response]">
               <div class="weather-context-grid">
                 <div class="weather-context-stack">

@@ -165,3 +165,4 @@ adicionales solo para marcar casillas ni comprimir el historial con squash.
 - 3: componentes SFC, estilos, rutas y shell adaptable. Build correcto; prueba Chromium de menu movil y navegacion a /sobre-nosotros sin errores de pagina.
 - 4: API fetch cancelable, contratos validados, composable de clima y busqueda. Build correcto; 12 pruebas Chromium correctas (4 casos en 3 tamanos).
 - 5: pronostico por dia, grafico SVG, metricas, unidades compartidas y fechas locales. Build correcto; 21 casos Chromium correctos, incluidos datos parciales y cambio de ano. Selectores de las suites adaptados a componentes Vue.
+- 6: sugerencias cancelables con teclado, geolocalizacion bajo demanda y favoritos persistentes compartidos entre rutas. Build/typecheck correctos; 21 pruebas de favoritos, sugerencias y ubicacion correctas, incluida auditoria axe del combobox.
