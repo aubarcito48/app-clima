@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
     throw new Error(`${key} debe ser una URL pública HTTP(S), HTTPS en producción, sin credenciales, parámetros ni fragmentos.`);
   }
   return {
-    plugins: [vue()],
+    plugins: [vue({ template: { transformAssetUrls: false } })],
     define: { __API_BASE_URL__: JSON.stringify(url.href.replace(/\/+$/u, '')) },
     server: { host: '127.0.0.1', port: 4200 },
     build: { outDir: 'dist/app-clima/browser' },

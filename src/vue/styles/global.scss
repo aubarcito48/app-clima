@@ -1,0 +1,88 @@
+@import 'leaflet/dist/leaflet.css';
+
+/* Leaflet creates its controls outside Angular's scoped styles. */
+.map-canvas .leaflet-control-zoom {
+  border: 1px solid var(--color-control-line);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+}
+.map-canvas .leaflet-control-zoom a {
+  color: var(--color-ink);
+  background: var(--color-surface);
+  min-width: 44px;
+  min-height: 44px;
+  line-height: 44px;
+}
+.map-canvas .leaflet-control-attribution {
+  max-width: 100%;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* Reveal the actual next theme from its control, without recoloring photos or Isa. */
+html.theme-reveal::view-transition-group(root) {
+  animation: none;
+}
+
+html.theme-reveal::view-transition-old(root),
+html.theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-reveal::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* Leave room for the sticky mobile navigation when following page anchors. */
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top));
+  }
+}
+
+/* Page scrollbar follows the same ocean palette as the weather controls. */
+@media (forced-colors: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-blue) var(--color-canvas);
+  }
+
+  /* Use the rounded thumb where the browser supports scrollbar parts. */
+  @supports selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+
+    html::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    html::-webkit-scrollbar-track,
+    html::-webkit-scrollbar-corner {
+      background: var(--color-canvas);
+    }
+
+    html::-webkit-scrollbar-thumb {
+      min-height: 48px;
+      border: 3px solid var(--color-canvas);
+      border-radius: 999px;
+      background: var(--color-blue);
+      background-clip: padding-box;
+    }
+
+    html::-webkit-scrollbar-thumb:hover {
+      background-color: color-mix(in srgb, var(--color-blue), var(--color-ink) 25%);
+    }
+
+    html::-webkit-scrollbar-thumb:active {
+      background-color: var(--color-ink);
+    }
+  }
+}

@@ -162,3 +162,4 @@ adicionales solo para marcar casillas ni comprimir el historial con squash.
 
 - 1: documentaci?n publicada como `1ff5c03`.
 - 2: entrada Vue, Vite, TypeScript y configuraci?n p?blica mediante allowlist. `npm run build` y `npm run typecheck`: correctos.
+- 3: componentes SFC, estilos, rutas y shell adaptable. Build correcto; prueba Chromium de menu movil y navegacion a /sobre-nosotros sin errores de pagina.
