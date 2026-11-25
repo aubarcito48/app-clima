@@ -49,7 +49,7 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 ## Ejecución
 
 - [x] 1: alcance y trece entregas documentados.
-- [ ] 2–13: implementar y registrar evidencia en el commit correspondiente.
+- [x] 2–13: implementar y registrar evidencia en el commit correspondiente.
 
 - 2: React 19, React DOM, React Router, TypeScript y Vite instalados; URL pública validada por allowlist. `npm run build` (incluye tipos): correcto.
 
@@ -72,3 +72,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 11: Motor de voz independiente de React, suscripcion useSyncExternalStore y sincronizacion directa del canvas sin renderizar toda la app por frame. Tres pruebas de transporte WAV, stream invalido y cancelacion aprobadas. Build y tipos: correctos.
 
 - 12: Avatar canvas con suscripcion directa, una instancia persistente entre tamanos, carrusel y navegacion por secciones con limpieza de listeners. Cuarenta y cinco pruebas de Isa y carrusel aprobadas; reveal respeta movimiento reducido. Build y tipos: correctos.. Build y tipos: correctos.
+
+- 13: Retirados Angular y componentes provisionales; documentacion React, VS Code y Vercel actualizados. npm ci sin vulnerabilidades, tipos de app y e2e correctos, tres comprobaciones de transporte de voz y build aprobados. Revision visual a 360 y 1440 px; suite completa: 207/207 pruebas Chromium aprobadas a 360, 768 y 1440 px con un trabajador y proveedores simulados. Corregido el identificador del panel de escritorio detectado por la regresion.

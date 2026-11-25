@@ -117,4 +117,14 @@ const listener = (event: StorageEvent) => {
 window?.addEventListener('storage', listener);
 cleanup(() => window?.removeEventListener('storage', listener));
 
-export function useFavoritePlaces() { useVersion(); return { places: places.value, announcement: announcement.value, storageWarning: storageWarning.value, contains, toggle, remove }; }
+export function useFavoritePlaces() {
+  useVersion();
+  return {
+    places: places.value,
+    announcement: announcement.value,
+    storageWarning: storageWarning.value,
+    contains,
+    toggle,
+    remove,
+  };
+}

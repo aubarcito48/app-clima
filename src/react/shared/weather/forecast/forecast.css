@@ -1,15 +1,14 @@
-
 [data-component='app-forecast'] {
   display: block;
   min-width: 0;
 }
-[data-component="app-forecast"] .hour-strip {
+[data-component='app-forecast'] .hour-strip {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
   padding: 0.25rem 0.125rem 0.75rem;
 }
-[data-component="app-forecast"] .hour-card {
+[data-component='app-forecast'] .hour-card {
   display: flex;
   flex: 0 0 6.25rem;
   min-width: 0;
@@ -23,18 +22,18 @@
   border: 1px solid transparent;
   padding: 1rem 0.65rem;
 }
-[data-component="app-forecast"] .hour-strip > .hour-card {
+[data-component='app-forecast'] .hour-strip > .hour-card {
   border-color: var(--color-selected-line);
   background: var(--color-selected);
 }
-[data-component="app-forecast"] .day-strip {
+[data-component='app-forecast'] .day-strip {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
   scroll-padding: 0.5rem;
   padding: 0.5rem 0.5rem 0.75rem;
 }
-[data-component="app-forecast"] .forecast-day {
+[data-component='app-forecast'] .forecast-day {
   position: relative;
   display: flex;
   flex: 0 0 7.75rem;
@@ -50,15 +49,15 @@
   padding: 1rem 0.65rem;
   text-align: center;
 }
-[data-component="app-forecast"] .forecast-day[aria-pressed='true'] {
+[data-component='app-forecast'] .forecast-day[aria-pressed='true'] {
   border-color: var(--color-selected-line);
   background: var(--color-selected);
 }
-[data-component="app-forecast"] .forecast-day:hover:not([aria-pressed='true']) {
+[data-component='app-forecast'] .forecast-day:hover:not([aria-pressed='true']) {
   background: var(--color-hover);
   border-color: var(--color-blue);
 }
-[data-component="app-forecast"] .day-temperatures {
+[data-component='app-forecast'] .day-temperatures {
   display: flex;
   justify-content: center;
   gap: 0.75rem;

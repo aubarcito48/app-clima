@@ -129,4 +129,7 @@ window?.addEventListener('storage', storageChanged);
   window?.removeEventListener('storage', storageChanged);
 });
 
-export function useColorTheme() { useVersion(); return { mode: mode.value, toggle }; }
+export function useColorTheme() {
+  useVersion();
+  return { mode: mode.value, toggle };
+}

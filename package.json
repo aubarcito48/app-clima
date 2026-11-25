@@ -11,7 +11,8 @@
     "e2e:typecheck": "tsc --project e2e/tsconfig.json",
     "e2e:report": "playwright show-report",
     "typecheck": "tsc -p tsconfig.react.json",
-    "preview": "vite preview --host 127.0.0.1 --port 4200"
+    "preview": "vite preview --host 127.0.0.1 --port 4200",
+    "test:voice": "node scripts/test-voice.mjs"
   },
   "private": true,
   "engines": {

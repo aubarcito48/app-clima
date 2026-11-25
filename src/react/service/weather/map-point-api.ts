@@ -51,7 +51,6 @@ export function createMapPointApi() {
       return selection;
     },
     query(latitude: number, longitude: number, language: 'es' | 'en' = 'es') {
-
       return new Observable<MapPointWeather>((subscriber) => {
         const controller = new AbortController();
         const params = new URLSearchParams({

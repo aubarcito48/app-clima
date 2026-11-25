@@ -1,4 +1,4 @@
-[data-component="app-weather-sidebar"] {
+[data-component='app-weather-sidebar'] {
   position: sticky;
   top: 0;
   z-index: 30;
@@ -66,7 +66,7 @@
   background: var(--color-hover);
 }
 @media (min-width: 1024px) {
-  [data-component="app-weather-sidebar"] {
+  [data-component='app-weather-sidebar'] {
     height: 100dvh;
   }
 

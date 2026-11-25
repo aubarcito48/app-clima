@@ -1,6 +1,6 @@
 import { test, expect, openNavigation, closeNavigation, chooseLanguage } from './fixtures';
 
-test('Vue: carga directa de la página informativa y regreso con teclado', async ({ page }) => {
+test('React: carga directa de la página informativa y regreso con teclado', async ({ page }) => {
   await page.goto('/sobre-nosotros');
   await expect(page.getByRole('heading', { name: 'Sobre nosotros', exact: true })).toHaveCount(1);
   await expect(page.locator('#main-content')).toBeFocused();
@@ -13,7 +13,7 @@ test('Vue: carga directa de la página informativa y regreso con teclado', async
   await expect(page.locator('.mobile-menu')).not.toBeVisible();
 });
 
-test('Vue: la página informativa respeta el idioma y una ruta desconocida vuelve al inicio', async ({
+test('React: la página informativa respeta el idioma y una ruta desconocida vuelve al inicio', async ({
   page,
 }) => {
   await page.goto('/sobre-nosotros');
@@ -25,7 +25,7 @@ test('Vue: la página informativa respeta el idioma y una ruta desconocida vuelv
   await expect(page.getByRole('heading', { name: 'Hello, explorer' })).toBeVisible();
 });
 
-test('Vue: elegir un favorito desde la página informativa consulta sus coordenadas', async ({
+test('React: elegir un favorito desde la página informativa consulta sus coordenadas', async ({
   page,
   api,
 }) => {

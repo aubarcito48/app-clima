@@ -7,18 +7,265 @@ import { useFavoritePlaces } from '../../../hooks/useFavoritePlaces';
 import type { SavedPlace } from '../../../models/places/saved-place';
 import WeatherIcon from '../weather-icon/weather-icon';
 import './weather-sidebar.css';
-export default function WeatherSidebar({children,onPlaceSelected}:{children?:ReactNode;onPlaceSelected?:(place:SavedPlace)=>void}){
- const {text:t}=useLanguage(),favorites=useFavoritePlaces(),location=useLocation();
- const [desktop,setDesktop]=useState(()=>matchMedia('(min-width: 1024px)').matches),[opened,setOpened]=useState(false),[placesOpen,setPlacesOpen]=useState(false);
- const dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null),placesButton=useRef<HTMLButtonElement>(null),desktopHost=useRef<HTMLDivElement>(null),mobileHost=useRef<HTMLDivElement>(null),overflow=useRef<string|null>(null);
- const [assistantHost]=useState(()=>document.createElement('div'));
- useLayoutEffect(()=>{(desktop?desktopHost.current:mobileHost.current)?.appendChild(assistantHost);return ()=>assistantHost.remove()},[desktop,assistantHost]);
- function unlock(){if(overflow.current!==null){document.body.style.overflow=overflow.current;overflow.current=null}}
- function close(restore=true){if(dialog.current?.open)dialog.current.close();setOpened(false);unlock();if(restore)trigger.current?.focus()}
- function open(){if(!dialog.current||dialog.current.open)return;overflow.current=document.body.style.overflow;document.body.style.overflow='hidden';dialog.current.showModal();setOpened(true);dialog.current.querySelector<HTMLButtonElement>('[data-close-menu]')?.focus()}
- useEffect(()=>{const media=matchMedia('(min-width: 1024px)');const resize=()=>{close(false);setDesktop(media.matches)};media.addEventListener('change',resize);return ()=>{media.removeEventListener('change',resize);unlock()}},[]);
- function select(place:SavedPlace){setPlacesOpen(false);close(false);onPlaceSelected?.(place)}
- const brand=<Link to="/" aria-label={t('StitchWeather, inicio')} className="relative flex items-center gap-3 rounded-app"><span className="stitch-logo" aria-hidden="true">S</span><span className="brand-copy"><span className="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span className="text-brand-accent">Weather</span></span><span className="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{t('TU CLIMA, MÁS AZUL')}</span></span></Link>;
- const content=<aside className="stitch-sidebar"><div className="relative flex items-center justify-between gap-2">{brand}{!desktop&&<button data-close-menu type="button" aria-label={t('Cerrar menú')} className="menu-control shrink-0" onClick={()=>close()}><WeatherIcon name="close" size={22}/></button>}</div><Preferences/><nav aria-label={t('Navegación principal')} className="relative mt-4 grid gap-2"><Link to="/sobre-nosotros" aria-current={location.pathname==='/sobre-nosotros'?'page':undefined} className={'sidebar-link'+(location.pathname==='/sobre-nosotros'?' bg-surface':'')} onClick={()=>{setPlacesOpen(false);close(false)}}><WeatherIcon name="sparkles" size={20}/><span>{t('Sobre nosotros')}</span></Link><Link to="/" aria-current={!placesOpen&&location.pathname==='/'?'location':undefined} className={'sidebar-link'+(!placesOpen&&location.pathname==='/'?' bg-surface':'')} onClick={()=>{setPlacesOpen(false);close(false);document.getElementById('city')?.focus({preventScroll:true})}}><WeatherIcon name="cloud-sun" size={20}/><span>{t('Pronóstico')}</span></Link><button ref={placesButton} type="button" className={'sidebar-link'+(placesOpen?' bg-surface':'')} aria-expanded={placesOpen} aria-controls="favorite-places" onClick={()=>setPlacesOpen(value=>!value)}><WeatherIcon name="heart" size={20}/><span>{t('Mis lugares')}</span><span className="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink">{favorites.places.length}</span></button></nav><p className="sr-only" aria-live="polite" aria-atomic="true">{t(favorites.announcement)}</p>{favorites.storageWarning&&<p className="relative mt-3 text-xs leading-5 text-secondary">{t(favorites.storageWarning)}</p>}<section id="favorite-places" hidden={!placesOpen} aria-labelledby="favorite-heading" className="relative mt-4 min-w-0"><h2 id="favorite-heading" className="text-sm font-bold text-ink">{t('Tus lugares guardados')}</h2>{favorites.places.length?<ul className="mt-2 grid gap-2">{favorites.places.map(place=><li key={place.id} className="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2"><button type="button" className="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left" onClick={()=>select(place)}><span className="block break-words text-sm font-semibold text-ink">{place.name}</span><span className="mt-1 block break-words text-xs text-secondary">{place.region?place.region+', ':''}{place.country}</span></button><button type="button" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky" aria-label={t('Eliminar {place} de Mis lugares',{place:place.name+', '+place.country})} onClick={()=>{favorites.remove(place.id);placesButton.current?.focus()}}><WeatherIcon name="close" size={17}/></button></li>)}</ul>:<p className="mt-2 text-xs leading-6 text-secondary">{t('Todavía no guardaste lugares. Consultá una ciudad y tocá el corazón para agregarla.')}</p>}<p className="mt-2 text-[11px] leading-5 text-muted">{t('Guardados en este navegador.')}</p></section>{desktop&&<div ref={desktopHost} className="sidebar-note"/>}</aside>;
- return <div data-component="app-weather-sidebar">{desktop?<div className="desktop-shell">{content}</div>:<><header className="mobile-header">{brand}<div ref={mobileHost} className="header-assistant"/><button ref={trigger} type="button" className="menu-control" aria-label={t('Abrir menú')} aria-haspopup="dialog" aria-expanded={opened} aria-controls="mobile-navigation" onClick={open}><WeatherIcon name="menu" size={23}/></button></header><dialog ref={dialog} id="mobile-navigation" className="mobile-menu" aria-label={t('Navegación principal')} onCancel={e=>{e.preventDefault();close()}} onClose={()=>{setOpened(false);unlock()}} onClick={e=>{if(e.target!==dialog.current)return;const rect=dialog.current.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom)close()}}>{content}</dialog></>}{createPortal(children,assistantHost)}</div>;
+export default function WeatherSidebar({
+  children,
+  onPlaceSelected,
+}: {
+  children?: ReactNode;
+  onPlaceSelected?: (place: SavedPlace) => void;
+}) {
+  const { text: t } = useLanguage(),
+    favorites = useFavoritePlaces(),
+    location = useLocation();
+  const [desktop, setDesktop] = useState(() => matchMedia('(min-width: 1024px)').matches),
+    [opened, setOpened] = useState(false),
+    [placesOpen, setPlacesOpen] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null),
+    trigger = useRef<HTMLButtonElement>(null),
+    placesButton = useRef<HTMLButtonElement>(null),
+    desktopHost = useRef<HTMLDivElement>(null),
+    mobileHost = useRef<HTMLDivElement>(null),
+    overflow = useRef<string | null>(null);
+  const [assistantHost] = useState(() => document.createElement('div'));
+  useLayoutEffect(() => {
+    (desktop ? desktopHost.current : mobileHost.current)?.appendChild(assistantHost);
+    return () => assistantHost.remove();
+  }, [desktop, assistantHost]);
+  function unlock() {
+    if (overflow.current !== null) {
+      document.body.style.overflow = overflow.current;
+      overflow.current = null;
+    }
+  }
+  function close(restore = true) {
+    if (dialog.current?.open) dialog.current.close();
+    setOpened(false);
+    unlock();
+    if (restore) trigger.current?.focus();
+  }
+  function open() {
+    if (!dialog.current || dialog.current.open) return;
+    overflow.current = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog.current.showModal();
+    setOpened(true);
+    dialog.current.querySelector<HTMLButtonElement>('[data-close-menu]')?.focus();
+  }
+  useEffect(() => {
+    const media = matchMedia('(min-width: 1024px)');
+    const resize = () => {
+      close(false);
+      setDesktop(media.matches);
+    };
+    media.addEventListener('change', resize);
+    return () => {
+      media.removeEventListener('change', resize);
+      unlock();
+    };
+  }, []);
+  function select(place: SavedPlace) {
+    setPlacesOpen(false);
+    close(false);
+    onPlaceSelected?.(place);
+  }
+  const brand = (
+    <Link
+      to="/"
+      aria-label={t('StitchWeather, inicio')}
+      className="relative flex items-center gap-3 rounded-app"
+    >
+      <span className="stitch-logo" aria-hidden="true">
+        S
+      </span>
+      <span className="brand-copy">
+        <span className="block font-display text-lg font-bold tracking-tight text-ink">
+          Stitch<span className="text-brand-accent">Weather</span>
+        </span>
+        <span className="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">
+          {t('TU CLIMA, MÁS AZUL')}
+        </span>
+      </span>
+    </Link>
+  );
+  const content = (
+    <aside className="stitch-sidebar">
+      <div className="relative flex items-center justify-between gap-2">
+        {brand}
+        {!desktop && (
+          <button
+            data-close-menu
+            type="button"
+            aria-label={t('Cerrar menú')}
+            className="menu-control shrink-0"
+            onClick={() => close()}
+          >
+            <WeatherIcon name="close" size={22} />
+          </button>
+        )}
+      </div>
+      <Preferences />
+      <nav aria-label={t('Navegación principal')} className="relative mt-4 grid gap-2">
+        <Link
+          to="/sobre-nosotros"
+          aria-current={location.pathname === '/sobre-nosotros' ? 'page' : undefined}
+          className={
+            'sidebar-link' + (location.pathname === '/sobre-nosotros' ? ' bg-surface' : '')
+          }
+          onClick={() => {
+            setPlacesOpen(false);
+            close(false);
+          }}
+        >
+          <WeatherIcon name="sparkles" size={20} />
+          <span>{t('Sobre nosotros')}</span>
+        </Link>
+        <Link
+          to="/"
+          aria-current={!placesOpen && location.pathname === '/' ? 'location' : undefined}
+          className={
+            'sidebar-link' + (!placesOpen && location.pathname === '/' ? ' bg-surface' : '')
+          }
+          onClick={() => {
+            setPlacesOpen(false);
+            close(false);
+            document.getElementById('city')?.focus({ preventScroll: true });
+          }}
+        >
+          <WeatherIcon name="cloud-sun" size={20} />
+          <span>{t('Pronóstico')}</span>
+        </Link>
+        <button
+          ref={placesButton}
+          type="button"
+          className={'sidebar-link' + (placesOpen ? ' bg-surface' : '')}
+          aria-expanded={placesOpen}
+          aria-controls="favorite-places"
+          onClick={() => setPlacesOpen((value) => !value)}
+        >
+          <WeatherIcon name="heart" size={20} />
+          <span>{t('Mis lugares')}</span>
+          <span className="favorite-count ml-auto rounded-app bg-sun-soft px-2 py-0.5 text-xs font-bold text-badge-ink">
+            {favorites.places.length}
+          </span>
+        </button>
+      </nav>
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {t(favorites.announcement)}
+      </p>
+      {favorites.storageWarning && (
+        <p className="relative mt-3 text-xs leading-5 text-secondary">
+          {t(favorites.storageWarning)}
+        </p>
+      )}
+      <section
+        id="favorite-places"
+        hidden={!placesOpen}
+        aria-labelledby="favorite-heading"
+        className="relative mt-4 min-w-0"
+      >
+        <h2 id="favorite-heading" className="text-sm font-bold text-ink">
+          {t('Tus lugares guardados')}
+        </h2>
+        {favorites.places.length ? (
+          <ul className="mt-2 grid gap-2">
+            {favorites.places.map((place) => (
+              <li
+                key={place.id}
+                className="flex min-w-0 items-center gap-1 rounded-app bg-surface p-2"
+              >
+                <button
+                  type="button"
+                  className="min-h-11 min-w-0 flex-1 rounded-control px-1 text-left"
+                  onClick={() => select(place)}
+                >
+                  <span className="block break-words text-sm font-semibold text-ink">
+                    {place.name}
+                  </span>
+                  <span className="mt-1 block break-words text-xs text-secondary">
+                    {place.region ? place.region + ', ' : ''}
+                    {place.country}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-control text-blue hover:bg-sky"
+                  aria-label={t('Eliminar {place} de Mis lugares', {
+                    place: place.name + ', ' + place.country,
+                  })}
+                  onClick={() => {
+                    favorites.remove(place.id);
+                    placesButton.current?.focus();
+                  }}
+                >
+                  <WeatherIcon name="close" size={17} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-2 text-xs leading-6 text-secondary">
+            {t(
+              'Todavía no guardaste lugares. Consultá una ciudad y tocá el corazón para agregarla.',
+            )}
+          </p>
+        )}
+        <p className="mt-2 text-[11px] leading-5 text-muted">{t('Guardados en este navegador.')}</p>
+      </section>
+      {desktop && <div ref={desktopHost} className="sidebar-note" />}
+    </aside>
+  );
+  return (
+    <div data-component="app-weather-sidebar">
+      {desktop ? (
+        <div id="desktop-navigation" className="desktop-shell">{content}</div>
+      ) : (
+        <>
+          <header className="mobile-header">
+            {brand}
+            <div ref={mobileHost} className="header-assistant" />
+            <button
+              ref={trigger}
+              type="button"
+              className="menu-control"
+              aria-label={t('Abrir menú')}
+              aria-haspopup="dialog"
+              aria-expanded={opened}
+              aria-controls="mobile-navigation"
+              onClick={open}
+            >
+              <WeatherIcon name="menu" size={23} />
+            </button>
+          </header>
+          <dialog
+            ref={dialog}
+            id="mobile-navigation"
+            className="mobile-menu"
+            aria-label={t('Navegación principal')}
+            onCancel={(e) => {
+              e.preventDefault();
+              close();
+            }}
+            onClose={() => {
+              setOpened(false);
+              unlock();
+            }}
+            onClick={(e) => {
+              if (e.target !== dialog.current) return;
+              const rect = dialog.current.getBoundingClientRect();
+              if (
+                e.clientX < rect.left ||
+                e.clientX > rect.right ||
+                e.clientY < rect.top ||
+                e.clientY > rect.bottom
+              )
+                close();
+            }}
+          >
+            {content}
+          </dialog>
+        </>
+      )}
+      {createPortal(children, assistantHost)}
+    </div>
+  );
 }

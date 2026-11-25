@@ -1,6 +1,6 @@
 @import 'leaflet/dist/leaflet.css';
 
-/* Leaflet creates its controls outside Vue's scoped styles. */
+/* Leaflet creates its controls outside component styles. */
 .map-canvas .leaflet-control-zoom {
   border: 1px solid var(--color-control-line);
   border-radius: var(--radius-control);
@@ -86,7 +86,7 @@ html.theme-reveal::view-transition-new(root) {
     }
   }
 }
-// Leaflet creates popup nodes outside Vue's scoped templates.
+// Leaflet creates popup nodes outside React templates.
 .weather-point-popup {
   .leaflet-popup-content-wrapper,
   .leaflet-popup-tip {

@@ -1,28 +1,27 @@
-
 [data-component='app-about'] {
   display: block;
   min-width: 0;
 }
-[data-component="app-about"] .about-section {
+[data-component='app-about'] .about-section {
   --gold: var(--color-blue);
   --cream: var(--color-ink);
   --muted: var(--color-secondary);
   color: var(--cream);
   padding: 0 clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 4vw, 4rem);
 }
-[data-component="app-about"] .story-card {
+[data-component='app-about'] .story-card {
   display: grid;
   align-items: center;
   gap: 3rem;
   padding-bottom: 3.5rem;
 }
-[data-component="app-about"] .story-copy {
+[data-component='app-about'] .story-copy {
   align-self: start;
 }
-[data-component="app-about"] .story-copy .section-label {
+[data-component='app-about'] .story-copy .section-label {
   min-height: 1.75rem;
 }
-[data-component="app-about"] .section-label {
+[data-component='app-about'] .section-label {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,36 +32,36 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
 }
-[data-component="app-about"] h2,
-[data-component="app-about"] h3,
-[data-component="app-about"] h4 {
+[data-component='app-about'] h2,
+[data-component='app-about'] h3,
+[data-component='app-about'] h4 {
   font-family: var(--font-display);
   color: var(--cream);
 }
-[data-component="app-about"] .section-label::before,
-[data-component="app-about"] .section-label::after {
+[data-component='app-about'] .section-label::before,
+[data-component='app-about'] .section-label::after {
   content: '';
   width: 3rem;
   height: 1px;
   background: var(--color-selected-line);
 }
-[data-component="app-about"] h2 {
+[data-component='app-about'] h2 {
   margin: 0 0 1.7rem;
   font-size: clamp(2rem, 3.6vw, 3.4rem);
   line-height: 1.12;
   letter-spacing: -0.025em;
 }
-[data-component="app-about"] h2 span {
+[data-component='app-about'] h2 span {
   display: block;
   color: var(--color-brand-accent);
 }
-[data-component="app-about"] .story-copy > p:not(.section-label) {
+[data-component='app-about'] .story-copy > p:not(.section-label) {
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.8;
   margin: 0 0 1.4rem;
 }
-[data-component="app-about"] .portfolio-link {
+[data-component='app-about'] .portfolio-link {
   display: inline-flex;
   align-items: center;
   gap: 1.5rem;
@@ -74,11 +73,11 @@
   font-weight: 600;
   text-decoration: none;
 }
-[data-component="app-about"] .portrait {
+[data-component='app-about'] .portrait {
   margin: 0;
   padding-bottom: 1.5rem;
 }
-[data-component="app-about"] .portrait > img {
+[data-component='app-about'] .portrait > img {
   display: block;
   width: 100%;
   height: auto;
@@ -87,7 +86,7 @@
   object-position: center 28%;
   border-radius: var(--radius-app);
 }
-[data-component="app-about"] figcaption {
+[data-component='app-about'] figcaption {
   position: relative;
   width: fit-content;
   margin: -2.5rem 0 0 -1rem;
@@ -96,50 +95,50 @@
   border-radius: var(--radius-control);
   background: var(--color-sidebar);
 }
-[data-component="app-about"] figcaption strong,
-[data-component="app-about"] figcaption span {
+[data-component='app-about'] figcaption strong,
+[data-component='app-about'] figcaption span {
   display: block;
 }
-[data-component="app-about"] figcaption strong {
+[data-component='app-about'] figcaption strong {
   font: 700 1.35rem var(--font-display);
 }
-[data-component="app-about"] figcaption span {
+[data-component='app-about'] figcaption span {
   color: var(--muted);
   margin-top: 0.25rem;
   font-size: 0.8rem;
 }
-[data-component="app-about"] .credits-section {
+[data-component='app-about'] .credits-section {
   padding-block: 2.5rem 3rem;
   text-align: center;
 }
-[data-component="app-about"] h3 {
+[data-component='app-about'] h3 {
   max-width: 40rem;
   margin: 0 auto;
   font-size: clamp(2rem, 3.5vw, 3rem);
   line-height: 1.1;
   font-weight: 700;
 }
-[data-component="app-about"] .section-intro {
+[data-component='app-about'] .section-intro {
   max-width: 42rem;
   margin: 1.6rem auto 3.5rem;
   color: var(--muted);
   line-height: 1.7;
 }
-[data-component="app-about"] .credits-grid {
+[data-component='app-about'] .credits-grid {
   display: grid;
   gap: 3rem 2rem;
 }
-[data-component="app-about"] .credit-card {
+[data-component='app-about'] .credit-card {
   padding: 1.5rem;
 }
-[data-component="app-about"] .credit-card > * {
+[data-component='app-about'] .credit-card > * {
   position: relative;
   z-index: 1;
 }
-[data-component="app-about"] .credit-card h4 {
+[data-component='app-about'] .credit-card h4 {
   color: var(--color-ink);
 }
-[data-component="app-about"] .provider-logo {
+[data-component='app-about'] .provider-logo {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,27 +149,27 @@
   background: #fff;
   padding: 0.6rem;
 }
-[data-component="app-about"] .provider-logo img {
+[data-component='app-about'] .provider-logo img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-[data-component="app-about"] h4 {
+[data-component='app-about'] h4 {
   margin: 0 0 0.7rem;
   font-size: 1.3rem;
   font-weight: 700;
 }
-[data-component="app-about"] h4 a {
+[data-component='app-about'] h4 a {
   text-decoration: none;
 }
-[data-component="app-about"] .credit-card p {
+[data-component='app-about'] .credit-card p {
   margin: 0;
   color: var(--color-secondary);
   font-size: 0.85rem;
   line-height: 1.75;
 }
-[data-component="app-about"] .credit-links {
+[data-component='app-about'] .credit-links {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -181,16 +180,16 @@
   color: var(--color-blue);
   font-size: 0.75rem;
 }
-[data-component="app-about"] .faq-section {
+[data-component='app-about'] .faq-section {
   margin: 3.5rem 0 1rem;
 }
-[data-component="app-about"] .faq-section h3,
-[data-component="app-about"] .faq-section > .section-intro {
+[data-component='app-about'] .faq-section h3,
+[data-component='app-about'] .faq-section > .section-intro {
   max-width: none;
   margin-inline: 0;
   text-align: left;
 }
-[data-component="app-about"] .faq-section h3::after {
+[data-component='app-about'] .faq-section h3::after {
   display: block;
   content: '';
   width: 4rem;
@@ -198,16 +197,16 @@
   background: var(--color-selected-line);
   margin: 1.3rem 0 0;
 }
-[data-component="app-about"] .faq-section > .section-intro {
+[data-component='app-about'] .faq-section > .section-intro {
   font: 1.1rem/1.7 var(--font-display);
 }
-[data-component="app-about"] .faq-list {
+[data-component='app-about'] .faq-list {
   border-top: 1px solid var(--color-line);
 }
-[data-component="app-about"] details {
+[data-component='app-about'] details {
   border-bottom: 1px solid var(--color-line);
 }
-[data-component="app-about"] summary {
+[data-component='app-about'] summary {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -215,49 +214,49 @@
   cursor: pointer;
   list-style: none;
 }
-[data-component="app-about"] summary::-webkit-details-marker {
+[data-component='app-about'] summary::-webkit-details-marker {
   display: none;
 }
-[data-component="app-about"] .faq-number {
+[data-component='app-about'] .faq-number {
   color: var(--gold);
   font: 0.85rem var(--font-display);
 }
-[data-component="app-about"] .question-text {
+[data-component='app-about'] .question-text {
   flex: 1;
   font: 700 1.1rem/1.5 var(--font-display);
 }
-[data-component="app-about"] .faq-symbol::before {
+[data-component='app-about'] .faq-symbol::before {
   content: '+';
   font-size: 1.6rem;
   color: var(--gold);
   font-weight: 300;
 }
-[data-component="app-about"] details[open] .faq-symbol::before {
+[data-component='app-about'] details[open] .faq-symbol::before {
   content: '\2212';
 }
-[data-component="app-about"] details > p {
+[data-component='app-about'] details > p {
   margin: 0;
   padding: 0 1.5rem 1.5rem 2.6rem;
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.8;
 }
-[data-component="app-about"] a:focus-visible,
-[data-component="app-about"] summary:focus-visible {
+[data-component='app-about'] a:focus-visible,
+[data-component='app-about'] summary:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 5px;
 }
 @media (min-width: 640px) {
-  [data-component="app-about"] .credits-grid {
+  [data-component='app-about'] .credits-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (min-width: 1100px) {
-  [data-component="app-about"] .story-card {
+  [data-component='app-about'] .story-card {
     grid-template-columns: 1.15fr 1fr;
     gap: 3rem;
   }
-  [data-component="app-about"] .credits-grid {
+  [data-component='app-about'] .credits-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

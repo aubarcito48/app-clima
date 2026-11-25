@@ -1,27 +1,26 @@
-
-[data-component="app-weather-icon"] svg {
+[data-component='app-weather-icon'] svg {
   overflow: visible;
 }
 @media (prefers-reduced-motion: no-preference) {
-  [data-component="app-weather-icon"] .weather-motion .sun-rays {
+  [data-component='app-weather-icon'] .weather-motion .sun-rays {
     transform-origin: 12px 12px;
     animation: sunshine-turn 24s linear infinite;
   }
-  [data-component="app-weather-icon"] .weather-motion .partial-sun-rays {
+  [data-component='app-weather-icon'] .weather-motion .partial-sun-rays {
     transform-origin: 9px 8px;
     animation: sunshine-turn 24s linear infinite;
   }
-  [data-component="app-weather-icon"] .weather-motion .cloud-drift {
+  [data-component='app-weather-icon'] .weather-motion .cloud-drift {
     animation: cloud-drift 6s ease-in-out infinite;
   }
-  [data-component="app-weather-icon"] .weather-motion .rain-drops {
+  [data-component='app-weather-icon'] .weather-motion .rain-drops {
     animation: rainfall 1.2s ease-in infinite;
   }
-  [data-component="app-weather-icon"] .weather-motion .moon-glow {
+  [data-component='app-weather-icon'] .weather-motion .moon-glow {
     animation: moon-glow 4s ease-in-out;
   }
-  [data-component="app-weather-icon"] .weather-motion.motion-paused path,
-  [data-component="app-weather-icon"] .weather-motion.motion-paused g {
+  [data-component='app-weather-icon'] .weather-motion.motion-paused path,
+  [data-component='app-weather-icon'] .weather-motion.motion-paused g {
     animation-play-state: paused;
   }
 }

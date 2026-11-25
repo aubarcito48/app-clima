@@ -1,8 +1,7 @@
-
 [data-component='app-isabel'] {
   display: block;
 }
-[data-component="app-isabel"] .isa-card {
+[data-component='app-isabel'] .isa-card {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -23,7 +22,7 @@
   aspect-ratio: 1;
   flex-basis: auto;
 }
-[data-component="app-isabel"] .isa-stage {
+[data-component='app-isabel'] .isa-stage {
   padding: 0;
   border: 0;
   cursor: pointer;
@@ -35,25 +34,25 @@
   overflow: hidden;
   background: transparent;
 }
-[data-component="app-isabel"] .isa-avatar {
+[data-component='app-isabel'] .isa-avatar {
   display: block;
   width: 100%;
   height: 100%;
 }
-[data-component="app-isabel"] .isa-stage.is-presence {
+[data-component='app-isabel'] .isa-stage.is-presence {
   cursor: default;
 }
-[data-component="app-isabel"] .isa-edge-filter {
+[data-component='app-isabel'] .isa-edge-filter {
   position: absolute;
   pointer-events: none;
 }
 /* Trim the white matte by one displayed pixel, without recoloring gray hair.
    One shared filter covers poses, both speech takes and the loading fallback. */
-html[data-theme='dark'] [data-component="app-isabel"] .isa-avatar,
-html[data-theme='dark'] [data-component="app-isabel"] .isa-fallback {
+html[data-theme='dark'] [data-component='app-isabel'] .isa-avatar,
+html[data-theme='dark'] [data-component='app-isabel'] .isa-fallback {
   filter: url('#isa-dark-edge');
 }
-[data-component="app-isabel"] .isa-fallback {
+[data-component='app-isabel'] .isa-fallback {
   position: absolute;
   inset: 0;
   display: block;
@@ -61,33 +60,33 @@ html[data-theme='dark'] [data-component="app-isabel"] .isa-fallback {
   height: 100%;
   object-fit: contain;
 }
-[data-component="app-isabel"] .isa-status {
+[data-component='app-isabel'] .isa-status {
   min-height: 3.75rem;
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
-[data-component="app-isabel"] .isa-stage:focus-visible {
+[data-component='app-isabel'] .isa-stage:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
-[data-component="app-isabel"] .isa-stage:disabled {
+[data-component='app-isabel'] .isa-stage:disabled {
   opacity: 0.6;
   cursor: default;
 }
 @media (max-width: 480px) {
-  [data-component="app-isabel"] .isa-card {
+  [data-component='app-isabel'] .isa-card {
     align-items: flex-start;
     gap: 0.5rem;
   }
-  [data-component="app-isabel"] .isa-stage {
+  [data-component='app-isabel'] .isa-stage {
     width: 76px;
     height: 90px;
     flex-basis: 76px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-component="app-isabel"] .is-speaking .isa-avatar {
+  [data-component='app-isabel'] .is-speaking .isa-avatar {
     animation: none;
   }
 }

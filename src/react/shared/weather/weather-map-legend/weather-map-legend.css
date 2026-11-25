@@ -1,9 +1,8 @@
-
 [data-component='app-weather-map-legend'] {
   display: block;
   min-width: 0;
 }
-[data-component="app-weather-map-legend"] .map-legend {
+[data-component='app-weather-map-legend'] .map-legend {
   margin-top: 0.75rem;
   padding: 0.75rem;
   border: 1px solid var(--color-line);
@@ -11,33 +10,33 @@
   background: var(--color-surface);
   color: var(--color-ink);
 }
-[data-component="app-weather-map-legend"] .legend-heading {
+[data-component='app-weather-map-legend'] .legend-heading {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.5rem;
   font-size: 0.75rem;
 }
-[data-component="app-weather-map-legend"] .legend-heading h3 {
+[data-component='app-weather-map-legend'] .legend-heading h3 {
   margin: 0;
   font-weight: 600;
 }
-[data-component="app-weather-map-legend"] .legend-gradient {
+[data-component='app-weather-map-legend'] .legend-gradient {
   height: 0.75rem;
   margin-top: 0.75rem;
   border-radius: 0.25rem;
 }
-[data-component="app-weather-map-legend"] .legend-ticks {
+[data-component='app-weather-map-legend'] .legend-ticks {
   position: relative;
   height: 1.75rem;
   margin: 0.25rem 1rem 0;
   font-size: 0.65rem;
 }
-[data-component="app-weather-map-legend"] .legend-ticks span {
+[data-component='app-weather-map-legend'] .legend-ticks span {
   position: absolute;
   transform: translateX(-50%);
 }
-[data-component="app-weather-map-legend"] .map-legend p {
+[data-component='app-weather-map-legend'] .map-legend p {
   margin: 0.5rem 0 0;
   font-size: 0.75rem;
   line-height: 1.6;

@@ -1,19 +1,18 @@
-
 [data-component='app-weather-alerts'] {
   display: block;
   min-width: 0;
 }
-[data-component="app-weather-alerts"] .severity {
+[data-component='app-weather-alerts'] .severity {
   background: var(--color-sky);
   color: var(--color-ink);
 }
-[data-component="app-weather-alerts"] .alert-notice {
+[data-component='app-weather-alerts'] .alert-notice {
   border-inline-start-width: 4px;
 }
-[data-component="app-weather-alerts"] .alert-notice[data-severity='Extreme'],
-[data-component="app-weather-alerts"] .alert-notice[data-severity='Severe'] {
+[data-component='app-weather-alerts'] .alert-notice[data-severity='Extreme'],
+[data-component='app-weather-alerts'] .alert-notice[data-severity='Severe'] {
   border-inline-start-color: var(--color-danger);
 }
-[data-component="app-weather-alerts"] .alert-notice[data-severity='Moderate'] {
+[data-component='app-weather-alerts'] .alert-notice[data-severity='Moderate'] {
   border-inline-start-color: var(--color-blue);
 }

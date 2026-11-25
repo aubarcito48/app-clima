@@ -22,44 +22,125 @@ export function useWeather() {
   const lastQuery = useRef<WeatherQuery | null>(null);
   const loading = useRef(false);
   const previousLanguage = useRef(language.code);
-  const weather = useMemo(() => response ? climatePresentation(response, language.locale) : null, [response, language.locale]);
+  const weather = useMemo(
+    () => (response ? climatePresentation(response, language.locale) : null),
+    [response, language.locale],
+  );
   const editQuery = useCallback(() => {
-    generation.current++; controller.current?.abort(); controller.current = null;
-    activeKey.current = ''; lastQuery.current = null; loading.current = false;
-    setResponse(null); setFeedback(null); setState('initial'); setCancelled(false); setLocating(false);
+    generation.current++;
+    controller.current?.abort();
+    controller.current = null;
+    activeKey.current = '';
+    lastQuery.current = null;
+    loading.current = false;
+    setResponse(null);
+    setFeedback(null);
+    setState('initial');
+    setCancelled(false);
+    setLocating(false);
   }, []);
-  const reset = () => { const pending = loading.current; editQuery(); setCancelled(pending); };
-  const search = useCallback(async (query: WeatherQuery) => {
-    const normalized = 'city' in query ? normalizeCityQuery(query) : query;
-    if ('city' in normalized && !normalized.city) return;
-    const key = `${serializeWeatherQuery(normalized)}:${language.code}`;
-    if (loading.current && activeKey.current === key) return;
-    controller.current?.abort(); const request = new AbortController(); controller.current = request;
+  const reset = () => {
+    const pending = loading.current;
+    editQuery();
+    setCancelled(pending);
+  };
+  const search = useCallback(
+    async (query: WeatherQuery) => {
+      const normalized = 'city' in query ? normalizeCityQuery(query) : query;
+      if ('city' in normalized && !normalized.city) return;
+      const key = `${serializeWeatherQuery(normalized)}:${language.code}`;
+      if (loading.current && activeKey.current === key) return;
+      controller.current?.abort();
+      const request = new AbortController();
+      controller.current = request;
+      const current = ++generation.current;
+      activeKey.current = key;
+      lastQuery.current = { ...normalized };
+      loading.current = true;
+      setLocating(false);
+      setResponse(null);
+      setFeedback(null);
+      setCancelled(false);
+      setState('loading');
+      setRequestedCity('city' in normalized ? normalized.city : 'tu ubicación actual');
+      try {
+        const result = await searchClimate(normalized, language.code, request.signal);
+        if (current !== generation.current || request.signal.aborted) return;
+        setResponse(result);
+        setState('ready');
+      } catch (error) {
+        if (current !== generation.current || request.signal.aborted) return;
+        setFeedback(climateFeedback(error));
+        setState('initial');
+      } finally {
+        if (current === generation.current) {
+          loading.current = false;
+          activeKey.current = '';
+        }
+      }
+    },
+    [language.code],
+  );
+  const locate = async () => {
+    editQuery();
+    const request = new AbortController();
+    controller.current = request;
     const current = ++generation.current;
-    activeKey.current = key; lastQuery.current = { ...normalized }; loading.current = true;
-    setLocating(false); setResponse(null); setFeedback(null); setCancelled(false); setState('loading');
-    setRequestedCity('city' in normalized ? normalized.city : 'tu ubicación actual');
+    setLocating(true);
+    setState('loading');
+    loading.current = true;
+    setRequestedCity('tu ubicación actual');
     try {
-      const result = await searchClimate(normalized, language.code, request.signal);
+      const coordinates = await currentLocation(request.signal);
       if (current !== generation.current || request.signal.aborted) return;
-      setResponse(result); setState('ready');
+      setLocating(false);
+      loading.current = false;
+      await search(coordinates);
     } catch (error) {
       if (current !== generation.current || request.signal.aborted) return;
-      setFeedback(climateFeedback(error)); setState('initial');
-    } finally { if (current === generation.current) { loading.current = false; activeKey.current = ''; } }
-  }, [language.code]);
-  const locate = async () => {
-    editQuery(); const request = new AbortController(); controller.current = request; const current = ++generation.current;
-    setLocating(true); setState('loading'); loading.current=true; setRequestedCity('tu ubicación actual');
-    try { const coordinates=await currentLocation(request.signal); if(current!==generation.current||request.signal.aborted)return; setLocating(false); loading.current=false; await search(coordinates); }
-    catch(error){ if(current!==generation.current||request.signal.aborted)return; setLocating(false); loading.current=false; setState('initial');setFeedback({kind:'location',message:error instanceof LocationFailure&&error.reason==='denied'?'No diste permiso para usar tu ubicación. Podés habilitarlo en el navegador o escribir un lugar.':error instanceof LocationFailure&&error.reason==='timeout'?'No pudimos obtener tu ubicación a tiempo. Volvé a intentarlo o escribí un lugar.':'Tu navegador no pudo obtener la ubicación. Revisá sus permisos o escribí un lugar.'}); }
+      setLocating(false);
+      loading.current = false;
+      setState('initial');
+      setFeedback({
+        kind: 'location',
+        message:
+          error instanceof LocationFailure && error.reason === 'denied'
+            ? 'No diste permiso para usar tu ubicación. Podés habilitarlo en el navegador o escribir un lugar.'
+            : error instanceof LocationFailure && error.reason === 'timeout'
+              ? 'No pudimos obtener tu ubicación a tiempo. Volvé a intentarlo o escribí un lugar.'
+              : 'Tu navegador no pudo obtener la ubicación. Revisá sus permisos o escribí un lugar.',
+      });
+    }
   };
-  const retry = () => { if (feedback?.retryable && lastQuery.current) void search(lastQuery.current); };
+  const retry = () => {
+    if (feedback?.retryable && lastQuery.current) void search(lastQuery.current);
+  };
   useEffect(() => {
     if (previousLanguage.current === language.code) return;
     previousLanguage.current = language.code;
     if (lastQuery.current) void search(lastQuery.current);
   }, [language.code, search]);
-  useEffect(() => () => { generation.current++; controller.current?.abort(); }, []);
-  return {locating,locate,response,state,feedback,weather,requestedCity,cancelled,temperatureUnit,setTemperatureUnit,search,editQuery,reset,retry};
+  useEffect(
+    () => () => {
+      generation.current++;
+      controller.current?.abort();
+    },
+    [],
+  );
+  return {
+    locating,
+    locate,
+    response,
+    state,
+    feedback,
+    weather,
+    requestedCity,
+    cancelled,
+    temperatureUnit,
+    setTemperatureUnit,
+    search,
+    editQuery,
+    reset,
+    retry,
+  };
 }

@@ -1,23 +1,22 @@
-
 [data-component='app-weather-map'] {
   display: block;
   min-width: 0;
 }
-[data-component="app-weather-map"] .map-card {
+[data-component='app-weather-map'] .map-card {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-[data-component="app-weather-map"] .map-content {
+[data-component='app-weather-map'] .map-content {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
 }
-[data-component="app-weather-map"] .map-content[hidden] {
+[data-component='app-weather-map'] .map-content[hidden] {
   display: none;
 }
-[data-component="app-weather-map"] .map-canvas {
+[data-component='app-weather-map'] .map-canvas {
   flex: 1;
   min-height: 300px;
   height: 100%;

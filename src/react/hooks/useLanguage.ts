@@ -58,4 +58,7 @@ function apply(): void {
 }
 apply();
 
-export function useLanguage() { useVersion(); return { code: code.value, locale: locale.value, set, text }; }
+export function useLanguage() {
+  useVersion();
+  return { code: code.value, locale: locale.value, set, text };
+}

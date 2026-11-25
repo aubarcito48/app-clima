@@ -1,7 +1,7 @@
 import { test, expect, climate, search } from './fixtures';
 import type { Route } from '@playwright/test';
 
-test('Vue: muestra clima actual con ceros y contenido de texto seguro', async ({ page, api }) => {
+test('React: muestra clima actual con ceros y contenido de texto seguro', async ({ page, api }) => {
   api.body = climate('Córdoba');
   await page.goto('/');
   await search(page, 'Córdoba');
@@ -11,7 +11,7 @@ test('Vue: muestra clima actual con ceros y contenido de texto seguro', async ({
   expect(api.requests[0].searchParams.get('ciudad')).toBe('Córdoba');
 });
 
-test('Vue: valida el lugar antes de consultar', async ({ page, api }) => {
+test('React: valida el lugar antes de consultar', async ({ page, api }) => {
   await page.goto('/');
   await page.locator('#city').fill('Córdoba,');
   await page.locator('#city').press('Enter');
@@ -19,7 +19,7 @@ test('Vue: valida el lugar antes de consultar', async ({ page, api }) => {
   expect(api.requests).toHaveLength(0);
 });
 
-test('Vue: rechaza una respuesta inválida y permite reintentar', async ({ page, api }) => {
+test('React: rechaza una respuesta inválida y permite reintentar', async ({ page, api }) => {
   api.body = {};
   await page.goto('/');
   await search(page, 'Córdoba');
@@ -29,7 +29,7 @@ test('Vue: rechaza una respuesta inválida y permite reintentar', async ({ page,
   await expect(page.locator('.temperature')).toBeVisible();
 });
 
-test('Vue: conserva la respuesta más reciente', async ({ page, api }) => {
+test('React: conserva la respuesta más reciente', async ({ page, api }) => {
   let previous: Route | undefined;
   api.handler = async (route, url) => {
     if (url.searchParams.get('ciudad') === 'Primera') previous = route;

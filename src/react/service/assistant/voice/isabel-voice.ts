@@ -1,7 +1,7 @@
 import { VoiceHttpError } from '../../../api/voice-error';
 import { createChannel } from '../../../hooks/store';
 import { useSyncExternalStore } from 'react';
-const {atom:ref,subscribe} = createChannel();
+const { atom: ref, subscribe } = createChannel();
 import { Subscription, retry, tap, throwError, timer } from 'rxjs';
 import { apiBaseUrl } from '../../../api/http';
 const environment = { apiBaseUrl };
@@ -243,8 +243,25 @@ class IsabelVoiceEngine {
 }
 
 const voice = new IsabelVoiceEngine();
-const commands={stop:()=>voice.stop(),resume:()=>voice.resume(),setEnabled:(value:boolean)=>voice.setEnabled(value),speak:(text:string,language:'es'|'en',segments?:IsaSegment[])=>voice.speak(text,language,segments)};
-const snapshot=()=>[voice.enabled.value,voice.state.value,voice.waitingForVoice.value].join('|');
-export function useIsabelVoice(){useSyncExternalStore(subscribe,snapshot,snapshot);return {...commands,enabled:voice.enabled.value,state:voice.state.value,waitingForVoice:voice.waitingForVoice.value}}
-export function observeSpeech(listener:(time:number,state:string)=>void){return subscribe(()=>listener(voice.speechTime.value,voice.state.value))}
+const commands = {
+  stop: () => voice.stop(),
+  resume: () => voice.resume(),
+  setEnabled: (value: boolean) => voice.setEnabled(value),
+  speak: (text: string, language: 'es' | 'en', segments?: IsaSegment[]) =>
+    voice.speak(text, language, segments),
+};
+const snapshot = () =>
+  [voice.enabled.value, voice.state.value, voice.waitingForVoice.value].join('|');
+export function useIsabelVoice() {
+  useSyncExternalStore(subscribe, snapshot, snapshot);
+  return {
+    ...commands,
+    enabled: voice.enabled.value,
+    state: voice.state.value,
+    waitingForVoice: voice.waitingForVoice.value,
+  };
+}
+export function observeSpeech(listener: (time: number, state: string) => void) {
+  return subscribe(() => listener(voice.speechTime.value, voice.state.value));
+}
 if (import.meta.hot) import.meta.hot.dispose(() => voice.stop());

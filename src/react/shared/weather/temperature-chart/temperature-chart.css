@@ -1,9 +1,8 @@
-
 @media (prefers-reduced-motion: no-preference) {
-  [data-component="app-temperature-chart"] .chart-motion {
+  [data-component='app-temperature-chart'] .chart-motion {
     animation: chart-reveal 180ms ease-out;
   }
-  [data-component="app-temperature-chart"] .chart-motion polyline {
+  [data-component='app-temperature-chart'] .chart-motion polyline {
     stroke-dasharray: 100;
     animation: chart-draw 450ms ease-out;
   }
