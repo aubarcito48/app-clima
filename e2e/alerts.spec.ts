@@ -9,7 +9,7 @@ test('cambiar de país selecciona la fuente oficial y conserva el idioma del avi
   api,
 }) => {
   await page.goto('/');
-  const panel = page.locator('app-weather-alerts');
+  const panel = page.locator('[data-component=app-weather-alerts]');
   for (const [country, city, event, url] of [
     ['AR', 'Córdoba', 'Tormentas en Córdoba de prueba', ALERTS_FIXTURE.alertas[0].url],
     [
@@ -81,7 +81,7 @@ test('un 429 del SMN explica la espera y no declara ausencia de alertas', async 
   };
   await page.goto('/');
   await search(page, 'Córdoba');
-  const panel = page.locator('app-weather-alerts');
+  const panel = page.locator('[data-component=app-weather-alerts]');
   await expect(panel.getByRole('status')).toContainText(
     'La fuente oficial está limitando temporalmente',
   );
@@ -99,9 +99,9 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
   expect(api.alertsRequests).toHaveLength(0);
   await search(page, 'Córdoba');
   await expect(page.locator('.temperature')).toBeVisible();
-  const panel = page.locator('app-weather-alerts');
+  const panel = page.locator('[data-component=app-weather-alerts]');
   await expect(panel).toContainText('Tormentas de prueba');
-  await expect(page.locator('app-weather-alerts')).toHaveCount(1);
+  await expect(page.locator('[data-component=app-weather-alerts]')).toHaveCount(1);
   const metrics = page.getByRole('region', { name: 'Detalles del clima', exact: true });
   await expect(metrics.locator('.metric-card')).toHaveCount(4);
   await expect(metrics).toHaveCSS('background-image', /emergency-card-texture\.svg/);
@@ -113,7 +113,7 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
     expect(metricsBox.x).toBeCloseTo(currentBox.x, 0);
     expect(alertsBox.y).toBeGreaterThan(currentBox.y + currentBox.height);
     expect(alertsBox.x).toBeCloseTo(currentBox.x, 0);
-    const mapBox = (await page.locator('app-weather-map').boundingBox())!;
+    const mapBox = (await page.locator('[data-component=app-weather-map]').boundingBox())!;
     expect(mapBox.x).toBeGreaterThan(alertsBox.x + alertsBox.width);
     expect(mapBox.x + mapBox.width).toBeCloseTo(currentBox.x + currentBox.width, 0);
     expect(mapBox.y + mapBox.height).toBeCloseTo(metricsBox.y + metricsBox.height, 0);
@@ -156,7 +156,7 @@ test('avisos SMN: vacíos, parciales, caída de fuente y países fuera de cobert
 }) => {
   await page.goto('/');
   await search(page, 'Córdoba');
-  const panel = page.locator('app-weather-alerts');
+  const panel = page.locator('[data-component=app-weather-alerts]');
   await expect(panel).toContainText('Sin alertas reportadas');
   await expect(panel).toContainText('no equivale a ausencia de riesgo');
   api.alertsBody = { ...structuredClone(ALERTS_FIXTURE), estado: 'parcial', alertas: [] };
@@ -209,18 +209,18 @@ test('una consulta lenta de avisos no bloquea el clima ni reemplaza la ciudad nu
   await page.goto('/');
   await search(page, 'Córdoba');
   await expect(page.locator('.temperature')).toBeVisible();
-  await expect(page.locator('app-weather-alerts')).toContainText('Consultando avisos oficiales');
+  await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('Consultando avisos oficiales');
   await expect.poll(() => !!release).toBe(true);
   api.body = climate('Mendoza');
   (api.body as ReturnType<typeof climate>).ubicacion.latitud = -32.89;
   try {
     await search(page, 'Mendoza');
-    await expect(page.locator('app-weather-alerts')).toContainText('Sin alertas reportadas');
+    await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('Sin alertas reportadas');
   } finally {
     await release?.();
   }
-  await expect(page.locator('app-weather-alerts')).toContainText('para Mendoza');
-  await expect(page.locator('app-weather-alerts')).not.toContainText('Tormentas de prueba');
+  await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('para Mendoza');
+  await expect(page.locator('[data-component=app-weather-alerts]')).not.toContainText('Tormentas de prueba');
   await page.getByRole('button', { name: 'Volver al inicio', exact: true }).click();
-  await expect(page.locator('app-weather-alerts')).toHaveCount(0);
+  await expect(page.locator('[data-component=app-weather-alerts]')).toHaveCount(0);
 });

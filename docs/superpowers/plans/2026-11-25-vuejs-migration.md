@@ -164,3 +164,4 @@ adicionales solo para marcar casillas ni comprimir el historial con squash.
 - 2: entrada Vue, Vite, TypeScript y configuraci?n p?blica mediante allowlist. `npm run build` y `npm run typecheck`: correctos.
 - 3: componentes SFC, estilos, rutas y shell adaptable. Build correcto; prueba Chromium de menu movil y navegacion a /sobre-nosotros sin errores de pagina.
 - 4: API fetch cancelable, contratos validados, composable de clima y busqueda. Build correcto; 12 pruebas Chromium correctas (4 casos en 3 tamanos).
+- 5: pronostico por dia, grafico SVG, metricas, unidades compartidas y fechas locales. Build correcto; 21 casos Chromium correctos, incluidos datos parciales y cambio de ano. Selectores de las suites adaptados a componentes Vue.

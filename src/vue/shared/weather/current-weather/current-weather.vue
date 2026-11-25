@@ -35,7 +35,7 @@ defineExpose({ temperature });
       <div class="flex shrink-0 items-center gap-2">
         <span class="rounded-app border border-ink/30 bg-ink/5 px-3 py-1 text-xs font-medium text-ink">{{ (weather?.source ?? (t('Tu pr\u00F3ximo plan'))) }}</span>
         <template v-if="weather"><template v-for="data in [weather]">
-          <button type="button" class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-control border border-ink/30 bg-ink/5 hover:bg-ink/10 focus-visible:outline-blue" :aria-label="(t(((favorite ? 'Quitar {city} de favoritos' : 'Guardar {city} en favoritos')), { 'city': data.city }))" :aria-pressed="(favorite)" @click="emit('favoriteToggled')">
+          <button type="button" class="favorite-toggle flex h-11 w-11 items-center justify-center rounded-control border border-ink/30 bg-ink/5 hover:bg-ink/10 focus-visible:outline-blue" :aria-label="t(((favorite ? 'Quitar {city} de favoritos' : 'Guardar {city} en favoritos')), { 'city': data.city })" :aria-pressed="favorite" @click="emit('favoriteToggled')">
             <WeatherIcon name="heart" :filled="favorite" :size="23" />
           </button>
         </template></template></div>
@@ -65,7 +65,7 @@ defineExpose({ temperature });
               {{ (data.description ?? (t('Descripci\u00F3n no disponible'))) }}
             </p>
             <template v-if="canAnimate">
-              <button type="button" class="weather-motion-control min-h-11 items-center justify-center rounded-control px-2 text-[11px] text-secondary underline decoration-ink/40 underline-offset-4 hover:bg-ink/10 focus-visible:outline-blue" :aria-label="((motionPaused ? (t('Reanudar animaci\u00F3n del clima')) : (t('Pausar animaci\u00F3n del clima'))))" @click="motionPaused = !(motionPaused)">
+              <button type="button" class="weather-motion-control min-h-11 items-center justify-center rounded-control px-2 text-[11px] text-secondary underline decoration-ink/40 underline-offset-4 hover:bg-ink/10 focus-visible:outline-blue" :aria-label="(motionPaused ? (t('Reanudar animaci\u00F3n del clima')) : (t('Pausar animaci\u00F3n del clima')))" @click="motionPaused = !(motionPaused)">
                 {{ (motionPaused ? (t('Reanudar')) : (t('Pausar'))) }}
               </button>
             </template></div>
@@ -100,6 +100,7 @@ defineExpose({ temperature });
         <p >
           {{ t('Observado el') }}
           <time :datetime="data.observedAtUtc">{{ t('{date} a las {time} h', { 'date': data.dateLabel, 'time': data.observedTime }) }}</time>.
+          <span>{{ t('Actualizado el') }} <time :datetime="data.updatedAtUtc">{{ data.updatedAt.replace(', ', t(' a las ')) }}</time>.</span>
         </p>
       </div>
     </template></template><template v-else>

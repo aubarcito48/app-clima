@@ -3,6 +3,7 @@ import { useTemplateRef } from 'vue';
 import { useWeather } from '../../composables/useWeather';
 import { useLanguage } from '../../service/preferences/language';
 import CitySearch from '../../shared/places/city-search/city-search.vue';
+import Forecast from '../../shared/weather/forecast/forecast.vue';
 import CurrentWeather from '../../shared/weather/current-weather/current-weather.vue';
 import WeatherLoading from '../../shared/weather/weather-loading/weather-loading.vue';
 import WeatherDetails from '../../shared/weather/weather-details/weather-details.vue';
@@ -74,7 +75,7 @@ citySearch?.focusCity()">
           <WeatherLoading  />
         </template><template v-else>
           <div class="grid items-stretch gap-6">
-            <CurrentWeather  :weather="weather" :showDetails="true" :unit="temperatureUnit"   @searchRequested="citySearch?.focusCity()" />
+            <CurrentWeather  :weather="weather" :showDetails="!weather" :unit="temperatureUnit"   @searchRequested="citySearch?.focusCity()" />
             <template v-if="response"><template v-for="data in [response]">
               <div class="weather-context-grid">
                 <div class="weather-context-stack">
@@ -85,6 +86,7 @@ citySearch?.focusCity()">
                 
               </div>
             </template></template>
+            <Forecast :weather="weather" v-model:unit="temperatureUnit" />
           </div>
         </template></div>
       <template v-if="(state === 'ready')">

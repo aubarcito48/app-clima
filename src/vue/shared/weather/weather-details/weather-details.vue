@@ -15,7 +15,7 @@ const weather = computed(() => props.weather);
 </script>
 
 <template>
-<div data-component="app-weather-details"><section class="metrics-panel textured-card" :aria-label="(t('Detalles del clima'))">
+<div data-component="app-weather-details"><section class="metrics-panel textured-card" :aria-label="t('Detalles del clima')">
   <h2 class="relative z-10 mb-3 font-display text-sm font-bold text-ink">
     {{ t('Tu clima de un vistazo') }}
   </h2>

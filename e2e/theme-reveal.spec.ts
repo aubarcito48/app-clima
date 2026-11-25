@@ -2,7 +2,7 @@ import { test, expect } from './fixtures';
 
 async function openTheme(page: import('@playwright/test').Page) {
   if (page.viewportSize()!.width < 1024) await page.getByRole('button', { name: 'Abrir menú', exact: true }).click();
-  return page.locator('app-theme-toggle button');
+  return page.locator('[data-component=app-theme-toggle] button');
 }
 
 test('revelado circular: nace en el control, completa ambos temas y tolera clics rápidos', async ({ page }, info) => {
@@ -21,7 +21,7 @@ test('revelado circular: nace en el control, completa ambos temas y tolera clics
   await page.goto('/');
   const button = await openTheme(page);
   await page.evaluate(() => document.addEventListener('click', event => {
-    const control = (event.target as Element)?.closest('app-theme-toggle button');
+    const control = (event.target as Element)?.closest('[data-component=app-theme-toggle] button');
     if (!control) return;
     const rect = control.getBoundingClientRect();
     document.documentElement.dataset['testThemeOrigin'] = JSON.stringify([rect.left + rect.width / 2, rect.top + rect.height / 2]);

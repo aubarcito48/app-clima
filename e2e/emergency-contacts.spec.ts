@@ -6,7 +6,7 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
   api,
 }, info) => {
   await page.goto('/');
-  const carousel = page.locator('app-emergency-contacts');
+  const carousel = page.locator('[data-component=app-emergency-contacts]');
   await expect(carousel).toContainText('Buscá una ciudad');
   await expect(carousel.locator('a[href^="tel:"]')).toHaveCount(0);
   await search(page, 'Córdoba');
@@ -17,7 +17,7 @@ test('teléfonos útiles: posición, cobertura, enlaces y carrusel accesible en 
   const carouselBox = (await carousel.boundingBox())!,
     searchBox = (await page.locator('#pronostico').boundingBox())!;
   expect(carouselBox.y).toBeGreaterThan(searchBox.y + searchBox.height);
-  const forecastBox = (await page.locator('app-forecast').boundingBox())!;
+  const forecastBox = (await page.locator('[data-component=app-forecast]').boundingBox())!;
   expect(carouselBox.y).toBeGreaterThan(forecastBox.y + forecastBox.height);
   const footerBox = (await page.locator('footer').boundingBox())!;
   expect(carouselBox.y + carouselBox.height).toBeLessThan(footerBox.y);
@@ -78,7 +78,7 @@ test('los teléfonos nacionales y su fuente cambian con el país, sin reutilizar
   api,
 }) => {
   await page.goto('/');
-  const panel = page.locator('app-emergency-contacts');
+  const panel = page.locator('[data-component=app-emergency-contacts]');
   for (const [country, city, countryName, numbers, sourceHost] of [
     ['AR', 'Córdoba', 'Argentina', ['911', '100', '103', '105', '106'], 'www.argentina.gob.ar'],
     ['CL', 'Santiago', 'Chile', ['133', '131', '132'], 'www.chile.gob.cl'],

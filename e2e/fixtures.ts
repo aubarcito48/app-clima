@@ -179,13 +179,13 @@ export async function closeNavigation(page: Page) {
 
 export async function chooseLanguage(page: Page, language: 'es' | 'en') {
   await openNavigation(page);
-  await page.locator(`app-language-toggle button[lang="${language}"]`).click();
+  await page.locator(`[data-component=app-language-toggle] button[lang="${language}"]`).click();
   await closeNavigation(page);
 }
 
 export async function changeTheme(page: Page) {
   await openNavigation(page);
-  await page.locator('app-theme-toggle button').click();
+  await page.locator('[data-component=app-theme-toggle] button').click();
   await closeNavigation(page);
 }
 

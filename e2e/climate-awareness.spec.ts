@@ -6,14 +6,14 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   api,
 }, info) => {
   await page.goto('/');
-  const slider = page.locator('app-climate-awareness');
+  const slider = page.locator('[data-component=app-climate-awareness]');
   const active = slider.locator('figure:not([hidden])');
   const mascot = slider.locator('.slider-mascot');
   await expect(mascot).toBeVisible();
-  await expect(page.locator('app-weather-sidebar img[src="stitch-coast.svg"]')).toHaveCount(0);
+  await expect(page.locator('[data-component=app-weather-sidebar] img[src="stitch-coast.svg"]')).toHaveCount(0);
   await expect(active.getByRole('heading')).toHaveText('Cuidemos nuestros bosques');
   const sliderBox = (await slider.boundingBox())!,
-    contacts = (await page.locator('app-emergency-contacts').boundingBox())!;
+    contacts = (await page.locator('[data-component=app-emergency-contacts]').boundingBox())!;
   expect(sliderBox.y + sliderBox.height).toBeLessThan(contacts.y);
   const greeting = (await page.locator('h1').boundingBox())!;
   expect(sliderBox.y).toBeGreaterThan(greeting.y + greeting.height);
@@ -61,7 +61,7 @@ test('slider ambiental: avance automático sin controles flotantes', async ({ pa
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.clock.install();
   await page.goto('/');
-  const slider = page.locator('app-climate-awareness');
+  const slider = page.locator('[data-component=app-climate-awareness]');
   const active = slider.locator('figure:not([hidden])');
   await expect(active.getByRole('heading')).toHaveText('Cuidemos nuestros bosques');
   await page.clock.runFor(5100);

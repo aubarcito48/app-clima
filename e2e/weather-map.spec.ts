@@ -19,16 +19,16 @@ test('mapa automático: capas sin clave pública, junto a alertas y sin desborde
   await page.goto('/');
   expect(tiles).toHaveLength(0);
   await search(page, 'Córdoba');
-  const map = page.locator('app-weather-map');
+  const map = page.locator('[data-component=app-weather-map]');
   await expect(map.getByRole('heading', { name: 'Mapa del clima' })).toBeVisible();
-  const alertsBox = await page.locator('app-weather-alerts').boundingBox();
+  const alertsBox = await page.locator('[data-component=app-weather-alerts]').boundingBox();
   const mapBox = await map.boundingBox();
   expect(alertsBox).not.toBeNull();
   expect(mapBox).not.toBeNull();
   if (info.project.name === 'desktop-1440') {
     expect(Math.abs(alertsBox!.y - mapBox!.y)).toBeLessThan(2);
     expect(mapBox!.x).toBeGreaterThan(alertsBox!.x);
-    const details = await page.locator('app-weather-details').boundingBox();
+    const details = await page.locator('[data-component=app-weather-details]').boundingBox();
     expect(mapBox!.y + mapBox!.height).toBeCloseTo(details!.y + details!.height, 0);
   } else {
     expect(mapBox!.y).toBeGreaterThan(alertsBox!.y);
@@ -39,7 +39,7 @@ test('mapa automático: capas sin clave pública, junto a alertas y sin desborde
     .locator('.weather-context-grid')
     .screenshot({ path: info.outputPath('aligned-weather.png') });
   await page
-    .locator('app-current-weather')
+    .locator('[data-component=app-current-weather]')
     .screenshot({ path: info.outputPath('current-weather-wide.png') });
   expect(tiles.every((url) => !url.searchParams.has('appid'))).toBe(true);
   await map.getByRole('combobox', { name: 'Mostrar' }).selectOption('wind');
@@ -68,7 +68,7 @@ test('un fallo del mapa conserva el clima y las alertas', async ({ page, api }) 
   );
   await page.goto('/');
   await search(page, 'Córdoba');
-  const map = page.locator('app-weather-map');
+  const map = page.locator('[data-component=app-weather-map]');
   await expect.poll(() => tileRequests).toBeGreaterThan(0);
   await expect(map.getByRole('status')).toContainText('No se pudo cargar todo el mapa');
   await expect(page.locator('.temperature')).toBeVisible();
