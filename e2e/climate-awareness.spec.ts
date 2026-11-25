@@ -10,7 +10,9 @@ test('slider ambiental: imágenes locales, posición, teclado, navegación y amb
   const active = slider.locator('figure:not([hidden])');
   const mascot = slider.locator('.slider-mascot');
   await expect(mascot).toBeVisible();
-  await expect(page.locator('[data-component=app-weather-sidebar] img[src="stitch-coast.svg"]')).toHaveCount(0);
+  await expect(
+    page.locator('[data-component=app-weather-sidebar] img[src="stitch-coast.svg"]'),
+  ).toHaveCount(0);
   await expect(active.getByRole('heading')).toHaveText('Cuidemos nuestros bosques');
   const sliderBox = (await slider.boundingBox())!,
     contacts = (await page.locator('[data-component=app-emergency-contacts]').boundingBox())!;

@@ -1,5 +1,5 @@
 // Fixture ficticio del contrato v1 del backend; solo para pruebas.
-import { ClimateResponse } from '../../src/app/models/weather/climate-response';
+import { ClimateResponse } from '../../src/vue/models/weather/climate-response';
 export const CLIMATE_FIXTURE: ClimateResponse = {
   ubicacion: {
     nombre: 'Córdoba',

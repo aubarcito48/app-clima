@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import {
-  ref,
-  nextTick,
-  computed,
-  watch,
-  watchEffect,
-  watchPostEffect,
-  onMounted,
-  onUnmounted,
-  useTemplateRef,
-} from 'vue';
-import { RouterLink, useRouter, useRoute } from 'vue-router';
-import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
+import { ref, nextTick, watch, useTemplateRef } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
+import { useCleanup } from '../../../composables/runtime';
 import LanguageToggle from '../../preferences/language-toggle/language-toggle.vue';
 import ThemeToggle from '../../preferences/theme-toggle/theme-toggle.vue';
 import WeatherIcon from '../weather-icon/weather-icon.vue';
@@ -22,7 +12,7 @@ import { useLanguage } from '../../../service/preferences/language';
 const cleanup = useCleanup();
 const route = useRoute();
 const t = useLanguage().text;
-const emit = defineEmits<{ (event: 'placeSelected', value?: any): void }>();
+const emit = defineEmits<{ placeSelected: [place: SavedPlace] }>();
 const document = globalThis.document;
 const desktop = ref(true);
 const mobileOpen = ref(false);

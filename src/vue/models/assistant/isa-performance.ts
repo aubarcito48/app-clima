@@ -20,7 +20,11 @@ function gesture(value: unknown): value is IsaGesture {
 }
 
 // Optional direction must never prevent displaying otherwise valid weather.
-export function readIsaSegments(value: unknown, text: string, maxSegments = 4): IsaSegment[] | undefined {
+export function readIsaSegments(
+  value: unknown,
+  text: string,
+  maxSegments = 4,
+): IsaSegment[] | undefined {
   if (!Array.isArray(value) || !value.length || value.length > maxSegments) return undefined;
   const bounded = (value: unknown, low: number, high: number): value is number =>
     typeof value === 'number' && Number.isFinite(value) && value >= low && value <= high;

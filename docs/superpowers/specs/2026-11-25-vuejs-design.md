@@ -5,7 +5,8 @@
 Crear una versión Vue y TypeScript de StitchWeather para mostrar experiencia con
 Vue en el portfolio. Conservar el diseño, las funciones y el contrato del backend
 Django de la versión Angular. Trabajar en la rama `vuejs`, con 10 commits de
-migración en total, distribuidos en sesiones; esta sesión entrega el primero.
+migración en total. El primer commit documenta el alcance; los siguientes
+incorporan funcionalidades. El usuario autorizó completarlos de forma continua.
 
 ## Enfoques
 
@@ -32,7 +33,7 @@ Resolver versiones compatibles al instalar, sin fijarlas por suposición en el p
 - Conservar navegación, adaptación móvil, teclado y preferencias persistentes.
 - Cada commit debe tener un alcance revisable y una validación proporcional.
 - Total previsto: 10 commits, incluido el plan inicial; sin commits vacíos ni
-  fechas artificiales. No completar las diez etapas en esta sesión.
+  fechas artificiales. Completar las etapas con validación y push individual, según la autorización posterior del usuario.
 - No publicar ni desplegar como parte del primer commit.
 
 ## Estado inicial y trabajo pendiente de Angular

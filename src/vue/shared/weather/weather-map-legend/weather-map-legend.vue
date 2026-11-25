@@ -1,50 +1,67 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect, watchPostEffect, onMounted, onUnmounted, useTemplateRef } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
+import { computed } from 'vue';
+
 import { MAP_LAYERS, WeatherLayer } from '../weather-map/map-layers';
 import { useLanguage } from '../../../service/preferences/language';
 
-const cleanup = useCleanup();
 const t = useLanguage().text;
-const props = withDefaults(defineProps<{ layer: WeatherLayer }>(), {  });
+const props = withDefaults(defineProps<{ layer: WeatherLayer }>(), {});
 const layer = computed(() => props.layer);
 const layers = MAP_LAYERS;
-
-
 </script>
 
 <template>
-<div data-component="app-weather-map-legend"><section class="rounded-app border border-line bg-surface p-4 sm:p-5" aria-labelledby="map-guide-heading">
-  <h2 id="map-guide-heading" class="font-display text-lg font-bold text-ink">
-    {{ t('C\u00F3mo leer el mapa') }}
-  </h2>
-  <template v-for="legend in [layers[layer]]">
-  <div class="map-legend mt-3">
-    <div class="legend-heading">
-      <strong >{{ t(legend.label) }} · {{ legend.unit }}</strong><span >OpenWeather</span>
-    </div>
-    <div class="legend-gradient" aria-hidden="true" :style="{ 'background': legend.gradient }"></div>
-    <div class="legend-ticks">
-      <template v-for="(tick, index) in legend.ticks" :key="tick.value">
-        <span :style="{ 'left': (tick.position) + '%' }">{{ tick.value }}</span>
-      </template></div>
-    <p >
-      {{ t('Escala orientativa. Los colores representan condiciones regionales, incluso al acercar a un barrio.') }}
-    </p>
+  <div data-component="app-weather-map-legend">
+    <section
+      class="rounded-app border border-line bg-surface p-4 sm:p-5"
+      aria-labelledby="map-guide-heading"
+    >
+      <h2 id="map-guide-heading" class="font-display text-lg font-bold text-ink">
+        {{ t('C\u00F3mo leer el mapa') }}
+      </h2>
+      <template v-for="legend in [layers[layer]]">
+        <div class="map-legend mt-3">
+          <div class="legend-heading">
+            <strong>{{ t(legend.label) }} · {{ legend.unit }}</strong
+            ><span>OpenWeather</span>
+          </div>
+          <div
+            class="legend-gradient"
+            aria-hidden="true"
+            :style="{ background: legend.gradient }"
+          ></div>
+          <div class="legend-ticks">
+            <template v-for="(tick, index) in legend.ticks" :key="tick.value">
+              <span :style="{ left: tick.position + '%' }">{{ tick.value }}</span>
+            </template>
+          </div>
+          <p>
+            {{
+              t(
+                'Escala orientativa. Los colores representan condiciones regionales, incluso al acercar a un barrio.',
+              )
+            }}
+          </p>
+        </div>
+        <p class="mt-3 text-xs leading-6 text-secondary">
+          {{
+            t(
+              'Arrastr\u00E1 para explorar y toc\u00E1 un punto para consultar su clima. Us\u00E1 + o \u2212 para acercar o alejar.',
+            )
+          }}
+        </p>
+        <p class="mt-2 text-xs leading-6 text-muted">
+          {{
+            t('Vista regional orientativa; no reemplaza los avisos meteorol\u00F3gicos oficiales.')
+          }}
+        </p>
+      </template>
+    </section>
   </div>
-  <p class="mt-3 text-xs leading-6 text-secondary">
-    {{ t('Arrastr\u00E1 para explorar y toc\u00E1 un punto para consultar su clima. Us\u00E1 + o \u2212 para acercar o alejar.') }}
-  </p>
-  <p class="mt-2 text-xs leading-6 text-muted">
-    {{ t('Vista regional orientativa; no reemplaza los avisos meteorol\u00F3gicos oficiales.') }}
-  </p>
-</template></section>
-</div>
 </template>
 
 <style scoped lang="scss">
-[data-component="app-weather-map-legend"] {
+[data-component='app-weather-map-legend'] {
   display: block;
   min-width: 0;
 }
@@ -88,5 +105,4 @@ const layers = MAP_LAYERS;
   line-height: 1.6;
   color: var(--color-secondary);
 }
-
 </style>

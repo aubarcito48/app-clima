@@ -9,7 +9,7 @@ export class IsaMotion {
   pose: IsaPose = 'isa-sleep';
 
   private get destination(): Branch | null {
-    return this.pose === 'isa-awake' ? null : this.pose.slice(4) as Branch;
+    return this.pose === 'isa-awake' ? null : (this.pose.slice(4) as Branch);
   }
 
   private get target(): number {
@@ -17,8 +17,11 @@ export class IsaMotion {
   }
 
   get moving(): boolean {
-    return Math.abs(this.position - this.target) > 0.001 || Math.abs(this.velocity) > 0.01
-      || (this.destination !== null && this.destination !== this.branch);
+    return (
+      Math.abs(this.position - this.target) > 0.001 ||
+      Math.abs(this.velocity) > 0.01 ||
+      (this.destination !== null && this.destination !== this.branch)
+    );
   }
 
   get progress(): number {
@@ -37,8 +40,12 @@ export class IsaMotion {
   advance(seconds: number): void {
     if (!Number.isFinite(seconds) || seconds <= 0) return;
     // All paths share one front frame. Change branches only after reaching it.
-    if (this.destination && this.destination !== this.branch
-        && this.position < 0.003 && Math.abs(this.velocity) < 0.04) {
+    if (
+      this.destination &&
+      this.destination !== this.branch &&
+      this.position < 0.003 &&
+      Math.abs(this.velocity) < 0.04
+    ) {
       this.branch = this.destination;
       this.position = 0;
       this.velocity = 0;

@@ -1,4 +1,4 @@
-// Resolve the palette before Angular renders to avoid a bright flash at night.
+// Resolve the palette before Vue renders to avoid a bright flash at night.
 (() => {
   let preference = null;
   try {

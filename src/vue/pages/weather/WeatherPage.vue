@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vReveal } from '../../composables/runtime';
 import { useTemplateRef, onMounted, ref } from 'vue';
 import { useFavoritePlaces } from '../../service/places/favorite-places';
 import { useWeather } from '../../composables/useWeather';
@@ -46,6 +47,7 @@ const sections = [
   { id: 'inicio-clima', label: 'Inicio' },
   { id: 'pronostico', label: 'Buscar ciudad' },
   { id: 'clima-contenido', label: 'Clima y pronóstico' },
+  { id: 'contactos-utiles', label: 'Contactos útiles' },
 ];
 onMounted(() => {
   const place = history.state?.weatherPlace;
@@ -93,6 +95,7 @@ onMounted(() => {
           <section
             id="pronostico"
             tabindex="-1"
+            v-reveal
             class="search-panel scroll-mt-6 rounded-app border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3"
             :aria-label="t('Consulta de ciudad')"
           >
@@ -157,11 +160,11 @@ onMounted(() => {
             </template>
           </div>
           <div id="clima-contenido" tabindex="-1" class="mt-2" :aria-busy="state === 'loading'">
-            <template v-if="state === 'loading'">
-              <WeatherLoading /> </template
+            <template v-if="state === 'loading'"> <WeatherLoading /> </template
             ><template v-else>
               <div class="grid items-stretch gap-6">
                 <CurrentWeather
+                  v-reveal
                   :weather="weather"
                   :showDetails="!weather"
                   :favorite="favorites.contains(response?.ubicacion ?? null)"
@@ -180,7 +183,7 @@ onMounted(() => {
                       <WeatherMap :location="data.ubicacion" v-model:layer="mapLayer" />
                     </div> </template
                 ></template>
-                <Forecast :weather="weather" v-model:unit="temperatureUnit" />
+                <Forecast v-reveal :weather="weather" v-model:unit="temperatureUnit" />
               </div>
             </template>
           </div>
@@ -217,6 +220,7 @@ onMounted(() => {
           </aside>
 
           <EmergencyContacts
+            v-reveal
             id="contactos-utiles"
             tabindex="-1"
             class="mt-8 block"

@@ -165,7 +165,9 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   const isa = page.locator('[data-component=app-isabel]');
-  await expect(page.locator('[data-component=app-weather-sidebar] [data-component=app-isabel]')).toHaveCount(1);
+  await expect(
+    page.locator('[data-component=app-weather-sidebar] [data-component=app-isabel]'),
+  ).toHaveCount(1);
   await expect(page.locator('main [data-component=app-isabel]')).toHaveCount(0);
   await expect(isa.locator('.isa-avatar canvas')).toBeVisible();
   await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute(
@@ -205,7 +207,9 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   const audit = await new AxeBuilder({ page }).include('[data-component=app-isabel]').analyze();
   expect(audit.violations).toEqual([]);
   await changeTheme(page);
-  const nightAudit = await new AxeBuilder({ page }).include('[data-component=app-isabel]').analyze();
+  const nightAudit = await new AxeBuilder({ page })
+    .include('[data-component=app-isabel]')
+    .analyze();
   expect(nightAudit.violations).toEqual([]);
 });
 

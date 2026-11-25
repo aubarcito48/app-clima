@@ -38,7 +38,10 @@ for (const language of ['es', 'en'] as const) {
     expect(
       await page.evaluate(() => (window as unknown as { isaPlayerCount: number }).isaPlayerCount),
     ).toBe(1);
-    await expect(page.locator('[data-component=app-isabel] .isa-avatar')).toHaveCSS('filter', /isa-dark-edge/);
+    await expect(page.locator('[data-component=app-isabel] .isa-avatar')).toHaveCSS(
+      'filter',
+      /isa-dark-edge/,
+    );
     await page.evaluate(() => {
       (window as unknown as { isaTestAudio: HTMLAudioElement }).isaTestAudio.currentTime = 8;
     });
@@ -51,6 +54,9 @@ for (const language of ['es', 'en'] as const) {
     await expect(canvas).toHaveAttribute('data-isa-speaking', 'false');
     await expect.poll(() => canvas.getAttribute('data-isa-speech-blend')).toBe('0.000');
     await changeTheme(page);
-    await expect(page.locator('[data-component=app-isabel] .isa-avatar')).toHaveCSS('filter', 'none');
+    await expect(page.locator('[data-component=app-isabel] .isa-avatar')).toHaveCSS(
+      'filter',
+      'none',
+    );
   });
 }

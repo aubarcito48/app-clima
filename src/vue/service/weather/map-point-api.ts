@@ -40,10 +40,36 @@ function readPoint(value: unknown): MapPointWeather {
   return root;
 }
 
-
-let selection: {city:string;lat:number;lng:number}|null=null;
-export function useMapPointApi() { return {
-remember(city:string,lat:number,lng:number){selection={city,lat,lng}},
-selectedFor(city:string){if(selection?.city!==city)selection=null;return selection},
-query(latitude:number,longitude:number){const language=useLanguage().code.value;return new Observable<MapPointWeather>(subscriber=>{const controller=new AbortController();const params=new URLSearchParams({latitud:latitude.toFixed(5),longitud:longitude.toFixed(5),idioma:language});getJson('/api/v1/mapa/punto/',params,controller.signal,15000).then(readPoint).then(point=>{subscriber.next(point);subscriber.complete()}).catch(error=>{if(!controller.signal.aborted)subscriber.error(error)});return ()=>controller.abort()})}
-};}
+let selection: { city: string; lat: number; lng: number } | null = null;
+export function useMapPointApi() {
+  return {
+    remember(city: string, lat: number, lng: number) {
+      selection = { city, lat, lng };
+    },
+    selectedFor(city: string) {
+      if (selection?.city !== city) selection = null;
+      return selection;
+    },
+    query(latitude: number, longitude: number) {
+      const language = useLanguage().code.value;
+      return new Observable<MapPointWeather>((subscriber) => {
+        const controller = new AbortController();
+        const params = new URLSearchParams({
+          latitud: latitude.toFixed(5),
+          longitud: longitude.toFixed(5),
+          idioma: language,
+        });
+        getJson('/api/v1/mapa/punto/', params, controller.signal, 15000)
+          .then(readPoint)
+          .then((point) => {
+            subscriber.next(point);
+            subscriber.complete();
+          })
+          .catch((error) => {
+            if (!controller.signal.aborted) subscriber.error(error);
+          });
+        return () => controller.abort();
+      });
+    },
+  };
+}

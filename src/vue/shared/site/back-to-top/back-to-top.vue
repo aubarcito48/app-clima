@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect, watchPostEffect, onMounted, onUnmounted, useTemplateRef } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
+import { ref, onMounted } from 'vue';
+
+import { useCleanup } from '../../../composables/runtime';
 import WeatherIcon from '../../weather/weather-icon/weather-icon.vue';
 import { useLanguage } from '../../../service/preferences/language';
 
@@ -10,41 +10,45 @@ const t = useLanguage().text;
 const document = globalThis.document;
 const visible = ref(false);
 function scrollToTop(): void {
-    const window = document.defaultView;
-    if (!window)
-        return;
-    document.getElementById('main-content')?.focus({ preventScroll: true });
-    window.scrollTo({
-        top: 0,
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-            ? 'instant'
-            : 'smooth',
-    });
+  const window = document.defaultView;
+  if (!window) return;
+  document.getElementById('main-content')?.focus({ preventScroll: true });
+  window.scrollTo({
+    top: 0,
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+  });
 }
 const destroyRef = { onDestroy: cleanup };
 onMounted(() => {
-    const window = document.defaultView;
-    if (!window)
-        return;
-    const update = () => visible.value = window.scrollY > 320;
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    destroyRef.onDestroy(() => window.removeEventListener('scroll', update));
+  const window = document.defaultView;
+  if (!window) return;
+  const update = () => (visible.value = window.scrollY > 320);
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  destroyRef.onDestroy(() => window.removeEventListener('scroll', update));
 });
 
 defineExpose({ scrollToTop });
 </script>
 
 <template>
-<div data-component="app-back-to-top"><template v-if="visible">
-  <button type="button" class="back-to-top" :aria-label="(t('Volver arriba'))" :title="t('Volver arriba')" @click="scrollToTop()">
-    <WeatherIcon name="arrow" class="-rotate-90" :size="22" />
-  </button>
-</template></div>
+  <div data-component="app-back-to-top">
+    <template v-if="visible">
+      <button
+        type="button"
+        class="back-to-top"
+        :aria-label="t('Volver arriba')"
+        :title="t('Volver arriba')"
+        @click="scrollToTop()"
+      >
+        <WeatherIcon name="arrow" class="-rotate-90" :size="22" />
+      </button>
+    </template>
+  </div>
 </template>
 
 <style scoped lang="scss">
-[data-component="app-back-to-top"] {
+[data-component='app-back-to-top'] {
   position: fixed;
   right: max(1.25rem, calc(env(safe-area-inset-right) + 0.75rem));
   bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem));
@@ -85,5 +89,4 @@ defineExpose({ scrollToTop });
     transform: none;
   }
 }
-
 </style>

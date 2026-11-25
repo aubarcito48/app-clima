@@ -1,12 +1,12 @@
 # StitchWeather Vue Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Replicar StitchWeather en Vue para el portfolio, mediante 10 commits sustanciales distribuidos en sesiones.
 
 **Architecture:** Frontend Vue independiente en la rama `vuejs`, con el mismo backend Django. Reutilizar modelos y recursos independientes de Angular; trasladar estado a composables y presentación a componentes Vue.
 
-**Tech Stack:** Vue, TypeScript, Vite, Vue Router, Tailwind/CSS, Leaflet y Playwright; versiones compatibles por verificar durante el setup.
+**Tech Stack:** Vue, TypeScript, Vite, Vue Router, Tailwind/CSS, Leaflet y Playwright; versiones compatibles fijadas en `package-lock.json`.
 
 **Spec:** `docs/superpowers/specs/2026-11-25-vuejs-design.md`
 
@@ -14,7 +14,7 @@
 
 - Mantener Angular en `main` y realizar la migración en `vuejs`.
 - Total previsto: 10 commits, incluido el plan inicial; sin commits vacíos ni fechas artificiales.
-- Esta sesión entrega únicamente el primer commit de documentación.
+- El usuario autorizó completar las diez etapas, validando, haciendo commit y push de cada una.
 - Usar el backend Django existente; no exponer claves privadas.
 - Verificar los cambios pendientes de Angular antes de portar el mapa.
 - Hacer staging por rutas explícitas, revisar el diff y registrar la validación antes de cada commit.
@@ -44,7 +44,7 @@ en el cierre, después de comprobar la equivalencia funcional.
 
 - [x] Documentar alcance, arquitectura, base y cambios locales excluidos en la especificación.
 - [x] Dividir la migración en diez entregas y detallar su validación en este plan.
-- [ ] Revisar `git diff --cached --check` y confirmar solo estos dos documentos.
+- [x] Revisar `git diff --cached --check` y confirmar solo estos dos documentos.
 
 ### 2. Preparar una aplicación Vue ejecutable
 
@@ -53,10 +53,10 @@ en el cierre, después de comprobar la equivalencia funcional.
 **Archivos:** `package.json`, `package-lock.json`, `index.html`, `vite.config.ts`,
 `tsconfig*.json`, `src/vue/main.ts`, `src/vue/App.vue`, `src/vue/env.d.ts` y `.gitignore`.
 
-- [ ] Configurar entrada Vue mínima y scripts de desarrollo, typecheck y build; conservar la referencia Angular sin importarla desde Vue.
-- [ ] Adaptar la configuración pública de API de `scripts/configure-env.mjs` a Vite, conservando los nombres de variables documentados y sin incluir secretos.
-- [ ] Instalar dependencias compatibles y verificar `npm run typecheck` y `npm run build`; comprobar que `npm start` carga la entrada Vue.
-- [ ] Revisar y confirmar únicamente los archivos de esta etapa.
+- [x] Configurar entrada Vue mínima y scripts de desarrollo, typecheck y build; conservar la referencia Angular sin importarla desde Vue.
+- [x] Adaptar la configuración pública de API de `scripts/configure-env.mjs` a Vite, conservando los nombres de variables documentados y sin incluir secretos.
+- [x] Instalar dependencias compatibles y verificar `npm run typecheck` y `npm run build`; comprobar que `npm start` carga la entrada Vue.
+- [x] Revisar y confirmar únicamente los archivos de esta etapa.
 
 ### 3. Replicar estructura visual y navegación
 
@@ -65,9 +65,9 @@ en el cierre, después de comprobar la equivalencia funcional.
 **Archivos:** `src/vue/router.ts`, `src/vue/pages/{WeatherPage,AboutPage}.vue`,
 `src/vue/components/site/`, `src/vue/styles/`, `src/vue/App.vue`.
 
-- [ ] Portar estructura, navegación, pie, página informativa y recursos existentes; configurar `/`, `/sobre-nosotros` y fallback al inicio.
-- [ ] Comprobar ambas rutas, carga directa y navegación con teclado en móvil y escritorio. Ejecutar typecheck y build.
-- [ ] Confirmar la estructura sin incluir funciones todavía sin implementar.
+- [x] Portar estructura, navegación, pie, página informativa y recursos existentes; configurar `/`, `/sobre-nosotros` y fallback al inicio.
+- [x] Comprobar ambas rutas, carga directa y navegación con teclado en móvil y escritorio. Ejecutar typecheck y build.
+- [x] Confirmar la estructura sin incluir funciones todavía sin implementar.
 
 ### 4. Conectar búsqueda y clima actual
 
@@ -76,10 +76,10 @@ en el cierre, después de comprobar la equivalencia funcional.
 **Archivos:** `src/vue/models/`, `src/vue/api/climate.ts`, `src/vue/composables/useWeather.ts`,
 `src/vue/components/{CitySearch,CurrentWeather,WeatherLoading}.vue`, `src/vue/pages/WeatherPage.vue`.
 
-- [ ] Portar `WeatherQuery`, serialización y `readClimateResponse`; exponer búsqueda asíncrona contra `/api/v1/clima/` con el mismo contrato e idioma.
-- [ ] Implementar estado de consulta, carga, error y resultado; cancelar o descartar consultas anteriores.
-- [ ] Adaptar `e2e/weather.spec.ts` y el servidor Playwright a Vite; verificar éxito, error, respuesta inválida y respuestas fuera de orden con fixtures.
-- [ ] Ejecutar typecheck, build y las pruebas de clima antes del commit.
+- [x] Portar `WeatherQuery`, serialización y `readClimateResponse`; exponer búsqueda asíncrona contra `/api/v1/clima/` con el mismo contrato e idioma.
+- [x] Implementar estado de consulta, carga, error y resultado; cancelar o descartar consultas anteriores.
+- [x] Adaptar `e2e/weather.spec.ts` y el servidor Playwright a Vite; verificar éxito, error, respuesta inválida y respuestas fuera de orden con fixtures.
+- [x] Ejecutar typecheck, build y las pruebas de clima antes del commit.
 
 ### 5. Incorporar pronóstico, detalles y unidades
 
@@ -88,9 +88,9 @@ en el cierre, después de comprobar la equivalencia funcional.
 **Archivos:** `src/vue/components/{Forecast,TemperatureChart,WeatherDetails,WeatherIcon}.vue`,
 `src/vue/composables/useTemperatureUnit.ts` y `src/vue/pages/WeatherPage.vue`.
 
-- [ ] Reutilizar cálculos de temperatura y portarlos con los componentes; compartir unidad reactiva entre clima, detalles y pronóstico.
-- [ ] Verificar con fixtures conversión Celsius/Fahrenheit, fechas UTC con zona del lugar consultado, pronóstico ausente y campos nulos.
-- [ ] Ejecutar typecheck, build y los casos de clima pertinentes; confirmar la etapa.
+- [x] Reutilizar cálculos de temperatura y portarlos con los componentes; compartir unidad reactiva entre clima, detalles y pronóstico.
+- [x] Verificar con fixtures conversión Celsius/Fahrenheit, fechas UTC con zona del lugar consultado, pronóstico ausente y campos nulos.
+- [x] Ejecutar typecheck, build y los casos de clima pertinentes; confirmar la etapa.
 
 ### 6. Incorporar ubicación y favoritos
 
@@ -99,9 +99,9 @@ en el cierre, después de comprobar la equivalencia funcional.
 **Archivos:** `src/vue/composables/{useCurrentLocation,useFavoritePlaces}.ts`,
 `src/vue/api/placeSuggestions.ts`, `src/vue/components/{CitySearch,WeatherSidebar}.vue`.
 
-- [ ] Portar sugerencias, geolocalización y favoritos; conservar formato y claves persistidas existentes.
-- [ ] Verificar alta/baja de favoritos, recarga, sugerencias canceladas, permiso denegado y almacenamiento no disponible; mantener búsqueda manual operativa.
-- [ ] Ejecutar typecheck, build y los casos de búsqueda/favoritos; confirmar la etapa.
+- [x] Portar sugerencias, geolocalización y favoritos; conservar formato y claves persistidas existentes.
+- [x] Verificar alta/baja de favoritos, recarga, sugerencias canceladas, permiso denegado y almacenamiento no disponible; mantener búsqueda manual operativa.
+- [x] Ejecutar typecheck, build y los casos de búsqueda/favoritos; confirmar la etapa.
 
 ### 7. Incorporar idiomas y temas
 
@@ -111,9 +111,9 @@ en el cierre, después de comprobar la equivalencia funcional.
 `src/vue/models/translations.ts`, `src/vue/components/{LanguageToggle,ThemeToggle}.vue`,
 componentes anteriores que consumen traducciones y `src/vue/api/climate.ts`.
 
-- [ ] Portar catálogo y preferencias; actualizar textos, atributos de idioma y parámetro `idioma` sin estados duplicados.
-- [ ] Adaptar `e2e/language.spec.ts` y `e2e/theme-reveal.spec.ts`; verificar persistencia, cambio de idioma y movimiento reducido.
-- [ ] Ejecutar typecheck, build y ambas suites antes del commit.
+- [x] Portar catálogo y preferencias; actualizar textos, atributos de idioma y parámetro `idioma` sin estados duplicados.
+- [x] Adaptar `e2e/language.spec.ts` y `e2e/theme-reveal.spec.ts`; verificar persistencia, cambio de idioma y movimiento reducido.
+- [x] Ejecutar typecheck, build y ambas suites antes del commit.
 
 ### 8. Incorporar mapa, alertas e información climática
 
@@ -122,10 +122,10 @@ componentes anteriores que consumen traducciones y `src/vue/api/climate.ts`.
 **Archivos:** `src/vue/components/{WeatherMap,WeatherMapLegend,WeatherAlerts,EmergencyContacts,ClimateAwareness}.vue`,
 `src/vue/api/{weatherAlerts,mapPoint}.ts`, `src/vue/models/weatherAlerts.ts`.
 
-- [ ] Comparar el mapa de Angular con sus cambios locales actuales antes de portar capas, leyenda y consulta por punto.
-- [ ] Portar Leaflet con limpieza de listeners y mapa al desmontar; conservar atribución, alertas, contactos por país y contenido climático.
-- [ ] Adaptar suites `weather-map`, `alerts`, `emergency-contacts` y `climate-awareness`; verificar capas, selección de ubicación, falta de datos y país sin contactos.
-- [ ] Ejecutar typecheck, build y esas suites antes del commit.
+- [x] Comparar el mapa de Angular con sus cambios locales actuales antes de portar capas, leyenda y consulta por punto.
+- [x] Portar Leaflet con limpieza de listeners y mapa al desmontar; conservar atribución, alertas, contactos por país y contenido climático.
+- [x] Adaptar suites `weather-map`, `alerts`, `emergency-contacts` y `climate-awareness`; verificar capas, selección de ubicación, falta de datos y país sin contactos.
+- [x] Ejecutar typecheck, build y esas suites antes del commit.
 
 ### 9. Incorporar recomendaciones, voz y animación de Isa
 
@@ -134,10 +134,10 @@ componentes anteriores que consumen traducciones y `src/vue/api/climate.ts`.
 **Archivos:** `src/vue/components/Isabel.vue`, `src/vue/composables/{useIsa,useIsaVoice}.ts`,
 `src/vue/assistant/`; reutilizar manifiestos y recursos de `public/isa-bot/`.
 
-- [ ] Portar recomendaciones y lógica independiente de reproducción, streaming, sincronización y animación; reemplazar lifecycle Angular por Vue.
-- [ ] Liberar audio, peticiones y temporizadores al cambiar de consulta o desmontar; conservar saludo y consejo en una pista cuando corresponda.
-- [ ] Adaptar suites `isabel`, `isa-stream` e `isa-playback`; verificar autoplay bloqueado, reproducción manual, cancelación e idiomas.
-- [ ] Ejecutar typecheck, build y esas suites antes del commit.
+- [x] Portar recomendaciones y lógica independiente de reproducción, streaming, sincronización y animación; reemplazar lifecycle Angular por Vue.
+- [x] Liberar audio, peticiones y temporizadores al cambiar de consulta o desmontar; conservar saludo y consejo en una pista cuando corresponda.
+- [x] Adaptar suites `isabel`, `isa-stream` e `isa-playback`; verificar autoplay bloqueado, reproducción manual, cancelación e idiomas.
+- [x] Ejecutar typecheck, build y esas suites antes del commit.
 
 ### 10. Cerrar paridad y documentar la versión Vue
 
@@ -146,10 +146,10 @@ componentes anteriores que consumen traducciones y `src/vue/api/climate.ts`.
 **Archivos:** `README.md`, `package.json`, `package-lock.json`, configuración de despliegue,
 `playwright.config.ts`, `e2e/`, `src/app/`, entradas y configuración Angular obsoletas.
 
-- [ ] Revisar cada función de la especificación contra Vue; resolver regresiones de móvil, teclado, rutas y preferencias.
-- [ ] Retirar código y dependencias Angular cuando Vue ya no los use; actualizar README con instalación, ejecución, validación y relación entre ramas.
-- [ ] Ejecutar instalación reproducible con `npm ci`, typecheck, build y toda la suite E2E en los tres tamaños configurados; registrar limitaciones de cualquier prueba manual pendiente.
-- [ ] Revisar diff y confirmar; verificar diez commits desde `9f8e059` con `git rev-list --count 9f8e059..vuejs`.
+- [x] Revisar cada función de la especificación contra Vue; resolver regresiones de móvil, teclado, rutas y preferencias.
+- [x] Retirar código y dependencias Angular cuando Vue ya no los use; actualizar README con instalación, ejecución, validación y relación entre ramas.
+- [x] Ejecutar instalación reproducible con `npm ci`, typecheck, build y toda la suite E2E en los tres tamaños configurados; registrar limitaciones de cualquier prueba manual pendiente.
+- [x] Revisar diff y confirmar; verificar diez commits desde `9f8e059` con `git rev-list --count 9f8e059..vuejs`.
 
 ## Ritmo de trabajo
 
@@ -170,3 +170,5 @@ adicionales solo para marcar casillas ni comprimir el historial con squash.
 - 7: catalogo ES/EN, preferencias compartidas, tema del sistema, sincronizacion de almacenamiento y revelado circular. Build correcto; 24 pruebas de idiomas/temas correctas, con storage bloqueado y consultas pendientes.
 - 8: mapa Leaflet, capas, leyenda y consulta por punto portados desde el estado local actual de Angular; alertas oficiales, contactos y carrusel ambiental. 48 pruebas correctas en tres tamanos, incluidas consultas por punto y auditorias axe.
 - 9: voz, streaming, reproducción, sincronización y animación de Isa portados a Vue. Teleport conserva la instancia al cambiar de resolución. Compilación correcta y 39 pruebas de Isa aprobadas en móvil, tablet y escritorio. El servidor de pruebas se cierra automáticamente al terminar.
+
+- 10: retirada la implementación y las dependencias de Angular de esta rama; actualizados README, configuración de Vite/Vercel, herramientas de VS Code y pruebas de navegación. Se validaron instalación con `npm ci`, TypeScript de aplicación y pruebas, y compilación. El usuario confirmó que las pruebas pasaron y solicitó cerrar la migración después del reinicio de la PC; no se relanzó la suite en esta sesión. Las pruebas de navegador utilizan proveedores y audio simulados.

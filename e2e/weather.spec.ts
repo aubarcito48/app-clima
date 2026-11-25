@@ -375,10 +375,16 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
   await expect(page.getByRole('link', { name: 'StitchWeather, inicio' })).toBeVisible();
   await expect(page.locator('[data-component=app-weather-music] iframe')).toHaveCount(0);
   await search(page, 'Córdoba');
-  await expect(page.locator('[data-component=app-current-weather]')).toContainText('06:00');
-  await expect(page.locator('[data-component=app-current-weather]')).toContainText('19:30');
+  await expect(page.getByRole('region', { name: 'Detalles del clima', exact: true })).toContainText(
+    '06:00',
+  );
+  await expect(page.getByRole('region', { name: 'Detalles del clima', exact: true })).toContainText(
+    '19:30',
+  );
   await expect(page.locator('.weather-art')).toBeVisible();
-  await expect(page.locator('[data-component=app-current-weather]')).toContainText('Oeste (O)');
+  await expect(page.getByRole('region', { name: 'Detalles del clima', exact: true })).toContainText(
+    'Oeste (O)',
+  );
   await expect(page.locator('[data-component=app-forecast] ol li')).toHaveCount(6);
   const firstDayBox = (await page.locator('.day-choice').nth(0).boundingBox())!;
   const secondDayBox = (await page.locator('.day-choice').nth(1).boundingBox())!;
@@ -409,19 +415,33 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     'true',
   );
   await page.getByRole('button', { name: 'Viento', exact: true }).click();
-  await expect(page.locator('[data-component=app-temperature-chart] figcaption')).toContainText('Viento (km/h)');
-  await expect(page.locator('[data-component=app-temperature-chart] circle title').first()).toContainText('Noreste');
+  await expect(page.locator('[data-component=app-temperature-chart] figcaption')).toContainText(
+    'Viento (km/h)',
+  );
+  await expect(
+    page.locator('[data-component=app-temperature-chart] circle title').first(),
+  ).toContainText('Noreste');
   await expect(page.locator('[data-component=app-temperature-chart] circle')).toHaveCount(8);
   await page.getByRole('button', { name: 'Temperatura', exact: true }).click();
-  await expect(page.locator('[data-component=app-forecast] ol li').first()).toContainText('Lluvia: 0 %');
+  await expect(page.locator('[data-component=app-forecast] ol li').first()).toContainText(
+    'Lluvia: 0 %',
+  );
   await page.getByLabel('Unidad de temperatura').selectOption('F');
   await expect(page.locator('[data-component=app-forecast] ol li').first()).toContainText('°F');
-  await expect(page.locator('[data-component=app-temperature-chart] figcaption')).toContainText('°F');
-  await expect(page.locator('[data-component=app-current-weather] .temperature')).toContainText('32');
-  await expect(page.locator('[data-component=app-current-weather] .temperature-unit')).toHaveText('°F');
+  await expect(page.locator('[data-component=app-temperature-chart] figcaption')).toContainText(
+    '°F',
+  );
+  await expect(page.locator('[data-component=app-current-weather] .temperature')).toContainText(
+    '32',
+  );
+  await expect(page.locator('[data-component=app-current-weather] .temperature-unit')).toHaveText(
+    '°F',
+  );
   await expect(page.locator('[data-component=app-current-weather]')).toContainText('26.6 °F');
   await page.getByLabel('Unidad de temperatura').selectOption('C');
-  await expect(page.locator('[data-component=app-current-weather] .temperature-unit')).toHaveText('°C');
+  await expect(page.locator('[data-component=app-current-weather] .temperature-unit')).toHaveText(
+    '°C',
+  );
   expect(api.requests).toHaveLength(1);
   await expect(page.locator('[data-component=app-weather-sidebar] iframe')).toHaveCount(0);
   expect(api.spotifyRequests).toHaveLength(0);
@@ -429,7 +449,11 @@ test('StitchWeather: días, horas y línea sin bloques de IA o Spotify', async (
     body: await page.screenshot({ fullPage: true }),
     contentType: 'image/png',
   });
-  await expect(page.locator('main [data-component=app-recommendation], main [data-component=app-weather-music]')).toHaveCount(0);
+  await expect(
+    page.locator(
+      'main [data-component=app-recommendation], main [data-component=app-weather-music]',
+    ),
+  ).toHaveCount(0);
   await expect(page.locator('[data-component=app-current-weather] #advice-text')).toHaveText(
     data.recomendacion.texto!,
   );
@@ -493,8 +517,14 @@ test('flujo principal: clima, unidades y consejo de la misma consulta', async ({
   await expect(page.locator('.temperature')).toContainText('0');
   await expect(page.locator('[data-component=app-current-weather]')).toContainText('-3 °C');
   await expect(page.locator('[data-component=app-weather-details] dd').nth(0)).toHaveText('0 %');
-  await expect(page.locator('[data-component=app-weather-details] dd').nth(1)).toHaveText('9.123 km/h');
-  await expect(page.locator('main [data-component=app-recommendation], main [data-component=app-weather-music]')).toHaveCount(0);
+  await expect(page.locator('[data-component=app-weather-details] dd').nth(1)).toHaveText(
+    '9.123 km/h',
+  );
+  await expect(
+    page.locator(
+      'main [data-component=app-recommendation], main [data-component=app-weather-music]',
+    ),
+  ).toHaveCount(0);
   await expect(page.locator('[data-component=app-current-weather] #advice-text')).toHaveText(
     'Consejo ficticio de prueba para Mendoza.',
   );
@@ -546,7 +576,9 @@ test('ambos bloques parciales y mediciones opcionales ausentes', async ({ page, 
     'No disponible',
     'No disponible',
   ]);
-  await expect(page.locator('[data-component=app-forecast]')).toContainText('Pronóstico no disponible');
+  await expect(page.locator('[data-component=app-forecast]')).toContainText(
+    'Pronóstico no disponible',
+  );
   await expect(page.locator('[data-component=app-forecast] ol')).toHaveCount(0);
   await expect(page.locator('main')).not.toContainText(/undefined|NaN/);
 });
@@ -576,7 +608,9 @@ test('cuarenta intervalos, cambio de año y hora de ciudad independiente del nav
   await expect(page.locator('[data-component=app-forecast] li')).toHaveCount(40);
   await expect(page.locator('[data-component=app-forecast] time').nth(0)).toHaveText('18:00 h');
   await expect(page.locator('[data-component=app-forecast]')).toContainText('2027');
-  await expect(page.locator('[data-component=app-forecast]')).toContainText('No son promedios diarios');
+  await expect(page.locator('[data-component=app-forecast]')).toContainText(
+    'No son promedios diarios',
+  );
 });
 
 test('409: elegir una región entre candidatos del mismo país', async ({ page, api }) => {
@@ -682,7 +716,11 @@ test('texto literal, accesibilidad y ausencia de desbordamiento', async ({ page,
     data.recomendacion.texto!,
   );
   await expect(page.locator('#advice-text script, #advice-text img')).toHaveCount(0);
-  await expect(page.locator('[data-component=app-recommendation] script, [data-component=app-recommendation] img')).toHaveCount(0);
+  await expect(
+    page.locator(
+      '[data-component=app-recommendation] script, [data-component=app-recommendation] img',
+    ),
+  ).toHaveCount(0);
   const dimensions = await page.evaluate(() => ({
     viewport: innerWidth,
     content: document.documentElement.scrollWidth,

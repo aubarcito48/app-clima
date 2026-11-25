@@ -1,5 +1,5 @@
 import { CLIMATE_FIXTURE } from './climate-fixture';
-import { WeatherAlertsResponse } from '../../src/app/models/alerts/weather-alerts';
+import { WeatherAlertsResponse } from '../../src/vue/models/alerts/weather-alerts';
 
 // Fictional notices for tests and visual review, never a live emergency warning.
 export const ALERTS_FIXTURE: WeatherAlertsResponse = {

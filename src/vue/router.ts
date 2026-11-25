@@ -7,5 +7,7 @@ export const router = createRouter({
     { path: '/sobre-nosotros', component: () => import('./pages/site/AboutPage.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
-  scrollBehavior(to, _from, saved) { return saved ?? (to.hash ? { el: to.hash } : { top: 0 }); },
+  scrollBehavior(to, _from, saved) {
+    return saved ?? (to.hash ? { el: to.hash } : { top: 0 });
+  },
 });

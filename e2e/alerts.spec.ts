@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, climate, search, changeTheme } from './fixtures';
 import { ALERTS_FIXTURE } from './data/alerts-fixture';
-import { ALERT_SOURCES } from '../src/app/models/alerts/weather-alerts';
+import { ALERT_SOURCES } from '../src/vue/models/alerts/weather-alerts';
 import { chooseLanguage } from './fixtures';
 
 test('cambiar de país selecciona la fuente oficial y conserva el idioma del aviso', async ({
@@ -116,7 +116,9 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
     const mapBox = (await page.locator('[data-component=app-weather-map]').boundingBox())!;
     expect(mapBox.x).toBeGreaterThan(alertsBox.x + alertsBox.width);
     expect(mapBox.x + mapBox.width).toBeCloseTo(currentBox.x + currentBox.width, 0);
-    const legendBox = (await page.locator('[data-component=app-weather-map-legend]').boundingBox())!;
+    const legendBox = (await page
+      .locator('[data-component=app-weather-map-legend]')
+      .boundingBox())!;
     expect(mapBox.y + mapBox.height).toBeCloseTo(legendBox.y + legendBox.height, 0);
   } else {
     expect(metricsBox.x).toBeCloseTo(alertsBox.x, 0);
@@ -210,18 +212,24 @@ test('una consulta lenta de avisos no bloquea el clima ni reemplaza la ciudad nu
   await page.goto('/');
   await search(page, 'Córdoba');
   await expect(page.locator('.temperature')).toBeVisible();
-  await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('Consultando avisos oficiales');
+  await expect(page.locator('[data-component=app-weather-alerts]')).toContainText(
+    'Consultando avisos oficiales',
+  );
   await expect.poll(() => !!release).toBe(true);
   api.body = climate('Mendoza');
   (api.body as ReturnType<typeof climate>).ubicacion.latitud = -32.89;
   try {
     await search(page, 'Mendoza');
-    await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('Sin alertas reportadas');
+    await expect(page.locator('[data-component=app-weather-alerts]')).toContainText(
+      'Sin alertas reportadas',
+    );
   } finally {
     await release?.();
   }
   await expect(page.locator('[data-component=app-weather-alerts]')).toContainText('para Mendoza');
-  await expect(page.locator('[data-component=app-weather-alerts]')).not.toContainText('Tormentas de prueba');
+  await expect(page.locator('[data-component=app-weather-alerts]')).not.toContainText(
+    'Tormentas de prueba',
+  );
   await page.getByRole('button', { name: 'Volver al inicio', exact: true }).click();
   await expect(page.locator('[data-component=app-weather-alerts]')).toHaveCount(0);
 });

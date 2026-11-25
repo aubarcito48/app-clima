@@ -1,7 +1,16 @@
 import { test as base, expect, type Page, type Route } from '@playwright/test';
 import { CLIMATE_FIXTURE } from './data/climate-fixture';
-import type { ClimateResponse } from '../src/app/models/weather/climate-response';
-const environment = { apiBaseUrl: process.env['PUBLIC_API_BASE_URL_DEVELOPMENT'] ?? 'http://localhost:8000' };
+import type { ClimateResponse } from '../src/vue/models/weather/climate-response';
+import { loadEnv } from 'vite';
+const environment = {
+  apiBaseUrl: (
+    process.env['PUBLIC_API_BASE_URL_DEVELOPMENT'] ??
+    loadEnv('development', process.cwd(), 'PUBLIC_API_BASE_URL_')[
+      'PUBLIC_API_BASE_URL_DEVELOPMENT'
+    ] ??
+    'http://localhost:8000'
+  ).replace(/\/+$/u, ''),
+};
 
 // Transparent tile: UI tests never download maps from external services.
 export const MAP_PNG = Buffer.from(

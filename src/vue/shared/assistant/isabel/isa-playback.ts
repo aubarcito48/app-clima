@@ -57,7 +57,9 @@ function readPcm(buffer: ArrayBuffer): PcmVoice | undefined {
         bytes = size;
       } else if (tag(at) === 'isam') {
         if (size > 128) return;
-        ownEngine = JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, at + 8, size)))?.engine === 'isa-rf-v2';
+        ownEngine =
+          JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, at + 8, size)))?.engine ===
+          'isa-rf-v2';
       } else if (tag(at) === 'isav') {
         if (raw !== undefined || size > 65536) return;
         raw = JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, at + 8, size)));
@@ -286,8 +288,11 @@ export function createIsaPlayback(buffer: ArrayBuffer, language: 'es' | 'en' = '
   const pcm = readPcm(buffer);
   if (!pcm) return undefined;
   if (pcm.ownEngine) {
-    try { return createOwnPlayback(buffer, pcm.samples, pcm.rate, pcm.cues, language); }
-    catch { return undefined; }
+    try {
+      return createOwnPlayback(buffer, pcm.samples, pcm.rate, pcm.cues, language);
+    } catch {
+      return undefined;
+    }
   }
   const { pauses, micro } = acousticPauses(pcm.samples, pcm.rate);
   if (language === 'en') {

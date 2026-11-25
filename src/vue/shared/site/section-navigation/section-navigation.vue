@@ -1,97 +1,101 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect, watchPostEffect, onMounted, onUnmounted, useTemplateRef } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
+import { ref, computed, onMounted } from 'vue';
+
+import { useCleanup } from '../../../composables/runtime';
 import { useLanguage } from '../../../service/preferences/language';
 export interface ScrollSection {
   id: string;
   label: string;
 }
 const cleanup = useCleanup();
-const t = useLanguage().text;
-const props = withDefaults(defineProps<{ sections: readonly ScrollSection[] }>(), {  });
+const props = withDefaults(defineProps<{ sections: readonly ScrollSection[] }>(), {});
 const language = useLanguage();
 const sections = computed(() => props.sections);
 const activeIndex = ref(0);
 const document = globalThis.document;
 const destroyRef = { onDestroy: cleanup };
 function goTo(event: MouseEvent, id: string) {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
-        return;
-    const target = document.getElementById(id);
-    if (!target)
-        return;
-    event.preventDefault();
-    const window = document.defaultView;
-    target.scrollIntoView({
-        behavior: window?.matchMedia('(prefers-reduced-motion: reduce)').matches
-            ? 'instant'
-            : 'smooth',
-        block: 'start',
-    });
-    target.focus({ preventScroll: true });
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  event.preventDefault();
+  const window = document.defaultView;
+  target.scrollIntoView({
+    behavior: window?.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    block: 'start',
+  });
+  target.focus({ preventScroll: true });
 }
 onMounted(() => {
-    const window = document.defaultView;
-    if (!window)
-        return;
-    let frame: number | undefined;
-    const update = () => {
-        frame = undefined;
-        const readingLine = Math.min(180, window.innerHeight * 0.25);
-        let current = 0;
-        sections.value.forEach((section, index) => {
-            const target = document.getElementById(section.id);
-            if (target && target.getBoundingClientRect().top <= readingLine)
-                current = index;
-        });
-        if (window.scrollY > 0 &&
-            window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
-            current = sections.value.length - 1;
-        }
-        activeIndex.value = current;
-    };
-    const schedule = () => {
-        frame ??= window.requestAnimationFrame(update);
-    };
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
-    observer?.observe(document.body);
-    schedule();
-    destroyRef.onDestroy(() => {
-        window.removeEventListener('scroll', schedule);
-        window.removeEventListener('resize', schedule);
-        observer?.disconnect();
-        if (frame !== undefined)
-            window.cancelAnimationFrame(frame);
+  const window = document.defaultView;
+  if (!window) return;
+  let frame: number | undefined;
+  const update = () => {
+    frame = undefined;
+    const readingLine = Math.min(180, window.innerHeight * 0.25);
+    let current = 0;
+    sections.value.forEach((section, index) => {
+      const target = document.getElementById(section.id);
+      if (target && target.getBoundingClientRect().top <= readingLine) current = index;
     });
+    if (
+      window.scrollY > 0 &&
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+    ) {
+      current = sections.value.length - 1;
+    }
+    activeIndex.value = current;
+  };
+  const schedule = () => {
+    frame ??= window.requestAnimationFrame(update);
+  };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
+  observer?.observe(document.body);
+  schedule();
+  destroyRef.onDestroy(() => {
+    window.removeEventListener('scroll', schedule);
+    window.removeEventListener('resize', schedule);
+    observer?.disconnect();
+    if (frame !== undefined) window.cancelAnimationFrame(frame);
+  });
 });
 
 defineExpose({ goTo });
 </script>
 
 <template>
-<div data-component="app-section-navigation"><nav :aria-label="(language.text('Navegación por secciones'))">
-  <ol >
-    <template v-for="(section, index) in sections" :key="section.id">
-      <li >
-        <a :href="('#' + section.id)" :aria-current="(((activeIndex === index) ? 'location' : undefined))" :aria-label="(language.text(section.label))" :class="{ 'is-active': (activeIndex === index) }" @click="goTo($event, section.id)">
-          <span class="section-label" aria-hidden="true">{{ language.text(section.label) }}</span>
-          <span class="section-dot" aria-hidden="true"></span>
-        </a>
-      </li>
-    </template></ol>
-</nav>
-</div>
+  <div data-component="app-section-navigation">
+    <nav :aria-label="language.text('Navegación por secciones')">
+      <ol>
+        <template v-for="(section, index) in sections" :key="section.id">
+          <li>
+            <a
+              :href="'#' + section.id"
+              :aria-current="activeIndex === index ? 'location' : undefined"
+              :aria-label="language.text(section.label)"
+              :class="{ 'is-active': activeIndex === index }"
+              @click="goTo($event, section.id)"
+            >
+              <span class="section-label" aria-hidden="true">{{
+                language.text(section.label)
+              }}</span>
+              <span class="section-dot" aria-hidden="true"></span>
+            </a>
+          </li>
+        </template>
+      </ol>
+    </nav>
+  </div>
 </template>
 
 <style scoped>
-[data-component="app-section-navigation"] {
+[data-component='app-section-navigation'] {
   display: none;
 }
 @media (min-width: 1280px) and (min-height: 520px) {
-  [data-component="app-section-navigation"] {
+  [data-component='app-section-navigation'] {
     display: block;
     position: fixed;
     z-index: 25;
@@ -179,5 +183,4 @@ a:focus-visible {
     transition: none;
   }
 }
-
 </style>
