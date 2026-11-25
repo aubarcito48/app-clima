@@ -13,7 +13,7 @@ test('Isa permanece visible en el navbar y fuera del menú al cambiar de resoluc
   page,
 }) => {
   await page.goto('/');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   const avatar = isa.getByRole('button', { name: /^Isa:/u });
   await expect(avatar).toBeVisible();
   await avatar.click();
@@ -25,8 +25,8 @@ test('Isa permanece visible en el navbar y fuera del menú al cambiar de resoluc
     await expect(avatar).toBeVisible();
     await expect(avatar).toHaveAttribute('aria-pressed', 'false');
     if (width < 1024) {
-      await expect(page.locator('.mobile-header app-isabel')).toHaveCount(1);
-      await expect(page.locator('.mobile-menu app-isabel')).toHaveCount(0);
+      await expect(page.locator('.mobile-header [data-component=app-isabel]')).toHaveCount(1);
+      await expect(page.locator('.mobile-menu [data-component=app-isabel]')).toHaveCount(0);
       const brand = page.locator('.mobile-header > a');
       await expect(brand).toBeVisible();
       await expect(page.locator('.mobile-header .brand-copy')).toBeVisible({
@@ -43,7 +43,7 @@ test('Isa permanece visible en el navbar y fuera del menú al cambiar de resoluc
       expect(assistant!.width).toBeGreaterThanOrEqual(44);
       expect(assistant!.height).toBeGreaterThanOrEqual(44);
     } else {
-      await expect(page.locator('.desktop-shell app-isabel')).toHaveCount(1);
+      await expect(page.locator('.desktop-shell [data-component=app-isabel]')).toHaveCount(1);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
@@ -71,7 +71,7 @@ test('Isa adapta la mirada al girar la pantalla sin reiniciar la solicitud de vo
   });
   await page.goto('/');
   await search(page, 'Córdoba');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   const canvas = isa.locator('.isa-avatar canvas');
   await expect(isa.getByRole('status')).toContainText('Isa está preparando');
   for (const width of [768, 1440, 360, 1024, 1023]) {
@@ -115,7 +115,7 @@ test('Isa reads English advice after changing language and keeps mute available'
   await expect.poll(() => requests.length).toBe(1);
   await chooseLanguage(page, 'en');
   await expect(page.locator('#advice-text')).toHaveText(english);
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   await expect(isa.getByRole('status')).toContainText('Isa is speaking');
   expect(requests).toEqual([
     { texto: `¡Buenas, explorador!\n${climate().recomendacion.texto}\n¡Hasta luego, explorador!` },
@@ -164,9 +164,11 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
 }, info) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
-  const isa = page.locator('app-isabel');
-  await expect(page.locator('app-weather-sidebar app-isabel')).toHaveCount(1);
-  await expect(page.locator('main app-isabel')).toHaveCount(0);
+  const isa = page.locator('[data-component=app-isabel]');
+  await expect(
+    page.locator('[data-component=app-weather-sidebar] [data-component=app-isabel]'),
+  ).toHaveCount(1);
+  await expect(page.locator('main [data-component=app-isabel]')).toHaveCount(0);
   await expect(isa.locator('.isa-avatar canvas')).toBeVisible();
   await expect(isa.locator('.isa-avatar canvas')).toHaveAttribute(
     'data-isa-animation',
@@ -202,10 +204,12 @@ test('Isa se anima automáticamente sin botones de animación y respeta movimien
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('isa.png'), fullPage: true });
-  const audit = await new AxeBuilder({ page }).include('app-isabel').analyze();
+  const audit = await new AxeBuilder({ page }).include('[data-component=app-isabel]').analyze();
   expect(audit.violations).toEqual([]);
   await changeTheme(page);
-  const nightAudit = await new AxeBuilder({ page }).include('app-isabel').analyze();
+  const nightAudit = await new AxeBuilder({ page })
+    .include('[data-component=app-isabel]')
+    .analyze();
   expect(nightAudit.violations).toEqual([]);
 });
 
@@ -224,7 +228,7 @@ test('Isa saluda, lee el consejo, se despide y puede silenciarse entre consultas
     });
   });
   await page.goto('/');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   await expect(isa.getByRole('button', { name: /^Isa:/u })).toHaveAttribute('aria-pressed', 'true');
   expect(texts).toEqual([]);
   await closeNavigation(page);
@@ -297,7 +301,7 @@ test('Isa despierta, mira hacia el contenido según el navbar, habla al frente y
     });
   });
   await page.goto('/');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   const canvas = isa.locator('.isa-avatar canvas');
   const checkMobileStatus = async () => {
     if (page.viewportSize()!.width > 640) return;
@@ -348,7 +352,7 @@ test('movimiento reducido conserva la voz y las poses sin animar la boca', async
   );
   await page.goto('/');
   await search(page, 'Córdoba');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   const canvas = isa.locator('canvas');
   await expect(canvas).toHaveAttribute('data-isa-expression', 'isa-awake');
@@ -371,7 +375,7 @@ test('un fallo de voz conserva el consejo sin botón para repetirlo', async ({ p
   );
   await page.goto('/');
   await search(page, 'Córdoba');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   await expect(isa.getByRole('status')).toContainText('No pudimos reproducir la voz');
   await expect(page.locator('#advice-text')).toHaveText(climate().recomendacion.texto!);
   await expect(isa.getByRole('button', { name: 'Escuchar consejo' })).toHaveCount(0);

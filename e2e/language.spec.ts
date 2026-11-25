@@ -6,10 +6,9 @@ test('ES / EN translates the interface and persists after reloading', async ({ p
   await expect(page.getByRole('heading', { name: 'Hola, explorador' })).toBeVisible();
   await chooseLanguage(page, 'en');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.locator('app-language-toggle button[lang="en"]')).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(
+    page.locator('[data-component=app-language-toggle] button[lang="en"]'),
+  ).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('heading', { name: 'Hello, explorer' })).toBeVisible();
   await expect(page.getByLabel('City, region or province', { exact: true })).toHaveAttribute(
     'placeholder',

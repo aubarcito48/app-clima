@@ -52,3 +52,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - [ ] 2–13: implementar y registrar evidencia en el commit correspondiente.
 
 - 2: React 19, React DOM, React Router, TypeScript y Vite instalados; URL pública validada por allowlist. `npm run build` (incluye tipos): correcto.
+
+- 3: Componentes funcionales, estilos existentes, sidebar adaptable y rutas de inicio/informacion con fallback. Build y tipos: correctos.

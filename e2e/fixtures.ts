@@ -1,7 +1,16 @@
 import { test as base, expect, type Page, type Route } from '@playwright/test';
 import { CLIMATE_FIXTURE } from './data/climate-fixture';
-import type { ClimateResponse } from '../src/app/models/weather/climate-response';
-import { environment } from '../src/environments/environment';
+import type { ClimateResponse } from '../src/react/models/weather/climate-response';
+import { loadEnv } from 'vite';
+const environment = {
+  apiBaseUrl: (
+    process.env['PUBLIC_API_BASE_URL_DEVELOPMENT'] ??
+    loadEnv('development', process.cwd(), 'PUBLIC_API_BASE_URL_')[
+      'PUBLIC_API_BASE_URL_DEVELOPMENT'
+    ] ??
+    'http://localhost:8000'
+  ).replace(/\/+$/u, ''),
+};
 
 // Transparent tile: UI tests never download maps from external services.
 export const MAP_PNG = Buffer.from(
@@ -179,13 +188,13 @@ export async function closeNavigation(page: Page) {
 
 export async function chooseLanguage(page: Page, language: 'es' | 'en') {
   await openNavigation(page);
-  await page.locator(`app-language-toggle button[lang="${language}"]`).click();
+  await page.locator(`[data-component=app-language-toggle] button[lang="${language}"]`).click();
   await closeNavigation(page);
 }
 
 export async function changeTheme(page: Page) {
   await openNavigation(page);
-  await page.locator('app-theme-toggle button').click();
+  await page.locator('[data-component=app-theme-toggle] button').click();
   await closeNavigation(page);
 }
 

@@ -68,7 +68,7 @@ for (const language of ['es', 'en'] as const) {
     await page.goto('/');
     if (language === 'en') await chooseLanguage(page, 'en');
     await search(page, 'Cordoba');
-    const isa = page.locator('app-isabel');
+    const isa = page.locator('[data-component=app-isabel]');
     if (language === 'es') {
       await expect(isa.getByRole('status')).toContainText('Tocá a Isa');
       await isa.getByRole('button', { name: /^Isa:/u }).click();
@@ -145,7 +145,7 @@ test('Isa cancela la descarga de frases al silenciarla', async ({ page }) => {
   );
   await page.goto('/');
   await search(page, 'Cordoba');
-  const isa = page.locator('app-isabel');
+  const isa = page.locator('[data-component=app-isabel]');
   await expect(isa.getByRole('status')).toContainText('Isa está hablando');
   await isa.getByRole('button', { name: /^Isa:/u }).click();
   await expect

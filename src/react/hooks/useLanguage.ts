@@ -1,0 +1,1 @@
+export function useLanguage() { return { code: 'es' as 'es' | 'en', locale: 'es-AR', text(value: string|null|undefined, params: Readonly<Record<string,string|number>> = {}) { return (value??'').replace(/\{(\w+)\}/gu,(token,name:string)=>params[name]==null?token:String(params[name])); } }; }

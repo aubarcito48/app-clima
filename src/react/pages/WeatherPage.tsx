@@ -1,0 +1,3 @@
+import WeatherSidebar from '../shared/weather/weather-sidebar/weather-sidebar';
+import SiteFooter from '../shared/site/site-footer/site-footer';
+export default function WeatherPage() { return <><a href="#main-content" className="skip-link">Saltar al contenido</a><div className="weather-layout mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]"><WeatherSidebar /><div className="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:pb-10 lg:pt-8"><main id="main-content" tabIndex={-1} className="pb-10"><h1 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Hola, explorador</h1><p className="mt-2 text-sm leading-6 text-secondary">Tu clima y tus planes para el día.</p></main><SiteFooter /></div></div></>; }
