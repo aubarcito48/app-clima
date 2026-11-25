@@ -116,7 +116,8 @@ test('avisos SMN: coordenadas, texto oficial seguro, detalles con teclado y ambo
     const mapBox = (await page.locator('[data-component=app-weather-map]').boundingBox())!;
     expect(mapBox.x).toBeGreaterThan(alertsBox.x + alertsBox.width);
     expect(mapBox.x + mapBox.width).toBeCloseTo(currentBox.x + currentBox.width, 0);
-    expect(mapBox.y + mapBox.height).toBeCloseTo(metricsBox.y + metricsBox.height, 0);
+    const legendBox = (await page.locator('[data-component=app-weather-map-legend]').boundingBox())!;
+    expect(mapBox.y + mapBox.height).toBeCloseTo(legendBox.y + legendBox.height, 0);
   } else {
     expect(metricsBox.x).toBeCloseTo(alertsBox.x, 0);
   }

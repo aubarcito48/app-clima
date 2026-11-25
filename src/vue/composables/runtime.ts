@@ -1,4 +1,4 @@
-import { ref, watchEffect, onUnmounted, type Directive } from 'vue';
+import { ref, computed, useTemplateRef, watchEffect, onUnmounted, type Directive } from 'vue';
 import { pauseTracking, resetTracking } from '@vue/reactivity';
 
 /** Allows listeners created after mount to join the component's cleanup. */
@@ -18,6 +18,12 @@ export function resettableRef<T>(source: () => T) {
   const value = ref<T>(source());
   watchEffect(() => { value.value = source(); });
   return value;
+}
+
+/** A single element inside a conditional fragment may be collected as a list. */
+export function useElementRef<T extends Element>(key: string) {
+  const elements = useTemplateRef<T | T[]>(key);
+  return computed(() => Array.isArray(elements.value) ? elements.value[0] ?? null : elements.value);
 }
 
 const revealCleanups = new WeakMap<HTMLElement, () => void>();

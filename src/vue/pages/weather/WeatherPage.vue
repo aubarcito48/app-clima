@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { useTemplateRef, onMounted } from 'vue';
+import { useTemplateRef, onMounted, ref } from 'vue';
 import { useFavoritePlaces } from '../../service/places/favorite-places';
 import { useWeather } from '../../composables/useWeather';
 import { useLanguage } from '../../service/preferences/language';
+import WeatherMap from '../../shared/weather/weather-map/weather-map.vue';
+import WeatherMapLegend from '../../shared/weather/weather-map-legend/weather-map-legend.vue';
+import WeatherAlerts from '../../shared/alerts/weather-alerts/weather-alerts.vue';
+import EmergencyContacts from '../../shared/alerts/emergency-contacts/emergency-contacts.vue';
+import ClimateAwareness from '../../shared/weather/climate-awareness/climate-awareness.vue';
+import type { WeatherLayer } from '../../shared/weather/weather-map/map-layers';
+const mapLayer = ref<WeatherLayer>('temperature');
 import CitySearch from '../../shared/places/city-search/city-search.vue';
 import Forecast from '../../shared/weather/forecast/forecast.vue';
 import CurrentWeather from '../../shared/weather/current-weather/current-weather.vue';
@@ -45,6 +52,7 @@ onMounted(() => {
           </p>
         </div>
 
+        <ClimateAwareness class="min-w-0" />
       </header>
       <section id="pronostico" tabindex="-1"  class="search-panel scroll-mt-6 rounded-app border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3" :aria-label="(t('Consulta de ciudad'))">
         <CitySearch :busy="(state === 'loading')" :locating="locating" :feedback="feedback" @queryEdited="editQuery()"  @querySubmitted="search($event)" @locationRequested="locate" @retryRequested="retry()" ref="citySearch" />
@@ -87,12 +95,12 @@ citySearch?.focusCity()">
             <CurrentWeather  :weather="weather" :showDetails="!weather" :favorite="favorites.contains(response?.ubicacion ?? null)" @favoriteToggled="toggleFavorite" :unit="temperatureUnit"   @searchRequested="citySearch?.focusCity()" />
             <template v-if="response"><template v-for="data in [response]">
               <div class="weather-context-grid">
-                <div class="weather-context-stack">
+                <div class="weather-context-stack"><WeatherAlerts :location="data.ubicacion" />
 
-                  <WeatherDetails :weather="weather" />
+                  <WeatherDetails :weather="weather" /><WeatherMapLegend :layer="mapLayer" />
 
                 </div>
-
+                <WeatherMap :location="data.ubicacion" v-model:layer="mapLayer" />
               </div>
             </template></template>
             <Forecast :weather="weather" v-model:unit="temperatureUnit" />
@@ -110,6 +118,7 @@ citySearch?.focusCity()">
         </p>
       </aside>
 
+      <EmergencyContacts id="contactos-utiles" tabindex="-1" class="mt-8 block" :selectedCountry="response?.ubicacion.pais ?? null" />
     </main>
     <SiteFooter  />
   </div>

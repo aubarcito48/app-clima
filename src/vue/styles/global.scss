@@ -86,3 +86,45 @@ html.theme-reveal::view-transition-new(root) {
     }
   }
 }
+// Leaflet creates popup nodes outside Angular's scoped templates.
+.weather-point-popup {
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+  .leaflet-popup-content {
+    margin: 12px 36px 12px 14px;
+  }
+  .point-popup p {
+    margin: 0 0 6px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .point-popup strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 20px;
+  }
+  .point-popup small {
+    display: block;
+    color: var(--color-secondary);
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .point-popup button {
+    min-height: 44px;
+    padding: 4px 8px;
+    color: var(--color-blue);
+    cursor: pointer;
+  }
+  .point-popup button:focus-visible {
+    outline: 2px solid var(--color-blue);
+  }
+  a.leaflet-popup-close-button {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    color: var(--color-ink);
+  }
+}
