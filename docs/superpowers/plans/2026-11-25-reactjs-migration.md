@@ -62,3 +62,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 6: Pronostico por dias e intervalos, unidades y grafico SVG con temperatura, lluvia y viento. Veintiuna pruebas aprobadas en tres tamanos. Build y tipos: correctos.
 
 - 7: Combobox accesible, debounce cancelable y geolocalizacion bajo permiso; dieciocho pruebas de sugerencias, teclado y permisos aprobadas. Build y tipos: correctos.
+
+- 8: Favoritos persistentes, anuncios accesibles y consulta por coordenadas desde ambas rutas. Doce pruebas de favoritos y navegacion aprobadas. Build y tipos: correctos.
