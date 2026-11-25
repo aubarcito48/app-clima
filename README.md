@@ -8,6 +8,22 @@ en español o inglés. Isa acompaña las recomendaciones con voz y un avatar ani
 
 [![Captura de StitchWeather con la información meteorológica y el avatar de Isa](public/app-clima.png)](https://app-clima-ecru.vercel.app/)
 
+## Versiones de la aplicación
+
+StitchWeather está disponible en **Angular, Vue y React**. Cada implementación
+tiene su propia rama y conserva las funcionalidades de la app: consultas del
+clima, pronóstico, favoritos, idiomas, temas, mapa, alertas y la voz de Isa.
+Las tres versiones comparten el mismo backend Django.
+
+| Frontend | Rama | Instalación y ejecución |
+| --- | --- | --- |
+| Angular | [`main`](https://github.com/aubarcito48/app-clima/tree/main) | [README de Angular](https://github.com/aubarcito48/app-clima/blob/main/README.md) |
+| Vue | [`vuejs`](https://github.com/aubarcito48/app-clima/tree/vuejs) | [README de Vue](https://github.com/aubarcito48/app-clima/blob/vuejs/README.md) |
+| React | [`reactjs`](https://github.com/aubarcito48/app-clima/tree/reactjs) | [README de React](https://github.com/aubarcito48/app-clima/blob/reactjs/README.md) |
+
+La demo enlazada arriba y las instrucciones de este README corresponden a
+Angular (`main`). Para ejecutar Vue o React, elegí su rama y seguí su README.
+
 ## Funcionalidades
 
 - Búsqueda de ciudades y consulta de la ubicación actual con permiso del navegador.
