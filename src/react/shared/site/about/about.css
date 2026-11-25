@@ -1,5 +1,5 @@
 
-[data-component="app-about"] [data-component='app-about'] {
+[data-component='app-about'] {
   display: block;
   min-width: 0;
 }

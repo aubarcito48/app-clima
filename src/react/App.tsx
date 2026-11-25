@@ -1,2 +1,3 @@
 import Router from './router';
-export default function App(){ return <Router />; }
+import {useReveal} from './hooks/useReveal';
+export default function App(){useReveal();return <Router/>}

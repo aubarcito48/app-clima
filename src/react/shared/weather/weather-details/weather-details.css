@@ -1,5 +1,5 @@
 
-[data-component="app-weather-details"] [data-component='app-weather-details'] {
+[data-component='app-weather-details'] {
   display: block;
   min-width: 0;
   height: 100%;

@@ -70,3 +70,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 10: Mapa con motor imperativo aislado y efectos React que liberan recursos; capas, leyenda, zoom y popup. Treinta pruebas de mapa, alertas y contactos aprobadas. Build y tipos: correctos.
 
 - 11: Motor de voz independiente de React, suscripcion useSyncExternalStore y sincronizacion directa del canvas sin renderizar toda la app por frame. Tres pruebas de transporte WAV, stream invalido y cancelacion aprobadas. Build y tipos: correctos.
+
+- 12: Avatar canvas con suscripcion directa, una instancia persistente entre tamanos, carrusel y navegacion por secciones con limpieza de listeners. Cuarenta y cinco pruebas de Isa y carrusel aprobadas; reveal respeta movimiento reducido. Build y tipos: correctos.. Build y tipos: correctos.

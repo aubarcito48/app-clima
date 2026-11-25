@@ -1,5 +1,5 @@
 
-[data-component="app-emergency-contacts"] [data-component='app-emergency-contacts'] {
+[data-component='app-emergency-contacts'] {
   display: block;
   min-width: 0;
 }

@@ -1,0 +1,147 @@
+
+[data-component='app-climate-awareness'] {
+  display: block;
+  min-width: 0;
+}
+[data-component="app-climate-awareness"] .awareness-slider {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-control-line);
+  border-radius: var(--radius-app);
+  background: #123952;
+  color: #ffffff;
+  isolation: isolate;
+}
+[data-component="app-climate-awareness"] .image-stage {
+  position: relative;
+  height: clamp(13rem, 18vw, 15rem);
+  touch-action: pan-y;
+}
+[data-component="app-climate-awareness"] .image-toggle {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-control);
+  background: transparent;
+}
+[data-component="app-climate-awareness"] .image-toggle:focus-visible {
+  outline: 3px solid #ffe1a0;
+  outline-offset: -4px;
+}
+[data-component="app-climate-awareness"] .awareness-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+[data-component="app-climate-awareness"] .awareness-slide[hidden] {
+  display: none;
+}
+[data-component="app-climate-awareness"] .awareness-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+[data-component="app-climate-awareness"] .awareness-slide figcaption {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  width: min(66%, 21rem);
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 1rem 2.5rem;
+  background: #0a263be8;
+  color: #ffffff;
+}
+[data-component="app-climate-awareness"] .slider-controls {
+  position: absolute;
+  z-index: 1;
+  right: 0.35rem;
+  bottom: 0.25rem;
+  left: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+[data-component="app-climate-awareness"] .slider-mascot {
+  position: absolute;
+  z-index: 2;
+  top: 0.5rem;
+  right: 0.75rem;
+  width: 3.25rem;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+[data-component="app-climate-awareness"] .slide-dot {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #102d43;
+  color: #ffffff;
+}
+[data-component="app-climate-awareness"] .slide-dot {
+  background: transparent;
+}
+[data-component="app-climate-awareness"] .slide-dot span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-app);
+  border: 1px solid white;
+  background: #102d43;
+}
+[data-component="app-climate-awareness"] .slide-dot[aria-current='true'] span {
+  width: 1.25rem;
+  background: #ffe1a0;
+  border-color: #ffe1a0;
+}
+
+[data-component="app-climate-awareness"] .slide-dot:focus-visible {
+  outline: 3px solid #ffe1a0;
+  outline-offset: -3px;
+}
+@media (min-width: 640px) {
+  [data-component="app-climate-awareness"] .awareness-slide figcaption {
+    width: min(40%, 25rem);
+    padding: 4.25rem 2rem 2.5rem;
+  }
+  [data-component="app-climate-awareness"] .slider-mascot {
+    width: 4rem;
+  }
+
+  [data-component="app-climate-awareness"] .awareness-slide h2 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+
+  [data-component="app-climate-awareness"] .awareness-slide p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+
+  [data-component="app-climate-awareness"] .slider-controls {
+    left: 1rem;
+    bottom: 0.5rem;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-component="app-climate-awareness"] .awareness-slide:not([hidden]) {
+    animation: awareness-enter 220ms ease;
+  }
+  @keyframes awareness-enter {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
