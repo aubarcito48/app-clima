@@ -68,3 +68,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 9: Alertas por pais con limpieza de solicitudes y contactos accesibles. Dieciocho pruebas de fuentes, errores y directorios aprobadas. Build y tipos: correctos.
 
 - 10: Mapa con motor imperativo aislado y efectos React que liberan recursos; capas, leyenda, zoom y popup. Treinta pruebas de mapa, alertas y contactos aprobadas. Build y tipos: correctos.
+
+- 11: Motor de voz independiente de React, suscripcion useSyncExternalStore y sincronizacion directa del canvas sin renderizar toda la app por frame. Tres pruebas de transporte WAV, stream invalido y cancelacion aprobadas. Build y tipos: correctos.

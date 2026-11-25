@@ -15,5 +15,5 @@ export function createChannel() {
   }
   function derived<T>(read: () => T) { return { get value() { return read(); } }; }
   function useVersion() { useSyncExternalStore(subscribe, snapshot, snapshot); }
-  return { atom, derived, useVersion };
+  return { atom, derived, useVersion, subscribe };
 }
