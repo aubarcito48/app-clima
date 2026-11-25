@@ -2,6 +2,8 @@
 import { ref, computed, watch, watchEffect, watchPostEffect, onMounted, onUnmounted, useTemplateRef } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useCleanup, resettableRef, untracked, vReveal } from '../../../composables/runtime';
+import LanguageToggle from '../../preferences/language-toggle/language-toggle.vue';
+import ThemeToggle from '../../preferences/theme-toggle/theme-toggle.vue';
 import WeatherIcon from '../weather-icon/weather-icon.vue';
 import { useFavoritePlaces } from '../../../service/places/favorite-places';
 import { SavedPlace } from '../../../models/places/saved-place';
@@ -109,9 +111,9 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
 <template v-if="desktop">
   <div class="desktop-shell">
     <aside id="desktop-navigation" class="stitch-sidebar">
-      
+
   <div class="relative flex items-center justify-between gap-2">
-    
+
   <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
@@ -122,10 +124,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
         <WeatherIcon name="close" :size="22" />
       </button>
     </template></div>
-  <div class="sidebar-preferences">
-    
-    
-  </div>
+  <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
   <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
     <RouterLink to="/sobre-nosotros" active-class="bg-surface" class="sidebar-link" @click="aboutSelected()" >
       <WeatherIcon name="sparkles" :size="20" />
@@ -169,7 +168,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
   </section>
   <template v-if="desktop">
     <div class="sidebar-note">
-      
+
   <slot />
 
     </div>
@@ -177,14 +176,14 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
   </div>
 </template><template v-else>
   <header class="mobile-header">
-    
+
   <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
   </RouterLink>
 
     <div class="header-assistant">
-      
+
   <slot />
 
     </div>
@@ -195,7 +194,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
   <dialog id="mobile-navigation" class="mobile-menu" :aria-label="t('Navegaci\u00F3n principal')" @cancel="cancelMenu($event)" @keydown.escape="cancelMenu($event)" @close="dialogClosed()" @click="backdropClick($event)" ref="mobileMenu">
     <aside class="stitch-sidebar">
   <div class="relative flex items-center justify-between gap-2">
-    
+
   <RouterLink to="/" class="relative flex items-center gap-3 rounded-app" :aria-label="t('StitchWeather, inicio')">
     <span class="stitch-logo" aria-hidden="true">S</span>
     <span class="brand-copy"><span class="block font-display text-lg font-bold tracking-tight text-ink">Stitch<span class="text-brand-accent">Weather</span></span><span class="mt-0.5 block text-[10px] font-semibold tracking-[0.16em] text-secondary">{{ t('TU CLIMA, M\u00C1S AZUL') }}</span></span>
@@ -206,10 +205,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
         <WeatherIcon name="close" :size="22" />
       </button>
     </template></div>
-  <div class="sidebar-preferences">
-    
-    
-  </div>
+  <div class="sidebar-preferences"><LanguageToggle /><ThemeToggle /></div>
   <nav class="relative mt-4 grid gap-2" :aria-label="t('Navegaci\u00F3n principal')">
     <RouterLink to="/sobre-nosotros" active-class="bg-surface" class="sidebar-link" @click="aboutSelected()" >
       <WeatherIcon name="sparkles" :size="20" />
@@ -253,7 +249,7 @@ defineExpose({ openMenu, closeMenu, dialogClosed, cancelMenu, backdropClick, tog
   </section>
   <template v-if="desktop">
     <div class="sidebar-note">
-      
+
   <slot />
 
     </div>

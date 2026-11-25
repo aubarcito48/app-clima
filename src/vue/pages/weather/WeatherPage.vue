@@ -31,7 +31,7 @@ onMounted(() => {
 <div data-component="app-weather" class="block min-w-0"><a href="#main-content" class="skip-link">{{ t('Saltar al contenido') }}</a>
 <div class="weather-layout mx-auto min-h-screen max-w-400 lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]">
   <WeatherSidebar @placeSelected="citySearch?.chooseSuggestion($event)">
-    
+
   </WeatherSidebar>
   <div class="min-w-0 px-5 py-6 sm:px-8 lg:px-10 lg:pb-10 lg:pt-8">
     <main id="main-content" tabindex="-1" class="pb-10">
@@ -44,7 +44,7 @@ onMounted(() => {
             {{ t('Tu clima y tus planes para el día.') }}
           </p>
         </div>
-        
+
       </header>
       <section id="pronostico" tabindex="-1"  class="search-panel scroll-mt-6 rounded-app border border-line bg-surface px-4 py-3 sm:px-5 sm:py-3" :aria-label="(t('Consulta de ciudad'))">
         <CitySearch :busy="(state === 'loading')" :locating="locating" :feedback="feedback" @queryEdited="editQuery()"  @querySubmitted="search($event)" @locationRequested="locate" @retryRequested="retry()" ref="citySearch" />
@@ -88,11 +88,11 @@ citySearch?.focusCity()">
             <template v-if="response"><template v-for="data in [response]">
               <div class="weather-context-grid">
                 <div class="weather-context-stack">
-                  
+
                   <WeatherDetails :weather="weather" />
-                  
+
                 </div>
-                
+
               </div>
             </template></template>
             <Forecast :weather="weather" v-model:unit="temperatureUnit" />
@@ -109,7 +109,7 @@ citySearch?.focusCity()">
           {{ t('La disponibilidad del pronóstico puede variar. Consultá las condiciones antes de organizar tus planes.') }}
         </p>
       </aside>
-      
+
     </main>
     <SiteFooter  />
   </div>
