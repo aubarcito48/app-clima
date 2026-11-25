@@ -37,7 +37,7 @@ defineExpose({ scrollToTop });
 
 <template>
 <div data-component="app-back-to-top"><template v-if="visible">
-  <button type="button" class="back-to-top" :aria-label="(t('Volver arriba')) ?? undefined" :title="t('Volver arriba')" @click="scrollToTop()">
+  <button type="button" class="back-to-top" :aria-label="(t('Volver arriba'))" :title="t('Volver arriba')" @click="scrollToTop()">
     <WeatherIcon name="arrow" class="-rotate-90" :size="22" />
   </button>
 </template></div>

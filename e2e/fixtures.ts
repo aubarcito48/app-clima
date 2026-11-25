@@ -1,7 +1,7 @@
 import { test as base, expect, type Page, type Route } from '@playwright/test';
 import { CLIMATE_FIXTURE } from './data/climate-fixture';
 import type { ClimateResponse } from '../src/app/models/weather/climate-response';
-import { environment } from '../src/environments/environment';
+const environment = { apiBaseUrl: process.env['PUBLIC_API_BASE_URL_DEVELOPMENT'] ?? 'http://localhost:8000' };
 
 // Transparent tile: UI tests never download maps from external services.
 export const MAP_PNG = Buffer.from(

@@ -72,11 +72,11 @@ defineExpose({ goTo });
 </script>
 
 <template>
-<div data-component="app-section-navigation"><nav :aria-label="(language.text('Navegación por secciones')) ?? undefined">
+<div data-component="app-section-navigation"><nav :aria-label="(language.text('Navegación por secciones'))">
   <ol >
     <template v-for="(section, index) in sections" :key="section.id">
       <li >
-        <a :href="('#' + section.id)" :aria-current="(((activeIndex === index) ? 'location' : null)) ?? undefined" :aria-label="(language.text(section.label)) ?? undefined" :class="{ 'is-active': (activeIndex === index) }" @click="goTo($event, section.id)">
+        <a :href="('#' + section.id)" :aria-current="(((activeIndex === index) ? 'location' : undefined))" :aria-label="(language.text(section.label))" :class="{ 'is-active': (activeIndex === index) }" @click="goTo($event, section.id)">
           <span class="section-label" aria-hidden="true">{{ language.text(section.label) }}</span>
           <span class="section-dot" aria-hidden="true"></span>
         </a>

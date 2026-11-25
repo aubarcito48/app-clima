@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-// ng e2e inicia una instancia aislada; no reutilizar Angular de desarrollo.
+// Vite sirve una instancia aislada para las pruebas.
 const baseURL = process.env['PLAYWRIGHT_TEST_BASE_URL'] ?? 'http://127.0.0.1:4300';
 const origin = new URL(baseURL);
 if (!['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) || origin.protocol !== 'http:') {
@@ -9,6 +9,7 @@ if (!['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) || origin.pro
 
 export default defineConfig({
   testDir: './e2e',
+  webServer: { command: 'npm start -- --port 4300 --strictPort', url: baseURL, reuseExistingServer: !process.env['CI'] },
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,
