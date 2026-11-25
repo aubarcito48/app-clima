@@ -64,3 +64,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 7: Combobox accesible, debounce cancelable y geolocalizacion bajo permiso; dieciocho pruebas de sugerencias, teclado y permisos aprobadas. Build y tipos: correctos.
 
 - 8: Favoritos persistentes, anuncios accesibles y consulta por coordenadas desde ambas rutas. Doce pruebas de favoritos y navegacion aprobadas. Build y tipos: correctos.
+
+- 9: Alertas por pais con limpieza de solicitudes y contactos accesibles. Dieciocho pruebas de fuentes, errores y directorios aprobadas. Build y tipos: correctos.
