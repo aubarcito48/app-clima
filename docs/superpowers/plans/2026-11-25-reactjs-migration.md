@@ -50,3 +50,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 
 - [x] 1: alcance y trece entregas documentados.
 - [ ] 2–13: implementar y registrar evidencia en el commit correspondiente.
+
+- 2: React 19, React DOM, React Router, TypeScript y Vite instalados; URL pública validada por allowlist. `npm run build` (incluye tipos): correcto.

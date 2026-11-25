@@ -2,57 +2,44 @@
   "name": "app-clima",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "env:configure": "node scripts/configure-env.mjs",
-    "prestart": "npm run env:configure",
-    "start": "ng serve",
-    "prebuild": "npm run env:configure",
-    "build": "ng build --configuration production",
-    "prebuild:dev": "npm run env:configure",
-    "build:dev": "ng build --configuration development",
-    "prewatch": "npm run env:configure",
-    "watch": "ng build --watch --configuration development",
-    "pree2e": "npm run env:configure",
-    "e2e": "ng e2e",
+    "start": "vite",
+    "build": "npm run typecheck && vite build",
+    "build:dev": "vite build --mode development",
+    "watch": "vite build --watch",
+    "e2e": "playwright test",
     "e2e:install": "playwright install chromium",
     "e2e:typecheck": "tsc --project e2e/tsconfig.json",
-    "e2e:report": "playwright show-report"
+    "e2e:report": "playwright show-report",
+    "typecheck": "tsc -p tsconfig.react.json",
+    "preview": "vite preview --host 127.0.0.1 --port 4200"
   },
   "private": true,
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || ^24.0.0"
   },
-  "overrides": {
-    "@angular/build": {
-      "undici": "7.30.1"
-    }
-  },
   "packageManager": "npm@11.10.0",
   "dependencies": {
-    "@angular/common": "^21.2.0",
-    "@angular/compiler": "^21.2.0",
-    "@angular/core": "^21.2.0",
-    "@angular/forms": "^21.2.0",
-    "@angular/platform-browser": "^21.2.0",
-    "@angular/router": "^21.2.0",
     "leaflet": "1.9.4",
     "rxjs": "~7.8.0",
-    "tailwindcss": "^4.3.3",
-    "tslib": "^2.3.0"
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router-dom": "7.18.7"
   },
   "devDependencies": {
-    "@angular/build": "^21.2.21",
-    "@angular/cli": "^21.2.21",
-    "@angular/compiler-cli": "^21.2.0",
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/leaflet": "1.9.21",
     "@types/node": "24.19.2",
-    "playwright-ng-schematics": "21.1.1",
     "postcss": "^8.5.3",
     "prettier": "^3.8.1",
+    "sass": "^1.108.2",
     "tailwindcss": "^4.1.12",
-    "typescript": "~5.9.2"
-  }
+    "typescript": "~5.9.2",
+    "vite": "^8.3.8",
+    "@vitejs/plugin-react": "6.3.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  },
+  "type": "module"
 }
