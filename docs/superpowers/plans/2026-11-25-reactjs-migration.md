@@ -54,3 +54,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 2: React 19, React DOM, React Router, TypeScript y Vite instalados; URL pública validada por allowlist. `npm run build` (incluye tipos): correcto.
 
 - 3: Componentes funcionales, estilos existentes, sidebar adaptable y rutas de inicio/informacion con fallback. Build y tipos: correctos.
+
+- 4: Preferencias compartidas mediante useSyncExternalStore; catalogo ES/EN y tema persistente. Doce pruebas de idiomas y temas aprobadas. Build y tipos: correctos.
