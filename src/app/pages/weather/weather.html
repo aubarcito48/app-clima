@@ -120,8 +120,9 @@
                 <div class="weather-context-stack">
                   <app-weather-alerts [location]="data.ubicacion" />
                   <app-weather-details [weather]="weather()" />
+                  <app-weather-map-legend [layer]="mapLayer()" />
                 </div>
-                <app-weather-map [location]="data.ubicacion" />
+                <app-weather-map [location]="data.ubicacion" [(layer)]="mapLayer" />
               </div>
             }
             <app-forecast

@@ -32,10 +32,15 @@ import { WeatherSidebar } from '../../shared/weather/weather-sidebar/weather-sid
 import { FavoritePlaces } from '../../service/places/favorite-places';
 import { WeatherAlerts } from '../../shared/alerts/weather-alerts/weather-alerts';
 import { WeatherMap } from '../../shared/weather/weather-map/weather-map';
+import { WeatherMapLegend } from '../../shared/weather/weather-map-legend/weather-map-legend';
+import { WeatherLayer } from '../../shared/weather/weather-map/map-layers';
 import { WeatherDetails } from '../../shared/weather/weather-details/weather-details';
 import { EmergencyContacts } from '../../shared/alerts/emergency-contacts/emergency-contacts';
 import { ClimateAwareness } from '../../shared/weather/climate-awareness/climate-awareness';
-import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/places/city-search/city-query';
+import {
+  normalizeCityQuery,
+  serializeWeatherQuery,
+} from '../../shared/places/city-search/city-query';
 @Component({
   selector: 'app-weather',
   imports: [
@@ -53,6 +58,7 @@ import { normalizeCityQuery, serializeWeatherQuery } from '../../shared/places/c
     WeatherSidebar,
     WeatherAlerts,
     WeatherMap,
+    WeatherMapLegend,
     WeatherDetails,
     EmergencyContacts,
     ClimateAwareness,
@@ -76,6 +82,7 @@ export class Weather {
     if (location) this.favorites.toggle(location);
   }
   readonly temperatureUnit = signal<'C' | 'F'>('C');
+  readonly mapLayer = signal<WeatherLayer>('temperature');
   readonly state = signal<'initial' | 'loading' | 'ready'>('initial');
   readonly weather = computed<WeatherPreview | null>(() => {
     const data = this.response();

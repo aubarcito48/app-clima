@@ -1,5 +1,28 @@
 /** Spanish source strings and their English translations. */
 export const ENGLISH: Readonly<Record<string, string>> = {
+  'Cómo leer el mapa': 'How to read the map',
+  'Cerrar detalle': 'Close details',
+  'Mi ciudad': 'My city',
+  'Consultar punto': 'Check point',
+  'Sin datos': 'No data',
+  'Controles del mapa': 'Map controls',
+  'Volver a la ciudad': 'Back to the city',
+  'Consultar centro del mapa': 'Check the map centre',
+  'Ampliar mapa': 'Expand map',
+  'Salir de pantalla completa': 'Exit full screen',
+  'Escala de colores': 'Colour scale',
+  'Escala orientativa. Los colores representan condiciones regionales, incluso al acercar a un barrio.':
+    'Indicative scale. Colours represent regional conditions, even when zooming into a neighbourhood.',
+  'Arrastrá para explorar y tocá un punto para consultar su clima. Usá + o − para acercar o alejar.':
+    'Drag to explore and select a point to check its weather. Use + or − to zoom in or out.',
+  'Condiciones en el punto': 'Conditions at this point',
+  'Consultando este punto…': 'Checking this point…',
+  'No se pudo consultar este punto. Podés volver a intentarlo.':
+    'This point could not be checked. You can try again.',
+  'Lluvia en la última hora': 'Rain in the last hour',
+  Observado: 'Observed',
+  'Consulta puntual de clima actual; puede diferir de la capa regional del mapa.':
+    'Current weather at this point; it may differ from the regional map layer.',
   'Teléfonos útiles': 'Useful numbers',
   'Buscá una ciudad para ver los teléfonos de su país.':
     'Search for a city to see its country’s numbers.',
