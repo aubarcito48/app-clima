@@ -58,3 +58,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 4: Preferencias compartidas mediante useSyncExternalStore; catalogo ES/EN y tema persistente. Doce pruebas de idiomas y temas aprobadas. Build y tipos: correctos.
 
 - 5: API validada, hook de clima, cancelacion y busqueda. Doce pruebas de clima, datos invalidos y respuestas fuera de orden aprobadas. Build y tipos: correctos.
+
+- 6: Pronostico por dias e intervalos, unidades y grafico SVG con temperatura, lluvia y viento. Veintiuna pruebas aprobadas en tres tamanos. Build y tipos: correctos.
