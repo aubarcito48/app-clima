@@ -1,0 +1,193 @@
+
+[data-component="app-current-weather"] [data-component='app-current-weather'] {
+  display: block;
+  min-width: 0;
+}
+[data-component="app-current-weather"] .weather-panel {
+  --color-ink: var(--color-weather-ink);
+  --color-secondary: var(--color-weather-secondary);
+  --color-muted: var(--color-weather-secondary);
+  background: linear-gradient(135deg, var(--color-weather-from), var(--color-weather-to));
+  border-color: transparent;
+  box-shadow: 0 16px 36px #2c81a021;
+}
+[data-component="app-current-weather"] .favorite-toggle {
+  color: var(--color-weather-heart);
+}
+[data-component="app-current-weather"] .weather-panel::before {
+  content: '';
+  position: absolute;
+  width: 16.5rem;
+  height: 16.5rem;
+  top: -5.5rem;
+  left: -4.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-blue) 14%, transparent);
+  pointer-events: none;
+}
+[data-component="app-current-weather"] .weather-panel::after {
+  content: '';
+  position: absolute;
+  width: 45rem;
+  height: 18rem;
+  border-radius: 50%;
+  background: #ffffff10;
+  right: -17rem;
+  bottom: -12rem;
+  transform: rotate(-12deg);
+  z-index: -1;
+  box-shadow: 0 -2rem 0 #ffffff08;
+}
+[data-component="app-current-weather"] .temperature {
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(3rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.075em;
+}
+[data-component="app-current-weather"] .current-details {
+  display: grid;
+  align-items: center;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  [data-component="app-current-weather"] .current-details {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+}
+[data-component="app-current-weather"] .current-overview {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+@media (min-width: 1280px) {
+  [data-component="app-current-weather"] .current-overview {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    row-gap: 1.5rem;
+  }
+  [data-component="app-current-weather"] .weather-panel {
+    align-self: stretch;
+  }
+  [data-component="app-current-weather"] .weather-panel {
+    padding: 1rem;
+  }
+  [data-component="app-current-weather"] .current-details {
+    gap: 0.85rem;
+    margin-top: 0;
+  }
+  [data-component="app-current-weather"] .temperature {
+    font-size: 3rem;
+  }
+  [data-component="app-current-weather"] #consejo-ia {
+    margin-top: 0.5rem;
+    padding: 0.65rem 0.85rem;
+  }
+  [data-component="app-current-weather"] #advice-text {
+    line-height: 1.35rem;
+  }
+}
+[data-component="app-current-weather"] .temperature-unit {
+  margin: 0.3rem 0 0 0.3rem;
+  font-size: 1.25rem;
+  letter-spacing: -0.04em;
+}
+[data-component="app-current-weather"] .weather-art {
+  filter: drop-shadow(0 12px 15px #627ba820);
+}
+[data-component="app-current-weather"] .empty-sky {
+  position: relative;
+  height: 8rem;
+  width: 7rem;
+  transform: scale(0.65);
+  transform-origin: center;
+}
+[data-component="app-current-weather"] .sun-disc {
+  position: absolute;
+  width: 6.8rem;
+  height: 6.8rem;
+  top: 1rem;
+  right: 0.3rem;
+  border-radius: 50%;
+  background: #f8ce65;
+  box-shadow:
+    0 0 0 12px #f8ce6520,
+    0 0 0 24px #f8ce6510;
+}
+[data-component="app-current-weather"] .sky-cloud {
+  position: absolute;
+  height: 3.6rem;
+  width: 9rem;
+  top: 6rem;
+  left: -0.4rem;
+  border-radius: 4rem;
+  background: #fff;
+  box-shadow: 0 12px 24px #718db71a;
+}
+[data-component="app-current-weather"] .sky-cloud::before,
+[data-component="app-current-weather"] .sky-cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+[data-component="app-current-weather"] .sky-cloud::before {
+  width: 4.5rem;
+  height: 4.5rem;
+  left: 1.1rem;
+  top: -2.1rem;
+}
+[data-component="app-current-weather"] .sky-cloud::after {
+  width: 3.2rem;
+  height: 3.2rem;
+  right: 1rem;
+  top: -1.1rem;
+}
+[data-component="app-current-weather"] .sky-cloud-back {
+  transform: scale(0.6);
+  background: #eef6ff;
+  top: 3.8rem;
+  left: 3.3rem;
+}
+@media (max-width: 639px) {
+  [data-component="app-current-weather"] .empty-sky {
+    height: 5rem;
+    width: 5rem;
+    margin: 0;
+    transform: scale(0.4);
+  }
+}
+
+[data-component="app-current-weather"] .temperature-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+[data-component="app-current-weather"] .temperature-with-icon .temperature {
+  flex-shrink: 0;
+}
+[data-component="app-current-weather"] .current-overview.single-overview {
+  display: block;
+}
+@media (min-width: 1280px) {
+  [data-component="app-current-weather"] .single-overview .weather-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+  [data-component="app-current-weather"] .single-overview .weather-panel > :first-child,
+  [data-component="app-current-weather"] .single-overview .weather-panel > :last-child {
+    grid-column: 1 / -1;
+  }
+  [data-component="app-current-weather"] .single-overview .current-details {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  [data-component="app-current-weather"] .single-overview #consejo-ia {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+}
