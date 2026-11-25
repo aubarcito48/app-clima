@@ -157,3 +157,8 @@ No ejecutar las etapas 2–10 en esta sesión. Al retomar, revisar el estado rea
 implementar la siguiente etapa y validar su entrega antes de confirmarla.
 Actualizar este plan en el commit de la etapa correspondiente. No crear commits
 adicionales solo para marcar casillas ni comprimir el historial con squash.
+
+## Registro de ejecuci?n
+
+- 1: documentaci?n publicada como `1ff5c03`.
+- 2: entrada Vue, Vite, TypeScript y configuraci?n p?blica mediante allowlist. `npm run build` y `npm run typecheck`: correctos.

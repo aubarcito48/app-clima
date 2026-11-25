@@ -4,19 +4,15 @@
   "scripts": {
     "ng": "ng",
     "env:configure": "node scripts/configure-env.mjs",
-    "prestart": "npm run env:configure",
-    "start": "ng serve",
-    "prebuild": "npm run env:configure",
-    "build": "ng build --configuration production",
-    "prebuild:dev": "npm run env:configure",
-    "build:dev": "ng build --configuration development",
-    "prewatch": "npm run env:configure",
-    "watch": "ng build --watch --configuration development",
-    "pree2e": "npm run env:configure",
-    "e2e": "ng e2e",
+    "start": "vite",
+    "build": "vue-tsc -p tsconfig.vue.json && vite build",
+    "build:dev": "vite build --mode development",
+    "watch": "vite build --watch",
+    "e2e": "playwright test",
     "e2e:install": "playwright install chromium",
     "e2e:typecheck": "tsc --project e2e/tsconfig.json",
-    "e2e:report": "playwright show-report"
+    "e2e:report": "playwright show-report",
+    "typecheck": "vue-tsc -p tsconfig.vue.json"
   },
   "private": true,
   "engines": {
@@ -38,7 +34,9 @@
     "leaflet": "1.9.4",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.3.3",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "vue": "^3.5.46",
+    "vue-router": "^4.6.5"
   },
   "devDependencies": {
     "@angular/build": "^21.2.21",
@@ -49,10 +47,15 @@
     "@tailwindcss/postcss": "^4.1.12",
     "@types/leaflet": "1.9.21",
     "@types/node": "24.19.2",
+    "@vitejs/plugin-vue": "^6.0.11",
     "playwright-ng-schematics": "21.1.1",
     "postcss": "^8.5.3",
     "prettier": "^3.8.1",
+    "sass": "^1.108.2",
     "tailwindcss": "^4.1.12",
-    "typescript": "~5.9.2"
-  }
+    "typescript": "~5.9.2",
+    "vite": "^8.3.8",
+    "vue-tsc": "^3.3.14"
+  },
+  "type": "module"
 }
