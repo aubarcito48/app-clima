@@ -66,3 +66,5 @@ los efectos deben liberar peticiones, listeners, mapas y temporizadores.
 - 8: Favoritos persistentes, anuncios accesibles y consulta por coordenadas desde ambas rutas. Doce pruebas de favoritos y navegacion aprobadas. Build y tipos: correctos.
 
 - 9: Alertas por pais con limpieza de solicitudes y contactos accesibles. Dieciocho pruebas de fuentes, errores y directorios aprobadas. Build y tipos: correctos.
+
+- 10: Mapa con motor imperativo aislado y efectos React que liberan recursos; capas, leyenda, zoom y popup. Treinta pruebas de mapa, alertas y contactos aprobadas. Build y tipos: correctos.
