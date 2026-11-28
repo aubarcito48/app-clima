@@ -20,8 +20,15 @@ function publicApiUrl(key, localValues, fallback, production) {
   } catch {
     throw new Error(`${key} debe contener una URL HTTP(S) válida.`);
   }
-  if (!['http:', 'https:'].includes(url.protocol) || (production && url.protocol !== 'https:')) {
-    throw new Error(`${key} debe usar ${production ? 'HTTPS' : 'HTTP o HTTPS'}.`);
+  const localHttp =
+    url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+  if (
+    !['http:', 'https:'].includes(url.protocol) ||
+    (production && url.protocol !== 'https:' && !localHttp)
+  ) {
+    throw new Error(
+      `${key} debe usar ${production ? 'HTTPS (HTTP solo en loopback local)' : 'HTTP o HTTPS'}.`,
+    );
   }
   if (url.username || url.password || url.search || url.hash) {
     throw new Error(`${key} no admite credenciales, parámetros ni fragmentos.`);
@@ -35,11 +42,21 @@ async function configureEnvironments() {
   const configurations = [
     {
       file: 'src/environments/environment.development.ts',
-      apiBaseUrl: publicApiUrl('PUBLIC_API_BASE_URL_DEVELOPMENT', localValues, 'http://localhost:8000', false),
+      apiBaseUrl: publicApiUrl(
+        'PUBLIC_API_BASE_URL_DEVELOPMENT',
+        localValues,
+        'http://localhost:8000',
+        false,
+      ),
     },
     {
       file: 'src/environments/environment.ts',
-      apiBaseUrl: publicApiUrl('PUBLIC_API_BASE_URL_PRODUCTION', localValues, 'https://api-clima.example.invalid', true),
+      apiBaseUrl: publicApiUrl(
+        'PUBLIC_API_BASE_URL_PRODUCTION',
+        localValues,
+        'https://api-clima.example.invalid',
+        true,
+      ),
     },
   ];
   for (const { file, apiBaseUrl } of configurations) {

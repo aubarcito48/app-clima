@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "env:configure": "node scripts/configure-env.mjs",
+    "test:env": "node --test scripts/configure-env.test.mjs",
     "prestart": "npm run env:configure",
     "start": "ng serve",
     "prebuild": "npm run env:configure",

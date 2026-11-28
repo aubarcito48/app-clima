@@ -183,3 +183,57 @@ acceso al micrófono del visitante.
 Podés [abrir un issue](https://github.com/aubarcito48/app-clima/issues) con una
 sugerencia o un error. Para ayudar a reproducirlo, indicá el navegador, el
 dispositivo, los pasos y una captura sin datos privados.
+
+
+## Ejecutar con Docker
+
+Esta opci?n practica una imagen independiente del frontend. Necesit?s Docker
+Desktop con contenedores Linux (o Docker Engine en Linux); no necesit?s instalar
+Node.js en el equipo. El backend se construye y ejecuta desde su propio repositorio.
+
+Desde la ra?z de este repositorio:
+
+```powershell
+docker build -t stitchweather-frontend:local .
+docker run -d --name stitchweather-frontend -p 127.0.0.1:8080:80 stitchweather-frontend:local
+```
+
+Abr? `http://localhost:8080`. La imagen usa por defecto la API en
+`http://localhost:8000`; levant? el contenedor del backend siguiendo su README.
+Su `CORS_ALLOWED_ORIGINS` debe incluir `http://localhost:8080`. Si abr?s el frontend
+con `127.0.0.1`, permit? tambi?n ese origen exacto.
+
+El Dockerfile tiene dos etapas: Node 24 ejecuta `npm ci` y compila Angular;
+la imagen final contiene Nginx y los archivos compilados. Nginx conserva las
+rutas de Angular al recargar y ofrece `/healthz` para el healthcheck. Los `.env`
+locales, dependencias y resultados de pruebas quedan fuera del contexto.
+
+### Elegir otra API o preparar un futuro servidor
+
+```powershell
+docker build --build-arg PUBLIC_API_BASE_URL_PRODUCTION=https://api.tu-dominio.com -t stitchweather-frontend:server .
+```
+
+Us? el origen sin `/api/v1`. Esta direcci?n la utiliza **el navegador del
+visitante**: `localhost` sirve para una pr?ctica en tu PC, pero en un servidor
+remoto necesit?s la URL p?blica HTTPS de la API. HTTP se admite ?nicamente en
+loopback (`localhost`, `127.0.0.1` o `[::1]`). No uses un nombre interno de Docker.
+
+La URL se incorpora **al construir** la imagen. Cambiarla con `docker run -e`
+no modifica el JavaScript: constru? otra imagen si cambi?s de API. Nunca pases
+claves de OpenWeather o Groq como argumentos de construcci?n del frontend.
+Para publicar en un servidor tambi?n hay que configurar el dominio y HTTPS
+mediante el proxy del alojamiento.
+
+### Verificar y detener
+
+```powershell
+docker ps --filter name=stitchweather-frontend
+docker logs stitchweather-frontend
+docker stop stitchweather-frontend
+docker rm stitchweather-frontend
+```
+
+La columna STATUS muestra `healthy` cuando pasa el control HTTP. `stop` detiene
+el contenedor; `rm` permite volver a crearlo con otra imagen o configuraci?n.
+Pod?s comprobar la validaci?n de URLs con `npm run test:env` si ten?s Node.js.
