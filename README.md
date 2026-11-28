@@ -48,6 +48,45 @@ Prepará primero el backend siguiendo su
 No requiere migraciones ni PostgreSQL. Dejalo ejecutándose y abrí una segunda
 terminal para el frontend.
 
+## Ejecutar con Docker
+
+Desde la rama `reactjs`, con Docker en modo Linux:
+
+```powershell
+docker build -t stitchweather-react:local .
+docker run -d --name stitchweather-react -p 127.0.0.1:8083:80 stitchweather-react:local
+```
+
+Abrí `http://localhost:8083`. La imagen consulta por defecto el backend en
+`http://localhost:8000`. Agregá `http://localhost:8083` a `CORS_ALLOWED_ORIGINS`
+del backend y recreá su contenedor si usás Docker. Para usar también `127.0.0.1`,
+permití ese origen exacto. Las tres versiones comparten el mismo backend.
+
+El Dockerfile compila React y TypeScript con Node 24 y sirve el resultado con
+Nginx. Incluye rutas SPA al recargar y un healthcheck en `/healthz`; no requiere
+Node.js instalado en el equipo. `.dockerignore` excluye archivos privados y cachés.
+
+Para apuntar a otra API al construir:
+
+```powershell
+docker build --build-arg PUBLIC_API_BASE_URL_PRODUCTION=https://api.tu-dominio.com -t stitchweather-react:server .
+```
+
+La URL la usa el navegador del visitante: usá el origen sin `/api/v1`, HTTPS
+en un servidor remoto y HTTP únicamente en loopback para la práctica local.
+No uses nombres internos de contenedores ni claves de proveedores. La URL queda
+incorporada al construir; `docker run -e` no cambia el JavaScript compilado.
+Un futuro servidor requiere además dominio y HTTPS en su proxy.
+
+```powershell
+docker ps --filter name=stitchweather-react
+docker logs stitchweather-react
+docker stop stitchweather-react
+docker rm stitchweather-react
+```
+
+`npm run test:env` comprueba la validación de la URL pública de la API.
+
 ## Ejecutar el frontend
 
 Descargá el frontend en una carpeta distinta del backend:

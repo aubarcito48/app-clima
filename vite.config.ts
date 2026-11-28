@@ -10,16 +10,18 @@ export default defineConfig(({ mode }) => {
       env[key] ??
       (production ? 'https://api-clima.example.invalid' : 'http://localhost:8000'),
   );
+  const localHttp =
+    url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
   if (
     !['http:', 'https:'].includes(url.protocol) ||
-    (production && url.protocol !== 'https:') ||
+    (production && url.protocol !== 'https:' && !localHttp) ||
     url.username ||
     url.password ||
     url.search ||
     url.hash
   ) {
     throw new Error(
-      `${key} debe ser una URL pública HTTP(S), HTTPS en producción, sin credenciales, parámetros ni fragmentos.`,
+      `${key} debe usar HTTPS (HTTP solo en loopback local en producción), sin credenciales, parámetros ni fragmentos.`,
     );
   }
   return {

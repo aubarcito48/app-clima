@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "vite",
+    "test:env": "node --test scripts/test-api-config.mjs",
     "build": "npm run typecheck && vite build",
     "build:dev": "vite build --mode development",
     "watch": "vite build --watch",
